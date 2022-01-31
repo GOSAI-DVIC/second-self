@@ -9,13 +9,13 @@ export class DanceLesson {
         this.size = [];
         this.length = 1000; // Arbitrary
 
-        this.video = sketch.loadImage("/apps/dance/components/videos/" + file_name + ".gif");
+        this.video = sketch.loadImage("./videos/" + file_name + ".gif");
         this.video.pause();
         this.video_index = 0;
         this.loaded = false;
 
         this.moves = sketch.loadJSON(
-            "/apps/dance/components/movements/" + file_name + ".json", // Structure : moves["index"] = [[kpts_index, x, y], ...]
+            "./movements/" + file_name + ".json", // Structure : moves["index"] = [[kpts_index, x, y], ...]
             (moves) => {
                 sketch.dance_lesson.size = moves["size"]; // Original video size
                 sketch.dance_lesson.length = moves["length"]; // Original video size

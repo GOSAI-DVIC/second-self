@@ -1,4 +1,4 @@
-from apps.application import BaseApplication
+from core.application import BaseApplication
 
 class Application(BaseApplication):
     """Dance"""
