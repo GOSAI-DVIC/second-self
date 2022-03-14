@@ -20,7 +20,7 @@ class Application(BaseApplication):
 
     def listener(self, source, event, data):
         super().listener(source, event, data)
-
+        
         if source == "pose_to_mirror" and event == "mirrored_data":
             self.data = data
             self.server.send_data(self.name, self.data)
