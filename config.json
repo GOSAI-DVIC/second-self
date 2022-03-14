@@ -4,7 +4,9 @@
         "orientation": "horizontal",
         "angle": 17,
         "x_offset": -230,
-        "y_offset": 100
+        "y_offset": 100,
+        "width": 640,
+        "height": 480
     },
     "screen": {
         "screen_width": 392.85,
