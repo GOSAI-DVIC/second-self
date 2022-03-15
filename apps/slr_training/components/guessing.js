@@ -29,7 +29,7 @@ export class Guessing {
         this.video.autoplay();
         this.video.volume(0);
         this.video.size(550, 350);
-        this.video.position(1000, 50); //1500, 50
+        this.video.position(width/2, 50); //1500, 50
         this.video.play();
         // this.video.play();
         // console.log(this.video);
