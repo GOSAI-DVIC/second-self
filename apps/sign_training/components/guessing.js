@@ -8,7 +8,7 @@ export class Guessing {
         this.actions;
         this.guessed_sign = "empty";
         this.targeted_sign = "hello";
-        this.targeted_sign_idx = 2;
+        this.targeted_sign_idx = 0;
         this.probability;
         this.sentence = [];
         this.threshold = 0.9;
@@ -168,7 +168,12 @@ export class Guessing {
     }
 
     reset() {
-        self.video.show();
+        this.playing = false;
+        this.playable = true;
+        this.start_playing = 0;
+        this.running = true;
+        this.count_valid = 0;
+        this.targeted_sign_idx = 0;
     }
 
     update() {

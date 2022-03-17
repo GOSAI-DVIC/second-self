@@ -1,7 +1,7 @@
 import { Slr } from "./components/slr.js"
 
-export const slr = new  p5(( sketch ) => {
-    sketch.name = "slr"
+export const sign_language = new  p5(( sketch ) => {
+    sketch.name = "sign language"
     sketch.z_index = 2
     sketch.activated = false
 
@@ -16,9 +16,9 @@ export const slr = new  p5(( sketch ) => {
             )
             // console.log(data["guessed_sign"])
         });
-        sketch.emit = (name, data) => {
-            socket.emit(name, data);
-        };
+        // sketch.emit = (name, data) => {
+            // socket.emit(name, data);
+        // };
         sketch.activated = true;
     }
     

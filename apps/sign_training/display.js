@@ -1,7 +1,7 @@
 import { Guessing } from "./components/guessing.js"
 
-export const slr_training = new  p5(( sketch ) => {
-    sketch.name = "slr_training"
+export const sign_training = new  p5(( sketch ) => {
+    sketch.name = "sign language training"
     sketch.z_index = 0
     sketch.activated = false
     
@@ -19,9 +19,9 @@ export const slr_training = new  p5(( sketch ) => {
             //console.log(data["guessed_sign"])
         });
 
-        sketch.emit = (name, data) => {
-            socket.emit(name, data);
-        };
+        // sketch.emit = (name, data) => {
+        //     socket.emit(name, data);
+        // };
         
         sketch.activated = true;
     }
