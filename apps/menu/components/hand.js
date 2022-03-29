@@ -79,7 +79,6 @@ export class Hand {
         ){
             this.junctions.forEach(parts => {
                 parts.forEach(pair => {
-                    print(this.hand_pose[pair[0]][3])
                     if (
                         this.hand_pose[pair[0]][3] >= 0 &&
                         this.hand_pose[pair[0]][1] > 0 &&
