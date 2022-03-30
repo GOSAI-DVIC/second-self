@@ -1,4 +1,5 @@
 {
+    "name" : "Second Self",
     "camera": {
         "type": "intel",
         "orientation": "horizontal",
