@@ -26,7 +26,7 @@ export class DanceLesson {
         this.diff = 0; // The lower, the closer the moves are
         this.limit = 120; // if this.diff < this.limit, it goes on
         this.time = 0;
-        this.timelimit = 2000;
+        this.timelimit = 1000; // Time limit for the dance
     }
 
     reset() {
