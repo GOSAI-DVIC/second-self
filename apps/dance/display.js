@@ -1,6 +1,8 @@
-import { DanceLesson } from "./components/dance.js"
+import {
+    DanceLesson
+} from "./components/dance.js"
 
-export const dance = new p5(( sketch ) =>{
+export const dance = new p5((sketch) => {
     sketch.name = "dance"
     sketch.z_index = 0
     sketch.activated = false
@@ -10,8 +12,13 @@ export const dance = new p5(( sketch ) =>{
 
         sketch.dance_lesson = new DanceLesson("dance02", sketch)
         socket.on(sketch.name, (data) => {
-            sketch.dance_lesson.update_data(data)
+            sketch.dance_lesson.update_data(data);
         });
+
+        sketch.emit = (event_name, data = undefined) => {
+            if (data == undefined) socket.emit(event_name);
+            else socket.emit(event_name, data);
+        }
 
         sketch.angleMode(RADIANS);
         sketch.textAlign(CENTER, CENTER);

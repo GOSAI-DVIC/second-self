@@ -26,7 +26,7 @@ export class DanceLesson {
         this.diff = 0; // The lower, the closer the moves are
         this.limit = 120; // if this.diff < this.limit, it goes on
         this.time = 0;
-        this.timelimit = 360;
+        this.timelimit = 2000;
     }
 
     reset() {
@@ -163,6 +163,9 @@ export class DanceLesson {
                 sketch.selfCanvas.clear();
                 sketch.activated = false;
                 this.reset();
+                sketch.emit("stop_application", {
+                    "application_name": "dance"
+                });
                 return;
             }
             if (this.moves_index in this.moves) {
