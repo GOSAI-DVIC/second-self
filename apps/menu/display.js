@@ -45,21 +45,23 @@ export const menu = new p5((sketch) => {
             sketch.menu.update_data(sketch.left_hand, sketch.right_hand);
         });
 
-        socket.on("list_applications", (data) => {
-            sketch.menu.remove_all_from(0);
-            for (let i = 0; i < data["started"].length; i++) {
-                if (
-                    data["started"][i] != "menu"
-                ) {
-                    sketch.menu.add_application(0, data["started"][i], true);
+        socket.on("available_applications", (data) => {
+            let apps = data["applications"];
+            apps.sort((a, b) => {
+                if (a["name"] < b["name"]) {
+                    return -1;
                 }
-            }
-
-            for (let i = 0; i < data["stopped"].length; i++) {
+                if (a["name"] > b["name"]) {
+                    return 1;
+                }
+                return 0;
+            });
+            sketch.menu.remove_all_from(0);
+            for (let i = 0; i < apps.length; i++) {
                 if (
-                    data["stopped"][i] != "menu"
+                    apps[i]["name"] != sketch.name
                 ) {
-                    sketch.menu.add_application(0, data["stopped"][i], false);
+                    sketch.menu.add_application(0, apps[i][name], Boolean(apps[i]["started"]));
                 }
             }
         });
