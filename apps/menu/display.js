@@ -61,10 +61,12 @@ export const menu = new p5((sketch) => {
                 if (
                     apps[i]["name"] != sketch.name
                 ) {
-                    sketch.menu.add_application(0, apps[i][name], Boolean(apps[i]["started"]));
+                    sketch.menu.add_application(0, apps[i]["name"], Boolean(apps[i]["started"]));
                 }
             }
         });
+
+        socket.emit("get_available_applications");
 
         sketch.emit = (name, data) => {
             socket.emit(name, data);
