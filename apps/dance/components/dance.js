@@ -119,6 +119,9 @@ export class DanceLesson {
             sketch.selfCanvas.clear();
             sketch.activated = false;
             this.reset();
+            sketch.emit("stop_application", {
+                "application_name": "dance"
+            });
             return;
         }
         if (this.body_pose == undefined || this.body_pose.length <= 0) return;
