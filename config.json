@@ -2,12 +2,16 @@
     "name": "Second Self",
     "camera": {
         "type": "intel",
+        "width": 640,
+        "height": 480,
         "orientation": "horizontal",
         "angle": 17,
         "x_offset": -230,
-        "y_offset": 100,
-        "width": 640,
-        "height": 480
+        "y_offset": 100
+    },
+    "applications": {
+        "startup": ["menu"],
+        "disabled": ["slr"]
     },
     "screen": {
         "screen_width": 392.85,
