@@ -336,6 +336,7 @@ export default class Vector {
         return radians / PI;
     }
     static find2DAngle(cx, cy, ex, ey) {
+        // console.log("cx, cy, ex, ey", cx, cy, ex, ey)
         const dy = ey - cy;
         const dx = ex - cx;
         const theta = Math.atan2(dy, dx);
@@ -374,7 +375,9 @@ export default class Vector {
         const beta = Math.asin(unitZ.x) || 0;
         const alpha = Math.atan2(-unitZ.y, unitZ.z) || 0;
         const gamma = Math.atan2(-unitY.x, unitX.x) || 0;
-        return new Vector(Vector.normalizeAngle(alpha), Vector.normalizeAngle(beta), Vector.normalizeAngle(gamma));
+
+        const rotation = new Vector(Vector.normalizeAngle(alpha), Vector.normalizeAngle(beta), Vector.normalizeAngle(gamma))
+        return rotation;
     }
     /**
      * Find angle between 3D Coordinates

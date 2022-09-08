@@ -9,7 +9,6 @@ class Aria {
 
         this.set = (width, height, socket) => {
             this.scene = new myScene();
-        
             socket.on(this.name, (data) => {
                 this.scene.update_data(data)
             });
