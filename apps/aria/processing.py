@@ -15,13 +15,6 @@ class Application(BaseApplication):
             self.data = data
 
             self.server.send_data(self.name, self.data)
-            # self.data = {
-            #     "face_mesh": self.data["face_landmarks"],
-            #     "body_pose": self.data["pose_landmarks"],
-            #     "right_hand_pose": self.data["right_hand_landmarks"],
-            #     "left_hand_pose": self.data["left_hand_landmarks"],
-            #     "body_world_pose": self.data["pose_world_landmarks"],
-            # }
             self.data = {
                 "face_mesh": self.data["face_mesh"],
                 "body_pose": self.data["body_pose"],

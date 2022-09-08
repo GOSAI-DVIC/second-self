@@ -89,17 +89,12 @@ export class myScene {
         );
 
         // Animate Rotation Helper function
-        this.rigRotation = (name, rotation = {
-            x: 0,
-            y: 0,
-            z: 0
-        }, dampener = 1, lerpAmount = 0.3) => {
-            
+        this.rigRotation = (name, rotation = {x: 0,y: 0,z: 0}, dampener = 1, lerpAmount = 0.3) => { 
             if (!this.currentVrm) {
                 return;
             }
             const Part = this.currentVrm.humanoid.getBoneNode(VRMSchema.HumanoidBoneName[name]);
-                if (!Part) {
+            if (!Part) {
                 return;
             }
             // console.log("rotation: ", rotation)
@@ -284,27 +279,38 @@ export class myScene {
         for (var key of Object.keys(results))
         {
             if (key == "body_world_pose") {
-                results_to_array[key]=(results[key]);
-                continue;
-            }
-            const min_width = 96;
-            const width = 448;
-            const height = 480;
-            var landmarks_array = [];
-            for (var landmark of results[key])
-            {
-                landmarks_array.push(
+                var landmarks_array = [];
+                var coor = {};
+                for (var landmark of results[key])
                 {
-                    "x": landmark[0]/width,
-                    "y": landmark[1]/height,
-                    "z": landmark[2]
-                });
+                    coor = {
+                        "x":landmark[0],
+                        "y":landmark[1],
+                        "z":landmark[2],
+                        "visibility":[3]
+                    }
+                    landmarks_array.push(coor);
+                }
+            }
+            else
+            {
+                const min_width = 96;
+                const width = 448;
+                const height = 480;
+                var landmarks_array = [];
+                var coor = {};
+                for (var landmark of results[key])
+                {   
+                    coor = {
+                        "x": landmark[0]/width,
+                        "y": landmark[1]/height,
+                        "z": landmark[2]
+                    }
+                    landmarks_array.push(coor);
+                }
             }
             results_to_array[key] = landmarks_array;
-
         }
-        console.log(results_to_array)
-
         return results_to_array
     }
 
@@ -328,7 +334,7 @@ export class myScene {
             width: width,
             height: height,
         };
-        this.animateVRM(this.array_to_landmarks(results), imageSize)
-        // this.animateVRM(results, imageSize)
+        var array_to_landmarks_results = this.array_to_landmarks(results);
+        this.animateVRM(array_to_landmarks_results, imageSize)
     }
 }
