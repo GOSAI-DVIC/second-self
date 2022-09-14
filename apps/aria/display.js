@@ -8,6 +8,7 @@ class Aria {
         this.activated = false
 
         this.set = (width, height, socket) => {
+            console.log("Calling new scene")
             this.scene = new myScene();
             socket.on(this.name, (data) => {
                 this.scene.update_data(data)

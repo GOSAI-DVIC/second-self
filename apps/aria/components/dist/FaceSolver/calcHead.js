@@ -31,8 +31,8 @@ export const calcHead = (lm) => {
     const width = plane[0].distance(plane[1]);
     const height = midPoint.distance(plane[2]);
     //flip
-    rotate.x *= -1;
-    rotate.z *= -1;
+    rotate.x *= 1;
+    rotate.z *= 1;
     return {
         //defaults to radians for rotation around x,y,z axis
         y: rotate.y * PI,

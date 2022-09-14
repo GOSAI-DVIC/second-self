@@ -2,6 +2,7 @@ import Vector from "../utils/vector.js";
 import { clamp } from "../utils/helpers.js";
 import { RIGHT, LEFT } from "./../constants.js";
 import { PI } from "./../constants.js";
+import { Int8BufferAttribute } from "three";
 /** Class representing hand solver. */
 export class HandSolver {
     /**
@@ -10,19 +11,34 @@ export class HandSolver {
      * @param {Side} side: left or right
      */
     static solve(lm, side = RIGHT) {
-        if (!lm) {
+        if (!lm || lm.length < 21) {
             console.error("Need Hand Landmarks");
             return;
         }
+        // for(let i = 0; i < lm.length; i++)
+        // {
+        //     if(isNaN(lm[i].x) || isNaN(lm[i].y) || isNaN(lm[i].z))
+        //     {
+        //         console.log(lm[i].x, lm[i].y, lm[i].z);
+        //         // return
+        //         console.log(lm)
+        //         // console.log("landmark at " + i +" is undefined");
+        //     }
+        // }
+        
         const palm = [
-            new Vector(lm[0]),
+            new Vector(lm[0].x),
             new Vector(lm[side === RIGHT ? 17 : 5]),
             new Vector(lm[side === RIGHT ? 5 : 17]),
         ];
         const handRotation = Vector.rollPitchYaw(palm[0], palm[1], palm[2]);
         handRotation.y = handRotation.z;
         handRotation.y -= side === LEFT ? 0.4 : 0.4;
+        // console.log(handRotation.x, handRotation.y, handRotation.z);
         let hand = {};
+        // console.log(Vector.angleBetween3DCoords(lm[0], lm[13], lm[14]))
+        // if(isNaN(Vector.angleBetween3DCoords(lm[0], lm[13], lm[14]))) console.log(lm)
+        // console.log(Vector.angleBetween3DCoords(lm[0], lm[13], lm[14]));
         hand[side + "Wrist"] = { x: handRotation.x, y: handRotation.y, z: handRotation.z };
         hand[side + "RingProximal"] = { x: 0, y: 0, z: Vector.angleBetween3DCoords(lm[0], lm[13], lm[14]) };
         hand[side + "RingIntermediate"] = { x: 0, y: 0, z: Vector.angleBetween3DCoords(lm[13], lm[14], lm[15]) };
@@ -49,6 +65,7 @@ export class HandSolver {
  * @param {Side} side : left or right
  */
 const rigFingers = (hand, side = RIGHT) => {
+    // console.log(hand)
     // Invert modifier based on left vs right side
     const invert = side === RIGHT ? 1 : -1;
     const digits = ["Ring", "Index", "Little", "Thumb", "Middle"];

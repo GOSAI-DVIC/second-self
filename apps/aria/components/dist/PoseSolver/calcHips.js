@@ -1,24 +1,6 @@
 import Vector from "../utils/vector.js";
 import { clamp, remap } from "../utils/helpers.js";
 import { PI } from "./../constants.js";
-
-function rollPitchYaw(a, b, c) {
-    if (!c) {
-        return new Vector(Vector.normalizeAngle(Vector.find2DAngle(a.z, a.y, b.z, b.y)), Vector.normalizeAngle(Vector.find2DAngle(a.z, a.x, b.z, b.x)), Vector.normalizeAngle(Vector.find2DAngle(a.x, a.y, b.x, b.y)));
-    }
-    const qb = b.subtract(a);
-    const qc = c.subtract(a);
-    const n = qb.cross(qc);
-    const unitZ = n.unit();
-    const unitX = qb.unit();
-    const unitY = unitZ.cross(unitX);
-    const beta = Math.asin(unitZ.x) || 0;
-    const alpha = Math.atan2(-unitZ.y, unitZ.z) || 0;
-    const gamma = Math.atan2(-unitY.x, unitX.x) || 0;
-    const rotation = new Vector(Vector.normalizeAngle(alpha), Vector.normalizeAngle(beta), Vector.normalizeAngle(gamma))
-    return rotation;
-}
-
 /**
  * Calculates Hip rotation and world position
  * @param {Array} lm3d : array of 3D pose vectors from tfjs or mediapipe
@@ -46,7 +28,7 @@ export const calcHips = (lm3d, lm2d) => {
         z: hips.position.z * Math.pow(hips.position.z * -2, 2),
     };
     hips.worldPosition.x *= hips.worldPosition.z;
-    hips.rotation = rollPitchYaw(lm3d[23], lm3d[24]);
+    hips.rotation = Vector.rollPitchYaw(lm3d[23], lm3d[24]);
     //fix -PI, PI jumping
     if (hips.rotation.y > 0.5) {
         hips.rotation.y -= 2;
@@ -62,7 +44,7 @@ export const calcHips = (lm3d, lm2d) => {
     const turnAroundAmountHips = remap(Math.abs(hips.rotation.y), 0.2, 0.4);
     hips.rotation.z *= 1 - turnAroundAmountHips;
     hips.rotation.x = 0; //temp fix for inaccurate X axis
-    const spine = rollPitchYaw(lm3d[11], lm3d[12]);
+    const spine = Vector.rollPitchYaw(lm3d[11], lm3d[12]);
     //fix -PI, PI jumping
     if (spine.y > 0.5) {
         spine.y -= 2;
@@ -89,13 +71,13 @@ export const calcHips = (lm3d, lm2d) => {
 export const rigHips = (hips, spine) => {
     //convert normalized values to radians
     if (hips.rotation) {
-        hips.rotation.x *= Math.PI;
-        hips.rotation.y *= Math.PI;
-        hips.rotation.z *= Math.PI;
+        hips.rotation.x *= -Math.PI;
+        hips.rotation.y *= -Math.PI;
+        hips.rotation.z *= -Math.PI;
     }
-    spine.x *= PI;
-    spine.y *= PI;
-    spine.z *= PI;
+    spine.x *= -PI;
+    spine.y *= -PI;
+    spine.z *= -PI;
     return {
         Hips: hips,
         Spine: spine,

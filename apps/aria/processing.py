@@ -1,5 +1,4 @@
 from core.application import BaseApplication
-import time
 
 class Application(BaseApplication):
     """Aria"""

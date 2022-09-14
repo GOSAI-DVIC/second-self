@@ -42,7 +42,7 @@ export class myScene {
         document.body.appendChild(this.renderer.domElement);
 
         // camera
-        this.orbitCamera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this.orbitCamera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 10);
         this.orbitCamera.position.set(0.0, 1.4, 0.7);
 
         // controls
@@ -64,6 +64,11 @@ export class myScene {
 
         // requestAnimationFrame(animate);
 
+        this.imageSize = {
+            width: width,
+            height: height,
+        };
+
         // Import Character VRM
         const loader = new GLTFLoader();
         loader.crossOrigin = "anonymous";
@@ -71,7 +76,7 @@ export class myScene {
         // console.log(window.location)
         loader.load(
             // "https://cdn.glitch.com/29e07830-2317-4b15-a044-135e73c7f840%2FAshtra.vrm?v=1630342336981",
-            "./platform/home/apps/aria/components/models/Yuya.vrm",
+            "./platform/home/apps/aria/components/models/papa_de_him_chan.vrm",
             // "https://cdn.glitch.com/29e07830-2317-4b15-a044-135e73c7f840%2Fthree-vrm-girl.vrm",
             (gltf) => {
                 VRMUtils.removeUnnecessaryJoints(gltf.scene);
@@ -80,6 +85,27 @@ export class myScene {
                     this.scene.add(vrm.scene);
                     this.currentVrm = vrm;
                     this.currentVrm.scene.rotation.y = Math.PI; // Rotate model 180deg to face camera
+
+                    this.rigRotation("RightUpperArm", {
+                        x: 0,
+                        y: 0,
+                        z: -1.5
+                    }, 1, 1);
+                    this.rigRotation("RightLowerArm", {
+                        x: 0,
+                        y: 0,
+                        z: 0
+                    }, 1, 1);
+                    this.rigRotation("LeftUpperArm", {
+                        x: 0,
+                        y: 0,
+                        z: 1.5
+                    }, 1, 1);
+                    this.rigRotation("LeftLowerArm", {
+                        x: 0,
+                        y: 0,
+                        z: 0
+                    }, 1, 1);
                 });
             },
 
@@ -89,24 +115,7 @@ export class myScene {
         );
 
         // Animate Rotation Helper function
-        this.rigRotation = (name, rotation = {x: 0,y: 0,z: 0}, dampener = 1, lerpAmount = 0.3) => { 
-            if (!this.currentVrm) {
-                return;
-            }
-            const Part = this.currentVrm.humanoid.getBoneNode(VRMSchema.HumanoidBoneName[name]);
-            if (!Part) {
-                return;
-            }
-            // console.log("rotation: ", rotation)
-            let euler = new THREE.Euler(
-                rotation.x * dampener,
-                rotation.y * dampener,
-                rotation.z * dampener,
-                rotation.rotationOrder || "XYZ"
-            );
-            let quaternion = new THREE.Quaternion().setFromEuler(euler);
-            Part.quaternion.slerp(quaternion, lerpAmount); // interpolate
-        };
+        
 
         // Animate Position Helper Function
         this.rigPosition = (name, position = {
@@ -126,9 +135,30 @@ export class myScene {
         };
 
         this.oldLookTarget = new THREE.Euler();
-
-        
     }
+
+    rigRotation(name, rotation = {x: 0,y: 0,z: 0}, dampener = 1, lerpAmount = 0.3) 
+        { 
+            if (!this.currentVrm) {
+                return;
+            }
+            const Part = this.currentVrm.humanoid.getBoneNode(VRMSchema.HumanoidBoneName[name]);
+            if (!Part) {
+                return;
+            }
+            // console.log("rotation: ", rotation)
+            let euler = new THREE.Euler(
+                rotation.x * dampener,
+                rotation.y * dampener,
+                rotation.z * dampener,
+                rotation.rotationOrder || "XYZ"
+            );
+            let quaternion = new THREE.Quaternion().setFromEuler(euler);
+            if (isNaN(quaternion.x) || isNaN(quaternion.y) || isNaN(quaternion.z) || isNaN(quaternion.w)) {
+                return;
+            }
+            Part.quaternion.slerp(quaternion, lerpAmount); // interpolate
+        };
 
     rigFace(riggedFace) {
         if (!this.currentVrm) {
@@ -210,66 +240,72 @@ export class myScene {
             this.rigRotation("Chest", riggedPose.Spine, 0.25, 0.3);
             this.rigRotation("Spine", riggedPose.Spine, 0.45, 0.3);
 
-            this.rigRotation("RightUpperArm", riggedPose.RightUpperArm, 1, 0.3);
-            this.rigRotation("RightLowerArm", riggedPose.RightLowerArm, 1, 0.3);
-            this.rigRotation("LeftUpperArm", riggedPose.LeftUpperArm, 1, 0.3);
-            this.rigRotation("LeftLowerArm", riggedPose.LeftLowerArm, 1, 0.3);
+            this.rigRotation("LeftUpperArm", riggedPose.RightUpperArm, 1, 0.3);
+            this.rigRotation("LeftLowerArm", riggedPose.RightLowerArm, 1, 0.3);
+            this.rigRotation("RightUpperArm", riggedPose.LeftUpperArm, 1, 0.3);
+            this.rigRotation("RightLowerArm", riggedPose.LeftLowerArm, 1, 0.3);
 
-            this.rigRotation("LeftUpperLeg", riggedPose.LeftUpperLeg, 1, 0.3);
-            this.rigRotation("LeftLowerLeg", riggedPose.LeftLowerLeg, 1, 0.3);
-            this.rigRotation("RightUpperLeg", riggedPose.RightUpperLeg, 1, 0.3);
-            this.rigRotation("RightLowerLeg", riggedPose.RightLowerLeg, 1, 0.3);
+            // this.rigRotation("LeftUpperLeg", riggedPose.LeftUpperLeg, 1, 0.3);
+            // this.rigRotation("LeftLowerLeg", riggedPose.LeftLowerLeg, 1, 0.3);
+            // this.rigRotation("RightUpperLeg", riggedPose.RightUpperLeg, 1, 0.3);
+            // this.rigRotation("RightLowerLeg", riggedPose.RightLowerLeg, 1, 0.3);
         }
 
-        // Animate Hands
-        if (left_hands_landmarks) {
+        if (left_hands_landmarks && left_hands_landmarks.length == 21) {
             riggedLeftHand = Kalidokit.Hand.solve(left_hands_landmarks, "Left");
-            this.rigRotation("LeftHand", {
-                // Combine pose rotation Z and hand rotation X Y
-                z: riggedPose.LeftHand.z,
-                y: riggedLeftHand.LeftWrist.y,
-                x: riggedLeftHand.LeftWrist.x,
-            });
-            this.rigRotation("LeftRingProximal", riggedLeftHand.LeftRingProximal);
-            this.rigRotation("LeftRingIntermediate", riggedLeftHand.LeftRingIntermediate);
-            this.rigRotation("LeftRingDistal", riggedLeftHand.LeftRingDistal);
-            this.rigRotation("LeftIndexProximal", riggedLeftHand.LeftIndexProximal);
-            this.rigRotation("LeftIndexIntermediate", riggedLeftHand.LeftIndexIntermediate);
-            this.rigRotation("LeftIndexDistal", riggedLeftHand.LeftIndexDistal);
-            this.rigRotation("LeftMiddleProximal", riggedLeftHand.LeftMiddleProximal);
-            this.rigRotation("LeftMiddleIntermediate", riggedLeftHand.LeftMiddleIntermediate);
-            this.rigRotation("LeftMiddleDistal", riggedLeftHand.LeftMiddleDistal);
-            this.rigRotation("LeftThumbProximal", riggedLeftHand.LeftThumbProximal);
-            this.rigRotation("LeftThumbIntermediate", riggedLeftHand.LeftThumbIntermediate);
-            this.rigRotation("LeftThumbDistal", riggedLeftHand.LeftThumbDistal);
-            this.rigRotation("LeftLittleProximal", riggedLeftHand.LeftLittleProximal);
-            this.rigRotation("LeftLittleIntermediate", riggedLeftHand.LeftLittleIntermediate);
-            this.rigRotation("LeftLittleDistal", riggedLeftHand.LeftLittleDistal);
+            if(riggedLeftHand) {
+
+                this.rigRotation("LeftHand", {
+                    // Combine pose rotation Z and hand rotation X Y
+                    z: riggedPose.LeftHand.z,
+                    y: riggedLeftHand.LeftWrist.y,
+                    x: riggedLeftHand.LeftWrist.x,
+                });
+                // console.log(this.currentVrm.humanoid.getBoneNode(VRMSchema.HumanoidBoneName["LeftIndexDistal"]).quaternion);
+                // console.log(riggedLeftHand.LeftIndexDistal);
+                
+                this.rigRotation("LeftRingProximal", riggedLeftHand.LeftRingProximal);
+                this.rigRotation("LeftRingIntermediate", riggedLeftHand.LeftRingIntermediate);
+                this.rigRotation("LeftRingDistal", riggedLeftHand.LeftRingDistal);
+                this.rigRotation("LeftIndexProximal", riggedLeftHand.LeftIndexProximal);
+                this.rigRotation("LeftIndexIntermediate", riggedLeftHand.LeftIndexIntermediate);
+                this.rigRotation("LeftIndexDistal", riggedLeftHand.LeftIndexDistal);
+                this.rigRotation("LeftMiddleProximal", riggedLeftHand.LeftMiddleProximal);
+                this.rigRotation("LeftMiddleIntermediate", riggedLeftHand.LeftMiddleIntermediate);
+                this.rigRotation("LeftMiddleDistal", riggedLeftHand.LeftMiddleDistal);
+                this.rigRotation("LeftThumbProximal", riggedLeftHand.LeftThumbProximal);
+                this.rigRotation("LeftThumbIntermediate", riggedLeftHand.LeftThumbIntermediate);
+                this.rigRotation("LeftThumbDistal", riggedLeftHand.LeftThumbDistal);
+                this.rigRotation("LeftLittleProximal", riggedLeftHand.LeftLittleProximal);
+                this.rigRotation("LeftLittleIntermediate", riggedLeftHand.LeftLittleIntermediate);
+                this.rigRotation("LeftLittleDistal", riggedLeftHand.LeftLittleDistal);
+            }
         }
         if (right_hand_landmarks) {
-            riggedRightHand = Kalidokit.Hand.solve(right_hand_landmarks, "Right");
-            this.rigRotation("RightHand", {
-                // Combine Z axis from pose hand and X/Y axis from hand wrist rotation
-                z: riggedPose.RightHand.z,
-                y: riggedRightHand.RightWrist.y,
-                x: riggedRightHand.RightWrist.x,
-            });
-            this.rigRotation("RightRingProximal", riggedRightHand.RightRingProximal);
-            this.rigRotation("RightRingIntermediate", riggedRightHand.RightRingIntermediate);
-            this.rigRotation("RightRingDistal", riggedRightHand.RightRingDistal);
-            this.rigRotation("RightIndexProximal", riggedRightHand.RightIndexProximal);
-            this.rigRotation("RightIndexIntermediate", riggedRightHand.RightIndexIntermediate);
-            this.rigRotation("RightIndexDistal", riggedRightHand.RightIndexDistal);
-            this.rigRotation("RightMiddleProximal", riggedRightHand.RightMiddleProximal);
-            this.rigRotation("RightMiddleIntermediate", riggedRightHand.RightMiddleIntermediate);
-            this.rigRotation("RightMiddleDistal", riggedRightHand.RightMiddleDistal);
-            this.rigRotation("RightThumbProximal", riggedRightHand.RightThumbProximal);
-            this.rigRotation("RightThumbIntermediate", riggedRightHand.RightThumbIntermediate);
-            this.rigRotation("RightThumbDistal", riggedRightHand.RightThumbDistal);
-            this.rigRotation("RightLittleProximal", riggedRightHand.RightLittleProximal);
-            this.rigRotation("RightLittleIntermediate", riggedRightHand.RightLittleIntermediate);
-            this.rigRotation("RightLittleDistal", riggedRightHand.RightLittleDistal);
+            // riggedRightHand = Kalidokit.Hand.solve(right_hand_landmarks, "Right");
+            // this.rigRotation("RightHand", {
+            //     // Combine Z axis from pose hand and X/Y axis from hand wrist rotation
+            //     z: riggedPose.RightHand.z,
+            //     y: riggedRightHand.RightWrist.y,
+            //     x: riggedRightHand.RightWrist.x,
+            // });
+            // this.rigRotation("RightRingProximal", riggedRightHand.RightRingProximal);
+            // this.rigRotation("RightRingIntermediate", riggedRightHand.RightRingIntermediate);
+            // this.rigRotation("RightRingDistal", riggedRightHand.RightRingDistal);
+            // this.rigRotation("RightIndexProximal", riggedRightHand.RightIndexProximal);
+            // this.rigRotation("RightIndexIntermediate", riggedRightHand.RightIndexIntermediate);
+            // this.rigRotation("RightIndexDistal", riggedRightHand.RightIndexDistal);
+            // this.rigRotation("RightMiddleProximal", riggedRightHand.RightMiddleProximal);
+            // this.rigRotation("RightMiddleIntermediate", riggedRightHand.RightMiddleIntermediate);
+            // this.rigRotation("RightMiddleDistal", riggedRightHand.RightMiddleDistal);
+            // this.rigRotation("RightThumbProximal", riggedRightHand.RightThumbProximal);
+            // this.rigRotation("RightThumbIntermediate", riggedRightHand.RightThumbIntermediate);
+            // this.rigRotation("RightThumbDistal", riggedRightHand.RightThumbDistal);
+            // this.rigRotation("RightLittleProximal", riggedRightHand.RightLittleProximal);
+            // this.rigRotation("RightLittleIntermediate", riggedRightHand.RightLittleIntermediate);
+            // this.rigRotation("RightLittleDistal", riggedRightHand.RightLittleDistal);
         }
+        
 
     }
 
@@ -287,7 +323,7 @@ export class myScene {
                         "x":landmark[0],
                         "y":landmark[1],
                         "z":landmark[2],
-                        "visibility":[3]
+                        "visibility":landmark[3]
                     }
                     landmarks_array.push(coor);
                 }
@@ -330,11 +366,10 @@ export class myScene {
     update() {}
 
     update_data(results) {
-        var imageSize = {
-            width: width,
-            height: height,
-        };
+        // const right_hand_landmarks = results["left_hand_pose"];
+        // results["left_hand_pose"] = results["right_hand_pose"];
+        // results["right_hand_pose"] = right_hand_landmarks;
         var array_to_landmarks_results = this.array_to_landmarks(results);
-        this.animateVRM(array_to_landmarks_results, imageSize)
+        this.animateVRM(array_to_landmarks_results, this.imageSize)
     }
 }

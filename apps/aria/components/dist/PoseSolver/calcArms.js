@@ -22,13 +22,15 @@ export const calcArms = (lm) => {
     LowerArm.l.y = Vector.angleBetween3DCoords(lm[12], lm[14], lm[16]);
     LowerArm.r.z = clamp(LowerArm.r.z, -2.14, 0);
     LowerArm.l.z = clamp(LowerArm.l.z, -2.14, 0);
+    // console.log("l", lm[15], lm[17], lm[19]);
+    // console.log("r", lm[16], lm[18], lm[20]);
     const Hand = {
-        r: Vector.findRotation(Vector.fromArray(lm[15]), Vector.lerp(Vector.fromArray(lm[17]), Vector.fromArray(lm[19]), 0.5)),
-        l: Vector.findRotation(Vector.fromArray(lm[16]), Vector.lerp(Vector.fromArray(lm[18]), Vector.fromArray(lm[20]), 0.5)),
+        l: Vector.findRotation(Vector.fromArray(lm[15]), Vector.lerp(Vector.fromArray(lm[17]), Vector.fromArray(lm[19]), 0.5)),
+        r: Vector.findRotation(Vector.fromArray(lm[16]), Vector.lerp(Vector.fromArray(lm[18]), Vector.fromArray(lm[20]), 0.5)),
     };
     //Modify Rotations slightly for more natural movement
-    const rightArmRig = rigArm(UpperArm.r, LowerArm.r, Hand.r, RIGHT);
-    const leftArmRig = rigArm(UpperArm.l, LowerArm.l, Hand.l, LEFT);
+    const rightArmRig = rigArm(UpperArm.r, LowerArm.r, Hand.r, LEFT);
+    const leftArmRig = rigArm(UpperArm.l, LowerArm.l, Hand.l, RIGHT);
     return {
         //Scaled
         UpperArm: {
