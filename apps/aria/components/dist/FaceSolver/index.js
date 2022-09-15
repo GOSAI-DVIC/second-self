@@ -35,6 +35,7 @@ export class FaceSolver {
         const getMouth = calcMouth(lm);
         //set high and low remapping values based on the runtime (tfjs vs mediapipe) of the results
         blinkSettings = blinkSettings.length > 0 ? blinkSettings : runtime === "tfjs" ? [0.55, 0.85] : [0.35, 0.5];
+
         let getEye = calcEyes(lm, {
             high: blinkSettings[1],
             low: blinkSettings[0],

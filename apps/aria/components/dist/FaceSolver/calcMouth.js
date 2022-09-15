@@ -32,7 +32,7 @@ export const calcMouth = (lm) => {
     ratioX = (ratioX - 0.3) * 2;
     // const mouthX = remap(ratioX - 0.4, 0, 0.5);
     const mouthX = ratioX;
-    const mouthY = remap(mouthOpen / eyeInnerDistance, 0.17, 0.5);
+    const mouthY = remap(mouthOpen / eyeInnerDistance, 0.17, 0.5)*1.5;
     //Depricated: Change sensitivity due to facemesh and holistic have different point outputs.
     // const fixFacemesh = runtime === "tfjs" ? 1.3 : 0;
     // let ratioI = remap(mouthXY, 1.3 + fixFacemesh * 0.8, 2.6 + fixFacemesh) * remap(mouthY, 0, 1);

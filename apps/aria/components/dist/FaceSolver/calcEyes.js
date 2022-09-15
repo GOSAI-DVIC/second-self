@@ -28,6 +28,7 @@ const points = {
 export const getEyeOpen = (lm, side = LEFT, { high = 0.85, low = 0.55 } = {}) => {
     const eyePoints = points.eye[side];
     const eyeDistance = eyeLidRatio(lm[eyePoints[0]], lm[eyePoints[1]], lm[eyePoints[2]], lm[eyePoints[3]], lm[eyePoints[4]], lm[eyePoints[5]], lm[eyePoints[6]], lm[eyePoints[7]]);
+    // console.log(lm[eyePoints[0]], lm[eyePoints[1]], lm[eyePoints[2]], lm[eyePoints[3]], lm[eyePoints[4]], lm[eyePoints[5]], lm[eyePoints[6]], lm[eyePoints[7]])
     // human eye width to height ratio is roughly .3
     const maxRatio = 0.285;
     // compare ratio against max ratio

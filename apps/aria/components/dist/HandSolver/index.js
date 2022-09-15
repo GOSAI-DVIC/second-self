@@ -34,11 +34,7 @@ export class HandSolver {
         const handRotation = Vector.rollPitchYaw(palm[0], palm[1], palm[2]);
         handRotation.y = handRotation.z;
         handRotation.y -= side === LEFT ? 0.4 : 0.4;
-        // console.log(handRotation.x, handRotation.y, handRotation.z);
         let hand = {};
-        // console.log(Vector.angleBetween3DCoords(lm[0], lm[13], lm[14]))
-        // if(isNaN(Vector.angleBetween3DCoords(lm[0], lm[13], lm[14]))) console.log(lm)
-        // console.log(Vector.angleBetween3DCoords(lm[0], lm[13], lm[14]));
         hand[side + "Wrist"] = { x: handRotation.x, y: handRotation.y, z: handRotation.z };
         hand[side + "RingProximal"] = { x: 0, y: 0, z: Vector.angleBetween3DCoords(lm[0], lm[13], lm[14]) };
         hand[side + "RingIntermediate"] = { x: 0, y: 0, z: Vector.angleBetween3DCoords(lm[13], lm[14], lm[15]) };

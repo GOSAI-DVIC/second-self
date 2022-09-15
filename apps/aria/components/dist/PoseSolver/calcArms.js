@@ -69,12 +69,12 @@ export const rigArm = (UpperArm, LowerArm, Hand, side = RIGHT) => {
     UpperArm.y -= Math.max(LowerArm.x);
     UpperArm.y -= -invert * Math.max(LowerArm.z, 0);
     UpperArm.x -= 0.3 * invert;
-    LowerArm.z *= -2.14 * invert;
+    LowerArm.z *= -2.14 * invert + 1.0;
     LowerArm.y *= 2.14 * invert;
     LowerArm.x *= 2.14 * invert;
     //Clamp values to human limits
     UpperArm.x = clamp(UpperArm.x, -0.5, PI);
-    LowerArm.x = clamp(LowerArm.x, -0.3, 0.3);
+    LowerArm.x = clamp(LowerArm.x, -0.3, 0.6);
     Hand.y = clamp(Hand.z * 2, -0.6, 0.6); //side to side
     Hand.z = Hand.z * -2.3 * invert; //up down
     return {
