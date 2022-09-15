@@ -101,9 +101,12 @@ export class Hand {
     update_data(pose, sign) {
         if (pose != undefined && pose.length > 0) {
             this.hand_pose = pose
+            this.show_hands_lines = true
         }
+        else this.show_hands_lines = false
         if (sign != undefined) {
             this.sign = sign
+            
         }
     }
 
