@@ -77,7 +77,7 @@ export const pupilPos = (lm, side = LEFT) => {
     const dx = midPoint.x - pupil.x;
     //eye center y is slightly above midpoint
     const dy = midPoint.y - eyeWidth * 0.075 - pupil.y;
-    let ratioX = dx / (eyeWidth / 2);
+    let ratioX = -dx / (eyeWidth / 2);
     let ratioY = dy / (eyeWidth / 4);
     ratioX *= 4;
     ratioY *= 4;
@@ -152,8 +152,8 @@ export const calcPupils = (lm) => {
     }
     else {
         //track pupils using left eye
-        const pupilL = pupilPos(lm, LEFT);
-        const pupilR = pupilPos(lm, RIGHT);
+        const pupilL = pupilPos(lm, RIGHT);
+        const pupilR = pupilPos(lm, LEFT);
         return {
             x: (pupilL.x + pupilR.x) * 0.5 || 0,
             y: (pupilL.y + pupilR.y) * 0.5 || 0,
@@ -184,8 +184,8 @@ export const calcBrow = (lm) => {
         return 0;
     }
     else {
-        const leftBrow = getBrowRaise(lm, LEFT);
-        const rightBrow = getBrowRaise(lm, RIGHT);
+        const leftBrow = getBrowRaise(lm, RIGHT);
+        const rightBrow = getBrowRaise(lm,LEFT );
         return (leftBrow + rightBrow) / 2 || 0;
     }
 };

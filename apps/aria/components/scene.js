@@ -234,7 +234,7 @@ export class myScene {
             console.log((pose2DLandmarks[24].x + pose2DLandmarks[23].x) / 2);
             this.rigPosition(
                 "Hips", {
-                    x: -(pose2DLandmarks[24].x + pose2DLandmarks[23].x -1.85) *2.5/2 , // Reverse direction
+                    x: -(pose2DLandmarks[24].x + pose2DLandmarks[23].x -1.35) *2.5/2 , // Reverse direction
                     y: riggedPose.Hips.position.y + 1, // Add a bit of height
                     z: -riggedPose.Hips.position.z, // Reverse direction
                 },
