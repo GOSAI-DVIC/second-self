@@ -28,7 +28,17 @@ export class Theremine{
         }
     }
 
-    show(sketch) {}
+    show(sketch) {
+        var x_pos_array = [];
+        var y_pos_array = [];
+        for(var point_coor of this.right_hand_pose) 
+        {
+            x_pos_array.push(point_coor[0]);
+            y_pos_array.push(point_coor[1]+40);
+        }
+        sketch.point(Math.max(...x_pos_array), Math.min(...y_pos_array));
+
+    }
 
     update(sketch) {
     }

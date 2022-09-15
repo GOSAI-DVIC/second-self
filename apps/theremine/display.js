@@ -47,6 +47,8 @@ export const theremine = new p5(( sketch ) => {
     };
 
     sketch.show = () => {
+        if (!sketch.activated) return;
         sketch.clear();
+        sketch.theremine.show(sketch);
     }
 });
