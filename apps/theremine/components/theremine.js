@@ -4,10 +4,65 @@ export class Theremine{
         this.length = 0.01;
         this.bitrate = 48000;
         this.amplitude = 0;
-
-    }
-    synthesize() {
+        this.right_hand_selected_point = [0,0,0];
+        this.left_hand_selected_point = [0,0,0];
         
+        // A simple Particle class
+        let Particle = function(position) {
+            this.acceleration = createVector(0, 0.05);
+            this.velocity = createVector(random(-1, 1), random(-1, 0));
+            this.position = position.copy();
+            this.lifespan = 255;
+            
+        };
+        
+        Particle.prototype.run = function(sketch) {
+            this.update();
+            this.display(sketch);
+        };
+        
+        // Method to update position
+        Particle.prototype.update = function(){
+            this.velocity.add(this.acceleration);
+            this.position.add(this.velocity);
+            this.lifespan -= 2;
+        };
+        
+        // Method to display
+        Particle.prototype.display = function(sketch) {
+            sketch.stroke(50, this.lifespan);
+            sketch.fill(0,0,200, this.lifespan);
+            sketch.ellipse(this.position.x, this.position.y, 12, 12);
+        };
+        
+        // Is the particle still useful?
+        Particle.prototype.isDead = function(){
+            return this.lifespan < 0;
+        };
+        
+        let ParticleSystem = function() {
+            this.particles = [];
+        };
+        
+        ParticleSystem.prototype.addParticle = function(position) {
+            this.particles.push(new Particle(position));
+        };
+        
+        ParticleSystem.prototype.run = function(sketch) {
+            console.log(this.particles)
+            for (let i = this.particles.length-1; i >= 0; i--) {
+                let p = this.particles[i];
+                p.run(sketch);
+                if (p.isDead()) {
+                this.particles.splice(i, 1);
+                }
+            }
+        };
+
+        this.system = new ParticleSystem(createVector(this.right_hand_selected_point[0], this.right_hand_selected_point[1] - 40));
+    }
+
+    synthesize() {
     }
 
     reset() {}
@@ -15,31 +70,36 @@ export class Theremine{
     update_data(right_hand_pose, left_hand_pose) {
         this.right_hand_pose = right_hand_pose;
         this.left_hand_pose = left_hand_pose;
+
         if(this.right_hand_pose.length !== 0){
-            var x_pos_array = [];
-            for(var point_coor of this.right_hand_pose) x_pos_array.push(point_coor[0]);
-            this.frequency = Math.max(...x_pos_array);
+            this.right_hand_selected_point = [0,0,0];
+            for(var point_coor of this.right_hand_pose) 
+                if(point_coor[0] > this.right_hand_selected_point[0]) this.right_hand_selected_point = point_coor;
         }
+        
         if(this.left_hand_pose.length !== 0){
-            var y_pos_array = [];
-            for(var point_coor of this.left_hand_pose) y_pos_array.push(point_coor[1]);
-            this.amplitude = (Math.min(...y_pos_array) - 250) * (0 - 1) / (650 - 250) + 1;
-            console.log("this.amplitude", this.amplitude);
+            this.left_hand_selected_point = [0,0,0];
+            for(var point_coor of this.left_hand_pose) 
+                if(point_coor[1] > this.left_hand_selected_point[1]) this.left_hand_selected_point = point_coor;
         }
+
+        this.frequency = this.right_hand_selected_point[0];
+        this.amplitude = this.left_hand_selected_point[1];
+
+
     }
 
     show(sketch) {
-        var x_pos_array = [];
-        var y_pos_array = [];
-        for(var point_coor of this.right_hand_pose) 
-        {
-            x_pos_array.push(point_coor[0]);
-            y_pos_array.push(point_coor[1]+40);
-        }
-        sketch.point(Math.max(...x_pos_array), Math.min(...y_pos_array));
-
+        // sketch.fill(0,0,255)
+        // sketch.ellipse(this.right_hand_selected_point[0], this.right_hand_selected_point[1] - 40, 10);
+        // sketch.fill(255,0,0)
+        // sketch.ellipse(this.left_hand_selected_point[0] + 40, this.left_hand_selected_point[1], 10);
+        this.system.addParticle(createVector(this.right_hand_selected_point[0], this.right_hand_selected_point[1] - 40));
+        this.system.run(sketch);
     }
 
     update(sketch) {
     }
+
+
 }
