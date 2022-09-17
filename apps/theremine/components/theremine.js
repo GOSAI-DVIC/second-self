@@ -1,3 +1,5 @@
+import notes_freq_CMaj_json from './notes-frequencies-CMaj.json' assert { type: "json" };
+
 export class Theremine{
     constructor() {
         this.frequency = 0;
@@ -6,14 +8,30 @@ export class Theremine{
         this.amplitude = 0;
         this.right_hand_selected_point = [0,0,0];
         this.left_hand_selected_point = [0,0,0];
+        this.blue_color;
+        this.red_color;
+        this.system;
         
+        this.initParticles();
+    }
+
+    displayBars(sketch) {
+        const notes_freq_CMaj = JSON.parse(JSON.stringify(notes_freq_CMaj_json))
+        for (let note in notes_freq_CMaj) {
+            console.log(notes_freq_CMaj[note])
+            sketch.stroke(200);
+            sketch.line(this.freqToPxl(notes_freq_CMaj[note]), 50, this.freqToPxl(notes_freq_CMaj[note]), height - 50);
+        }
+    }
+
+    initParticles() {
         // A simple Particle class
-        let Particle = function(position) {
-            this.acceleration = createVector(0, 0.05);
-            this.velocity = createVector(random(-1, 1), random(-1, 0));
+        let Particle = function(position, color) {
+            this.acceleration = createVector(0, 0.02);
+            this.velocity = createVector(random(-0.8,0.8), random(-0.8, 0));
             this.position = position.copy();
-            this.lifespan = 255;
-            
+            this.lifespan = 50;
+            this.color = color;
         };
         
         Particle.prototype.run = function(sketch) {
@@ -30,9 +48,8 @@ export class Theremine{
         
         // Method to display
         Particle.prototype.display = function(sketch) {
-            sketch.stroke(50, this.lifespan);
-            sketch.fill(0,0,200, this.lifespan);
-            sketch.ellipse(this.position.x, this.position.y, 12, 12);
+            sketch.fill(this.color);
+            sketch.ellipse(this.position.x, this.position.y, 3, 3);
         };
         
         // Is the particle still useful?
@@ -40,16 +57,16 @@ export class Theremine{
             return this.lifespan < 0;
         };
         
-        let ParticleSystem = function() {
+        let ParticleSystem = function(position) {
+            this.origin = position.copy();
             this.particles = [];
         };
         
-        ParticleSystem.prototype.addParticle = function(position) {
-            this.particles.push(new Particle(position));
+        ParticleSystem.prototype.addParticle = function(position, color) {
+            this.particles.push(new Particle(position, color));
         };
         
         ParticleSystem.prototype.run = function(sketch) {
-            console.log(this.particles)
             for (let i = this.particles.length-1; i >= 0; i--) {
                 let p = this.particles[i];
                 p.run(sketch);
@@ -60,7 +77,8 @@ export class Theremine{
         };
 
         this.system = new ParticleSystem(createVector(this.right_hand_selected_point[0], this.right_hand_selected_point[1] - 40));
-    }
+        // console.log(this.system.particles)
+        }
 
     synthesize() {
     }
@@ -83,22 +101,49 @@ export class Theremine{
                 if(point_coor[1] > this.left_hand_selected_point[1]) this.left_hand_selected_point = point_coor;
         }
 
-        this.frequency = this.right_hand_selected_point[0];
-        this.amplitude = this.left_hand_selected_point[1];
+        this.frequency = this.calcFreq(this.right_hand_selected_point[0]);
+        this.amplitude = Math.max(2*height/3 - this.left_hand_selected_point[1], 0)/100;
+    }
 
+    // Links the distance in pixels to the frequency
+    calcFreq(value)
+    {
+        return  value - width/10;
+    }
 
+    freqToPxl(freq)
+    {
+        return freq + width/10;
     }
 
     show(sketch) {
-        // sketch.fill(0,0,255)
-        // sketch.ellipse(this.right_hand_selected_point[0], this.right_hand_selected_point[1] - 40, 10);
-        // sketch.fill(255,0,0)
-        // sketch.ellipse(this.left_hand_selected_point[0] + 40, this.left_hand_selected_point[1], 10);
-        this.system.addParticle(createVector(this.right_hand_selected_point[0], this.right_hand_selected_point[1] - 40));
+        var blue_color = sketch.color(115, 167, 250);
+        var red_color = sketch.color(245, 34, 34);
+
+        if (this.right_hand_pose) {
+            if (this.right_hand_pose.length !== 0)
+            {
+                sketch.fill(blue_color);
+                sketch.ellipse(this.right_hand_selected_point[0], this.right_hand_pose[11][1] - 40, 10);
+                this.system.addParticle(createVector(this.right_hand_selected_point[0], this.right_hand_pose[11][1] - 40), blue_color);
+
+            }
+        }
+        if (this.left_hand_pose) {
+            if (this.left_hand_pose.length !== 0)
+            {
+                sketch.fill(red_color)
+                sketch.ellipse(this.left_hand_selected_point[0] + 60, this.left_hand_pose[4][1], 10);
+                this.system.addParticle(createVector(this.left_hand_selected_point[0] + 60, this.left_hand_pose[4][1]), red_color);
+            }
+        }
         this.system.run(sketch);
+
+        this.displayBars(sketch);
     }
 
     update(sketch) {
+
     }
 
 
