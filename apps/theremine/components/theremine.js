@@ -1,9 +1,11 @@
 import notes_freq_CMaj_json from './notes-frequencies-CMaj.json' assert { type: "json" };
+import notes_freq_json from './notes-frequencies.json' assert { type: "json" };
+import la_vie_en_rose_json from './scores/la_vie_en_rose.json' assert { type: "json" };
 
 export class Theremine{
     constructor() {
         this.frequency = 0;
-        this.length = 0.01;
+        this.note_duration = 0.01;
         this.bitrate = 48000;
         this.amplitude = 0;
         this.right_hand_selected_point = [0,0,0];
@@ -79,9 +81,6 @@ export class Theremine{
         this.system = new ParticleSystem(createVector(this.right_hand_selected_point[0], this.right_hand_selected_point[1] - 40));
         // console.log(this.system.particles)
         }
-
-    synthesize() {
-    }
 
     reset() {}
 
