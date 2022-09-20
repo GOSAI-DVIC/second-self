@@ -4,11 +4,10 @@ import la_vie_en_rose_json from './scores/la_vie_en_rose.json' assert { type: "j
 
 export class Score_player{
     constructor() {
-        this.frequency = 0;
+        this.frequency = 440;
         this.note_duration = 0.01;
         this.bitrate = 48000;
         this.amplitude = 0;
-
         this.playScore(la_vie_en_rose_json);
     }
 
@@ -21,12 +20,13 @@ export class Score_player{
     playScore(score_json)
     {
         const score = JSON.parse(JSON.stringify(score_json))
+        const notes_freq = JSON.parse(JSON.stringify(notes_freq_json))
         
         for(var note of score.notes)
         {
-            const notes_freq = JSON.parse(JSON.stringify(notes_freq_json))
             this.frequency = notes_freq[note[0]];
             this.note_duration = note[1]*score.rythm.tempo/60;
+            
         }
     }
 

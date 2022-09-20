@@ -9,9 +9,9 @@ class Application(BaseApplication):
         self.requires["pose_to_mirror"] = ["mirrored_data"]
         self.requires["synthesizer"] = ["synthesizing"]
 
-        @self.server.sio.on("synthesize")
+        @self.server.sio.on("score_player_synthesize")
         def synthesize(data):
-            self.execute("synthesizer", "play_synth", data)
+            self.execute("synthesizer", "add_to_queue", data)
             
 
     def listener(self, source, event, data):
