@@ -1,6 +1,4 @@
-import { Score_player } from "./components/score_player.js";
-import notes_freq_CMaj_json from './components/notes-frequencies-CMaj.json' assert { type: "json" };
-import notes_freq_json from './components/notes-frequencies.json' assert { type: "json" };
+import musical_elements_json from './components/musical_elements.json' assert { type: "json" };
 import la_vie_en_rose_json from './components/scores/la_vie_en_rose.json' assert { type: "json" };
 
 export const score_player = new p5(( sketch ) => {
@@ -22,13 +20,15 @@ export const score_player = new p5(( sketch ) => {
         var duration = 0.01;
         var amplitude = 0.5;
 
-        const score = JSON.parse(JSON.stringify(la_vie_en_rose_json))
-        const notes_freq = JSON.parse(JSON.stringify(notes_freq_json))
+        const score = JSON.parse(JSON.stringify(la_vie_en_rose_json));
+        const musical_elements = JSON.parse(JSON.stringify(musical_elements_json));
+        const notes_freqs = musical_elements.notes_freqs;
+        const note_durations = musical_elements.notes_durations;
 
         for(var note of score.notes)
         {
-            frequency = notes_freq[note[0]];
-            duration = note[1]*score.rythm.tempo/60;
+            frequency = notes_freqs[note[0]];
+            duration = (1/note_durations[note[1]])*60/score.rythm.tempo;
             
             sketch.emit("score_player_synthesize", {
                 "frequency": frequency, 
