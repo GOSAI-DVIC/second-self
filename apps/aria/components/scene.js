@@ -12,17 +12,17 @@ export class myScene {
         this.right_hand_pose = [];
         this.left_hand_pose = [];
 
-        const canvasElement = document.createElement('canvas');
+        this.canvasElement = document.createElement('canvas');
         let sizes = {
             width: window.innerWidth,
             height: window.innerHeight
         }
-        canvasElement.width = sizes.width;
-        canvasElement.height = sizes.height;
-        canvasElement.style.position = "absolute";
-        canvasElement.style.left = "0px"
-        canvasElement.style.top = "0px"
-        canvasElement.style.zIndex = 5
+        this.canvasElement.width = sizes.width;
+        this.canvasElement.height = sizes.height;
+        this.canvasElement.style.position = "absolute";
+        this.canvasElement.style.left = "0px"
+        this.canvasElement.style.top = "0px"
+        this.canvasElement.style.zIndex = 5
 
         //Import Helper Functions from Kalidokit
         this.remap = Kalidokit.Utils.remap;
@@ -33,7 +33,7 @@ export class myScene {
         
         // renderer
         this.renderer = new THREE.WebGLRenderer({
-            canvas: canvasElement,
+            canvas: this.canvasElement,
             alpha: true,
             antialias: true,
         });

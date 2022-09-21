@@ -17,6 +17,9 @@ class Aria {
         this.activated = true;
     
         }
+        this.selfCanvas = new Object();
+        this.selfCanvas.hide = () => {this.scene.canvasElement.style.display = "none"};
+        this.selfCanvas.show = () => {this.scene.canvasElement.style.display = "block"};
     }
 
     resume = () => {
