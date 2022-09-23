@@ -23,15 +23,14 @@ export class FaceSolver {
                 height: videoEl.videoHeight,
             };
         }
-        //if runtime is mediapipe, we need the image dimentions for accurate calculations
-        // if (runtime === "mediapipe" && imageSize) {
-        //     console.log(lm)
-        //     for (const e of Object.keys(lm)) {
-        //         lm[e].x *= imageSize.width;
-        //         lm[e].y *= imageSize.height;
-        //         lm[e].z *= imageSize.width;
-        //     }
-        // }
+        // if runtime is mediapipe, we need the image dimentions for accurate calculations
+        if (runtime === "mediapipe" && imageSize) {
+            for (const e of Object.keys(lm)) {
+                lm[e].x *= imageSize.width;
+                lm[e].y *= imageSize.height;
+                lm[e].z *= imageSize.width;
+            }
+        }
         const getHead = calcHead(lm);
         const getMouth = calcMouth(lm);
         //set high and low remapping values based on the runtime (tfjs vs mediapipe) of the results

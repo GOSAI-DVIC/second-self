@@ -127,7 +127,7 @@ export const stabilizeBlink = (eye, headY, { enableWink = true, maxRot = 0.5, } 
  */
 export const calcEyes = (lm, { high = 0.85, low = 0.55, } = {}) => {
     //return early if no iris tracking
-    if (lm.length !== 478) {
+    if (Object.keys(lm).length !== 478) {
         return {
             l: 1,
             r: 1,
@@ -136,6 +136,7 @@ export const calcEyes = (lm, { high = 0.85, low = 0.55, } = {}) => {
     //open [0,1]
     const leftEyeLid = getEyeOpen(lm, LEFT, { high: high, low: low });
     const rightEyeLid = getEyeOpen(lm, RIGHT, { high: high, low: low });
+    // console.log(leftEyeLid, rightEyeLid);
     return {
         l: leftEyeLid.norm || 0,
         r: rightEyeLid.norm || 0,
@@ -147,7 +148,7 @@ export const calcEyes = (lm, { high = 0.85, low = 0.55, } = {}) => {
  */
 export const calcPupils = (lm) => {
     //pupil x:[-1,1],y:[-1,1]
-    if (lm.length !== 478) {
+    if (Object.keys(lm).length !== 478) {
         return { x: 0, y: 0 };
     }
     else {
@@ -180,7 +181,7 @@ export const getBrowRaise = (lm, side = LEFT) => {
  * @param {Array} lm : array of results from tfjs or mediapipe
  */
 export const calcBrow = (lm) => {
-    if (lm.length !== 478) {
+    if (Object.keys(lm).length !== 478) {
         return 0;
     }
     else {
