@@ -231,16 +231,36 @@ export class myScene {
             });
             // this.currentVrm.scene.position.set(-pose3DLandmarks[0].x, 0, 0);
             this.rigRotation("Hips", riggedPose.Hips.rotation, 0.7);
-            console.log((pose2DLandmarks[24].x + pose2DLandmarks[23].x) / 2);
+            // this.rigPosition(
+            //     "Hips", {
+            //         x: -(pose2DLandmarks[24].x + pose2DLandmarks[23].x -1.35) *2.5/2 , // Reverse direction
+            //         y: riggedPose.Hips.position.y + 1, // Add a bit of height
+            //         z: -riggedPose.Hips.position.z, // Reverse direction
+            //     },
+            //     1,
+            //     0.07
+            // );
+            console.log(-pose2DLandmarks[0].x*1.8 +1.65, -pose2DLandmarks[0].y, -pose2DLandmarks[0].z*1.5 +1.5)
             this.rigPosition(
                 "Hips", {
-                    x: -(pose2DLandmarks[24].x + pose2DLandmarks[23].x -1.35) *2.5/2 , // Reverse direction
-                    y: riggedPose.Hips.position.y + 1, // Add a bit of height
-                    z: -riggedPose.Hips.position.z, // Reverse direction
+                    x: -pose2DLandmarks[0].x*1.8 +1.65, // Reverse direction
+                    y: -pose2DLandmarks[0].y + 1.5, // Add a bit of height
+                    z: -pose2DLandmarks[0].z*1.5 +1.5, // Reverse direction
                 },
                 1,
                 0.07
             );
+            // this.rigPosition(
+            //     "Head", {
+            //         // x: -pose2DLandmarks[0].x , // Reverse direction
+            //         x: riggedFace.head.position.x , // Reverse direction
+            //         // x: -(pose2DLandmarks[24].x + pose2DLandmarks[23].x -1.35) *2.5/2 , // Reverse direction
+            //         y: riggedFace.head.position.y,//+ 1, // Add a bit of height
+            //         z: riggedFace.head.position.z, // Reverse direction
+            //     },
+            //     1,
+            //     0.07
+            // );
 
             this.rigRotation("Chest", riggedPose.Spine, 0.25, 0.3);
             this.rigRotation("Spine", riggedPose.Spine, 0.45, 0.3);
@@ -323,8 +343,8 @@ export class myScene {
         for (var key of Object.keys(results))
         {
             if (key == "body_world_pose") {
-                var landmarks_array = [];
-                var coor = {};
+                var landmarks_array = new Array();
+                var coor = new Object();
                 for (var landmark of results[key])
                 {
                     coor = {
@@ -333,7 +353,7 @@ export class myScene {
                         "z":landmark[2],
                         "visibility":landmark[3]
                     }
-                    landmarks_array.push(coor);
+                    landmarks_array.push(Object.assign({}, coor));
                 }
             }
             else
@@ -341,8 +361,8 @@ export class myScene {
                 const min_width = 96;
                 const width = 448;
                 const height = 480;
-                var landmarks_array = [];
-                var coor = {};
+                var landmarks_array = new Array();
+                var coor = new Object();
                 for (var landmark of results[key])
                 {   
                     coor = {
@@ -350,10 +370,10 @@ export class myScene {
                         "y": landmark[1]/height,
                         "z": landmark[2]
                     }
-                    landmarks_array.push(coor);
+                    landmarks_array.push(Object.assign({}, coor));
                 }
             }
-            results_to_array[key] = landmarks_array;
+            results_to_array[key] = Object.assign({}, landmarks_array);
         }
         return results_to_array
     }
@@ -376,5 +396,6 @@ export class myScene {
     update_data(results) {
         var array_to_landmarks_results = this.array_to_landmarks(results);
         this.animateVRM(array_to_landmarks_results, this.imageSize)
+        // console.log(array_to_landmarks_results)
     }
 }

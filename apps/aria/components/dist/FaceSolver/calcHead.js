@@ -23,16 +23,24 @@ export const createEulerPlane = (lm) => {
 export const calcHead = (lm) => {
     // find 3 vectors that form a plane to represent the head
     const plane = createEulerPlane(lm).vector;
+
     // calculate roll pitch and yaw from vectors
     const rotate = Vector.rollPitchYaw(plane[0], plane[1], plane[2]);
     // find the center of the face detection box
     const midPoint = plane[0].lerp(plane[1], 0.5);
+
+    // console.log(lm)
+    // console.log(midPoint)
+    // console.log(plane[1])
+    // console.log(midPoint.lerp(plane[2], 0.5))
+
     // find the dimensions roughly of the face detection box
     const width = plane[0].distance(plane[1]);
     const height = midPoint.distance(plane[2]);
     //flip
     rotate.x *= 1;
     rotate.z *= 1;
+    
     return {
         //defaults to radians for rotation around x,y,z axis
         y: rotate.y * PI,
