@@ -243,8 +243,8 @@ export class myScene {
             console.log(-pose2DLandmarks[0].x*1.8 +1.65, -pose2DLandmarks[0].y, -pose2DLandmarks[0].z*1.5 +1.5)
             this.rigPosition(
                 "Hips", {
-                    x: -pose2DLandmarks[0].x*1.8 +1.65, // Reverse direction
-                    y: -pose2DLandmarks[0].y + 1.5, // Add a bit of height
+                    x: -pose2DLandmarks[0].x*1.8 +1.7, // Reverse direction
+                    y: -pose2DLandmarks[0].y*1.8 + 1.8, // Add a bit of height
                     z: -pose2DLandmarks[0].z*1.5 +1.5, // Reverse direction
                 },
                 1,

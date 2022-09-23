@@ -4,6 +4,7 @@ class Application(BaseApplication):
     """Aria"""
 
     def __init__(self, name, hal, server, manager):
+        print("loading application: " + name)
         super().__init__(name, hal, server, manager)
         self.requires["pose"] = ["raw_data"]
 
