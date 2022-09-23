@@ -8,8 +8,8 @@ export class Menu {
     this.anchor = [0, 0];
     this.cursor = [0, 0];
 
-    this.left_hand = undefined;
-    this.right_hand = undefined;
+    this.left_hand_pose = undefined;
+    this.right_hand_pose = undefined;
 
     this.slots = [-2 * this.d, -this.d, 0, this.d, 2 * this.d];
     this.bubbles = [];
@@ -69,15 +69,15 @@ export class Menu {
     }
   }
 
-  update_data(left_hand, right_hand) {
-    this.left_hand = left_hand;
-    this.right_hand = right_hand;
+  update_data(left_hand_pose, right_hand_pose) {
+    this.left_hand_pose = left_hand_pose;
+    this.right_hand_pose = right_hand_pose;
   }
 
   update() {
     if (
-      this.right_hand !== undefined &&
-      this.right_hand.hand_pose[8] !== undefined
+      this.right_hand_pose !== undefined &&
+      this.right_hand_pose[8] !== undefined
     ) {
       // if (
       //     this.left_hand.sign[0] == "OPEN_HAND" && this.left_hand.sign[1] > 0.8
@@ -87,9 +87,9 @@ export class Menu {
       //     this.display_bubbles = false;
       // }
       // this.anchor = this.left_hand.hand_pose[8];
-      this.main_button.update(this.right_hand.hand_pose[8]);
+      this.main_button.update(this.right_hand_pose[8]);
       this.anchor = this.main_button.anchor;
-      this.cursor = this.right_hand.hand_pose[8];
+      this.cursor = this.right_hand_pose[8];
     }
 
     for (let i = 0; i < this.bubbles.length; i++) {
@@ -548,27 +548,33 @@ function chooseAction(opt, action, type, sketch) {
       switch (opt) {
         case "Show Face":
           if (action) {
-            sketch.face.showing = true;
+            sketch.emit("show_face", true);
+            // sketch.face.showing = true;
           } else {
-            sketch.face.showing = false;
+            sketch.emit("show_face", false);
+            // sketch.face.showing = false;
           }
           break;
 
         case "Show Body":
           if (action) {
-            sketch.body.showing = true;
+            sketch.emit("show_body", true);
+            // sketch.body.showing = true;
           } else {
-            sketch.body.showing = false;
+            sketch.emit("show_body", false);
+            // sketch.body.showing = false;
           }
           break;
 
         case "Show Hands":
           if (action) {
-            sketch.left_hand.showing = true;
-            sketch.right_hand.showing = true;
+            sketch.emit("show_hands", true);
+            // sketch.left_hand.showing = true;
+            // sketch.right_hand.showing = true;
           } else {
-            sketch.left_hand.showing = false;
-            sketch.right_hand.showing = false;
+            sketch.emit("show_hands", false);
+            // sketch.left_hand.showing = false;
+            // sketch.right_hand.showing = false;
           }
           break;
       }

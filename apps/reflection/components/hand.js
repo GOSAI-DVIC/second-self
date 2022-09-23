@@ -106,7 +106,6 @@ export class Hand {
         else this.show_hands_lines = false
         if (sign != undefined) {
             this.sign = sign
-            
         }
     }
 
