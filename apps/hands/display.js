@@ -1,9 +1,7 @@
-import { Face } from "./components/face.js";
 import { Hand } from "./components/hand.js";
-import { Body } from "./components/body.js";
 
-export const reflection = new p5((sketch) => {
-    sketch.name = "reflection";
+export const hands = new p5((sketch) => {
+    sketch.name = "hands";
     sketch.z_index = 5;
     sketch.activated = false;
 
@@ -13,8 +11,6 @@ export const reflection = new p5((sketch) => {
     sketch.left_hand;
 
     sketch.set = (width, height, socket) => {
-        sketch.face = new Face("face");
-        sketch.body = new Body("body");
         sketch.right_hand = new Hand("right_hand");
         sketch.left_hand = new Hand("left_hand");
 
@@ -29,15 +25,11 @@ export const reflection = new p5((sketch) => {
         // sketch.imageMode(CENTER);
 
         socket.on(sketch.name, (data) => {
-            sketch.face.update_data(data["face_mesh"]);
-            sketch.body.update_data(data["body_pose"]);
             sketch.right_hand.update_data(
-                data["right_hand_pose"],
-                data["right_hand_sign"]
+                data["right_hand_pose"]
             );
             sketch.left_hand.update_data(
-                data["left_hand_pose"],
-                data["left_hand_sign"]
+                data["left_hand_pose"]
             );
         });
 
@@ -59,16 +51,12 @@ export const reflection = new p5((sketch) => {
     };
 
     sketch.update = () => {
-        sketch.face.update();
-        sketch.body.update();
         sketch.right_hand.update();
         sketch.left_hand.update();
     };
 
     sketch.show = () => {
         sketch.clear();
-        sketch.face.show(sketch);
-        sketch.body.show(sketch);
         sketch.right_hand.show(sketch);
         sketch.left_hand.show(sketch);
     };

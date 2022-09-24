@@ -12,4 +12,7 @@ class Application(BaseApplication):
 
         if source == "pose_to_mirror" and event == "mirrored_data":
             self.data = data
-            self.server.send_data(self.name, self.data)
+            self.server.send_data(self.name, {
+                "right_hand_pose": data["right_hand_pose"], 
+                "left_hand_pose": data["left_hand_pose"]
+            })

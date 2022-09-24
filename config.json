@@ -10,7 +10,7 @@
         "y_offset": 100
     },
     "applications": {
-        "startup": ["menu"],
+        "startup": ["menu", "face", "hands", "body"],
         "disabled": ["slr"]
     },
     "screen": {

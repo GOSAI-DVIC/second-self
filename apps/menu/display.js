@@ -1,4 +1,6 @@
-import { Menu } from "../menu/components/menu2.js";
+import {
+    Menu
+} from "../menu/components/menu2.js";
 
 export const menu = new p5((sketch) => {
     sketch.name = "menu";
@@ -23,10 +25,10 @@ export const menu = new p5((sketch) => {
         sketch.imageMode(CENTER);
 
         socket.on(sketch.name, (data) => {
-            right_hand_pose = data["right_hand_pose"];
-            right_hand_sign = data["right_hand_sign"];
-            left_hand_pose = data["left_hand_pose"];
-            left_hand_sign = data["left_hand_sign"];
+            sketch.menu.update_data(
+                data["right_hand_pose"], 
+                data["left_hand_pose"]
+            );
         });
 
         socket.on("available_applications", (data) => {
