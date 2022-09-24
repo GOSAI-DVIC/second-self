@@ -53,7 +53,7 @@ export class Hand {
         this.show_hands_points = false;
         this.show_hands_lines = true;
 
-        this.sign = ["NONE", 0];
+        // this.sign = ["NONE", 0];
     }
 
     show(sketch) {
@@ -98,13 +98,15 @@ export class Hand {
         sketch.pop();
     }
 
-    update_data(pose, sign) {
+    update_data(pose) {
         if (pose != undefined && pose.length > 0) {
             this.hand_pose = pose
+            this.show_hands_lines = true
         }
-        if (sign != undefined) {
-            this.sign = sign
-        }
+        else this.show_hands_lines = false
+        // if (sign != undefined) {
+        //     this.sign = sign
+        // }
     }
 
     update() {

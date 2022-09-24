@@ -10,7 +10,7 @@
         "y_offset": 100
     },
     "applications": {
-        "startup": ["menu", "aria"],
+        "startup": ["menu"],
         "disabled": ["slr"]
     },
     "screen": {
