@@ -20,7 +20,6 @@ export class Theremine{
     displayBars(sketch) {
         const notes_freq_CMaj = JSON.parse(JSON.stringify(notes_freq_CMaj_json))
         for (let note in notes_freq_CMaj) {
-            console.log(notes_freq_CMaj[note])
             sketch.stroke(200);
             sketch.line(this.freqToPxl(notes_freq_CMaj[note]), 50, this.freqToPxl(notes_freq_CMaj[note]), height - 50);
         }
@@ -105,18 +104,18 @@ export class Theremine{
     }
 
     // Links the distance in pixels to the frequency
-    calcFreq(value)
+    calcFreq(value_px)
     {
-        return  value - width/10;
+        return  value_px - width/5;
     }
 
     freqToPxl(freq)
     {
-        return freq + width/10;
+        return freq + width/5;
     }
 
     show(sketch) {
-        var blue_color = sketch.color(115, 167, 250);
+        var blue_color = sketch.color(30, 129, 250);
         var red_color = sketch.color(245, 34, 34);
 
         if (this.right_hand_pose) {

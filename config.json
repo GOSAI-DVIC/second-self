@@ -10,7 +10,7 @@
         "y_offset": 100
     },
     "applications": {
-        "startup": ["menu", "theremine"],
+        "startup": ["menu", "body", "hands", "face", "theremine"],
         "disabled": ["slr"]
     },
     "screen": {
