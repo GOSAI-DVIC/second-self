@@ -100,24 +100,26 @@ export class Theremine{
         }
 
         this.frequency = Math.min(Math.max(this.px_to_freq(this.right_hand_selected_point[0]), 0), 2000);
-        console.log(this.frequency)
         this.amplitude = Math.max(2*height/3 - this.left_hand_selected_point[1], 0)/100;
     }
 
     // Links the distance in pixels to the frequency
     px_to_freq(value_px)
     {
-        const key_num = value_px / 10;
+        const key_num = Math.round((value_px + 200)/ 15);
+        console.log(key_num)
         return this.key_to_freq(key_num) ;
     }
 
     key_to_pxl(key_num)
     {
-        return key_num * 10;
+        return key_num * 15 - 200;
     }
 
     key_to_freq(key) {
-        return 27.5 * Math.pow(Math.pow(2, 1/12), key-1);
+        const freq = 27.5 * Math.pow(Math.pow(2, 1/12), key-1)
+        console.log(freq)
+        return freq;
     }
 
     show(sketch) {
