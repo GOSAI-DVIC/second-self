@@ -1,5 +1,5 @@
-import notes_freq_CMaj_json from './notes-frequencies-CMaj.json' assert { type: "json" };
-import notes_freq_json from './notes-frequencies.json' assert { type: "json" };
+import notes_keys_CMaj_json from './notes_keys_CMaj.json' assert { type: "json" };
+import notes_keys_json from './notes_keys.json' assert { type: "json" };
 import la_vie_en_rose_json from './scores/la_vie_en_rose.json' assert { type: "json" };
 
 export class Theremine{
@@ -10,18 +10,18 @@ export class Theremine{
         this.amplitude = 0;
         this.right_hand_selected_point = [0,0,0];
         this.left_hand_selected_point = [0,0,0];
-        this.blue_color;
-        this.red_color;
         this.system;
         
         this.initParticles();
     }
 
     displayBars(sketch) {
-        const notes_freq_CMaj = JSON.parse(JSON.stringify(notes_freq_CMaj_json))
-        for (let note in notes_freq_CMaj) {
+        const notes_keys_CMaj = JSON.parse(JSON.stringify(notes_keys_CMaj_json))
+        const green_color = sketch.color(34, 245, 34);
+        for (let note in notes_keys_CMaj) {
             sketch.stroke(200);
-            sketch.line(this.freqToPxl(notes_freq_CMaj[note]), 50, this.freqToPxl(notes_freq_CMaj[note]), height - 50);
+            // if (note[0] == 'C4') sketch.fill(green_color)
+            sketch.line(this.key_to_pxl(notes_keys_CMaj[note]), 50, this.key_to_pxl(notes_keys_CMaj[note]), height - 50);
         }
     }
 
@@ -99,19 +99,25 @@ export class Theremine{
                 if(point_coor[1] > this.left_hand_selected_point[1]) this.left_hand_selected_point = point_coor;
         }
 
-        this.frequency = this.calcFreq(this.right_hand_selected_point[0]);
+        this.frequency = Math.min(Math.max(this.px_to_freq(this.right_hand_selected_point[0]), 0), 2000);
+        console.log(this.frequency)
         this.amplitude = Math.max(2*height/3 - this.left_hand_selected_point[1], 0)/100;
     }
 
     // Links the distance in pixels to the frequency
-    calcFreq(value_px)
+    px_to_freq(value_px)
     {
-        return  value_px - width/5;
+        const key_num = value_px / 10;
+        return this.key_to_freq(key_num) ;
     }
 
-    freqToPxl(freq)
+    key_to_pxl(key_num)
     {
-        return freq + width/5;
+        return key_num * 10;
+    }
+
+    key_to_freq(key) {
+        return 27.5 * Math.pow(Math.pow(2, 1/12), key-1);
     }
 
     show(sketch) {
@@ -134,6 +140,10 @@ export class Theremine{
                 sketch.ellipse(this.left_hand_selected_point[0] + 60, this.left_hand_pose[4][1], 10);
                 this.system.addParticle(createVector(this.left_hand_selected_point[0] + 60, this.left_hand_pose[4][1]), red_color);
             }
+        }
+        else {
+            this.left_hand_selected_point[1] = height;
+            this.amplitude = 0;
         }
         this.system.run(sketch);
 
