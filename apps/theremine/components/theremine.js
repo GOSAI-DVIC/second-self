@@ -106,7 +106,7 @@ export class Theremine{
     // Links the distance in pixels to the frequency
     px_to_freq(value_px)
     {
-        const key_num = Math.round((value_px + 200)/ 15);
+        const key_num = (value_px + 200)/ 15;
         console.log(key_num)
         return this.key_to_freq(key_num) ;
     }
