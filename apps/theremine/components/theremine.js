@@ -10,19 +10,28 @@ export class Theremine{
         this.amplitude = 0;
         this.right_hand_selected_point = [0,0,0];
         this.left_hand_selected_point = [0,0,0];
-        this.system;
-        
+        this.particles_system;
+        this.gap_between_bars = 20;
+        this.shift_bars = 450;
         this.initParticles();
     }
 
     displayBars(sketch) {
         const notes_keys_CMaj = JSON.parse(JSON.stringify(notes_keys_CMaj_json))
-        const green_color = sketch.color(34, 245, 34);
         for (let note in notes_keys_CMaj) {
-            sketch.stroke(200);
-            // if (note[0] == 'C4') sketch.fill(green_color)
+            sketch.stroke(255)
+            sketch.strokeWeight(2);
+            var bar_color = note[0] == 'C4' ? sketch.color(255,255,255) : sketch.color(34, 245, 34); 
+            sketch.fill(bar_color)
             sketch.line(this.key_to_pxl(notes_keys_CMaj[note]), 50, this.key_to_pxl(notes_keys_CMaj[note]), height - 50);
         }
+        const amp_to_px_min = this.amp_to_px(0);
+        const amp_to_px_max = this.amp_to_px(7);
+        sketch.fill(sketch.color(34,245,34));
+        sketch.stroke(255)
+        sketch.strokeWeight(2)
+        sketch.line(0, amp_to_px_min, 200, amp_to_px_min);
+        sketch.line(0, amp_to_px_max, 200, amp_to_px_max);
     }
 
     initParticles() {
@@ -77,8 +86,8 @@ export class Theremine{
             }
         };
 
-        this.system = new ParticleSystem(createVector(this.right_hand_selected_point[0], this.right_hand_selected_point[1] - 40));
-        // console.log(this.system.particles)
+        this.particles_system = new ParticleSystem(createVector(this.right_hand_selected_point[0], this.right_hand_selected_point[1] - 40));
+        // console.log(this.particles_system.particles)
         }
 
     reset() {}
@@ -99,26 +108,35 @@ export class Theremine{
                 if(point_coor[1] > this.left_hand_selected_point[1]) this.left_hand_selected_point = point_coor;
         }
 
-        this.frequency = Math.min(Math.max(this.px_to_freq(this.right_hand_selected_point[0]), 0), 2000);
-        this.amplitude = Math.max(2*height/3 - this.left_hand_selected_point[1], 0)/100;
+        this.frequency = this.px_to_freq(this.right_hand_selected_point[0]);
+        
+        this.amplitude = this.px_to_amp(this.left_hand_selected_point[1]);
+    }
+
+    px_to_amp(value_px)
+    {
+        return Math.min(Math.max((height/2 - value_px)/100, 0), 7);
+    }
+
+    amp_to_px(amp)
+    {
+        return -(amp*100 - height/2)
     }
 
     // Links the distance in pixels to the frequency
     px_to_freq(value_px)
     {
-        const key_num = (value_px + 200)/ 15;
-        console.log(key_num)
-        return this.key_to_freq(key_num) ;
+        const key_num = (value_px + this.shift_bars)/ this.gap_between_bars;
+        return Math.min(Math.max(this.key_to_freq(key_num), 0), 2000);
     }
 
     key_to_pxl(key_num)
     {
-        return key_num * 15 - 200;
+        return key_num * this.gap_between_bars - this.shift_bars;
     }
 
     key_to_freq(key) {
         const freq = 27.5 * Math.pow(Math.pow(2, 1/12), key-1)
-        console.log(freq)
         return freq;
     }
 
@@ -131,7 +149,7 @@ export class Theremine{
             {
                 sketch.fill(blue_color);
                 sketch.ellipse(this.right_hand_selected_point[0], this.right_hand_pose[11][1] - 40, 10);
-                this.system.addParticle(createVector(this.right_hand_selected_point[0], this.right_hand_pose[11][1] - 40), blue_color);
+                this.particles_system.addParticle(createVector(this.right_hand_selected_point[0], this.right_hand_pose[11][1] - 40), blue_color);
 
             }
         }
@@ -140,14 +158,14 @@ export class Theremine{
             {
                 sketch.fill(red_color)
                 sketch.ellipse(this.left_hand_selected_point[0] + 60, this.left_hand_pose[4][1], 10);
-                this.system.addParticle(createVector(this.left_hand_selected_point[0] + 60, this.left_hand_pose[4][1]), red_color);
+                this.particles_system.addParticle(createVector(this.left_hand_selected_point[0] + 60, this.left_hand_pose[4][1]), red_color);
             }
         }
         else {
             this.left_hand_selected_point[1] = height;
             this.amplitude = 0;
         }
-        this.system.run(sketch);
+        this.particles_system.run(sketch);
 
         this.displayBars(sketch);
     }

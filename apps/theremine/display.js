@@ -36,15 +36,13 @@ export const theremine = new p5(( sketch ) => {
     };
 
     sketch.update = () => {
-        // console.log("FREQUENCY: ", sketch.theremine.frequency);
         sketch.emit("synthesize", {
             "frequency": sketch.theremine.frequency, 
             "amplitude": sketch.theremine.amplitude,
             "note_duration": sketch.theremine.note_duration, 
             "bitrate": sketch.theremine.bitrate
         });
-        // console.log("FREQUENCY: ", sketch.theremine.frequency);
-
+        console.log(sketch.theremine.amplitude)
         sketch.theremine.update(sketch);
     };
 
