@@ -6,11 +6,12 @@ class Application(BaseApplication):
 
     def __init__(self, name, hal, server, manager):
         super().__init__(name, hal, server, manager)
-        # self.requires["pose_to_mirror"] = ["mirrored_data"]
-        self.requires["pose"] = ["raw_data"]
+        self.requires["pose_to_mirror"] = ["mirrored_data"]
+        # self.requires["pose"] = ["raw_data"]
         self.requires["synthesizer"] = ["synthesizing"]
         self.is_exclusive = True
-        self.applications_to_keep = ["hands"]
+        self.applications_allowed = ["menu", "hands"]
+        self.applications_required = ["menu", "hands"]
 
         @self.server.sio.on("synthesize")
         def synthesize(data):
