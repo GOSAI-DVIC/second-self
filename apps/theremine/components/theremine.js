@@ -92,6 +92,8 @@ export class Theremine{
 
     reset() {}
 
+    
+
     update_data(right_hand_pose, left_hand_pose) {
         this.right_hand_pose = right_hand_pose;
         this.left_hand_pose = left_hand_pose;
