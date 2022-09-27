@@ -18,8 +18,6 @@ export const theremine = new p5(( sketch ) => {
             if (data == undefined) socket.emit(event_name);
             else socket.emit(event_name, data);
         }
-        sketch.emit("stop_application", { application_name: "body",});
-        sketch.emit("stop_application", { application_name: "face",});
         sketch.activated = true
     }
 

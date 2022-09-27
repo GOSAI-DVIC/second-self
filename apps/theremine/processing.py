@@ -9,6 +9,8 @@ class Application(BaseApplication):
         # self.requires["pose_to_mirror"] = ["mirrored_data"]
         self.requires["pose"] = ["raw_data"]
         self.requires["synthesizer"] = ["synthesizing"]
+        self.is_exclusive = True
+        self.applications_to_keep = ["hands"]
 
         @self.server.sio.on("synthesize")
         def synthesize(data):
