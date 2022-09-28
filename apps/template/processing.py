@@ -6,7 +6,6 @@ class Application(BaseApplication):
 
     def __init__(self, name, hal, server, manager):
         super().__init__(name, hal, server, manager)
-
         # * Example
         # self.requires = {"name of the driver": ["data"]}
 
