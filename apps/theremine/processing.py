@@ -13,7 +13,7 @@ class Application(BaseApplication):
         self.applications_allowed = ["menu", "hands"]
         self.applications_required = ["menu", "hands"]
 
-        @self.server.sio.on("synthesize")
+        @self.server.sio.on("application_theremine_synthesize")
         def synthesize(data):
             self.execute("synthesizer", "play", data)            
 
