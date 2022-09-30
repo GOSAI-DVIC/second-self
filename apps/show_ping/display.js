@@ -24,7 +24,7 @@ export const show_ping = new p5((sketch) => {
             else socket.emit(event_name, data);
         }
 
-        socket.on("pong", (data) => {
+        socket.on("application-show_ping-pong", (data) => {
             ping.push(data["ping"]);
             if (ping.length > 100) ping.shift();
             pong.push((performance.timeOrigin + performance.now()) - data["pong"]);
@@ -40,7 +40,7 @@ export const show_ping = new p5((sketch) => {
     sketch.pause = () => {};
 
     sketch.update = () => {
-        sketch.emit("ping", {"ping": (performance.timeOrigin + performance.now())});
+        sketch.emit("application-show_ping-ping", {"ping": (performance.timeOrigin + performance.now())});
     };
 
     sketch.show = () => {

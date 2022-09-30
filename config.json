@@ -11,7 +11,7 @@
     },
     "applications": {
         "startup": ["menu", "face", "hands", "body"],
-        "disabled": ["slr"]
+        "disabled": ["show_ping"]
     },
     "screen": {
         "screen_width": 392.85,
