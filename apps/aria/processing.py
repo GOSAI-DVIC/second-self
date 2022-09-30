@@ -7,6 +7,9 @@ class Application(BaseApplication):
         print("loading application: " + name)
         super().__init__(name, hal, server, manager)
         self.requires["pose"] = ["raw_data"]
+        self.is_exclusive = True
+        self.applications_allowed = ["menu", "bounce", "clock", "poke_it", "score_player", "show_ping"]
+        self.applications_required = ["menu"]
 
     def listener(self, source, event, data):
         super().listener(source, event, data)

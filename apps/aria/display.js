@@ -13,27 +13,14 @@ class Aria {
             socket.on(this.name, (data) => {
                 this.scene.update_data(data)
             });
-
-            this.emit = (event_name, data = undefined) => {
-                if (data == undefined) socket.emit(event_name);
-                else socket.emit(event_name, data);
-            }
             
-            this.emit("stop_application", { application_name: "body",});
-            this.emit("stop_application", { application_name: "face",});
-            // this.emit("stop_application", { application_name: "hands",});
-
             this.activated = true;
-    
         }
         
         this.selfCanvas = new Object();
 
         this.selfCanvas.hide = () => {
             this.scene.canvasElement.style.display = "none"
-            this.emit("start_application", { application_name: "body",});
-            this.emit("start_application", { application_name: "face",});
-            // this.emit("start_application", { application_name: "hands",});
         };
         this.selfCanvas.show = () => {
             this.scene.canvasElement.style.display = "block"
