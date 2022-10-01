@@ -1,5 +1,5 @@
-{
-    "Activate bars": "bars_activation",
-    "Start tutorial": "tutorial_start",
-    "Activate sound": "synthesizer_activation"
+{  
+    "Activate bars": {"event_name": "application-theremine-bars_activation", "type":"toggle"},
+    "Start tutorial": {"event_name": "application-theremine-tutorial_start", "type":"button"},
+    "Activate sound": {"event_name":"application-theremine-sound_activation", "type":"toggle"}
 }

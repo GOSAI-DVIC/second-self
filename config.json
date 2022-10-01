@@ -10,8 +10,8 @@
         "y_offset": 100
     },
     "applications": {
-        "startup": ["menu", "theremine"],
-        "disabled": ["slr"]
+        "startup": ["menu", "hands"],
+        "disabled": ["slr","raw_hands", "show_ping", "score_player"]
     },
     "screen": {
         "screen_width": 392.85,

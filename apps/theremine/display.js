@@ -13,6 +13,18 @@ export const theremine = new p5(( sketch ) => {
                 data["left_hand_pose"]
             )
         });
+
+        socket.on("application-theremine-bars_activation", (is_selected) => {
+            sketch.theremine.toggleShowBars(is_selected)
+        });
+
+        socket.on("application-theremine-tutorial_start", (is_selected) => {
+            sketch.theremine.startTutorial(is_selected)
+        });
+
+        socket.on("application-theremine-sound_activation", (is_selected) => {
+            sketch.theremine.toggleSound(is_selected)
+        });
         
         sketch.emit = (event_name, data = undefined) => {
             if (data == undefined) socket.emit(event_name);
@@ -40,7 +52,6 @@ export const theremine = new p5(( sketch ) => {
             "note_duration": sketch.theremine.note_duration, 
             "bitrate": sketch.theremine.bitrate
         });
-        console.log(sketch.theremine.amplitude)
         sketch.theremine.update(sketch);
     };
 
