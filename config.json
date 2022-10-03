@@ -10,8 +10,7 @@
         "y_offset": 100
     },
     "applications": {
-        "startup": ["menu", "face", "hands", "body"],
-        "disabled": ["show_ping"]
+        "disabled": ["slr","raw_hands", "show_ping", "score_player"]
     },
     "screen": {
         "screen_width": 392.85,
