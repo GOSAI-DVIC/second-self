@@ -40,6 +40,16 @@ export class Menu {
         }
     }
 
+    remove_element(element_name) {
+        for (var i = 0; i<this.bubbles.length; i++) 
+        {
+            if (this.bubbles[i].bubble_name == element_name) {
+                this.bubbles.splice(i, 1);
+            }
+        }
+        
+    }
+
     add(element) {
         element.x = this.x;
         element.y = this.y;

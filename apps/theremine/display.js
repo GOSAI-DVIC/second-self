@@ -33,6 +33,9 @@ export const theremine = new p5(( sketch ) => {
         sketch.activated = true
     }
 
+    sketch.reset = () => {
+    }
+
     sketch.windowResized = () => {
         sketch.resizeCanvas(windowWidth, windowHeight);
     }

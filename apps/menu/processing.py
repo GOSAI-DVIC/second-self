@@ -8,9 +8,9 @@ class Application(BaseApplication):
         self.requires["pose_to_mirror"] = ["mirrored_data"]
         self.is_exclusive = False
 
-        @self.server.sio.on("application_menu_add_sub")
-        def _(data) -> None:
-            self.start(data)
+        # @self.server.sio.on("application_menu_add_sub")
+        # def _(data) -> None:
+        #     self.start(data)
 
     def listener(self, source, event, data):
         super().listener(source, event, data)

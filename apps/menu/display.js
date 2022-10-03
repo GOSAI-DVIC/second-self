@@ -62,6 +62,10 @@ export const menu = new p5((sketch) => {
             sketch.menu.add_sub_menu(data.app_name, data.options);
         });
 
+        socket.on("core-app_manager-remove_sub_menu", (data) => {
+            sketch.menu.remove_element(data.element_name);
+        });
+
         sketch.activated = true;
     };
 
