@@ -14,7 +14,6 @@ export const show_frequency = new p5((sketch) => {
             .style("z-index", sketch.z_index);
 
         socket.on(sketch.name, (data) => {
-            // console.log(data);
             frequency = data["max_frequency"];
             rfft = data["rfft"];
         });
