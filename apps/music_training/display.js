@@ -1,4 +1,4 @@
-export const template = new p5(( sketch ) => {
+export const music_training = new p5(( sketch ) => {
     sketch.name = "music_training"
     sketch.z_index = 0
     sketch.activated = false
@@ -7,7 +7,7 @@ export const template = new p5(( sketch ) => {
         sketch.selfCanvas = sketch.createCanvas(width, height).position(0, 0).style("z-index", sketch.z_index);
 
         socket.on("music_training", (data) => {
-
+            
         });
     }
 
