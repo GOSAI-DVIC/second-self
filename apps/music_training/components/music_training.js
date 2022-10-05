@@ -85,7 +85,7 @@ export class MusicTraining{
     playTutorial() {
         const la_vie_en_rose = JSON.parse(JSON.stringify(la_vie_en_rose_json))
         for (note in la_vie_en_rose.notes) {
-
+            
         }
     }
 
