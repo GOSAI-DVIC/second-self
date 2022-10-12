@@ -31,7 +31,7 @@ export const menu = new p5((sketch) => {
             );
         });
 
-        socket.on("available_applications", (data) => {
+        socket.on("core-app_manager-available_applications", (data) => {
             let apps = data["applications"];
             apps.sort((a, b) => {
                 if (a["name"] < b["name"]) {
@@ -47,16 +47,24 @@ export const menu = new p5((sketch) => {
                 if (
                     apps[i]["name"] != sketch.name
                 ) {
-                    sketch.menu.add_application(0, apps[i]["name"], Boolean(apps[i]["started"]));
+                    sketch.menu.add_select_bar(0, apps[i]["name"], Boolean(apps[i]["started"], "application"));
                 }
             }
         });
 
-        socket.emit("get_available_applications");
+        socket.emit("core-app_manager-get_available_applications");
 
         sketch.emit = (name, data) => {
             socket.emit(name, data);
         };
+
+        socket.on("core-app_manager-add_sub_menu", (data) => {
+            sketch.menu.add_sub_menu(data.app_name, data.options);
+        });
+
+        socket.on("core-app_manager-remove_sub_menu", (data) => {
+            sketch.menu.remove_element(data.element_name);
+        });
 
         sketch.activated = true;
     };

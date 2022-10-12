@@ -11,18 +11,17 @@ export class Menu {
         this.left_hand_pose = undefined;
         this.right_hand_pose = undefined;
 
-        this.slots = [-2 * this.d, -this.d, 0, this.d, 2 * this.d];
         this.bubbles = [];
 
         this.display_bubbles = false;
 
-        let bubble_demo = new Bubble("play.svg", 150);
-        let bubble_description = new Bubble("info.svg", 150);
-        let bubble_settings = new Bubble("settings.svg", 150);
+        let bubble_demo = new Bubble("Play", "play.svg", 150);
+        let bubble_description = new Bubble("Info", "info.svg", 150);
+        let bubble_settings = new Bubble("Settings", "settings.svg", 150);
 
-        this.add(bubble_demo, 2);
-        this.add(bubble_description, 3);
-        this.add(bubble_settings, 4);
+        this.add(bubble_demo);
+        this.add(bubble_description);
+        this.add(bubble_settings);
 
         let description = `This is the alpha version of an interractive mirror. Place yourself at about 1m50 for a better experience. Use your left hand to display the menu.`;
         let description_panel = new InfoPanel(description, 300, 300);
@@ -33,17 +32,35 @@ export class Menu {
         this.main_button = main_button;
     }
 
-    add(element, slot) {
+    add_sub_menu(app_name, options) {
+        let bubble = new Bubble(app_name, app_name+".svg", 150);
+        this.add(bubble);
+        for(var option_name of Object.keys(options)) {
+            bubble.add_select_bar(option_name, true, "option");
+        }
+    }
+
+    remove_element(element_name) {
+        for (var i = 0; i<this.bubbles.length; i++) 
+        {
+            if (this.bubbles[i].bubble_name == element_name) {
+                this.bubbles.splice(i, 1);
+            }
+        }
+        
+    }
+
+    add(element) {
         element.x = this.x;
         element.y = this.y;
         element.d = this.d;
-        element.yoffset = this.slots[slot];
-        element.parent = this;
+        element.yoffset = this.d * this.bubbles.length;
         this.bubbles.push(element);
+        element.parent = this;
     }
 
-    add_application(bubble_id, name, started) {
-        this.bubbles[bubble_id].add_application(name, started);
+    add_select_bar(bubble_id, name, isStarted) {
+        this.bubbles[bubble_id].add_select_bar(name, isStarted, "application");
     }
 
     remove_all_from(bubble_id) {
@@ -100,7 +117,7 @@ export class Menu {
 }
 
 class Bubble {
-    constructor(icon, d) {
+    constructor(bubble_name, icon, d) {
         this.icon = loadImage("./platform/home/apps/menu/components/icons/" + icon);
         this.d = d;
 
@@ -116,6 +133,8 @@ class Bubble {
         this.mul = 0.92;
         this.c = 0;
         this.selected = false;
+        
+        this.bubble_name = bubble_name
 
         this.slots = [
             0,
@@ -126,6 +145,8 @@ class Bubble {
             (this.d * 12) / 4,
             (this.d * 15) / 4,
             (this.d * 18) / 4,
+            (this.d * 21) / 4,
+            (this.d * 24) / 4,
         ];
 
         this.bars = [];
@@ -140,17 +161,17 @@ class Bubble {
         this.bars.push(element);
     }
 
-    add_application(name, started) {
-        let demo_app = new SelectBar(name, 300, 75);
-        this.add(demo_app, this.bars.length);
-        demo_app.type = "application";
-        demo_app.selected = started;
+    add_select_bar(name, started, type) {
+        let select_bar = new SelectBar(name, 300, 75);
+        this.add(select_bar, this.bars.length);
+        select_bar.type = type;
+        select_bar.selected = started;
     }
 
     remove_all() {
         this.bars = [];
     }
-
+    
     show(sketch) {
         sketch.stroke(255);
         sketch.strokeWeight(6);
@@ -220,7 +241,8 @@ class Bubble {
                                 this.name,
                                 this.selected,
                                 "bubble",
-                                this.parent.sketch
+                                this.parent.sketch,
+                                this
                             );
                         }
                     }
@@ -459,7 +481,8 @@ class SelectBar {
                             this.choice,
                             this.selected,
                             this.type,
-                            this.parent.parent.sketch
+                            this.parent.parent.sketch,
+                            this
                         );
                     }
                 } else {
@@ -521,17 +544,28 @@ class InfoPanel {
     }
 }
 
-function chooseAction(opt, action, type, sketch) {
+function chooseAction(choice, is_selected, type, sketch, element) {
     switch (type) {
         case "application":
-            if (action) {
+            if (is_selected) {
                 sketch.menu.main_button.selected = false;
-                sketch.emit("start_application", {
-                    application_name: opt,
+                    sketch.emit("core-app_manager-start_application", {
+                        application_name: choice,
                 });
             } else {
-                sketch.emit("stop_application", {
-                    application_name: opt,
+                    sketch.emit("core-app_manager-stop_application", {
+                        application_name: choice,
+                });
+            }
+            break;
+        case "option":
+            if (is_selected) {
+                    sketch.emit("core-app_manager-start_option", {
+                        option_name: choice, app_name: element.parent.bubble_name
+                });
+            } else {
+                    sketch.emit("core-app_manager-stop_option", {
+                        option_name: choice, app_name: element.parent.bubble_name
                 });
             }
             break;
