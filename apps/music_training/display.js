@@ -8,8 +8,7 @@ export const music_training = new p5(( sketch ) => {
         sketch.selfCanvas = sketch.createCanvas(width, height).position(0, 0).style("z-index", sketch.z_index);
         sketch.music_training = new MusicTraining()
         socket.on(sketch.name, (data) => {
-            console.log(data["max_frequency"])
-            sketch.music_training.update_data(
+            sketch.music_training.updateData(
                 data["max_frequency"], data["amplitude"]
             )
         });

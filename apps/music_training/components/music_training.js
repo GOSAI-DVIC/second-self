@@ -1,39 +1,39 @@
-import musical_elements_json from './musical_elements.json' assert { type: "json" };
-import la_vie_en_rose_json from './scores/la_vie_en_rose.json' assert { type: "json" };
-import score_test_json from './scores/score_test.json' assert { type: "json" };
+import musicalElementsJson from './musical_elements.json' assert { type: "json" };
+import laVieEnRoseJson from './scores/la_vie_en_rose.json' assert { type: "json" };
+import scoreTestJson from './scores/score_test.json' assert { type: "json" };
 
 export class MusicTraining{
     constructor() {
         this.frequency = 0;
-        this.particles_system;
-        this.gap_between_bars = 20;
-        this.shift_bars = 520;
-        this.show_bars = true;
+        this.particlesSystem;
+        this.gapBetweenBars = 20;
+        this.shiftBars = 520;
+        this.showBars = true;
         this.initParticles();
         
         this.playingTutorial = true;
         this.tempo;
-        this.falling_notes = [];
+        this.fallingNotes = [];
         this.score = 0;
         
-        this.cursor_x_pos = 0;
-        this.cursor_y_pos = height - 200;
-        this.cursor_diameter = 10;
+        this.cursorXPos = 0;
+        this.cursorYPos = height - 200;
+        this.cursorDiameter = 10;
 
-        this.particles_color;
-        this.max_particles = 7;
+        this.particlesColor;
+        this.maxParticles = 7;
 
         this.playTutorial();
 
     }
 
     displayBars(sketch) {
-        const musical_elements = JSON.parse(JSON.stringify(musical_elements_json))
-        for (let note in musical_elements.notes_key) {
+        const musicalElements = JSON.parse(JSON.stringify(musicalElementsJson))
+        for (let note in musicalElements.notes_key) {
             sketch.stroke(255)
             sketch.strokeWeight(1);
             sketch.fill(sketch.color(255,255,255))
-            sketch.line(this.key_to_pxl(musical_elements.notes_key[note]), 200, this.key_to_pxl(musical_elements.notes_key[note]), this.cursor_y_pos);
+            sketch.line(this.keyToPxl(musicalElements.notes_key[note]), 200, this.keyToPxl(musicalElements.notes_key[note]), this.cursorYPos);
         }
     }
 
@@ -91,112 +91,112 @@ export class MusicTraining{
             }
         };
 
-        this.particles_system = new ParticleSystem(createVector(0,0));
+        this.particlesSystem = new ParticleSystem(createVector(0,0));
         }
 
     playTutorial() {
         this.playingTutorial = true;
 
         // const score = JSON.parse(JSON.stringify(score_test_json))
-        const score = JSON.parse(JSON.stringify(la_vie_en_rose_json))
-        const musical_elements = JSON.parse(JSON.stringify(musical_elements_json))
+        const score = JSON.parse(JSON.stringify(laVieEnRoseJson))
+        const musicalElements = JSON.parse(JSON.stringify(musicalElementsJson))
         this.tempo = score.rythm.tempo
 
         for (var i=0; i< score.notes.length; i++) {
-            const note_num = score.rythm.timeSignatureNum
-            const pas_mesure = 1/musical_elements.notes_durations_denom[score.notes[i][1]]
-            let note_duration =  note_num * pas_mesure * 60/this.tempo;
+            const noteNum = score.rythm.timeSignatureNum
+            const pasMesure = 1/musicalElements.notes_durations_denom[score.notes[i][1]]
+            let noteDuration =  noteNum * pasMesure * 60/this.tempo;
 
-            let note_coor_x = this.key_to_pxl(musical_elements.notes_key[score.notes[i][0]]);
-            var lineY = i>0 ? this.falling_notes[i-1].lineY - this.falling_notes[i-1].distance: 0;
+            let noteCoorX = this.keyToPxl(musicalElements.notes_key[score.notes[i][0]]);
+            var lineY = i>0 ? this.fallingNotes[i-1].lineY - this.fallingNotes[i-1].distance: 0;
 
-            var newFallingNote = new FallingNote(lineY, note_duration, note_coor_x);
-            this.falling_notes.push(newFallingNote);
+            var newFallingNote = new FallingNote(lineY, noteDuration, noteCoorX);
+            this.fallingNotes.push(newFallingNote);
         }
     }
 
     reset() {}
 
-    update_data(frequency, amplitude) {
+    updateData(frequency, amplitude) {
         this.frequency = frequency;
         this.amplitude = amplitude;
     }
 
     // Links the distance in pixels to the frequency
-    px_to_freq(value_px)
+    pxToFreq(valuePx)
     {
-        const key_num = (value_px + this.shift_bars)/ this.gap_between_bars;
-        return Math.min(Math.max(this.key_to_freq(key_num), 0), 2000);
+        const keyNum = (valuePx + this.shiftBars)/ this.gapBetweenBars;
+        return Math.min(Math.max(this.keyToGreq(keyNum), 0), 2000);
     }
 
-    key_to_pxl(key_num)
+    keyToPxl(keyNum)
     {
-        return key_num * this.gap_between_bars - this.shift_bars;
+        return keyNum * this.gapBetweenBars - this.shiftBars;
     }
 
-    key_to_freq(key) {
+    keyToGreq(key) {
         const freq = 27.5 * Math.pow(Math.pow(2, 1/12), key-1)
         return freq;
     }
 
-    freq_to_key(freq) {
+    freqToKey(freq) {
         return Math.log(freq/27.5)/Math.log(Math.pow(2, 1/12)) + 1
     }
 
     show(sketch) {
         
-        var blue_color = sketch.color(30, 50, 250);
+        var blueColor = sketch.color(30, 50, 250);
 
-        if(!this.particles_color) this.particles_color = blue_color;
+        if(!this.particlesColor) this.particlesColor = blueColor;
 
         if (this.frequency && this.amplitude) {
             if (this.frequency > 30 && this.amplitude>40)
             {
-                var key = this.freq_to_key(this.frequency)
-                this.cursor_x_pos = this.key_to_pxl(key);
-                sketch.fill(this.particles_color);
-                sketch.ellipse(this.cursor_x_pos, this.cursor_y_pos, this.cursor_diameter);
+                var key = this.freqToKey(this.frequency)
+                this.cursorXPos = this.keyToPxl(key);
+                sketch.fill(this.particlesColor);
+                sketch.ellipse(this.cursorXPos, this.cursorYPos, this.cursorDiameter);
 
-                if (Math.floor(Math.random() * this.max_particles) == 0) {
-                    this.particles_system.addParticle(createVector(this.cursor_x_pos, this.cursor_y_pos), this.particles_color);
+                if (Math.floor(Math.random() * this.maxParticles) == 0) {
+                    this.particlesSystem.addParticle(createVector(this.cursorXPos, this.cursorYPos), this.particlesColor);
                 }
             }
             else
             {
-                this.particles_system.particles = [];
-                this.cursor_x_pos = 0;
+                this.particlesSystem.particles = [];
+                this.cursorXPos = 0;
             }
         }
-        this.particles_system.run(sketch);
+        this.particlesSystem.run(sketch);
 
-        if (this.show_bars) this.displayBars(sketch);
+        if (this.showBars) this.displayBars(sketch);
 
         if (this.playingTutorial) {
-            for (let i=0; i<this.falling_notes.length; i++) {
-                if(this.falling_notes[i].lineY > this.cursor_y_pos) {
-                    if(this.falling_notes[i].isValidating(this.cursor_x_pos)) {
-                        if(this.particles_color.levels[0] > 0) this.particles_color.levels[0] -=4;
-                        if(this.particles_color.levels[1] < 255) this.particles_color.levels[1] +=4;
-                        if(this.particles_color.levels[2] > 0) this.particles_color.levels[2] -=4;
-                        this.max_particles = 1;
-                        if(this.cursor_diameter<20) this.cursor_diameter += 2;
+            for (let i=0; i<this.fallingNotes.length; i++) {
+                if(this.fallingNotes[i].lineY > this.cursorYPos) {
+                    if(this.fallingNotes[i].isValidating(this.cursorXPos)) {
+                        if(this.particlesColor.levels[0] > 0) this.particlesColor.levels[0] -=4;
+                        if(this.particlesColor.levels[1] < 255) this.particlesColor.levels[1] +=4;
+                        if(this.particlesColor.levels[2] > 0) this.particlesColor.levels[2] -=4;
+                        this.maxParticles = 1;
+                        if(this.cursorDiameter<20) this.cursorDiameter += 2;
                     }
                     else {
-                        if(this.particles_color.levels[0] > 0) this.particles_color.levels[0] -=4;
-                        if(this.particles_color.levels[1] > 0) this.particles_color.levels[1] -=4;
-                        if(this.particles_color.levels[2] < 255) this.particles_color.levels[2] +=4;
-                        this.max_particles = 7;
-                        if(this.cursor_diameter>10) this.cursor_diameter -= 2;
+                        if(this.particlesColor.levels[0] > 0) this.particlesColor.levels[0] -=4;
+                        if(this.particlesColor.levels[1] > 0) this.particlesColor.levels[1] -=4;
+                        if(this.particlesColor.levels[2] < 255) this.particlesColor.levels[2] +=4;
+                        this.maxParticles = 7;
+                        if(this.cursorDiameter>10) this.cursorDiameter -= 2;
                     }
                 }
                 
-                if (this.falling_notes[i].isDead()) 
+                if (this.fallingNotes[i].isDead()) 
                 {
-                    this.score += this.falling_notes[i].noteScore;
-                    this.falling_notes.splice(i, 1);
+                    this.score += this.fallingNotes[i].noteScore;
+                    this.fallingNotes.splice(i, 1);
                 }
                 else {
-                    this.falling_notes[i].update(sketch, this.cursor_x_pos, this.cursor_y_pos, this.tempo);
+                    this.fallingNotes[i].update(sketch, this.cursorXPos, this.cursorYPos, this.tempo);
                 }
             }
         }
@@ -207,7 +207,7 @@ export class MusicTraining{
     }
 
     toggleShowBars(isActivated) {
-        this.show_bars = isActivated;
+        this.showBars = isActivated;
     }
 
     startTutorial(isActivated)
@@ -217,7 +217,7 @@ export class MusicTraining{
 
     toggleSound(isActivated)
     {
-        this.sound_activation = isActivated;
+        this.soundActivation = isActivated;
     }
 
     update(sketch) {
@@ -226,26 +226,26 @@ export class MusicTraining{
 }
 
 class FallingNote {
-    constructor(lineY, duration, x_coor) {
+    constructor(lineY, duration, xCoor) {
         this.speed = 5;
         this.distance = duration * this.speed* 120;
-        this.x_coor = x_coor;
+        this.xCoor = xCoor;
         this.lineY = lineY;
         this.barColor;
         this.noteScore =0;
     }
     
-    update(sketch, cursor_x_pos, cursor_y_pos, tempo)
+    update(sketch, cursorXPos, cursorYPos, tempo)
     {
         if(!this.barColor) this.barColor = sketch.color(255,255,255);
 
         this.lineY = this.lineY + this.speed;
 
         //changing the color and the score
-        if(this.lineY > cursor_y_pos) {
+        if(this.lineY > cursorYPos) {
             let gain = this.speed*tempo*5/this.distance
 
-            if(this.isValidating(cursor_x_pos)) {
+            if(this.isValidating(cursorXPos)) {
                 this.noteScore += Math.round(gain);
                 if(this.barColor.levels[0] > 0) this.barColor.levels[0] -=gain;
                 if(this.barColor.levels[1] < 255) this.barColor.levels[1] +=gain;
@@ -262,14 +262,14 @@ class FallingNote {
 
         sketch.strokeWeight(5);
         sketch.stroke(this.barColor);
-        sketch.line(this.x_coor, this.lineY, this.x_coor, this.lineY - this.distance);
+        sketch.line(this.xCoor, this.lineY, this.xCoor, this.lineY - this.distance);
     }
 
     isDead() {
         return this.lineY - this.distance > height ? true : false;
     }
 
-    isValidating(cursor_x_pos) {
-        return this.x_coor - 5 < cursor_x_pos && this.x_coor + 5 > cursor_x_pos;
+    isValidating(cursorXPos) {
+        return this.xCoor - 5 < cursorXPos && this.xCoor + 5 > cursorXPos;
     }
 }
