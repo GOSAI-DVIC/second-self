@@ -426,11 +426,11 @@ function chooseAction(opt, action, type, sketch) {
     switch (type) {
         case "application":
             if (action) {
-                sketch.emit("start_application", {
+                sketch.emit("core-menu-start_application", {
                     application_name: opt
                 });
             } else {
-                sketch.emit("stop_application", {
+                sketch.emit("core-menu-stop_application", {
                     application_name: opt
                 });
             }

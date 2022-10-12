@@ -10,8 +10,8 @@
         "y_offset": 100
     },
     "applications": {
-        "startup": ["menu", "face", "hands", "body"],
-        "disabled": ["show_ping"]
+        "startup": ["menu", "hands", "theremine"],
+        "disabled": ["slr","raw_hands", "show_ping", "score_player"]
     },
     "microphone": {
         "number": 0
