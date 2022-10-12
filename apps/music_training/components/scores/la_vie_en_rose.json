@@ -1,16 +1,8 @@
 {
     "rythm":{
-        "tempo": 30,
+        "tempo": 83,
         "timeSignatureNum": 4,
         "timeSignatureDenom": 4
-    },
-    "notes_duration":{
-
-        "eighth":"",
-        "dotted_quarter":"",
-        "half":"",
-        "whole":""
-
     },
     "notes":[
         ["C5","dotted_quarter"],

@@ -1,0 +1,29 @@
+{
+    "rythm":{
+        "tempo": 90,
+        "timeSignatureNum": 4,
+        "timeSignatureDenom": 4
+    },
+    "notes":[
+        ["A4","whole"],
+        ["B4","whole"],
+        ["C5","whole"],
+        ["D5","whole"],
+        ["E5","whole"],
+        ["A4","whole"],
+        ["B4","whole"],
+        ["C5","whole"],
+        ["D5","whole"],
+        ["E5","whole"], 
+        ["A4","whole"],
+        ["B4","whole"],
+        ["C5","whole"],
+        ["D5","whole"],
+        ["E5","whole"],
+        ["A4","whole"],
+        ["B4","whole"],
+        ["C5","whole"],
+        ["D5","whole"],
+        ["E5","whole"]
+    ]
+}
