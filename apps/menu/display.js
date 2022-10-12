@@ -52,7 +52,7 @@ export const menu = new p5((sketch) => {
             }
         });
 
-        socket.emit("get_available_applications");
+        socket.emit("core-app_manager-get_available_applications");
 
         sketch.emit = (name, data) => {
             socket.emit(name, data);

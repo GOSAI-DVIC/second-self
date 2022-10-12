@@ -11,7 +11,7 @@
     },
     "applications": {
         "startup": ["menu", "face", "hands", "body"],
-        "disabled": ["slr"]
+        "disabled": ["show_ping"]
     },
     "microphone": {
         "number": 0
