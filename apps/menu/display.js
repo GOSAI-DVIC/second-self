@@ -31,7 +31,7 @@ export const menu = new p5((sketch) => {
             );
         });
 
-        socket.on("available_applications", (data) => {
+        socket.on("core-app_manager-available_applications", (data) => {
             let apps = data["applications"];
             apps.sort((a, b) => {
                 if (a["name"] < b["name"]) {
