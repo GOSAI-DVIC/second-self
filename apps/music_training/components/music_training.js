@@ -7,7 +7,7 @@ export class MusicTraining{
         this.frequency = 0;
         this.particles_system;
         this.gap_between_bars = 20;
-        this.shift_bars = 450;
+        this.shift_bars = 520;
         this.show_bars = true;
         this.initParticles();
         
@@ -64,7 +64,7 @@ export class MusicTraining{
         Particle.prototype.display = function(sketch) {
             sketch.stroke(this.color.levels[0], this.color.levels[1], this.color.levels[2], this.lifespan)
             sketch.fill(this.color);
-            sketch.ellipse(this.position.x, this.position.y, 0.14);
+            sketch.ellipse(this.position.x, this.position.y, 2);
         };
         
         // Is the particle still useful?
@@ -158,8 +158,8 @@ export class MusicTraining{
                 sketch.ellipse(this.cursor_x_pos, this.cursor_y_pos, this.cursor_diameter);
 
                 if (Math.floor(Math.random() * this.max_particles) == 0) {
-                this.particles_system.addParticle(createVector(this.cursor_x_pos, this.cursor_y_pos), this.particles_color);
-            }
+                    this.particles_system.addParticle(createVector(this.cursor_x_pos, this.cursor_y_pos), this.particles_color);
+                }
             }
             else
             {
@@ -175,18 +175,18 @@ export class MusicTraining{
             for (let i=0; i<this.falling_notes.length; i++) {
                 if(this.falling_notes[i].lineY > this.cursor_y_pos) {
                     if(this.falling_notes[i].isValidating(this.cursor_x_pos)) {
-                        if(this.particles_color.levels[0] > 0) this.particles_color.levels[0] -=1;
-                        if(this.particles_color.levels[1] < 255) this.particles_color.levels[1] +=1;
-                        if(this.particles_color.levels[2] > 0) this.particles_color.levels[2] -=1;
+                        if(this.particles_color.levels[0] > 0) this.particles_color.levels[0] -=4;
+                        if(this.particles_color.levels[1] < 255) this.particles_color.levels[1] +=4;
+                        if(this.particles_color.levels[2] > 0) this.particles_color.levels[2] -=4;
                         this.max_particles = 1;
-                        if(this.cursor_diameter<20) this.cursor_diameter += 1;
+                        if(this.cursor_diameter<20) this.cursor_diameter += 2;
                     }
                     else {
-                        if(this.particles_color.levels[0] > 0) this.particles_color.levels[0] -=1;
-                        if(this.particles_color.levels[1] > 0) this.particles_color.levels[1] -=1;
-                        if(this.particles_color.levels[2] < 255) this.particles_color.levels[2] +=1;
+                        if(this.particles_color.levels[0] > 0) this.particles_color.levels[0] -=4;
+                        if(this.particles_color.levels[1] > 0) this.particles_color.levels[1] -=4;
+                        if(this.particles_color.levels[2] < 255) this.particles_color.levels[2] +=4;
                         this.max_particles = 7;
-                        if(this.cursor_diameter>10) this.cursor_diameter -= 1;
+                        if(this.cursor_diameter>10) this.cursor_diameter -= 2;
                     }
                 }
                 
@@ -203,7 +203,7 @@ export class MusicTraining{
 
         sketch.textSize(32);
         sketch.fill(255, 255, 255);
-        sketch.text('Score: '+this.score, 10, 30);
+        sketch.text('Score: '+this.score, 50, 100);
     }
 
     toggleShowBars(isActivated) {
