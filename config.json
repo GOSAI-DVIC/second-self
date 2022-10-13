@@ -11,7 +11,7 @@
     },
     "applications": {
         "startup": ["menu", "hands", "face", "body"],
-        "disabled": ["slr","bounce", "raw_hands", "show_ping", "score_player", "music_training", "show_frequency"]
+        "disabled": ["slr","raw_hands", "show_ping", "score_player", "music_training","sign_training", "sign_language", "show_frequency"]
     },
     "microphone": {
         "number": 6
