@@ -10,7 +10,7 @@
         "y_offset": 100
     },
     "applications": {
-        "startup": ["menu", "music_training"],
+        "startup": ["menu", "hands", "music_training"],
         "disabled": ["show_ping"]
     },
     "screen": {

@@ -7,17 +7,17 @@ export class MusicTraining{
         this.frequency = 0;
         this.particlesSystem;
         this.gapBetweenBars = 20;
-        this.shiftBars = 520;
+        this.shiftBars = 380;
         this.showBars = true;
         this.initParticles();
         
         this.playingTutorial = true;
         this.tempo;
         this.fallingNotes = [];
-        this.score = 0;
+        this.total_score = 0;
         
         this.cursorXPos = 0;
-        this.cursorYPos = height - 200;
+        this.cursorYPos = 200;
         this.cursorDiameter = 10;
 
         this.particlesColor;
@@ -31,16 +31,16 @@ export class MusicTraining{
         const musicalElements = JSON.parse(JSON.stringify(musicalElementsJson))
         for (let note in musicalElements.notes_key) {
             sketch.stroke(255)
-            sketch.strokeWeight(1);
+            sketch.strokeWeight(0.5);
             sketch.fill(sketch.color(255,255,255))
-            sketch.line(this.keyToPxl(musicalElements.notes_key[note]), 200, this.keyToPxl(musicalElements.notes_key[note]), this.cursorYPos);
+            sketch.line(this.keyToPxl(musicalElements.notes_key[note]), this.cursorYPos, this.keyToPxl(musicalElements.notes_key[note]), height-200);
         }
     }
 
     initParticles() {
         // A simple Particle class
         let Particle = function(position, color) {
-            this.acceleration = createVector(0, 0.05);
+            this.acceleration = createVector(0, -0.05);
             // this.velocity = createVector(random(-0.8,0.8), random(-0.8, 0));
             this.velocity = createVector(random(-0.2,0.2), 0);
             this.position = position.copy();
@@ -97,8 +97,8 @@ export class MusicTraining{
     playTutorial() {
         this.playingTutorial = true;
 
-        // const score = JSON.parse(JSON.stringify(score_test_json))
-        const score = JSON.parse(JSON.stringify(laVieEnRoseJson))
+        const score = JSON.parse(JSON.stringify(scoreTestJson))
+        // const score = JSON.parse(JSON.stringify(laVieEnRoseJson))
         const musicalElements = JSON.parse(JSON.stringify(musicalElementsJson))
         this.tempo = score.rythm.tempo
 
@@ -108,7 +108,7 @@ export class MusicTraining{
             let noteDuration =  noteNum * pasMesure * 60/this.tempo;
 
             let noteCoorX = this.keyToPxl(musicalElements.notes_key[score.notes[i][0]]);
-            var lineY = i>0 ? this.fallingNotes[i-1].lineY - this.fallingNotes[i-1].distance: 0;
+            var lineY = i>0 ? this.fallingNotes[i-1].lineY + this.fallingNotes[i-1].distance: height;
 
             var newFallingNote = new FallingNote(lineY, noteDuration, noteCoorX);
             this.fallingNotes.push(newFallingNote);
@@ -192,7 +192,7 @@ export class MusicTraining{
                 
                 if (this.fallingNotes[i].isDead()) 
                 {
-                    this.score += this.fallingNotes[i].noteScore;
+                    this.total_score += this.fallingNotes[i].noteScore;
                     this.fallingNotes.splice(i, 1);
                 }
                 else {
@@ -203,7 +203,7 @@ export class MusicTraining{
 
         sketch.textSize(32);
         sketch.fill(255, 255, 255);
-        sketch.text('Score: '+this.score, 50, 100);
+        sketch.text('Score: '+this.total_score, 50, 100);
     }
 
     toggleShowBars(isActivated) {
@@ -239,10 +239,10 @@ class FallingNote {
     {
         if(!this.barColor) this.barColor = sketch.color(255,255,255);
 
-        this.lineY = this.lineY + this.speed;
+        this.lineY = this.lineY - this.speed;
 
         //changing the color and the score
-        if(this.lineY > cursorYPos) {
+        if(this.lineY < cursorYPos) {
             let gain = this.speed*tempo*5/this.distance
 
             if(this.isValidating(cursorXPos)) {
@@ -262,11 +262,11 @@ class FallingNote {
 
         sketch.strokeWeight(5);
         sketch.stroke(this.barColor);
-        sketch.line(this.xCoor, this.lineY, this.xCoor, this.lineY - this.distance);
+        sketch.line(this.xCoor, this.lineY, this.xCoor, this.lineY + this.distance);
     }
 
     isDead() {
-        return this.lineY - this.distance > height ? true : false;
+        return this.lineY + this.distance < 0 ? true : false;
     }
 
     isValidating(cursorXPos) {
