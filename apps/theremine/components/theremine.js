@@ -9,10 +9,11 @@ export class Theremine{
         this.bitrate = 48000;
         this.amplitude = 0;
         this.right_hand_selected_point = [0,0,0];
-        this.left_hand_selected_point = [0,0,0];
+        this.leftHandSelectedPoint = [0,0,0];
         this.particles_system;
         this.gap_between_bars = 20;
         this.shift_bars = 450;
+        this.show_bars = true;
         this.initParticles();
     }
 
@@ -92,6 +93,8 @@ export class Theremine{
 
     reset() {}
 
+    
+
     update_data(right_hand_pose, left_hand_pose) {
         this.right_hand_pose = right_hand_pose;
         this.left_hand_pose = left_hand_pose;
@@ -103,14 +106,14 @@ export class Theremine{
         }
         
         if(this.left_hand_pose.length !== 0){
-            this.left_hand_selected_point = [0,0,0];
+            this.leftHandSelectedPoint = [0,0,0];
             for(var point_coor of this.left_hand_pose) 
-                if(point_coor[1] > this.left_hand_selected_point[1]) this.left_hand_selected_point = point_coor;
+                if(point_coor[1] > this.leftHandSelectedPoint[1]) this.leftHandSelectedPoint = point_coor;
         }
 
         this.frequency = this.px_to_freq(this.right_hand_selected_point[0]);
         
-        this.amplitude = this.px_to_amp(this.left_hand_selected_point[1]);
+        this.amplitude = this.px_to_amp(this.leftHandSelectedPoint[1]);
     }
 
     px_to_amp(value_px)
@@ -157,22 +160,34 @@ export class Theremine{
             if (this.left_hand_pose.length !== 0)
             {
                 sketch.fill(red_color)
-                sketch.ellipse(this.left_hand_selected_point[0] + 60, this.left_hand_pose[4][1], 10);
-                this.particles_system.addParticle(createVector(this.left_hand_selected_point[0] + 60, this.left_hand_pose[4][1]), red_color);
+                sketch.ellipse(this.leftHandSelectedPoint[0] + 60, this.left_hand_pose[4][1], 10);
+                this.particles_system.addParticle(createVector(this.leftHandSelectedPoint[0] + 60, this.left_hand_pose[4][1]), red_color);
             }
         }
         else {
-            this.left_hand_selected_point[1] = height;
+            this.leftHandSelectedPoint[1] = height;
             this.amplitude = 0;
         }
         this.particles_system.run(sketch);
 
-        this.displayBars(sketch);
+        if (this.show_bars) this.displayBars(sketch);
+    }
+
+    toggleShowBars(isActivated) {
+        this.show_bars = isActivated;
+    }
+
+    startTutorial(isActivated)
+    {
+        console.log("on verra plus tard") // TODO
+    }
+
+    toggleSound(isActivated)
+    {
+        this.sound_activation = isActivated;
     }
 
     update(sketch) {
 
     }
-
-
 }
