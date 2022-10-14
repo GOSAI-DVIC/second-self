@@ -10,11 +10,11 @@ export class MusicTraining{
         this.shiftBars = 380;
         this.showBars = true;
         this.initParticles();
-        
-        this.playingTutorial = true;
-        this.tempo;
+
+        this.playingTutorial = false;
         this.fallingNotes = [];
         this.total_score = 0;
+        this.tempo;
         
         this.cursorXPos = 0;
         this.cursorYPos = 200;
@@ -22,9 +22,13 @@ export class MusicTraining{
 
         this.particlesColor;
         this.maxParticles = 7;
+        this.resetTutorial();
+    }
 
-        this.playTutorial();
-
+    resetTutorial() {
+        this.playingTutorial = false;
+        this.fallingNotes = [];
+        this.total_score = 0;
     }
 
     displayBars(sketch) {
@@ -199,6 +203,8 @@ export class MusicTraining{
                     this.fallingNotes[i].update(sketch, this.cursorXPos, this.cursorYPos, this.tempo);
                 }
             }
+
+            if(i == this.fallingNotes.length-1 && this.fallingNotes[i].lineY + this.fallingNotes[i].distance < 0) this.resetTutorial();
         }
 
         sketch.textSize(32);
@@ -212,7 +218,10 @@ export class MusicTraining{
 
     startTutorial(isActivated)
     {
-        console.log("on verra plus tard") // TODO
+        if (isActivated)
+        {
+            this.playTutorial();
+        }
     }
 
     toggleSound(isActivated)
