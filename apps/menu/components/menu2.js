@@ -36,7 +36,7 @@ export class Menu {
         let bubble = new Bubble(app_name, app_name+".svg", 150);
         this.add(bubble);
         for(var option_name of Object.keys(options)) {
-            bubble.add_select_bar(option_name, true, "option");
+            bubble.add_select_bar(option_name, false, "option", options[option_name][type]);
         }
     }
 
@@ -60,7 +60,7 @@ export class Menu {
     }
 
     add_select_bar(bubble_id, name, isStarted) {
-        this.bubbles[bubble_id].add_select_bar(name, isStarted, "application");
+        this.bubbles[bubble_id].add_select_bar(name, isStarted, "setting", "toggle");
     }
 
     remove_all_from(bubble_id) {
@@ -161,8 +161,8 @@ class Bubble {
         this.bars.push(element);
     }
 
-    add_select_bar(name, started, type) {
-        let select_bar = new SelectBar(name, 300, 75);
+    add_select_bar(name, started, type, trigger_type="toggle") {
+        let select_bar = new SelectBar(name, 300, 75, type, trigger_type);
         this.add(select_bar, this.bars.length);
         select_bar.type = type;
         select_bar.selected = started;
@@ -241,6 +241,7 @@ class Bubble {
                                 this.name,
                                 this.selected,
                                 "bubble",
+                                this.trigger_type,
                                 this.parent.sketch,
                                 this
                             );
@@ -266,7 +267,7 @@ class Bubble {
 }
 
 class SelectBar {
-    constructor(choice, w, h) {
+    constructor(choice, w, h, type, trigger_type) {
         this.choice = choice;
         this.w = w;
         this.h = h;
@@ -276,7 +277,8 @@ class SelectBar {
         this.yoffset = 0;
         this.ypoffset = 0; // Parent offset
         this.parent = undefined;
-        this.type = "settings";
+        this.type = type;
+        this.trigger_type = trigger_type;
 
         this.hidden = true;
         this.selected = true;
@@ -481,6 +483,7 @@ class SelectBar {
                             this.choice,
                             this.selected,
                             this.type,
+                            this.trigger_type,
                             this.parent.parent.sketch,
                             this
                         );
@@ -544,7 +547,7 @@ class InfoPanel {
     }
 }
 
-function chooseAction(choice, is_selected, type, sketch, element) {
+function chooseAction(choice, is_selected, type, trigger_type, sketch, element) {
     switch (type) {
         case "application":
             if (is_selected) {
@@ -559,16 +562,23 @@ function chooseAction(choice, is_selected, type, sketch, element) {
             }
             break;
         case "option":
-            if (is_selected) {
-                    sketch.emit("core-app_manager-start_option", {
-                        option_name: choice, app_name: element.parent.bubble_name
-                });
-            } else {
-                    sketch.emit("core-app_manager-stop_option", {
-                        option_name: choice, app_name: element.parent.bubble_name
+            if(trigger_type == "toggle"){
+                if (is_selected) {
+                        sketch.emit("core-app_manager-start_option", {
+                            option_name: choice, app_name: element.parent.bubble_name
+                    });
+                } else {
+                        sketch.emit("core-app_manager-stop_option", {
+                            option_name: choice, app_name: element.parent.bubble_name
+                    });
+                }
+                break;
+            }
+            else if(trigger_type == "button"){
+                sketch.emit("core-app_manager-trigger_option", {
+                    option_name: choice, app_name: element.parent.bubble_name
                 });
             }
-            break;
     }
 }
 

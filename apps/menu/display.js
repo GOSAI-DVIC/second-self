@@ -47,7 +47,7 @@ export const menu = new p5((sketch) => {
                 if (
                     apps[i]["name"] != sketch.name
                 ) {
-                    sketch.menu.add_select_bar(0, apps[i]["name"], Boolean(apps[i]["started"], "application"));
+                    sketch.menu.add_select_bar(apps[i]["name"], Boolean(apps[i]["started"], "application"));
                 }
             }
         });
