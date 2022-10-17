@@ -12,6 +12,17 @@ export const music_training = new p5(( sketch ) => {
                 data["max_frequency"], data["amplitude"]
             )
         });
+        socket.on("application-music_training-bars_activation", (is_selected) => {
+            sketch.theremine.toggleShowBars(is_selected)
+        });
+
+        socket.on("application-music_training-tutorial_start", (is_selected) => {
+            sketch.theremine.startTutorial(is_selected)
+        });
+
+        socket.on("application-music_training-sound_activation", (is_selected) => {
+            sketch.theremine.toggleSound(is_selected)
+        });
         sketch.activated = true
     }
 

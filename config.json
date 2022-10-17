@@ -10,8 +10,8 @@
         "y_offset": 100
     },
     "applications": {
-        "startup": ["menu", "hands", "face", "body"],
-        "disabled": ["slr","bounce", "raw_hands", "show_ping", "score_player", "music_training", "show_frequency"]
+        "startup": ["menu", "hands"],
+        "disabled": ["sign_training", "sign_language","bounce", "raw_hands", "show_ping", "score_player", "show_frequency"]
     },
     "microphone": {
         "number": 6

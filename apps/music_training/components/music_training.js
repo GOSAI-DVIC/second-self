@@ -218,10 +218,7 @@ export class MusicTraining{
 
     startTutorial(isActivated)
     {
-        if (isActivated)
-        {
-            this.playTutorial();
-        }
+        if (isActivated && !this.playingTutorial) this.playTutorial();
     }
 
     toggleSound(isActivated)

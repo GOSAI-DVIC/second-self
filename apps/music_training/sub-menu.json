@@ -1,0 +1,5 @@
+{  
+    "Activate bars": {"event_name": "application-music_training-bars_activation", "type":"toggle"},
+    "Start tutorial": {"event_name": "application-music_training-tutorial_start", "type":"button"},
+    "Activate sound": {"event_name":"application-music_training-sound_activation", "type":"toggle"}
+}
