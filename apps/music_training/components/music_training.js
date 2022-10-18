@@ -22,11 +22,7 @@ export class MusicTraining{
 
         this.particlesColor;
         this.maxParticles = 7;
-        this.resetTutorial();
-    }
 
-    resetTutorial() {
-        this.playingTutorial = false;
         this.fallingNotes = [];
         this.total_score = 0;
     }
@@ -99,8 +95,6 @@ export class MusicTraining{
         }
 
     playTutorial() {
-        this.playingTutorial = true;
-
         const score = JSON.parse(JSON.stringify(scoreTestJson))
         // const score = JSON.parse(JSON.stringify(laVieEnRoseJson))
         const musicalElements = JSON.parse(JSON.stringify(musicalElementsJson))
@@ -119,6 +113,12 @@ export class MusicTraining{
         }
     }
 
+    stopTutorial() {
+        this.playingTutorial = false;
+        this.fallingNotes = [];
+        this.total_score = 0;
+    }
+
     reset() {}
 
     updateData(frequency, amplitude) {
@@ -130,7 +130,7 @@ export class MusicTraining{
     pxToFreq(valuePx)
     {
         const keyNum = (valuePx + this.shiftBars)/ this.gapBetweenBars;
-        return Math.min(Math.max(this.keyToGreq(keyNum), 0), 2000);
+        return Math.min(Math.max(this.keyToFreq(keyNum), 0), 2000);
     }
 
     keyToPxl(keyNum)
@@ -138,7 +138,7 @@ export class MusicTraining{
         return keyNum * this.gapBetweenBars - this.shiftBars;
     }
 
-    keyToGreq(key) {
+    keyToFreq(key) {
         const freq = 27.5 * Math.pow(Math.pow(2, 1/12), key-1)
         return freq;
     }
@@ -202,9 +202,9 @@ export class MusicTraining{
                 else {
                     this.fallingNotes[i].update(sketch, this.cursorXPos, this.cursorYPos, this.tempo);
                 }
+                if(i == this.fallingNotes.length-1 && this.fallingNotes[i].lineY + this.fallingNotes[i].distance < 0) this.stopTutorial();
             }
 
-            if(i == this.fallingNotes.length-1 && this.fallingNotes[i].lineY + this.fallingNotes[i].distance < 0) this.resetTutorial();
         }
 
         sketch.textSize(32);
@@ -216,9 +216,15 @@ export class MusicTraining{
         this.showBars = isActivated;
     }
 
-    startTutorial(isActivated)
+    triggerTutorial()
     {
-        if (isActivated && !this.playingTutorial) this.playTutorial();
+        this.playingTutorial = !this.playingTutorial;
+        if (this.playingTutorial) {
+            this.playTutorial();
+        }
+        else {
+            this.stopTutorial();
+        }
     }
 
     toggleSound(isActivated)
