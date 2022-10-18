@@ -36,7 +36,7 @@ export class Menu {
         let bubble = new Bubble(app_name, app_name+".svg", 150);
         this.add(bubble);
         for(var option_name of Object.keys(options)) {
-            bubble.add_select_bar(option_name, true, "option");
+            bubble.add_select_bar(option_name, options[option_name]["defaultly_activated"], "option", options[option_name]["trigger_type"]);
         }
     }
 
@@ -47,7 +47,6 @@ export class Menu {
                 this.bubbles.splice(i, 1);
             }
         }
-        
     }
 
     add(element) {
@@ -60,7 +59,7 @@ export class Menu {
     }
 
     add_select_bar(bubble_id, name, isStarted) {
-        this.bubbles[bubble_id].add_select_bar(name, isStarted, "application");
+        this.bubbles[bubble_id].add_select_bar(name, isStarted, "application", "toggle", false);
     }
 
     remove_all_from(bubble_id) {
@@ -69,8 +68,8 @@ export class Menu {
 
     unselect() {
         for (let i = 0; i < this.bubbles.length; i++) {
-            if (this.bubbles[i].selected) {
-                this.bubbles[i].selected = false;
+            if (this.bubbles[i].isSelected) {
+                this.bubbles[i].isSelected = false;
                 for (let j = 0; j < this.bubbles[i].bars.length; j++) {
                     this.bubbles[i].bars[j].per = 0;
                 }
@@ -132,7 +131,7 @@ class Bubble {
         this.per = 0;
         this.mul = 0.92;
         this.c = 0;
-        this.selected = false;
+        this.isSelected = false;
         
         this.bubble_name = bubble_name
 
@@ -161,11 +160,10 @@ class Bubble {
         this.bars.push(element);
     }
 
-    add_select_bar(name, started, type) {
-        let select_bar = new SelectBar(name, 300, 75);
+    add_select_bar(name, started, type, trigger_type="toggle") {
+        let select_bar = new SelectBar(name, 300, 75, type, trigger_type, started);
         this.add(select_bar, this.bars.length);
-        select_bar.type = type;
-        select_bar.selected = started;
+        // select_bar.isSelected = started;
     }
 
     remove_all() {
@@ -175,7 +173,7 @@ class Bubble {
     show(sketch) {
         sketch.stroke(255);
         sketch.strokeWeight(6);
-        if (this.selected) {
+        if (this.isSelected) {
             sketch.fill(255, 129, 0);
         } else {
             sketch.fill(100, 0.7);
@@ -190,14 +188,14 @@ class Bubble {
                 (this.r * this.per * 1) / 2
             );
         }
-        if (this.selected) {
+        if (this.isSelected) {
             for (let i = 0; i < this.bars.length; i++) {
                 this.bars[i].show(sketch);
             }
         }
         if (
             this.parent.display_bubbles &&
-            !this.selected &&
+            !this.isSelected &&
             dist(this.rx, this.ry, this.parent.cursor[0], this.parent.cursor[1]) <
             this.r
         ) {
@@ -227,19 +225,19 @@ class Bubble {
                 this.per += 0.04;
             } else {
                 if (
-                    !this.selected &&
+                    !this.isSelected &&
                     dist(this.rx, this.ry, cursor[0], cursor[1]) < this.r
                 ) {
                     this.c += 0.8;
 
                     if (this.c >= 40) {
                         this.parent.unselect();
-                        this.selected = true;
+                        this.isSelected = true;
 
                         if (typeof this.name !== "object") {
                             chooseAction(
                                 this.name,
-                                this.selected,
+                                this.isSelected,
                                 "bubble",
                                 this.parent.sketch,
                                 this
@@ -251,7 +249,7 @@ class Bubble {
                 }
             }
         }
-        if (this.selected) {
+        if (this.isSelected) {
             for (let i = 0; i < this.bars.length; i++) {
                 this.bars[i].update(anchor, cursor);
             }
@@ -260,13 +258,14 @@ class Bubble {
 
     unselect() {
         for (let i = 0; i < this.bars.length; i++) {
-            this.bars[i].selected = false;
+            this.bars[i].isSelected = false;
         }
     }
 }
 
 class SelectBar {
-    constructor(choice, w, h) {
+    constructor(choice, w, h, type, trigger_type, isSelected = false) {
+        if (trigger_type == "button") isSelected = false;
         this.choice = choice;
         this.w = w;
         this.h = h;
@@ -279,7 +278,7 @@ class SelectBar {
         this.type = "settings";
 
         this.hidden = true;
-        this.selected = true;
+        this.isSelected = isSelected;
 
         this.c = 0;
 
@@ -292,8 +291,9 @@ class SelectBar {
     }
 
     show(sketch) {
+        // if (this.choice = "Activate bars") console.log(this.choice, this.isSelected)
         this.sketch = sketch;
-        if ((this.parent.selected || !this.hidden) && this.per > 0.1) {
+        if ((this.parent.isSelected || !this.hidden) && this.per > 0.1) {
             sketch.stroke(255);
             sketch.strokeWeight(2);
             sketch.fill(0);
@@ -303,16 +303,18 @@ class SelectBar {
                 this.w * this.per,
                 this.h * this.per
             );
-            if (this.selected) {
+            if (this.isSelected) {
                 sketch.fill(255, 129, 0);
                 sketch.stroke(255, 129, 0);
             } else {
                 sketch.fill(255);
                 sketch.stroke(255);
             }
+
             sketch.noStroke();
             sketch.textSize((this.per * this.h) / 2);
             sketch.text(this.choice, this.rx + (this.per * this.w) / 2, this.ry);
+
             if (this.yoffset == 0) {
                 sketch.fill(255);
                 sketch.stroke(255);
@@ -455,7 +457,7 @@ class SelectBar {
         this.show_selection = false;
 
         if (
-            (!this.parent.selected && this.hidden) ||
+            (!this.parent.isSelected && this.hidden) ||
             !this.parent.parent.display_bubbles
         ) {
             this.per *= this.mul;
@@ -476,10 +478,10 @@ class SelectBar {
                     this.c += 1;
                     if (this.c == this.selection_time) {
                         // this.parent.unselect();
-                        this.selected = !this.selected;
+                        this.isSelected = !this.isSelected;
                         chooseAction(
                             this.choice,
-                            this.selected,
+                            this.isSelected,
                             this.type,
                             this.parent.parent.sketch,
                             this
@@ -510,7 +512,7 @@ class InfoPanel {
     }
 
     show(sketch) {
-        if (this.parent.selected && this.per > 0.5) {
+        if (this.parent.isSelected && this.per > 0.5) {
             sketch.stroke(255);
             sketch.strokeWeight(4);
             sketch.noFill();
@@ -536,7 +538,7 @@ class InfoPanel {
         // this.rx = this.x + this.per * this.offset;
         // this.ry = this.y;
 
-        if (!this.parent.selected || !this.parent.parent.display_bubbles) {
+        if (!this.parent.isSelected || !this.parent.parent.display_bubbles) {
             this.per *= this.mul;
         } else {
             this.per = 1;
@@ -544,24 +546,38 @@ class InfoPanel {
     }
 }
 
-function chooseAction(choice, is_selected, type, sketch, element) {
+function chooseAction(choice, isSelected, type, trigger_type, sketch, element) {
     switch (type) {
         case "application":
-            if (is_selected) {
-                sketch.menu.main_button.selected = false;
-                    sketch.emit("core-app_manager-start_application", {
-                        application_name: choice,
+            if (isSelected) {
+                sketch.menu.main_button.isSelected = false;
+                sketch.emit("core-app_manager-start_application", {
+                    application_name: choice,
                 });
             } else {
-                    sketch.emit("core-app_manager-stop_application", {
-                        application_name: choice,
+                sketch.emit("core-app_manager-stop_application", {
+                    application_name: choice,
                 });
             }
             break;
         case "option":
-            if (is_selected) {
+            if(trigger_type == "toggle"){
+                if (isSelected) {
+                    sketch.menu.main_button.isSelected = false;
                     sketch.emit("core-app_manager-start_option", {
                         option_name: choice, app_name: element.parent.bubble_name
+                    });
+                } else {
+                    sketch.menu.main_button.isSelected = false;
+                    sketch.emit("core-app_manager-stop_option", {
+                        option_name: choice, app_name: element.parent.bubble_name
+                    });
+                }
+                break;
+            }
+            else if(trigger_type == "button"){
+                sketch.emit("core-app_manager-trigger_option", {
+                    option_name: choice, app_name: element.parent.bubble_name
                 });
             } else {
                     sketch.emit("core-app_manager-stop_option", {
@@ -584,14 +600,14 @@ class BubbleMenu {
         this.menu = menu;
         this.r = 80;
         this.c = 0;
-        this.selected = false;
+        this.isSelected = false;
         this.selection_time = 40;
     }
 
     show(sketch) {
         sketch.stroke(255);
         sketch.strokeWeight(6);
-        if (this.selected) {
+        if (this.isSelected) {
             sketch.fill(255, 129, 0);
             this.menu.display_bubbles = true;
         } else {
@@ -619,7 +635,7 @@ class BubbleMenu {
         if (dist(this.x, this.y, cursor[0], cursor[1]) < this.r) {
             this.c += 1;
             if (this.c == this.selection_time) {
-                this.selected = !this.selected;
+                this.isSelected = !this.isSelected;
             }
         } else {
             this.c = 0;
