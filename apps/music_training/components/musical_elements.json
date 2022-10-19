@@ -12,6 +12,7 @@
     "dotted_sixteenth": 12.923076923076923
   },
   "notes_key" : {
+    "silence": 0,
     "F2":21,
     "G2":23,
     "A2":25,
