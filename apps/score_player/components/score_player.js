@@ -1,4 +1,5 @@
 import musical_elements_json from './musical_elements.json' assert { type: "json" };
+import no_time_to_die_json from './scores/no_time_to_die.json' assert { type: "json" };
 import la_vie_en_rose_json from './scores/la_vie_en_rose.json' assert { type: "json" };
 
 export class Score_player{
@@ -7,7 +8,7 @@ export class Score_player{
         this.note_duration = 0.01;
         this.bitrate = 48000;
         this.amplitude = 0;
-        this.playScore(la_vie_en_rose_json);
+        this.playScore(no_time_to_die_json);
     }
 
     reset() {}
