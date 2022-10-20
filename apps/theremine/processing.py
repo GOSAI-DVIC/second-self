@@ -15,7 +15,7 @@ class Application(BaseApplication):
 
         @self.server.sio.on("application_theremine_synthesize")
         def synthesize(data):
-            self.execute("synthesizer", "play_synth", data)  
+            self.execute("synthesizer", "play", data)  
 
     def listener(self, source, event, data):
         super().listener(source, event, data)
