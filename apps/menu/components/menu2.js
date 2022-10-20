@@ -579,10 +579,7 @@ function chooseAction(choice, isSelected, type, trigger_type, sketch, element) {
                 sketch.emit("core-app_manager-trigger_option", {
                     option_name: choice, app_name: element.parent.bubble_name
                 });
-            } else {
-                    sketch.emit("core-app_manager-stop_option", {
-                        option_name: choice, app_name: element.parent.bubble_name
-                });
+                element.isSelected = false
             }
             break;
     }
