@@ -1,5 +1,6 @@
 import musicalElementsJson from './musical_elements.json' assert { type: "json" };
 import laVieEnRoseJson from './scores/la_vie_en_rose.json' assert { type: "json" };
+import noTimeToDie from './scores/no_time_to_die.json' assert { type: "json" };
 import scoreTestJson from './scores/score_test.json' assert { type: "json" };
 
 export class MusicTraining{
@@ -25,6 +26,11 @@ export class MusicTraining{
 
         this.fallingNotes = [];
         this.total_score = 0;
+
+        this.playingMusic = false;
+        this.playedScore = NaN;
+
+        this.scores = {"laVieEnRoseJson": laVieEnRoseJson, "noTimeToDieJson": noTimeToDie};
     }
 
     displayBars(sketch) {
@@ -219,6 +225,8 @@ export class MusicTraining{
     triggerTutorial()
     {
         this.playingTutorial = !this.playingTutorial;
+        this.playingMusic == false
+
         if (this.playingTutorial) {
             this.playTutorial();
         }
@@ -227,13 +235,59 @@ export class MusicTraining{
         }
     }
 
-    toggleSound(isActivated)
-    {
-        this.soundActivation = isActivated;
-    }
-
     update(sketch) {
 
+    }
+
+    triggerMusic(sketch, scoreName) {
+
+        // if the music is not already playing and a new one is selected
+        if (this.playingMusic && this.playedScore != scoreName) 
+        {
+            this.stopMusic(sketch);
+            this.playMusic(sketch, scoreName);
+        }
+        else {
+            this.playingMusic = !this.playingMusic;
+            if(this.playingMusic && !this.playingTutorial) {
+                this.playMusic(sketch, scoreName);
+            }
+            else {
+                this.stopMusic(sketch)
+                this.playedScore = NaN;
+            }
+        }
+    }
+
+    playMusic(sketch, scoreName) {
+
+        this.playedScore = scoreName;
+        var amplitude = 0.5;
+        
+        const score = JSON.parse(JSON.stringify(this.scores[scoreName + "Json"]));
+        const musicalElements = JSON.parse(JSON.stringify(musicalElementsJson));
+
+        for(var note of score.notes)
+        {
+            const noteNum = score.rythm.timeSignatureNum
+            const pasMesure = 1/musicalElements.notes_durations_denom[note[1]]
+            let noteDuration =  noteNum * pasMesure * 60/score.rythm.tempo;
+            // duration = (1/notes_durations_denom[note[1]])*60/score.rythm.tempo;
+            // console.log(this.keyToFreq(musicalElements.notes_key[note[0]]), amplitude, noteDuration,)
+            console.log(this.playingMusic)
+            if(this.playingMusic) { 
+                sketch.emit("score_player_synthesize", {
+                    "frequency": this.keyToFreq(musicalElements.notes_key[note[0]]), 
+                    "amplitude": amplitude,
+                    "duration": noteDuration,
+                });
+            }
+            else break;
+        }
+    }
+
+    stopMusic(sketch) {
+        sketch.emit("score_player_stop_music", {});
     }
 }
 

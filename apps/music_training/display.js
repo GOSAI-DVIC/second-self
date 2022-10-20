@@ -20,9 +20,19 @@ export const music_training = new p5(( sketch ) => {
             sketch.music_training.triggerTutorial()
         });
 
-        socket.on("application-music_training-music_play", (isSelected) => {
-            sketch.music_training.toggleMusic(isSelected)
+        socket.on("application-music_training-trigger_la_vie_en_rose", () => {
+            sketch.music_training.triggerMusic(sketch, "laVieEnRose")
         });
+
+        socket.on("application-music_training-trigger_no_time_to_die", () => {
+            sketch.music_training.triggerMusic(sketch, "noTimeToDie")
+        });
+
+        sketch.emit = (event_name, data = undefined) => {
+            if (data == undefined) socket.emit(event_name);
+            else socket.emit(event_name, data);
+        }
+
         sketch.activated = true
     }
 
