@@ -1,0 +1,7 @@
+{  
+    "Activate bars": {"event_name": "application-music_training-bars_activation", "trigger_type":"toggle", "defaultly_activated": "true"},
+    "Start tutorial": {"event_name": "application-music_training-tutorial_start", "trigger_type":"button", "defaultly_activated": "false" },
+    "Play La Vie En Rose": {"event_name":"application-music_training-trigger_la_vie_en_rose", "trigger_type":"button", "defaultly_activated": "false"},
+    "Play No Time to Die": {"event_name":"application-music_training-trigger_no_time_to_die", "trigger_type":"button", "defaultly_activated": "false"}
+
+}

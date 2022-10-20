@@ -239,6 +239,7 @@ class Bubble {
                                 this.name,
                                 this.isSelected,
                                 "bubble",
+                                this.trigger_type,
                                 this.parent.sketch,
                                 this
                             );
@@ -275,7 +276,8 @@ class SelectBar {
         this.yoffset = 0;
         this.ypoffset = 0; // Parent offset
         this.parent = undefined;
-        this.type = "settings";
+        this.type = type;
+        this.trigger_type = trigger_type;
 
         this.hidden = true;
         this.isSelected = isSelected;
@@ -483,6 +485,7 @@ class SelectBar {
                             this.choice,
                             this.isSelected,
                             this.type,
+                            this.trigger_type,
                             this.parent.parent.sketch,
                             this
                         );
@@ -581,7 +584,6 @@ function chooseAction(choice, isSelected, type, trigger_type, sketch, element) {
                 });
                 element.isSelected = false
             }
-            break;
     }
 }
 
