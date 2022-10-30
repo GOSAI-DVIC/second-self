@@ -35,6 +35,10 @@ export class Menu {
     }
 
     add_sub_menu(app_name, options) {
+        for (let bubble of this.bubbles) {
+            if (bubble.bubble_name == app_name) return
+        }
+            
         let bubble = new Bubble(app_name, app_name+".svg", 150);
         this.add(bubble);
         for(var option_name of Object.keys(options)) {
