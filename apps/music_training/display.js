@@ -42,7 +42,9 @@ export const music_training = new p5(( sketch ) => {
 
     sketch.resume = () => {};
 
-    sketch.pause = () => {};
+    sketch.pause = () => {
+        sketch.clear();
+    };
 
     sketch.update = () => {}
 
