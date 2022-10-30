@@ -1,47 +1,54 @@
-import notes_keys_CMaj_json from './notes_keys_CMaj.json' assert { type: "json" };
-import notes_keys_json from './notes_keys.json' assert { type: "json" };
-import la_vie_en_rose_json from './scores/la_vie_en_rose.json' assert { type: "json" };
+import musicalElementsJson from './musical_elements.json' assert { type: "json" };
+import laVieEnRoseJson from './scores/la_vie_en_rose.json' assert { type: "json" };
+import noTimeToDie from './scores/no_time_to_die.json' assert { type: "json" };
 
 export class Theremine{
     constructor() {
         this.frequency = 0;
-        this.note_duration = 0.01;
+        this.noteDuration = 0.01;
         this.bitrate = 48000;
         this.amplitude = 0;
-        this.right_hand_selected_point = [0,0,0];
+        this.rightHandSelectedPoint = [0,0,0];
         this.leftHandSelectedPoint = [0,0,0];
-        this.particles_system;
-        this.gap_between_bars = 20;
-        this.shift_bars = 450;
-        this.show_bars = true;
+        this.particlesSystem;
+
+        this.gabBetweenBars = 20;
+        this.shiftBars = 340;
+        this.showBars = true;
+
+        this.cursorsDiameter = 10;
+
         this.initParticles();
     }
 
     displayBars(sketch) {
-        const notes_keys_CMaj = JSON.parse(JSON.stringify(notes_keys_CMaj_json))
-        for (let note in notes_keys_CMaj) {
+        const musicalElements = JSON.parse(JSON.stringify(musicalElementsJson))
+        for (let note in musicalElements.notes_key) {
             sketch.stroke(255)
-            sketch.strokeWeight(2);
-            var bar_color = note[0] == 'C4' ? sketch.color(255,255,255) : sketch.color(34, 245, 34); 
-            sketch.fill(bar_color)
-            sketch.line(this.key_to_pxl(notes_keys_CMaj[note]), 50, this.key_to_pxl(notes_keys_CMaj[note]), height - 50);
+            sketch.strokeWeight(0.5);
+            sketch.fill(sketch.color(255,255,255))
+            sketch.line(this.keyToPxl(musicalElements.notes_key[note]), 50, this.keyToPxl(musicalElements.notes_key[note]), height-50);
         }
-        const amp_to_px_min = this.amp_to_px(0);
-        const amp_to_px_max = this.amp_to_px(7);
+        const ampToPxMin = this.ampToPx(0);
+        const ampToPxMax = this.ampToPx(7);
         sketch.fill(sketch.color(34,245,34));
         sketch.stroke(255)
         sketch.strokeWeight(2)
-        sketch.line(0, amp_to_px_min, 200, amp_to_px_min);
-        sketch.line(0, amp_to_px_max, 200, amp_to_px_max);
+        sketch.line(0, ampToPxMin, 200, ampToPxMin);
+        sketch.fill(sketch.color(34,245,34));
+        sketch.stroke(255)
+        sketch.strokeWeight(2)
+        sketch.line(0, ampToPxMax, 200, ampToPxMax);
     }
 
     initParticles() {
         // A simple Particle class
         let Particle = function(position, color) {
-            this.acceleration = createVector(0, 0.02);
-            this.velocity = createVector(random(-0.8,0.8), random(-0.8, 0));
+            this.acceleration = createVector(0, -0.05);
+            // this.velocity = createVector(random(-0.8,0.8), random(-0.8, 0));
+            this.velocity = createVector(random(-0.2,0.2), 0);
             this.position = position.copy();
-            this.lifespan = 50;
+            this.lifespan = 200;
             this.color = color;
         };
         
@@ -54,13 +61,14 @@ export class Theremine{
         Particle.prototype.update = function(){
             this.velocity.add(this.acceleration);
             this.position.add(this.velocity);
-            this.lifespan -= 2;
+            this.lifespan -= 1;
         };
         
         // Method to display
         Particle.prototype.display = function(sketch) {
+            sketch.stroke(this.color.levels[0], this.color.levels[1], this.color.levels[2], this.lifespan)
             sketch.fill(this.color);
-            sketch.ellipse(this.position.x, this.position.y, 3, 3);
+            sketch.ellipse(this.position.x, this.position.y, 2);
         };
         
         // Is the particle still useful?
@@ -82,14 +90,14 @@ export class Theremine{
                 let p = this.particles[i];
                 p.run(sketch);
                 if (p.isDead()) {
-                this.particles.splice(i, 1);
+                    this.particles.splice(i, 1);
                 }
             }
         };
 
-        this.particles_system = new ParticleSystem(createVector(this.right_hand_selected_point[0], this.right_hand_selected_point[1] - 40));
-        // console.log(this.particles_system.particles)
-        }
+        this.particlesSystem = new ParticleSystem(createVector(0,0));
+    }
+
 
     reset() {}
 
@@ -100,9 +108,9 @@ export class Theremine{
         this.left_hand_pose = left_hand_pose;
 
         if(this.right_hand_pose.length !== 0){
-            this.right_hand_selected_point = [0,0,0];
+            this.rightHandSelectedPoint = [0,0,0];
             for(var point_coor of this.right_hand_pose) 
-                if(point_coor[0] > this.right_hand_selected_point[0]) this.right_hand_selected_point = point_coor;
+                if(point_coor[0] > this.rightHandSelectedPoint[0]) this.rightHandSelectedPoint = point_coor;
         }
         
         if(this.left_hand_pose.length !== 0){
@@ -111,36 +119,39 @@ export class Theremine{
                 if(point_coor[1] > this.leftHandSelectedPoint[1]) this.leftHandSelectedPoint = point_coor;
         }
 
-        this.frequency = this.px_to_freq(this.right_hand_selected_point[0]);
+        this.frequency = this.pxToFreq(this.rightHandSelectedPoint[0]);
         
-        this.amplitude = this.px_to_amp(this.leftHandSelectedPoint[1]);
+        this.amplitude = this.pxToAmp(this.leftHandSelectedPoint[1]);
     }
 
-    px_to_amp(value_px)
+    pxToAmp(value_px)
     {
         return Math.min(Math.max((height/2 - value_px)/100, 0), 7);
     }
 
-    amp_to_px(amp)
+    ampToPx(amp)
     {
         return -(amp*100 - height/2)
     }
 
-    // Links the distance in pixels to the frequency
-    px_to_freq(value_px)
+    pxToFreq(valuePx)
     {
-        const key_num = (value_px + this.shift_bars)/ this.gap_between_bars;
-        return Math.min(Math.max(this.key_to_freq(key_num), 0), 2000);
+        const keyNum = (valuePx + this.shiftBars)/ this.gabBetweenBars;
+        return Math.min(Math.max(this.keyToFreq(keyNum), 0), 2000);
     }
 
-    key_to_pxl(key_num)
+    keyToPxl(keyNum)
     {
-        return key_num * this.gap_between_bars - this.shift_bars;
+        return keyNum * this.gabBetweenBars - this.shiftBars;
     }
 
-    key_to_freq(key) {
+    keyToFreq(key) {
         const freq = 27.5 * Math.pow(Math.pow(2, 1/12), key-1)
         return freq;
+    }
+
+    freqToKey(freq) {
+        return Math.log(freq/27.5)/Math.log(Math.pow(2, 1/12)) + 1
     }
 
     show(sketch) {
@@ -151,8 +162,8 @@ export class Theremine{
             if (this.right_hand_pose.length !== 0)
             {
                 sketch.fill(blue_color);
-                sketch.ellipse(this.right_hand_selected_point[0], this.right_hand_pose[11][1] - 40, 10);
-                this.particles_system.addParticle(createVector(this.right_hand_selected_point[0], this.right_hand_pose[11][1] - 40), blue_color);
+                sketch.ellipse(this.rightHandSelectedPoint[0], this.right_hand_pose[11][1] - 40, this.cursorsDiameter);
+                this.particlesSystem.addParticle(createVector(this.rightHandSelectedPoint[0], this.right_hand_pose[11][1] - 40), blue_color);
 
             }
         }
@@ -160,21 +171,21 @@ export class Theremine{
             if (this.left_hand_pose.length !== 0)
             {
                 sketch.fill(red_color)
-                sketch.ellipse(this.leftHandSelectedPoint[0] + 60, this.left_hand_pose[4][1], 10);
-                this.particles_system.addParticle(createVector(this.leftHandSelectedPoint[0] + 60, this.left_hand_pose[4][1]), red_color);
+                sketch.ellipse(this.leftHandSelectedPoint[0] + 60, this.left_hand_pose[4][1], this.cursorsDiameter);
+                this.particlesSystem.addParticle(createVector(this.leftHandSelectedPoint[0] + 60, this.left_hand_pose[4][1]), red_color);
             }
         }
         else {
             this.leftHandSelectedPoint[1] = height;
             this.amplitude = 0;
         }
-        this.particles_system.run(sketch);
+        this.particlesSystem.run(sketch);
 
-        if (this.show_bars) this.displayBars(sketch);
+        if (this.showBars) this.displayBars(sketch);
     }
 
     toggleShowBars(isActivated) {
-        this.show_bars = isActivated;
+        this.showBars = isActivated;
     }
 
     startTutorial(isActivated)
