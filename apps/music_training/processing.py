@@ -8,6 +8,11 @@ class Application(BaseApplication):
         super().__init__(name, hal, server, manager)
         self.requires["frequency_analysis"] = ["frequency"]
         self.requires["synthesizer"] = ["synthesizing"]
+
+        self.is_exclusive = True
+        self.applications_allowed = ["menu", "hands"]
+        self.applications_required = ["menu", "hands"]
+
         @self.server.sio.on("score_player_synthesize")
         def synthesize(data):
             self.execute("synthesizer", "add_to_queue", data)
