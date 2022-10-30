@@ -27,7 +27,7 @@ export const poke_it = new p5(( sketch ) =>{
     };
 
     sketch.pause = () => {
-
+        sketch.clear();
     };
 
     sketch.windowResized = () => {
