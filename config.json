@@ -10,8 +10,11 @@
         "y_offset": 100
     },
     "applications": {
-        "startup": ["menu", "hands", "theremine"],
-        "disabled": ["slr","raw_hands", "show_ping", "score_player"]
+        "startup": ["menu", "hands"],
+        "disabled": ["sign_training", "sign_language","bounce", "raw_hands", "show_ping", "score_player", "show_frequency"]
+    },
+    "microphone": {
+        "number": 6
     },
     "screen": {
         "screen_width": 392.85,
