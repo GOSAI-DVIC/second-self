@@ -30,7 +30,7 @@ export const menu = new p5((sketch) => {
                 data["left_hand_pose"]
             );
         });
-
+        
         socket.on("core-app_manager-available_applications", (data) => {
             let apps = data["applications"];
             apps.sort((a, b) => {
@@ -52,14 +52,31 @@ export const menu = new p5((sketch) => {
             }
         });
 
-        socket.emit("core-app_manager-get_available_applications");
-
         sketch.emit = (name, data) => {
             socket.emit(name, data);
         };
 
+        socket.emit("core-app_manager-get_init_sub_menu")
+
+        socket.emit("core-app_manager-get_available_applications")
+        
+        socket.on("core-app_manager-init_sub_menu", (data) => {
+            let sub_menu = data["sub_menu"];
+            let started_apps = data["available_applications"];
+            started_apps.forEach(app => {
+                if(sub_menu[app.name] != undefined) {
+                    sketch.menu.add_sub_menu(app.name, sub_menu[app.name])
+                }
+            });
+        });
+
         socket.on("core-app_manager-add_sub_menu", (data) => {
-            sketch.menu.add_sub_menu(data.app_name, data.options);
+            let sub_menu = data["sub_menu"];
+            let app_name = data["app_name"];
+            
+            if(sub_menu != undefined) {
+                sketch.menu.add_sub_menu(app_name, sub_menu)
+            }
         });
 
         socket.on("core-app_manager-remove_sub_menu", (data) => {

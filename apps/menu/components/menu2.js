@@ -30,6 +30,8 @@ export class Menu {
 
         let main_button = new BubbleMenu(this);
         this.main_button = main_button;
+
+        this.sub_menu = {};
     }
 
     add_sub_menu(app_name, options) {
@@ -59,6 +61,7 @@ export class Menu {
     }
 
     add_select_bar(bubble_id, name, isStarted) {
+        
         this.bubbles[bubble_id].add_select_bar(name, isStarted, "application", "toggle", false);
     }
 
@@ -266,6 +269,7 @@ class Bubble {
 
 class SelectBar {
     constructor(choice, w, h, type, trigger_type, isSelected = false) {
+        
         if (trigger_type == "button") isSelected = false;
         this.choice = choice;
         this.w = w;
@@ -290,6 +294,8 @@ class SelectBar {
 
         this.sketch;
         this.show_selection = false;
+
+        
     }
 
     show(sketch) {
@@ -481,6 +487,7 @@ class SelectBar {
                     if (this.c == this.selection_time) {
                         // this.parent.unselect();
                         this.isSelected = !this.isSelected;
+                        console.log(this.parent.parent.sketch)
                         chooseAction(
                             this.choice,
                             this.isSelected,
@@ -489,6 +496,18 @@ class SelectBar {
                             this.parent.parent.sketch,
                             this
                         );
+
+                        // if (this.parent.parent.sub_menu[this.choice] !== undefined && this.isSelected && this.parent.parent.bubbles[this.choice] == undefined) 
+                        // {
+                        //     this.parent.parent.add_sub_menu(this.choice, this.parent.parent.sub_menu[this.choice])
+                        //     console.log("adding sub menu")
+                        // }
+                        // else if (this.parent.parent.sub_menu[this.choice] !== undefined && !this.isSelected && this.parent.parent.bubbles[this.choice] != undefined) 
+                        // {
+                        //     this.parent.parent.remove_element(this.choice)
+                        //     console.log("removing sub menu")
+                        // }
+
                     }
                 } else {
                     this.c = 0;
@@ -554,6 +573,7 @@ function chooseAction(choice, isSelected, type, trigger_type, sketch, element) {
         case "application":
             if (isSelected) {
                 sketch.menu.main_button.isSelected = false;
+                
                 sketch.emit("core-app_manager-start_application", {
                     application_name: choice,
                 });
@@ -579,6 +599,7 @@ function chooseAction(choice, isSelected, type, trigger_type, sketch, element) {
                 break;
             }
             else if(trigger_type == "button"){
+                console.log(element)
                 sketch.emit("core-app_manager-trigger_option", {
                     option_name: choice, app_name: element.parent.bubble_name
                 });
