@@ -23,9 +23,9 @@ export const music_training = new p5(( sketch ) => {
         socket.on("application-music_training-trigger_la_vie_en_rose", () => {
             sketch.music_training.triggerMusic(sketch, "laVieEnRose")
         });
-
-        socket.on("application-music_training-trigger_no_time_to_die", () => {
-            sketch.music_training.triggerMusic(sketch, "noTimeToDie")
+        
+        socket.on("application-music_training-trigger_freq_calibration", () => {
+            sketch.music_training.triggerFreqCalibration(sketch)
         });
 
         sketch.emit = (event_name, data = undefined) => {
@@ -42,7 +42,9 @@ export const music_training = new p5(( sketch ) => {
 
     sketch.resume = () => {};
 
-    sketch.pause = () => {};
+    sketch.pause = () => {
+        sketch.clear();
+    };
 
     sketch.update = () => {}
 

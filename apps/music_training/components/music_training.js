@@ -7,8 +7,8 @@ export class MusicTraining{
     constructor() {
         this.frequency = 0;
         this.particlesSystem;
-        this.gapBetweenBars = 20;
-        this.shiftBars = 380;
+        this.gapBetweenBars = 10;
+        this.shiftBars = 180;
         this.showBars = true;
         this.initParticles();
 
@@ -19,27 +19,69 @@ export class MusicTraining{
         
         this.cursorXPos = 0;
         this.cursorYPos = 200;
-        this.cursorDiameter = 10;
+        this.cursorDiameter = 12;
 
         this.particlesColor;
-        this.maxParticles = 7;
-
-        this.fallingNotes = [];
-        this.total_score = 0;
+        this.maxParticles = 3;
 
         this.playingMusic = false;
         this.playedScore = NaN;
 
-        this.scores = {"laVieEnRoseJson": laVieEnRoseJson, "noTimeToDieJson": noTimeToDie};
+        this.musicalElements = JSON.parse(JSON.stringify(musicalElementsJson))
+        this.scores = {"laVieEnRoseJson": laVieEnRoseJson};
+
+        this.keyFreqGap = 0;
     }
 
     displayBars(sketch) {
-        const musicalElements = JSON.parse(JSON.stringify(musicalElementsJson))
-        for (let note in musicalElements.notes_key) {
-            sketch.stroke(255)
-            sketch.strokeWeight(0.5);
-            sketch.fill(sketch.color(255,255,255))
-            sketch.line(this.keyToPxl(musicalElements.notes_key[note]), this.cursorYPos, this.keyToPxl(musicalElements.notes_key[note]), height-200);
+        sketch.stroke(255)
+        sketch.strokeWeight(0.5);
+        let rectSupLeftXPt;
+        let rectSupLeftYPt;
+        let rectWidth;
+        let rectHeight;
+
+        // sketch.fill(sketch.color(255))
+        // console.log(this.keyToPxl(Object.values(this.musicalElements.notes_key)[1]), height-300, this.keyToPxl(Object.values(this.musicalElements.notes_key)[-1]), height-250)
+        // sketch.rect(this.keyToPxl(Object.values(this.musicalElements.notes_key)[1]), height-300, this.keyToPxl(Object.values(this.musicalElements.notes_key)[-1]), height-250);
+        
+        for (let note in this.musicalElements.notes_key) {
+            if(!note.includes("#"))
+            {
+                // La coordonnée du do et fa doit être décalée car pas de dièse avant
+                // rectSupLeftXPt = this.keyToPxl(note_counter+first_note_index) + note_counter*this.gapBetweenBars - this.gapBetweenBars/2 + 1 //+ shiftCount*this.gapBetweenBars;
+                
+                rectSupLeftYPt = this.cursorYPos;
+                rectWidth = this.gapBetweenBars*2.2;
+                rectHeight = 250;
+
+                sketch.fill(sketch.color(255))
+                sketch.strokeWeight(2);
+                sketch.stroke(0);
+                sketch.rect(this.keyToPxl(this.musicalElements.notes_key[note]) - rectWidth/2, rectSupLeftYPt, rectWidth, rectHeight);
+                
+                // sketch.noStroke();
+                // sketch.ellipse(this.keyToPxl(this.musicalElements.notes_key[note]), height-30, 4);
+            }
+        }
+        
+        // first_note_index = Object.values(this.musicalElements.notes_key)[1];
+        for (let note in this.musicalElements.notes_key) {
+            if(note.includes("#")) 
+            {
+                sketch.fill(sketch.color(16))
+
+                rectSupLeftXPt = this.keyToPxl(this.musicalElements.notes_key[note]) - this.gapBetweenBars/2;
+                rectSupLeftYPt = this.cursorYPos;
+                rectWidth = this.gapBetweenBars*1.2;
+                rectHeight = 200;
+
+                sketch.noStroke()
+                sketch.rect(this.keyToPxl(this.musicalElements.notes_key[note]) - rectWidth/2, rectSupLeftYPt, rectWidth, rectHeight);
+                sketch.fill(sketch.color(0,210,0))
+                
+                // sketch.ellipse(this.keyToPxl(this.musicalElements.notes_key[note]), height-50, 4);
+            }
         }
     }
 
@@ -50,7 +92,7 @@ export class MusicTraining{
             // this.velocity = createVector(random(-0.8,0.8), random(-0.8, 0));
             this.velocity = createVector(random(-0.2,0.2), 0);
             this.position = position.copy();
-            this.lifespan = 200;
+            this.lifespan = 300;
             this.color = color;
         };
         
@@ -101,17 +143,15 @@ export class MusicTraining{
         }
 
     playTutorial() {
-        const score = JSON.parse(JSON.stringify(scoreTestJson))
-        // const score = JSON.parse(JSON.stringify(laVieEnRoseJson))
-        const musicalElements = JSON.parse(JSON.stringify(musicalElementsJson))
-        this.tempo = score.rythm.tempo
+        
+        const score = JSON.parse(JSON.stringify(this.scores["laVieEnRoseJson"]));
+        this.tempo = score.rythm.tempo;
 
         for (var i=0; i< score.notes.length; i++) {
             const noteNum = score.rythm.timeSignatureNum
-            const pasMesure = 1/musicalElements.notes_durations_denom[score.notes[i][1]]
+            const pasMesure = 1/this.musicalElements.notes_durations_denom[score.notes[i][1]]
             let noteDuration =  noteNum * pasMesure * 60/this.tempo;
-
-            let noteCoorX = this.keyToPxl(musicalElements.notes_key[score.notes[i][0]]);
+            let noteCoorX = this.keyToPxl(this.musicalElements.notes_key[score.notes[i][0]] - this.keyFreqGap);
             var lineY = i>0 ? this.fallingNotes[i-1].lineY + this.fallingNotes[i-1].distance: height;
 
             var newFallingNote = new FallingNote(lineY, noteDuration, noteCoorX);
@@ -125,23 +165,42 @@ export class MusicTraining{
         this.total_score = 0;
     }
 
+    frequencyCalibration(sketch) {
+        let sungNote = "";
+        let sungKey = 0;
+
+        sketch.textSize(48);
+        sketch.fill(255, 255, 255);
+        sketch.text('Sing a comfortable note', 50, 150);
+
+        sungKey = this.freqToKey(this.frequency)
+
+        if (Object.values(this.musicalElements.notes_key).includes(sungKey)) {
+            sungNote = this.keyToNote(sungKey);
+            sketch.text(sungNote, 200, 100);
+        }
+        const score = JSON.parse(JSON.stringify(this.scores["laVieEnRoseJson"]));
+        this.keyFreqGap = Math.floor((this.musicalElements.notes_key[score.principalHigh] - sungKey)/12 + 1)*12;
+    }
+
     reset() {}
 
-    updateData(frequency, amplitude) {
+    updateData(frequency, amplitude, dt) {
         this.frequency = frequency;
         this.amplitude = amplitude;
     }
 
     // Links the distance in pixels to the frequency
-    pxToFreq(valuePx)
-    {
-        const keyNum = (valuePx + this.shiftBars)/ this.gapBetweenBars;
-        return Math.min(Math.max(this.keyToFreq(keyNum), 0), 2000);
-    }
+    // pxlToFreq(valuePx)
+    // {
+    //     const keyNum = (valuePx + this.shiftBars)/ this.gapBetweenBars;
+    //     return Math.min(Math.max(this.keyToFreq(keyNum), 0), 2000);
+    // }
 
     keyToPxl(keyNum)
     {
-        return keyNum * this.gapBetweenBars - this.shiftBars;
+        let pxl = (keyNum + Math.floor((keyNum - 4)/12) + Math.floor((keyNum - 9)/12)) * this.gapBetweenBars - this.shiftBars
+        return pxl;
     }
 
     keyToFreq(key) {
@@ -149,13 +208,18 @@ export class MusicTraining{
         return freq;
     }
 
+    keyToNote(key) {
+        return Object.keys(this.musicalElements.notes_key).find(note=>this.musicalElements.notes_key[note]===key)
+    }
+
     freqToKey(freq) {
-        return Math.log(freq/27.5)/Math.log(Math.pow(2, 1/12)) + 1
+        return Math.round(Math.log(freq/27.5)/Math.log(Math.pow(2, 1/12)) + 1)
     }
 
     show(sketch) {
-        
-        var blueColor = sketch.color(30, 50, 250);
+        if (this.showBars) this.displayBars(sketch);
+
+        var blueColor = sketch.color(0, 191, 255);
 
         if(!this.particlesColor) this.particlesColor = blueColor;
 
@@ -179,7 +243,7 @@ export class MusicTraining{
         }
         this.particlesSystem.run(sketch);
 
-        if (this.showBars) this.displayBars(sketch);
+        if (sketch.millis() - this.tutorialStartTime < 4000) this.frequencyCalibration(sketch);
 
         if (this.playingTutorial) {
             for (let i=0; i<this.fallingNotes.length; i++) {
@@ -222,10 +286,17 @@ export class MusicTraining{
         this.showBars = isActivated;
     }
 
+    triggerFreqCalibration(sketch) {
+        this.stopTutorial();
+        this.playingTutorial = false;
+        this.playingMusic == false;
+        this.tutorialStartTime = sketch.millis();
+    }
+
     triggerTutorial()
     {
         this.playingTutorial = !this.playingTutorial;
-        this.playingMusic == false
+        this.playingMusic = false
 
         if (this.playingTutorial) {
             this.playTutorial();
@@ -240,7 +311,7 @@ export class MusicTraining{
     }
 
     triggerMusic(sketch, scoreName) {
-
+        this.stopTutorial();
         // if the music is not already playing and a new one is selected
         if (this.playingMusic && this.playedScore != scoreName) 
         {
@@ -260,24 +331,19 @@ export class MusicTraining{
     }
 
     playMusic(sketch, scoreName) {
-
         this.playedScore = scoreName;
         var amplitude = 0.5;
         
         const score = JSON.parse(JSON.stringify(this.scores[scoreName + "Json"]));
-        const musicalElements = JSON.parse(JSON.stringify(musicalElementsJson));
 
         for(var note of score.notes)
         {
             const noteNum = score.rythm.timeSignatureNum
-            const pasMesure = 1/musicalElements.notes_durations_denom[note[1]]
-            let noteDuration =  noteNum * pasMesure * 60/score.rythm.tempo;
-            // duration = (1/notes_durations_denom[note[1]])*60/score.rythm.tempo;
-            // console.log(this.keyToFreq(musicalElements.notes_key[note[0]]), amplitude, noteDuration,)
-            console.log(this.playingMusic)
+            const pasMesure = 1/this.musicalElements.notes_durations_denom[note[1]]
+            let noteDuration =  noteNum * pasMesure * 60/score.rythm.tempo - 0.1;
             if(this.playingMusic) { 
                 sketch.emit("score_player_synthesize", {
-                    "frequency": this.keyToFreq(musicalElements.notes_key[note[0]]), 
+                    "frequency": this.keyToFreq(this.musicalElements.notes_key[note[0]]), 
                     "amplitude": amplitude,
                     "duration": noteDuration,
                 });
@@ -319,7 +385,6 @@ class FallingNote {
             }
             else
             {
-                this.noteScore -= Math.round(gain);
                 if(this.barColor.levels[0] < 255) this.barColor.levels[0] +=gain;
                 if(this.barColor.levels[1] > 0) this.barColor.levels[1] -=gain;
                 if(this.barColor.levels[2] > 0) this.barColor.levels[2] -=gain;
