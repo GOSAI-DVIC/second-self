@@ -8,7 +8,7 @@ export class MusicTraining{
         this.frequency = 0;
         this.particlesSystem;
         this.gapBetweenBars = 10;
-        this.shiftBars = 220;
+        this.shiftBars = 180;
         this.showBars = true;
         this.initParticles();
 
@@ -31,7 +31,9 @@ export class MusicTraining{
         this.playedScore = NaN;
 
         this.musicalElements = JSON.parse(JSON.stringify(musicalElementsJson))
-        this.scores = {"laVieEnRoseJson": laVieEnRoseJson, "noTimeToDieJson": noTimeToDie};
+        this.scores = {"laVieEnRoseJson": laVieEnRoseJson};
+
+        this.keyFreqGap = 0;
     }
 
     displayBars(sketch) {
@@ -144,16 +146,15 @@ export class MusicTraining{
         }
 
     playTutorial() {
-        const score = JSON.parse(JSON.stringify(scoreTestJson))
-        // const score = JSON.parse(JSON.stringify(laVieEnRoseJson))
-        this.tempo = score.rythm.tempo
+        
+        const score = JSON.parse(JSON.stringify(this.scores["laVieEnRoseJson"]));
+        this.tempo = score.rythm.tempo;
 
         for (var i=0; i< score.notes.length; i++) {
             const noteNum = score.rythm.timeSignatureNum
             const pasMesure = 1/this.musicalElements.notes_durations_denom[score.notes[i][1]]
             let noteDuration =  noteNum * pasMesure * 60/this.tempo;
-
-            let noteCoorX = this.keyToPxl(this.musicalElements.notes_key[score.notes[i][0]]);
+            let noteCoorX = this.keyToPxl(this.musicalElements.notes_key[score.notes[i][0]] - this.keyFreqGap);
             var lineY = i>0 ? this.fallingNotes[i-1].lineY + this.fallingNotes[i-1].distance: height;
 
             var newFallingNote = new FallingNote(lineY, noteDuration, noteCoorX);
@@ -167,9 +168,27 @@ export class MusicTraining{
         this.total_score = 0;
     }
 
+    frequencyCalibration(sketch) {
+        let sungNote = "";
+        let sungKey = 0;
+
+        sketch.textSize(48);
+        sketch.fill(255, 255, 255);
+        sketch.text('Sing a comfortable note', 50, 150);
+
+        sungKey = this.freqToKey(this.frequency)
+
+        if (Object.values(this.musicalElements.notes_key).includes(sungKey)) {
+            sungNote = this.keyToNote(sungKey);
+            sketch.text(sungNote, 200, 100);
+        }
+        const score = JSON.parse(JSON.stringify(this.scores["laVieEnRoseJson"]));
+        this.keyFreqGap = Math.floor((this.musicalElements.notes_key[score.principalHigh] - sungKey)/12 + 1)*12;
+    }
+
     reset() {}
 
-    updateData(frequency, amplitude) {
+    updateData(frequency, amplitude, dt) {
         this.frequency = frequency;
         this.amplitude = amplitude;
     }
@@ -192,12 +211,15 @@ export class MusicTraining{
         return freq;
     }
 
+    keyToNote(key) {
+        return Object.keys(this.musicalElements.notes_key).find(note=>this.musicalElements.notes_key[note]===key)
+    }
+
     freqToKey(freq) {
-        return Math.log(freq/27.5)/Math.log(Math.pow(2, 1/12)) + 1
+        return Math.round(Math.log(freq/27.5)/Math.log(Math.pow(2, 1/12)) + 1)
     }
 
     show(sketch) {
-        
         if (this.showBars) this.displayBars(sketch);
 
         var blueColor = sketch.color(0, 191, 255);
@@ -223,6 +245,8 @@ export class MusicTraining{
             }
         }
         this.particlesSystem.run(sketch);
+
+        if (sketch.millis() - this.tutorialStartTime < 4000) this.frequencyCalibration(sketch);
 
         if (this.playingTutorial) {
             for (let i=0; i<this.fallingNotes.length; i++) {
@@ -265,10 +289,16 @@ export class MusicTraining{
         this.showBars = isActivated;
     }
 
+    triggerFreqCalibration(sketch) {
+        this.playingTutorial = false;
+        this.playingMusic == false;
+        this.tutorialStartTime = sketch.millis();
+    }
+
     triggerTutorial()
     {
         this.playingTutorial = !this.playingTutorial;
-        this.playingMusic == false
+        this.playingMusic = false
 
         if (this.playingTutorial) {
             this.playTutorial();
@@ -303,7 +333,6 @@ export class MusicTraining{
     }
 
     playMusic(sketch, scoreName) {
-
         this.playedScore = scoreName;
         var amplitude = 0.5;
         
