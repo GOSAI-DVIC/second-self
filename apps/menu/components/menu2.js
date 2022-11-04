@@ -17,11 +17,11 @@ export class Menu {
 
         let bubble_demo = new Bubble("Play", "play.svg", 150);
         let bubble_description = new Bubble("Info", "info.svg", 150);
-        let bubble_settings = new Bubble("Settings", "settings.svg", 150);
+        // let bubble_settings = new Bubble("Settings", "settings.svg", 150);
 
         this.add(bubble_demo);
         this.add(bubble_description);
-        this.add(bubble_settings);
+        // this.add(bubble_settings);
 
         let description = `This is the alpha version of an interractive mirror. Place yourself at about 1m50 for a better experience. Use your left hand to display the menu.`;
         let description_panel = new InfoPanel(description, 300, 300);
@@ -491,7 +491,6 @@ class SelectBar {
                     if (this.c == this.selection_time) {
                         // this.parent.unselect();
                         this.isSelected = !this.isSelected;
-                        console.log(this.parent.parent.sketch)
                         chooseAction(
                             this.choice,
                             this.isSelected,
@@ -603,7 +602,6 @@ function chooseAction(choice, isSelected, type, trigger_type, sketch, element) {
                 break;
             }
             else if(trigger_type == "button"){
-                console.log(element)
                 sketch.emit("core-app_manager-trigger_option", {
                     option_name: choice, app_name: element.parent.bubble_name
                 });
