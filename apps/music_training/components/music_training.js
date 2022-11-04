@@ -24,9 +24,6 @@ export class MusicTraining{
         this.particlesColor;
         this.maxParticles = 3;
 
-        this.fallingNotes = [];
-        this.total_score = 0;
-
         this.playingMusic = false;
         this.playedScore = NaN;
 
@@ -290,6 +287,7 @@ export class MusicTraining{
     }
 
     triggerFreqCalibration(sketch) {
+        this.stopTutorial();
         this.playingTutorial = false;
         this.playingMusic == false;
         this.tutorialStartTime = sketch.millis();
@@ -313,7 +311,7 @@ export class MusicTraining{
     }
 
     triggerMusic(sketch, scoreName) {
-
+        this.stopTutorial();
         // if the music is not already playing and a new one is selected
         if (this.playingMusic && this.playedScore != scoreName) 
         {
@@ -387,7 +385,6 @@ class FallingNote {
             }
             else
             {
-                this.noteScore -= Math.round(gain);
                 if(this.barColor.levels[0] < 255) this.barColor.levels[0] +=gain;
                 if(this.barColor.levels[1] > 0) this.barColor.levels[1] -=gain;
                 if(this.barColor.levels[2] > 0) this.barColor.levels[2] -=gain;
