@@ -3,6 +3,7 @@ import laVieEnRoseJson from './scores/la_vie_en_rose.json' assert { type: "json"
 import noTimeToDie from './scores/no_time_to_die.json' assert { type: "json" };
 import scoreTestJson from './scores/score_test.json' assert { type: "json" };
 
+
 export class MusicTraining{
     constructor() {
         this.frequency = 0;
@@ -62,9 +63,6 @@ export class MusicTraining{
                 sketch.strokeWeight(2);
                 sketch.stroke(0);
                 sketch.rect(this.keyToPxl(this.musicalElements.notes_key[note]) - rectWidth/2, rectSupLeftYPt, rectWidth, rectHeight);
-                
-                // sketch.noStroke();
-                // sketch.ellipse(this.keyToPxl(this.musicalElements.notes_key[note]), height-30, 4);
             }
         }
         
@@ -72,18 +70,14 @@ export class MusicTraining{
         for (let note in this.musicalElements.notes_key) {
             if(note.includes("#")) 
             {
-                sketch.fill(sketch.color(16))
-
                 rectSupLeftXPt = this.keyToPxl(this.musicalElements.notes_key[note]) - this.gapBetweenBars/2;
                 rectSupLeftYPt = this.cursorYPos;
                 rectWidth = this.gapBetweenBars*1.2;
                 rectHeight = 200;
-
+                
+                sketch.fill(sketch.color(16))
                 sketch.noStroke()
                 sketch.rect(this.keyToPxl(this.musicalElements.notes_key[note]) - rectWidth/2, rectSupLeftYPt, rectWidth, rectHeight);
-                sketch.fill(sketch.color(0,210,0))
-                
-                // sketch.ellipse(this.keyToPxl(this.musicalElements.notes_key[note]), height-50, 4);
             }
         }
     }
@@ -146,7 +140,6 @@ export class MusicTraining{
         }
 
     playTutorial() {
-        
         const score = JSON.parse(JSON.stringify(this.scores["laVieEnRoseJson"]));
         this.tempo = score.rythm.tempo;
 
@@ -277,12 +270,10 @@ export class MusicTraining{
                 }
                 if(i == this.fallingNotes.length-1 && this.fallingNotes[i].lineY + this.fallingNotes[i].distance < 0) this.stopTutorial();
             }
-
+            sketch.textSize(32);
+            sketch.fill(255, 255, 255);
+            sketch.text('Score: '+this.total_score, 50, 100);
         }
-
-        sketch.textSize(32);
-        sketch.fill(255, 255, 255);
-        sketch.text('Score: '+this.total_score, 50, 100);
     }
 
     toggleShowBars(isActivated) {
