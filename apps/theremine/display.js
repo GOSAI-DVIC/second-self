@@ -18,8 +18,8 @@ export const theremine = new p5(( sketch ) => {
             sketch.theremine.toggleShowBars(is_selected)
         });
 
-        socket.on("application-theremine-tutorial_start", (is_selected) => {
-            sketch.theremine.startTutorial(is_selected)
+        socket.on("application-music_training-tutorial_start", () => {
+            sketch.theremine.triggerTutorial()
         });
 
         socket.on("application-theremine-sound_activation", (is_selected) => {

@@ -29,7 +29,9 @@ export const clock = new p5((sketch) => {
 
     sketch.resume = () => {};
 
-    sketch.pause = () => {};
+    sketch.pause = () => {
+        sketch.clear();
+    };
 
     sketch.update = () => {};
 

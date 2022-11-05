@@ -17,11 +17,11 @@ export class Menu {
 
         let bubble_demo = new Bubble("Play", "play.svg", 150);
         let bubble_description = new Bubble("Info", "info.svg", 150);
-        let bubble_settings = new Bubble("Settings", "settings.svg", 150);
+        // let bubble_settings = new Bubble("Settings", "settings.svg", 150);
 
         this.add(bubble_demo);
         this.add(bubble_description);
-        this.add(bubble_settings);
+        // this.add(bubble_settings);
 
         let description = `This is the alpha version of an interractive mirror. Place yourself at about 1m50 for a better experience. Use your left hand to display the menu.`;
         let description_panel = new InfoPanel(description, 300, 300);
@@ -30,9 +30,15 @@ export class Menu {
 
         let main_button = new BubbleMenu(this);
         this.main_button = main_button;
+
+        this.sub_menu = {};
     }
 
     add_sub_menu(app_name, options) {
+        for (let bubble of this.bubbles) {
+            if (bubble.bubble_name == app_name) return
+        }
+            
         let bubble = new Bubble(app_name, app_name+".svg", 150);
         this.add(bubble);
         for(var option_name of Object.keys(options)) {
@@ -59,6 +65,7 @@ export class Menu {
     }
 
     add_select_bar(bubble_id, name, isStarted) {
+        
         this.bubbles[bubble_id].add_select_bar(name, isStarted, "application", "toggle", false);
     }
 
@@ -239,6 +246,7 @@ class Bubble {
                                 this.name,
                                 this.isSelected,
                                 "bubble",
+                                this.trigger_type,
                                 this.parent.sketch,
                                 this
                             );
@@ -265,6 +273,7 @@ class Bubble {
 
 class SelectBar {
     constructor(choice, w, h, type, trigger_type, isSelected = false) {
+        
         if (trigger_type == "button") isSelected = false;
         this.choice = choice;
         this.w = w;
@@ -275,7 +284,8 @@ class SelectBar {
         this.yoffset = 0;
         this.ypoffset = 0; // Parent offset
         this.parent = undefined;
-        this.type = "settings";
+        this.type = type;
+        this.trigger_type = trigger_type;
 
         this.hidden = true;
         this.isSelected = isSelected;
@@ -288,6 +298,8 @@ class SelectBar {
 
         this.sketch;
         this.show_selection = false;
+
+        
     }
 
     show(sketch) {
@@ -483,9 +495,22 @@ class SelectBar {
                             this.choice,
                             this.isSelected,
                             this.type,
+                            this.trigger_type,
                             this.parent.parent.sketch,
                             this
                         );
+
+                        // if (this.parent.parent.sub_menu[this.choice] !== undefined && this.isSelected && this.parent.parent.bubbles[this.choice] == undefined) 
+                        // {
+                        //     this.parent.parent.add_sub_menu(this.choice, this.parent.parent.sub_menu[this.choice])
+                        //     console.log("adding sub menu")
+                        // }
+                        // else if (this.parent.parent.sub_menu[this.choice] !== undefined && !this.isSelected && this.parent.parent.bubbles[this.choice] != undefined) 
+                        // {
+                        //     this.parent.parent.remove_element(this.choice)
+                        //     console.log("removing sub menu")
+                        // }
+
                     }
                 } else {
                     this.c = 0;
@@ -551,6 +576,7 @@ function chooseAction(choice, isSelected, type, trigger_type, sketch, element) {
         case "application":
             if (isSelected) {
                 sketch.menu.main_button.isSelected = false;
+                
                 sketch.emit("core-app_manager-start_application", {
                     application_name: choice,
                 });
@@ -581,7 +607,6 @@ function chooseAction(choice, isSelected, type, trigger_type, sketch, element) {
                 });
                 element.isSelected = false
             }
-            break;
     }
 }
 

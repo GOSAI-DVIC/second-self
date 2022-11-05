@@ -1,14 +1,15 @@
 import musicalElementsJson from './musical_elements.json' assert { type: "json" };
 import laVieEnRoseJson from './scores/la_vie_en_rose.json' assert { type: "json" };
 import noTimeToDie from './scores/no_time_to_die.json' assert { type: "json" };
+import scoreTestJson from './scores/score_test.json' assert { type: "json" };
 
 
-export class Theremine{
+export class MusicTraining{
     constructor() {
         this.frequency = 0;
         this.particlesSystem;
-        this.gapBetweenBars = 20;
-        this.shiftBars = 340;
+        this.gapBetweenBars = 10;
+        this.shiftBars = 180;
         this.showBars = true;
         this.initParticles();
 
@@ -17,10 +18,12 @@ export class Theremine{
         this.total_score = 0;
         this.tempo;
         
-        this.cursorsDiameter = 10;
+        this.cursorXPos = 0;
+        this.cursorYPos = 200;
+        this.cursorDiameter = 12;
 
         this.particlesColor;
-        this.maxParticles = 5;
+        this.maxParticles = 3;
 
         this.playingMusic = false;
         this.playedScore = NaN;
@@ -28,13 +31,7 @@ export class Theremine{
         this.musicalElements = JSON.parse(JSON.stringify(musicalElementsJson))
         this.scores = {"laVieEnRoseJson": laVieEnRoseJson};
 
-        this.cursorYPos = 200;
-
-        this.noteDuration = 0.01;
-        this.bitrate = 48000;
-        this.amplitude = 0;
-        this.rightHandSelectedPoint = [0,0,0];
-        this.leftHandSelectedPoint = [0,0,0];
+        this.keyFreqGap = 0;
     }
 
     displayBars(sketch) {
@@ -44,23 +41,22 @@ export class Theremine{
         let rectSupLeftYPt;
         let rectWidth;
         let rectHeight;
+
+        // sketch.fill(sketch.color(255))
+        // console.log(this.keyToPxl(Object.values(this.musicalElements.notes_key)[1]), height-300, this.keyToPxl(Object.values(this.musicalElements.notes_key)[-1]), height-250)
+        // sketch.rect(this.keyToPxl(Object.values(this.musicalElements.notes_key)[1]), height-300, this.keyToPxl(Object.values(this.musicalElements.notes_key)[-1]), height-250);
         
         for (let note in this.musicalElements.notes_key) {
-            sketch.fill(sketch.color(255))
-            sketch.strokeWeight(2);
-            sketch.stroke(255);
-            sketch.line(this.keyToPxl(this.musicalElements.notes_key[note]), this.cursorYPos, this.keyToPxl(this.musicalElements.notes_key[note]), this.cursorYPos + 500);
-            
             if(!note.includes("#"))
             {
                 // La coordonnée du do et fa doit être décalée car pas de dièse avant
                 // rectSupLeftXPt = this.keyToPxl(note_counter+first_note_index) + note_counter*this.gapBetweenBars - this.gapBetweenBars/2 + 1 //+ shiftCount*this.gapBetweenBars;
                 
                 rectSupLeftYPt = this.cursorYPos;
-                rectWidth = this.gapBetweenBars*1.2; //*2.2
-                rectHeight = 150;
-                
-                sketch.fill(sketch.color(255));
+                rectWidth = this.gapBetweenBars*2.2;
+                rectHeight = 250;
+
+                sketch.fill(sketch.color(255))
                 sketch.strokeWeight(2);
                 sketch.stroke(0);
                 sketch.rect(this.keyToPxl(this.musicalElements.notes_key[note]) - rectWidth/2, rectSupLeftYPt, rectWidth, rectHeight);
@@ -74,7 +70,7 @@ export class Theremine{
                 rectSupLeftXPt = this.keyToPxl(this.musicalElements.notes_key[note]) - this.gapBetweenBars/2;
                 rectSupLeftYPt = this.cursorYPos;
                 rectWidth = this.gapBetweenBars*1.2;
-                rectHeight = 100;
+                rectHeight = 200;
                 
                 sketch.fill(sketch.color(16))
                 sketch.noStroke()
@@ -90,7 +86,7 @@ export class Theremine{
             // this.velocity = createVector(random(-0.8,0.8), random(-0.8, 0));
             this.velocity = createVector(random(-0.2,0.2), 0);
             this.position = position.copy();
-            this.lifespan = 200;
+            this.lifespan = 300;
             this.color = color;
         };
         
@@ -138,7 +134,7 @@ export class Theremine{
         };
 
         this.particlesSystem = new ParticleSystem(createVector(0,0));
-    }
+        }
 
     playTutorial() {
         const score = JSON.parse(JSON.stringify(this.scores["laVieEnRoseJson"]));
@@ -148,8 +144,7 @@ export class Theremine{
             const noteNum = score.rythm.timeSignatureNum
             const pasMesure = 1/this.musicalElements.notes_durations_denom[score.notes[i][1]]
             let noteDuration =  noteNum * pasMesure * 60/this.tempo;
-            let noteCoorX = this.keyToPxl(this.musicalElements.notes_key[score.notes[i][0]]);
-            console.log(this.musicalElements.notes_key[score.notes[i][0]])
+            let noteCoorX = this.keyToPxl(this.musicalElements.notes_key[score.notes[i][0]] - this.keyFreqGap);
             var lineY = i>0 ? this.fallingNotes[i-1].lineY + this.fallingNotes[i-1].distance: height;
 
             var newFallingNote = new FallingNote(lineY, noteDuration, noteCoorX);
@@ -163,48 +158,41 @@ export class Theremine{
         this.total_score = 0;
     }
 
+    frequencyCalibration(sketch) {
+        let sungNote = "";
+        let sungKey = 0;
+
+        sketch.textSize(48);
+        sketch.fill(255, 255, 255);
+        sketch.text('Sing a comfortable note', 50, 150);
+
+        sungKey = this.freqToKey(this.frequency)
+
+        if (Object.values(this.musicalElements.notes_key).includes(sungKey)) {
+            sungNote = this.keyToNote(sungKey);
+            sketch.text(sungNote, 200, 100);
+        }
+        const score = JSON.parse(JSON.stringify(this.scores["laVieEnRoseJson"]));
+        this.keyFreqGap = Math.floor((this.musicalElements.notes_key[score.principalHigh] - sungKey)/12 + 1)*12;
+    }
+
     reset() {}
 
-    update_data(right_hand_pose, left_hand_pose) {
-        this.right_hand_pose = right_hand_pose;
-        this.left_hand_pose = left_hand_pose;
-
-        if(this.right_hand_pose.length !== 0){
-            this.rightHandSelectedPoint = [0,0,0];
-            for(var point_coor of this.right_hand_pose) 
-                if(point_coor[0] > this.rightHandSelectedPoint[0]) this.rightHandSelectedPoint = point_coor;
-        }
-        
-        if(this.left_hand_pose.length !== 0){
-            this.leftHandSelectedPoint = [0,0,0];
-            for(var point_coor of this.left_hand_pose) 
-                if(point_coor[1] > this.leftHandSelectedPoint[1]) this.leftHandSelectedPoint = point_coor;
-        }
-
-        this.frequency = this.pxToFreq(this.rightHandSelectedPoint[0]);
-        this.amplitude = this.pxToAmp(this.leftHandSelectedPoint[1]);
+    updateData(frequency, amplitude, dt) {
+        this.frequency = frequency;
+        this.amplitude = amplitude;
     }
 
-    pxToAmp(value_px)
-    {
-        return Math.min(Math.max((height/2 - value_px)/100, 0), 7);
-    }
-
-    ampToPx(amp)
-    {
-        return -(amp*100 - height/2)
-    }
-
-    pxToFreq(valuePx)
-    {
-        const keyNum = (valuePx + this.shiftBars)/ this.gapBetweenBars;
-        return Math.min(Math.max(this.keyToFreq(keyNum), 0), 2000);
-    }
+    // Links the distance in pixels to the frequency
+    // pxlToFreq(valuePx)
+    // {
+    //     const keyNum = (valuePx + this.shiftBars)/ this.gapBetweenBars;
+    //     return Math.min(Math.max(this.keyToFreq(keyNum), 0), 2000);
+    // }
 
     keyToPxl(keyNum)
     {
-        let pxl = keyNum * this.gapBetweenBars - this.shiftBars
-        // let pxl = (keyNum + Math.floor((keyNum - 4)/12) + Math.floor((keyNum - 9)/12)) * this.gapBetweenBars - this.shiftBars
+        let pxl = (keyNum + Math.floor((keyNum - 4)/12) + Math.floor((keyNum - 9)/12)) * this.gapBetweenBars - this.shiftBars
         return pxl;
     }
 
@@ -213,47 +201,47 @@ export class Theremine{
         return freq;
     }
 
+    keyToNote(key) {
+        return Object.keys(this.musicalElements.notes_key).find(note=>this.musicalElements.notes_key[note]===key)
+    }
+
+    freqToKey(freq) {
+        return Math.round(Math.log(freq/27.5)/Math.log(Math.pow(2, 1/12)) + 1)
+    }
+
     show(sketch) {
         if (this.showBars) this.displayBars(sketch);
-        
-        var redColor = sketch.color(245, 34, 34);
+
         var blueColor = sketch.color(0, 191, 255);
 
         if(!this.particlesColor) this.particlesColor = blueColor;
 
-        if (this.right_hand_pose) {
-            if (this.right_hand_pose.length !== 0)
+        if (this.frequency && this.amplitude) {
+            if (this.frequency > 30 && this.amplitude>40)
             {
-                sketch.fill(blueColor);
-                sketch.ellipse(this.rightHandSelectedPoint[0], this.right_hand_pose[11][1] - 40, this.cursorsDiameter);
+                var key = this.freqToKey(this.frequency)
+                this.cursorXPos = this.keyToPxl(key);
+                sketch.fill(this.particlesColor);
+                sketch.ellipse(this.cursorXPos, this.cursorYPos, this.cursorDiameter);
 
                 if (Math.floor(Math.random() * this.maxParticles) == 0) {
-                    this.particlesSystem.addParticle(createVector(this.rightHandSelectedPoint[0], this.right_hand_pose[11][1] - 40), blueColor);
+                    this.particlesSystem.addParticle(createVector(this.cursorXPos, this.cursorYPos), this.particlesColor);
                 }
             }
-        }
-        if (this.left_hand_pose) {
-            if (this.left_hand_pose.length !== 0)
+            else
             {
-                sketch.fill(redColor)
-                sketch.ellipse(this.leftHandSelectedPoint[0] + 60, this.left_hand_pose[4][1], this.cursorsDiameter);
-                
-                if (Math.floor(Math.random() * this.maxParticles) == 0) {
-                    this.particlesSystem.addParticle(createVector(this.leftHandSelectedPoint[0] + 60, this.left_hand_pose[4][1]), redColor);
-                }
+                this.particlesSystem.particles = [];
+                this.cursorXPos = 0;
             }
-        }
-        else {
-            this.leftHandSelectedPoint[1] = height;
-            this.amplitude = 0;
         }
         this.particlesSystem.run(sketch);
 
+        if (sketch.millis() - this.tutorialStartTime < 4000) this.frequencyCalibration(sketch);
+
         if (this.playingTutorial) {
             for (let i=0; i<this.fallingNotes.length; i++) {
-                if(this.fallingNotes[i].lineY > this.rightHandSelectedPoint[1]) {
-                // if(this.fallingNotes[i].lineY > this.cursorYPos) {
-                    if(this.fallingNotes[i].isValidating(this.rightHandSelectedPoint[0])) {
+                if(this.fallingNotes[i].lineY > this.cursorYPos) {
+                    if(this.fallingNotes[i].isValidating(this.cursorXPos)) {
                         if(this.particlesColor.levels[0] > 0) this.particlesColor.levels[0] -=4;
                         if(this.particlesColor.levels[1] < 255) this.particlesColor.levels[1] +=4;
                         if(this.particlesColor.levels[2] > 0) this.particlesColor.levels[2] -=4;
@@ -275,7 +263,7 @@ export class Theremine{
                     this.fallingNotes.splice(i, 1);
                 }
                 else {
-                    this.fallingNotes[i].update(sketch, this.rightHandSelectedPoint[0], this.rightHandSelectedPoint[1], this.tempo);
+                    this.fallingNotes[i].update(sketch, this.cursorXPos, this.cursorYPos, this.tempo);
                 }
                 if(i == this.fallingNotes.length-1 && this.fallingNotes[i].lineY + this.fallingNotes[i].distance < 0) this.stopTutorial();
             }
@@ -287,6 +275,13 @@ export class Theremine{
 
     toggleShowBars(isActivated) {
         this.showBars = isActivated;
+    }
+
+    triggerFreqCalibration(sketch) {
+        this.stopTutorial();
+        this.playingTutorial = false;
+        this.playingMusic == false;
+        this.tutorialStartTime = sketch.millis();
     }
 
     triggerTutorial()
@@ -302,13 +297,54 @@ export class Theremine{
         }
     }
 
-    toggleSound(isActivated)
-    {
-        this.sound_activation = isActivated;
-    }
-
     update(sketch) {
 
+    }
+
+    triggerMusic(sketch, scoreName) {
+        this.stopTutorial();
+        // if the music is not already playing and a new one is selected
+        if (this.playingMusic && this.playedScore != scoreName) 
+        {
+            this.stopMusic(sketch);
+            this.playMusic(sketch, scoreName);
+        }
+        else {
+            this.playingMusic = !this.playingMusic;
+            if(this.playingMusic && !this.playingTutorial) {
+                this.playMusic(sketch, scoreName);
+            }
+            else {
+                this.stopMusic(sketch)
+                this.playedScore = NaN;
+            }
+        }
+    }
+
+    playMusic(sketch, scoreName) {
+        this.playedScore = scoreName;
+        var amplitude = 0.5;
+        
+        const score = JSON.parse(JSON.stringify(this.scores[scoreName + "Json"]));
+
+        for(var note of score.notes)
+        {
+            const noteNum = score.rythm.timeSignatureNum
+            const pasMesure = 1/this.musicalElements.notes_durations_denom[note[1]]
+            let noteDuration =  noteNum * pasMesure * 60/score.rythm.tempo - 0.1;
+            if(this.playingMusic) { 
+                sketch.emit("score_player_synthesize", {
+                    "frequency": this.keyToFreq(this.musicalElements.notes_key[note[0]]), 
+                    "amplitude": amplitude,
+                    "duration": noteDuration,
+                });
+            }
+            else break;
+        }
+    }
+
+    stopMusic(sketch) {
+        sketch.emit("score_player_stop_music", {});
     }
 }
 
@@ -330,19 +366,19 @@ class FallingNote {
 
         //changing the color and the score
         if(this.lineY < cursorYPos) {
-            let colorgain = this.speed*tempo*5/this.distance
+            let gain = this.speed*tempo*5/this.distance
 
             if(this.isValidating(cursorXPos)) {
-                this.noteScore += Math.round(colorgain);
-                if(this.barColor.levels[0] > 0) this.barColor.levels[0] -=colorgain;
-                if(this.barColor.levels[1] < 255) this.barColor.levels[1] +=colorgain;
-                if(this.barColor.levels[2] > 0) this.barColor.levels[2] -=colorgain;
+                this.noteScore += Math.round(gain);
+                if(this.barColor.levels[0] > 0) this.barColor.levels[0] -=gain;
+                if(this.barColor.levels[1] < 255) this.barColor.levels[1] +=gain;
+                if(this.barColor.levels[2] > 0) this.barColor.levels[2] -=gain;
             }
             else
             {
-                if(this.barColor.levels[0] < 255) this.barColor.levels[0] +=colorgain;
-                if(this.barColor.levels[1] > 0) this.barColor.levels[1] -=colorgain;
-                if(this.barColor.levels[2] > 0) this.barColor.levels[2] -=colorgain;
+                if(this.barColor.levels[0] < 255) this.barColor.levels[0] +=gain;
+                if(this.barColor.levels[1] > 0) this.barColor.levels[1] -=gain;
+                if(this.barColor.levels[2] > 0) this.barColor.levels[2] -=gain;
             }
         }
 

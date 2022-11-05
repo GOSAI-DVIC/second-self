@@ -37,7 +37,9 @@ export const show_ping = new p5((sketch) => {
 
     sketch.resume = () => {};
 
-    sketch.pause = () => {};
+    sketch.pause = () => {
+        sketch.clear();
+    };
 
     sketch.update = () => {
         sketch.emit("application-show_ping-ping", {"ping": (performance.timeOrigin + performance.now())});

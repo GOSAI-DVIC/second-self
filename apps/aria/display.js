@@ -34,7 +34,9 @@ class Aria {
     windowResized = () => {}
     
     
-    pause = () => {};
+    pause = () => {
+        sketch.clear();
+    };
     
     update = () => {
         this.scene.update()
