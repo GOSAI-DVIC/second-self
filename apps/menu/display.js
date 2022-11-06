@@ -52,6 +52,20 @@ export const menu = new p5((sketch) => {
             }
         });
 
+        socket.on("core-app_manager-started_applications", (data) => {
+            let started_apps = data["applications"];
+            started_apps.sort((a, b) => {
+                if (a["name"] < b["name"]) {
+                    return -1;
+                }
+                if (a["name"] > b["name"]) {
+                    return 1;
+                }
+                return 0;
+            });
+            sketch.menu.started_applications = started_apps;
+        });
+
         sketch.emit = (name, data) => {
             socket.emit(name, data);
         };
@@ -59,6 +73,8 @@ export const menu = new p5((sketch) => {
         socket.emit("core-app_manager-get_init_sub_menu")
 
         socket.emit("core-app_manager-get_available_applications")
+
+        socket.emit("core-app_manager-get_started_applications")
         
         socket.on("core-app_manager-init_sub_menu", (data) => {
             let sub_menu = data["sub_menu"];
@@ -97,7 +113,7 @@ export const menu = new p5((sketch) => {
     };
 
     sketch.update = () => {
-        sketch.menu.update();
+        sketch.menu.update(sketch);
     };
 
     sketch.show = () => {
