@@ -11,6 +11,11 @@ export class Menu {
         this.left_hand_pose = undefined;
         this.right_hand_pose = undefined;
 
+        this.started_applications = [];
+
+        this.display_tips = false;
+        this.last_interraction_time = sketch.millis();
+
         this.bubbles = [];
 
         this.display_bubbles = false;
@@ -65,7 +70,6 @@ export class Menu {
     }
 
     add_select_bar(bubble_id, name, isStarted) {
-        
         this.bubbles[bubble_id].add_select_bar(name, isStarted, "application", "toggle", false);
     }
 
@@ -89,7 +93,16 @@ export class Menu {
         this.left_hand_pose = left_hand_pose;
     }
 
-    update() {
+    update(sketch) {
+        // si il y a n'y a pas d'autres applications que menu, body, face, ou hands dans le menu
+        // alors on affiche les tips
+        this.display_tips = true;
+        for (let app in this.started_applications) 
+        {
+            const app_name = this.started_applications[app].name;
+            if (app_name != "menu" && app_name != "body" && app_name != "face" && app_name != "hands" || sketch.millis() - this.last_interraction_time < 10000) this.display_tips = false;    
+        }
+
         if (
             this.right_hand_pose !== undefined &&
             this.right_hand_pose[8] !== undefined
@@ -110,6 +123,7 @@ export class Menu {
         for (let i = 0; i < this.bubbles.length; i++) {
             this.bubbles[i].update(this.anchor, this.cursor);
         }
+        
     }
 
     show(sketch) {
@@ -119,6 +133,13 @@ export class Menu {
             this.bubbles[i].show(sketch);
         }
         sketch.pop();
+        if (this.display_tips) {
+            sketch.fill(155);
+            sketch.strokeWeight(2);
+            sketch.textSize(20);
+            sketch.text(`Activate the bubble with the right index finger to launch applications`, width/2 - 25, height-50);
+        }
+        
     }
 }
 
@@ -572,6 +593,10 @@ class InfoPanel {
 }
 
 function chooseAction(choice, isSelected, type, trigger_type, sketch, element) {
+    
+    sketch.emit("home-apps-menu","core-app_manager-get_started_applications")
+    sketch.menu.last_interraction_time = sketch.millis();
+
     switch (type) {
         case "application":
             if (isSelected) {
