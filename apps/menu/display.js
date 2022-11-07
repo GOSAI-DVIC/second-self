@@ -45,7 +45,7 @@ export const menu = new p5((sketch) => {
             sketch.menu.remove_all_from(0);
             for (let i = 0; i < apps.length; i++) {
                 if (
-                    apps[i]["name"] != sketch.name
+                    apps[i]["name"] != sketch.name && apps[i]["name"] != "hands"
                 ) {
                     sketch.menu.add_select_bar(0, apps[i]["name"], Boolean(apps[i]["started"]));
                 }
