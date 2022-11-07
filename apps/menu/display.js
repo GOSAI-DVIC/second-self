@@ -1,24 +1,17 @@
-import { Face } from "./components/face.js";
-import { Hand } from "./components/hand.js";
-import { Body } from "./components/body.js";
-import { Menu } from "./components/menu2.js";
+import {
+    Menu
+} from "../menu/components/menu2.js";
 
 export const menu = new p5((sketch) => {
     sketch.name = "menu";
     sketch.z_index = 5;
     sketch.activated = false;
 
-    sketch.face;
-    sketch.body;
     sketch.right_hand;
     sketch.left_hand;
     sketch.menu;
 
     sketch.set = (width, height, socket) => {
-        sketch.face = new Face("face");
-        sketch.body = new Body("body");
-        sketch.right_hand = new Hand("right_hand");
-        sketch.left_hand = new Hand("left_hand");
         sketch.menu = new Menu(0, 0, 150, sketch);
 
         sketch.selfCanvas = sketch
@@ -32,67 +25,99 @@ export const menu = new p5((sketch) => {
         sketch.imageMode(CENTER);
 
         socket.on(sketch.name, (data) => {
-            sketch.face.update_data(data["face_mesh"]);
-            sketch.body.update_data(data["body_pose"]);
-            sketch.right_hand.update_data(
-                data["right_hand_pose"],
-                data["right_hand_sign"]
+            sketch.menu.update_data(
+                data["right_hand_pose"], 
+                data["left_hand_pose"]
             );
-            sketch.left_hand.update_data(
-                data["left_hand_pose"],
-                data["left_hand_sign"]
-            );
-            sketch.menu.update_data(sketch.left_hand, sketch.right_hand);
+        });
+        
+        socket.on("core-app_manager-available_applications", (data) => {
+            let apps = data["applications"];
+            apps.sort((a, b) => {
+                if (a["name"] < b["name"]) {
+                    return -1;
+                }
+                if (a["name"] > b["name"]) {
+                    return 1;
+                }
+                return 0;
+            });
+            sketch.menu.remove_all_from(0);
+            for (let i = 0; i < apps.length; i++) {
+                if (
+                    apps[i]["name"] != sketch.name && apps[i]["name"] != "hands"
+                ) {
+                    sketch.menu.add_select_bar(0, apps[i]["name"], Boolean(apps[i]["started"]));
+                }
+            }
         });
 
-        socket.on("list_applications", (data) => {
-            sketch.menu.remove_all_from(0);
-            for (let i = 0; i < data["started"].length; i++) {
-                if (
-                    data["started"][i] != "menu"
-                ) {
-                    sketch.menu.add_application(0, data["started"][i], true);
+        socket.on("core-app_manager-started_applications", (data) => {
+            let started_apps = data["applications"];
+            started_apps.sort((a, b) => {
+                if (a["name"] < b["name"]) {
+                    return -1;
                 }
-            }
-
-            for (let i = 0; i < data["stopped"].length; i++) {
-                if (
-                    data["stopped"][i] != "menu"
-                ) {
-                    sketch.menu.add_application(0, data["stopped"][i], false);
+                if (a["name"] > b["name"]) {
+                    return 1;
                 }
-            }
+                return 0;
+            });
+            sketch.menu.started_applications = started_apps;
         });
 
         sketch.emit = (name, data) => {
             socket.emit(name, data);
         };
 
+        socket.emit("core-app_manager-get_init_sub_menu")
+
+        socket.emit("core-app_manager-get_available_applications")
+
+        socket.emit("core-app_manager-get_started_applications")
+        
+        socket.on("core-app_manager-init_sub_menu", (data) => {
+            let sub_menu = data["sub_menu"];
+            let started_apps = data["available_applications"];
+            started_apps.forEach(app => {
+                if(sub_menu[app.name] != undefined) {
+                    sketch.menu.add_sub_menu(app.name, sub_menu[app.name])
+                }
+            });
+        });
+
+        socket.on("core-app_manager-add_sub_menu", (data) => {
+            let sub_menu = data["sub_menu"];
+            let app_name = data["app_name"];
+            
+            if(sub_menu != undefined) {
+                sketch.menu.add_sub_menu(app_name, sub_menu)
+            }
+        });
+
+        socket.on("core-app_manager-remove_sub_menu", (data) => {
+            sketch.menu.remove_element(data.element_name);
+        });
+
         sketch.activated = true;
     };
 
     sketch.resume = () => {};
 
-    sketch.pause = () => {};
+    sketch.pause = () => {
+        sketch.clear();
+    };
 
     sketch.windowResized = () => {
         sketch.resizeCanvas(windowWidth, windowHeight);
     };
 
     sketch.update = () => {
-        sketch.face.update();
-        sketch.body.update();
-        sketch.right_hand.update();
-        sketch.left_hand.update();
-        sketch.menu.update();
+        sketch.menu.update(sketch);
     };
 
     sketch.show = () => {
         sketch.clear();
-        sketch.face.show(sketch);
-        sketch.body.show(sketch);
-        sketch.right_hand.show(sketch);
-        sketch.left_hand.show(sketch);
         sketch.menu.show(sketch);
     };
 });

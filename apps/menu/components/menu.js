@@ -29,13 +29,13 @@ export class Menu {
 
         bubble_description.add(description_panel, 0);
 
-        let settings_face = new SelectBar("Show Face", 300, 75);
-        let settings_pose = new SelectBar("Show Body", 300, 75);
-        let settings_hands = new SelectBar("Show Hands", 300, 75);
+        // let settings_face = new SelectBar("Show Face", 300, 75, true);
+        // let settings_pose = new SelectBar("Show Body", 300, 75, true);
+        // let settings_hands = new SelectBar("Show Hands", 300, 75, true);
 
-        bubble_settings.add(settings_face, 1);
-        bubble_settings.add(settings_pose, 0);
-        bubble_settings.add(settings_hands, 2);
+        // bubble_settings.add(settings_face, 1);
+        // bubble_settings.add(settings_pose, 0);
+        // bubble_settings.add(settings_hands, 2);
 
 
     }
@@ -106,7 +106,7 @@ export class Menu {
 
 class Bubble {
     constructor(icon, d) {
-        this.icon = loadImage("/apps/menu/components/icons/" + icon);
+        this.icon = loadImage("./platform/home/apps/menu/components/icons/" + icon);
         this.d = d;
 
         this.x = 0;
@@ -146,7 +146,7 @@ class Bubble {
     }
 
     add_application(name, started) {
-        let demo_app = new SelectBar(name, 300, 75);
+        let demo_app = new SelectBar(name, 300, 75, true);
         this.add(demo_app, this.bars.length);
         demo_app.type = "application";
         demo_app.selected = started;
@@ -227,7 +227,7 @@ class Bubble {
 }
 
 class SelectBar {
-    constructor(choice, w, h) {
+    constructor(choice, w, h, selected) {
         this.choice = choice;
         this.w = w;
         this.h = h;
@@ -240,7 +240,7 @@ class SelectBar {
         this.type = "settings";
 
         this.hidden = true;
-        this.selected = true;
+        this.selected = selected;
 
         this.c = 0;
 
@@ -426,11 +426,11 @@ function chooseAction(opt, action, type, sketch) {
     switch (type) {
         case "application":
             if (action) {
-                sketch.emit("start_application", {
+                sketch.emit("core-menu-start_application", {
                     application_name: opt
                 });
             } else {
-                sketch.emit("stop_application", {
+                sketch.emit("core-menu-stop_application", {
                     application_name: opt
                 });
             }

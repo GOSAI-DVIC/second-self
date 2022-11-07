@@ -9,13 +9,13 @@ export class DanceLesson {
         this.size = [];
         this.length = 1000; // Arbitrary
 
-        this.video = sketch.loadImage("./videos/" + file_name + ".gif");
+        this.video = sketch.loadImage("./platform/home/apps/dance/components/videos/" + file_name + ".gif");
         this.video.pause();
         this.video_index = 0;
         this.loaded = false;
 
         this.moves = sketch.loadJSON(
-            "./movements/" + file_name + ".json", // Structure : moves["index"] = [[kpts_index, x, y], ...]
+            "./platform/home/apps/dance/components/movements/" + file_name + ".json", // Structure : moves["index"] = [[kpts_index, x, y], ...]
             (moves) => {
                 sketch.dance_lesson.size = moves["size"]; // Original video size
                 sketch.dance_lesson.length = moves["length"]; // Original video size
@@ -26,7 +26,7 @@ export class DanceLesson {
         this.diff = 0; // The lower, the closer the moves are
         this.limit = 120; // if this.diff < this.limit, it goes on
         this.time = 0;
-        this.timelimit = 360;
+        this.timelimit = 1000; // Time limit for the dance
     }
 
     reset() {
@@ -67,8 +67,6 @@ export class DanceLesson {
             80,
             80
         );
-
-
 
         sketch.noStroke();
         if (this.diff < this.limit) {
@@ -121,6 +119,9 @@ export class DanceLesson {
             sketch.selfCanvas.clear();
             sketch.activated = false;
             this.reset();
+            sketch.emit("stop_application", {
+                "application_name": "dance"
+            });
             return;
         }
         if (this.body_pose == undefined || this.body_pose.length <= 0) return;
@@ -165,6 +166,9 @@ export class DanceLesson {
                 sketch.selfCanvas.clear();
                 sketch.activated = false;
                 this.reset();
+                sketch.emit("stop_application", {
+                    "application_name": "dance"
+                });
                 return;
             }
             if (this.moves_index in this.moves) {

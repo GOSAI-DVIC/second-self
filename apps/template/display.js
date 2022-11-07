@@ -17,7 +17,9 @@ export const template = new p5(( sketch ) => {
 
     sketch.resume = () => {};
 
-    sketch.pause = () => {};
+    sketch.pause = () => {
+        sketch.clear();
+    };
 
     sketch.update = () => {}
 
