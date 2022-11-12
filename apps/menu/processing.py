@@ -14,7 +14,7 @@ class Application(BaseApplication):
 
     def listener(self, source, event, data):
         super().listener(source, event, data)
-
+        
         if source == "pose_to_mirror" and event == "mirrored_data":
             self.data = {
                 "right_hand_pose": data["right_hand_pose"],
