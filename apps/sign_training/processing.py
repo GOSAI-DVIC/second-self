@@ -7,7 +7,6 @@ class Application(BaseApplication):
         super().__init__(name, hal, server, manager)
         self.requires["slr"] = ["new_sign"]
 
-
     def listener(self, source, event, data):
         super().listener(source, event, data)
 
@@ -23,4 +22,3 @@ class Application(BaseApplication):
                 }
                 #print(self.data)
                 self.server.send_data(self.name, self.data)
-    

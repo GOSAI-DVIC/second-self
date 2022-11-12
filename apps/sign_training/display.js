@@ -1,11 +1,10 @@
 import { Guessing } from "./components/guessing.js"
 
 export const sign_training = new  p5(( sketch ) => {
-    sketch.name = "sign language training"
+    sketch.name = "sign_training"
     sketch.z_index = 0
     sketch.activated = false
     
-
     sketch.set = (width, height, socket) => {
         sketch.selfCanvas = sketch.createCanvas(width, height).position(0, 0).style("z-index", sketch.z_index);
 
@@ -35,8 +34,7 @@ export const sign_training = new  p5(( sketch ) => {
     };
 
     sketch.update = () => {
-        sketch.slr_training.update()        
-        
+        sketch.slr_training.update()   
     }
 
     sketch.show = () => {

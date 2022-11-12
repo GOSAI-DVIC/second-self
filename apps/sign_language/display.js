@@ -1,20 +1,19 @@
 import { Slr } from "./components/slr.js"
 
 export const sign_language = new  p5(( sketch ) => {
-    sketch.name = "sign language"
+    sketch.name = "sign_language"
     sketch.z_index = 2
     sketch.activated = false
 
     sketch.set = (width, height, socket) => {
         sketch.selfCanvas = sketch.createCanvas(width, height).position(0, 0).style("z-index", sketch.z_index);
-
-        sketch.slr = new Slr(sketch)
+        sketch.slr = new Slr()
+        print("sketch.name",sketch.name)
         socket.on(sketch.name, (data) => {
+            console.log("receiving data")
             sketch.slr.update_data(
-                data["guessed_sign"],
-                data["probability"]
+                data["guessed_sign"], data["probability"]
             )
-            // console.log(data["guessed_sign"])
         });
         // sketch.emit = (name, data) => {
             // socket.emit(name, data);

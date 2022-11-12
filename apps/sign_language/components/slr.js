@@ -41,7 +41,6 @@ export class Slr{
         sketch.fill(this.dark_blue);
         sketch.noStroke();
 
-        console.log("guessed sign", this.guessed_sign)
         if(this.guessed_sign != undefined)
         {
             sketch.rect(0,60,int(this.probability*this.guessed_sign.length *1.5),90);

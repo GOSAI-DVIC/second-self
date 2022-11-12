@@ -5,16 +5,20 @@ export class Guessing {
         this.white = color(255, 255, 255);
         this.red = color(240, 0, 0);
         this.dark_blue = (30, 70, 160);
+
         this.actions;
         this.guessed_sign = "empty";
         this.targeted_sign = "hello";
-        this.targeted_sign_idx = 0;
+        this.targeted_sign_idx = 2;
+
         this.probability;
         this.sentence = [];
         this.threshold = 0.9;
+
         this.playing = false;
         this.playable = true;
         this.start_playing = 0;
+
         this.running = true;
         this.count_valid = 0;
     }
@@ -24,15 +28,12 @@ export class Guessing {
         this.playable = false;
         this.playing = true;
         this.targeted_sign = this.actions[this.targeted_sign_idx]
-        this.video = createVideo(["../../home/apps/slr_training/components/videos/" + this.targeted_sign + ".webm"]);
-        //home/apps/slr_training/components/videos/hello.webm
+        this.video = createVideo(["./platform/home/apps/sign_training/components/videos/" + this.targeted_sign + ".webm"]);
         this.video.autoplay();
         this.video.volume(0);
         this.video.size(550, 350);
         this.video.position(width/2, 50); //1500, 50
         this.video.play();
-        // this.video.play();
-        // console.log(this.video);
         this.guessed_sign = "empty";
         this.start_tuto = Date.now();
     }
@@ -41,7 +42,6 @@ export class Guessing {
         if (actions != undefined) {
             this.actions = actions
         }
-        // console.log("Playable : ",this.playable," , playing: ", this.playing);
 
         if (Date.now() - this.start_tuto > 60000) {
             this.running = false;
@@ -55,7 +55,6 @@ export class Guessing {
                 return;
             }
 
-
             if (this.video.elt.ended) {
                 this.playing = false;
                 this.targeted_sign = "nothing"
@@ -63,7 +62,6 @@ export class Guessing {
 
             //lancement de la vidéo si l'utilisateur fait le bon signe
             if (this.video.elt.ended && this.playable) {
-                // console.log("Play "+ this.targeted_sign);
                 this.video.hide();
                 this.playTuto();
                 return;
@@ -92,13 +90,10 @@ export class Guessing {
             if (this.sentence.length > 5) {
                 this.sentence.shift();
             }
-
         }
 
         if (this.guessed_sign == this.targeted_sign) {
             this.count_valid += 1;
-            //console.log("validated"); 
-
         }
         else {
             this.count_valid = 0;
@@ -127,7 +122,6 @@ export class Guessing {
         if (this.guessed_sign != undefined) {
             sketch.rect(0, 60, int(this.probability * this.guessed_sign.length * 20), 40);
         }
-
 
         sketch.textSize(32);
         sketch.fill(this.white);
