@@ -168,17 +168,26 @@ export class Theremine{
     update_data(right_hand_pose, left_hand_pose) {
         this.right_hand_pose = right_hand_pose;
         this.left_hand_pose = left_hand_pose;
-
         if(this.right_hand_pose.length !== 0){
             this.rightHandSelectedPoint = [0,0,0];
             for(var point_coor of this.right_hand_pose) 
                 if(point_coor[0] > this.rightHandSelectedPoint[0]) this.rightHandSelectedPoint = point_coor;
+        }
+        else {
+            this.amplitude = 0;
+            this.frequency = 0;
+            return;
         }
         
         if(this.left_hand_pose.length !== 0){
             this.leftHandSelectedPoint = [0,0,0];
             for(var point_coor of this.left_hand_pose) 
                 if(point_coor[1] > this.leftHandSelectedPoint[1]) this.leftHandSelectedPoint = point_coor;
+        }
+        else {
+            this.amplitude = 0;
+            this.frequency = 0;
+            return;
         }
 
         this.frequency = this.pxToFreq(this.rightHandSelectedPoint[0]);
