@@ -18,9 +18,9 @@ export const sign_training = new  p5(( sketch ) => {
             //console.log(data["guessed_sign"])
         });
 
-        // sketch.emit = (name, data) => {
-        //     socket.emit(name, data);
-        // };
+        sketch.emit = (name, data) => {
+            socket.emit(name, data);
+        };
         
         sketch.activated = true;
     }

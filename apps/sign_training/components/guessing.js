@@ -21,6 +21,7 @@ export class Guessing {
 
         this.running = true;
         this.count_valid = 0;
+        this.isStopped = false;
     }
 
     playTuto() {
@@ -153,11 +154,13 @@ export class Guessing {
         // sketch.text(this.count_valid, 0, 265);
 
         if (!this.running) {
-            console.log("STOP APPLICATION");
-            this.video.hide();
-            sketch.emit("stop_application", {
-                application_name: "slr_training"
-            });
+            if(!this.isStopped) {
+                this.video.hide();
+                sketch.emit("core-app_manager-stop_application", {
+                    application_name: "sign_training"
+                });
+            }
+            this.isStopped = true;
         }
     }
 
