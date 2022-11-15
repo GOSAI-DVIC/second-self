@@ -149,7 +149,6 @@ export class Theremine{
             const pasMesure = 1/this.musicalElements.notes_durations_denom[score.notes[i][1]]
             let noteDuration =  noteNum * pasMesure * 60/this.tempo;
             let noteCoorX = this.keyToPxl(this.musicalElements.notes_key[score.notes[i][0]]);
-            console.log(this.musicalElements.notes_key[score.notes[i][0]])
             var lineY = i>0 ? this.fallingNotes[i-1].lineY + this.fallingNotes[i-1].distance: height;
 
             var newFallingNote = new FallingNote(lineY, noteDuration, noteCoorX);

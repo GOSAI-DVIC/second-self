@@ -14,7 +14,8 @@
         "disabled": ["sign_training", "sign_language","bounce", "raw_hands", "show_ping", "score_player", "show_frequency"]
     },
     "microphone": {
-        "number": 6
+        "number": 13,
+        "channels_nb": 1
     },
     "screen": {
         "screen_width": 392.85,
