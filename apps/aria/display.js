@@ -29,13 +29,14 @@ class Aria {
 
     resume = () => {
         this.scene.reset();
+        this.selfCanvas.show();
     };
     
     windowResized = () => {}
     
     
     pause = () => {
-        sketch.clear();
+        this.selfCanvas.hide();
     };
     
     update = () => {
