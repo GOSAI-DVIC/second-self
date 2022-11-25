@@ -25,6 +25,7 @@ export class Guessing {
         this.count_valid = 0;
         this.isStopped = false;
 
+        this.targeted_sign = "hello";
         this.correction = new Correction(sketch, this.targeted_sign);
         this.show_correction = false;
 
@@ -120,8 +121,8 @@ export class Guessing {
         }
 
         if (this.count_valid >= 6)  { 
-            this.correction = new Correction(this.targeted_sign);
-            this.correction.show(sketch, 6);
+            // this.correction = new Correction(this.targeted_sign); //TODO COMPLETER CA
+            // this.correction.show(sketch, 6);
 
             this.targeted_sign_idx++;
             if (this.targeted_sign_idx < this.actions.length) {
@@ -140,9 +141,9 @@ export class Guessing {
     show(sketch) {
         this.show_correction = true;
         if(this.show_correction){
-            this.correction.show(sketch);
-            this.correction.update(sketch);
             this.correction.update_data(this.right_hand_pose, this.left_hand_pose, this.body_pose);
+            this.correction.update(sketch);
+            this.correction.show(sketch);
         }
 
         // //Affichage de l'action détectée

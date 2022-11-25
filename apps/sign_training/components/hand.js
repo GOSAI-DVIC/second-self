@@ -56,7 +56,7 @@ export class Hand {
         // this.sign = ["NONE", 0];
     }
 
-    show(sketch, pose) {
+    show(sketch, pose, offset, ratio) {
         if (pose != undefined && pose.length > 0) {
             this.hand_pose = pose
             this.show_hands_lines = true
@@ -91,10 +91,10 @@ export class Hand {
                         this.hand_pose[pair[1]][1] > 0
                     ) {
                         sketch.line(
-                            this.hand_pose[pair[0]][0],
-                            this.hand_pose[pair[0]][1],
-                            this.hand_pose[pair[1]][0],
-                            this.hand_pose[pair[1]][1]
+                            this.hand_pose[pair[0]][0]*ratio + offset[0],
+                            this.hand_pose[pair[0]][1]*ratio + offset[1],
+                            this.hand_pose[pair[1]][0]*ratio + offset[0],
+                            this.hand_pose[pair[1]][1]*ratio + offset[1]
                         );
                     }
                 })

@@ -66,7 +66,7 @@ export class Body {
         this.show_wrist = false;
     }
 
-    show(sketch, data) {
+    show(sketch, data, offset, ratio) {
         if (data != undefined) {
             this.body_pose = data
         }
@@ -107,10 +107,10 @@ export class Body {
                         ![17, 18, 19, 20, 21, 22].includes(pair[1])))
                     ) {
                         sketch.line(
-                            this.body_pose[pair[0]][0],
-                            this.body_pose[pair[0]][1],
-                            this.body_pose[pair[1]][0],
-                            this.body_pose[pair[1]][1]
+                            this.body_pose[pair[0]][0]*ratio + offset[0],
+                            this.body_pose[pair[0]][1]*ratio + offset[1],
+                            this.body_pose[pair[1]][0]*ratio + offset[0],
+                            this.body_pose[pair[1]][1]*ratio + offset[1]
                         );
                     }
                 })
