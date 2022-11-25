@@ -1,6 +1,8 @@
+import { Correction } from "./correction.js"
+
 export class Guessing {
 
-    constructor() {
+    constructor(sketch) {
         this.cyan = color(50, 250, 255);
         this.white = color(255, 255, 255);
         this.red = color(240, 0, 0);
@@ -22,24 +24,41 @@ export class Guessing {
         this.running = true;
         this.count_valid = 0;
         this.isStopped = false;
+
+        this.correction = new Correction(sketch, this.targeted_sign);
+        this.show_correction = false;
+
+        this.right_hand_pose;
+        this.left_hand_pose;
+        this.body_pose;
     }
 
     playTuto() {
-        // this.gif_sign = createImg("/apps/slr_training/components/videos/" + this.targeted_sign + ".webm");
-        this.playable = false;
-        this.playing = true;
-        this.targeted_sign = this.actions[this.targeted_sign_idx]
-        this.video = createVideo(["./platform/home/apps/sign_training/components/videos/" + this.targeted_sign + ".webm"]);
-        this.video.autoplay();
-        this.video.volume(0);
-        this.video.size(550, 350);
-        this.video.position(width/2, 50); //1500, 50
-        this.video.play();
-        this.guessed_sign = "empty";
-        this.start_tuto = Date.now();
+        // this.playable = false;
+        // this.playing = true;
+        // this.targeted_sign = this.actions[this.targeted_sign_idx]
+        // this.video = createVideo(["./platform/home/apps/sign_training/components/videos/" + this.targeted_sign + ".webm"]);
+        // this.video.autoplay();
+        // this.video.volume(0);
+        // this.video.size(550, 350);
+        // this.video.position(width/2, 50); //1500, 50
+        // this.video.play();
+        // this.guessed_sign = "empty";
+        // this.start_tuto = Date.now();
     }
 
-    update_data(guessed_sign, probability, actions) {
+    update_data(guessed_sign, probability, actions, right_hand_pose, left_hand_pose, body_pose) {
+        
+        if(right_hand_pose != undefined) {
+            this.right_hand_pose = right_hand_pose;
+        }
+        if(left_hand_pose != undefined) {
+            this.left_hand_pose = left_hand_pose;
+        }
+        if(body_pose != undefined) {
+            this.body_pose = body_pose;
+        }
+
         if (actions != undefined) {
             this.actions = actions
         }
@@ -100,7 +119,9 @@ export class Guessing {
             this.count_valid = 0;
         }
 
-        if (this.count_valid >= 6)  { // || this.targeted_sign_idx == 5
+        if (this.count_valid >= 6)  { 
+            this.correction = new Correction(this.targeted_sign);
+            this.correction.show(sketch, 6);
 
             this.targeted_sign_idx++;
             if (this.targeted_sign_idx < this.actions.length) {
@@ -117,51 +138,58 @@ export class Guessing {
     }
 
     show(sketch) {
-        //Affichage de l'action détectée
-        sketch.fill(this.dark_blue);
-        sketch.noStroke();
-        if (this.guessed_sign != undefined) {
-            sketch.rect(0, 60, int(this.probability * this.guessed_sign.length * 20), 40);
+        this.show_correction = true;
+        if(this.show_correction){
+            this.correction.show(sketch);
+            this.correction.update(sketch);
+            this.correction.update_data(this.right_hand_pose, this.left_hand_pose, this.body_pose);
         }
 
-        sketch.textSize(32);
-        sketch.fill(this.white);
-        sketch.text(this.guessed_sign, 0, 85);
+        // //Affichage de l'action détectée
+        // sketch.fill(this.dark_blue);
+        // sketch.noStroke();
+        // if (this.guessed_sign != undefined) {
+        //     sketch.rect(0, 60, int(this.probability * this.guessed_sign.length * 20), 40);
+        // }
 
-        //affichage du targeted_sign
-        sketch.fill(this.red);
-        sketch.noStroke();
-        sketch.rect(0, 120, 150, 40);
+        // sketch.textSize(32);
+        // sketch.fill(this.white);
+        // sketch.text(this.guessed_sign, 0, 85);
 
-        sketch.textSize(32);
-        sketch.fill(this.white);
-        sketch.text(this.targeted_sign, 0, 145);
+        // //affichage du targeted_sign
+        // sketch.fill(this.red);
+        // sketch.noStroke();
+        // sketch.rect(0, 120, 150, 40);
 
-        //Affichage de la séquence
-        sketch.fill(this.dark_blue);
-        sketch.noStroke();
-        sketch.rect(0, 0, 740, 40);
+        // sketch.textSize(32);
+        // sketch.fill(this.white);
+        // sketch.text(this.targeted_sign, 0, 145);
 
-        sketch.textSize(32);
-        sketch.fill(this.white);
-        // text(this.sentence, 3, 30);
-        sketch.text(this.sentence, 3, 30);
+        // //Affichage de la séquence
+        // sketch.fill(this.dark_blue);
+        // sketch.noStroke();
+        // sketch.rect(0, 0, 740, 40);
 
-        // sketch.text(this.playable, 0, 185);
+        // sketch.textSize(32);
+        // sketch.fill(this.white);
+        // // text(this.sentence, 3, 30);
+        // sketch.text(this.sentence, 3, 30);
 
-        // sketch.text(this.playing, 0, 225);
+        // // sketch.text(this.playable, 0, 185);
 
-        // sketch.text(this.count_valid, 0, 265);
+        // // sketch.text(this.playing, 0, 225);
 
-        if (!this.running) {
-            if(!this.isStopped) {
-                this.video.hide();
-                sketch.emit("core-app_manager-stop_application", {
-                    application_name: "sign_training"
-                });
-            }
-            this.isStopped = true;
-        }
+        // // sketch.text(this.count_valid, 0, 265);
+
+        // if (!this.running) {
+        //     if(!this.isStopped) {
+        //         this.video.hide();
+        //         sketch.emit("core-app_manager-stop_application", {
+        //             application_name: "sign_training"
+        //         });
+        //     }
+        //     this.isStopped = true;
+        // }
     }
 
     reset() {
@@ -174,5 +202,6 @@ export class Guessing {
     }
 
     update() {
+        
     }
 }

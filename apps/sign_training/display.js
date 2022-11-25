@@ -13,9 +13,11 @@ export const sign_training = new  p5(( sketch ) => {
             sketch.slr_training.update_data(
                 data["guessed_sign"],
                 data["probability"],
-                data["actions"] 
+                data["actions"],
+                data["right_hand_pose"], 
+                data["left_hand_pose"],
+                data["body_pose"],
             )
-            //console.log(data["guessed_sign"])
         });
 
         sketch.emit = (name, data) => {

@@ -1,0 +1,166 @@
+import { Hand } from "./hand.js"
+import { Body } from "./body.js"
+// import sampleJson from './slr_samples' assert { type: "json" };
+
+
+export class Correction {
+    
+    // Une correction est appelée après chaque validation d'un signe
+    // Elle dépend de ce signe
+    constructor(sketch, action) {
+        this.action = action;
+
+        this.indexes_to_study = [0, 11, 12, 15, 16, 23, 24];
+
+        this.right_hand = new Hand("right_hand");
+        this.left_hand = new Hand("left_hand");
+        this.body = new Body("body");
+        this.files_length = 30;
+
+        this.frameIdx = 0;
+        this.time = 0;
+        this.timelimit = 10000;
+
+        this.right_and_pose;
+        this.left_hand_pose;
+        this.body_pose;
+
+        this.isDataLoaded = false;
+
+        this.init = false;
+        this.offset = [0, 0];
+        this.ratio = 1;
+
+        this.sample_pose_frames = [];
+
+        //on parcourt chaque frame et on l'ajoute à la pose_data
+        for(let frameIdx = 0; frameIdx < this.files_length; frameIdx++) {
+            loadJSON("./platform/home/apps/sign_training/components/slr_samples/" + this.action +"/"+ frameIdx + ".json",
+            (data) => {
+                data = this.rebuilt_frame(data)
+                sketch.slr_training.correction.sample_pose_frames.push(data);
+            });
+            if(frameIdx == this.files_length - 1) this.isDataLoaded = true;
+            
+        }
+        // on parcourt les frames des données récupérées et on les affiches
+    }
+
+    show(sketch) {
+        if(this.sample_pose_frames[this.frameIdx] != undefined) {
+            this.right_hand.show(sketch, this.sample_pose_frames[this.frameIdx]["right_hand"]);
+            this.left_hand.show(sketch, this.sample_pose_frames[this.frameIdx]["left_hand"]);
+            this.body.show(sketch, this.sample_pose_frames[this.frameIdx]["body"]);
+        }
+    }
+
+    rebuilt_frame(frame) {
+        let data = {}
+        let pose_landmarks = []
+        for (let i = 0; i<33*2; i++) {
+            if (i % 2 == 0)
+                pose_landmarks.push([Math.floor(frame[i]), Math.floor(frame[i+1])]) 
+        }
+
+        let left_hands_landmarks = []
+        for (let i = 33*2; i< 33*2+21*2; i++) {
+            if (i % 2 == 0)
+                left_hands_landmarks.push([Math.floor(frame[i]), Math.floor(frame[i+1])]) 
+        } 
+
+        let right_hands_landmarks = []
+        for (let i = 33*2+21*2; i< frame.length; i++) {
+            if (i % 2 == 0)
+                right_hands_landmarks.push([Math.floor(frame[i]), Math.floor(frame[i+1])]) 
+        } 
+
+        data["body"] = pose_landmarks
+        data["left_hand"] = left_hands_landmarks
+        data["right_hand"] = right_hands_landmarks
+        return data
+    }
+
+    reset() {
+        
+    }
+
+    update_data(right_hand_pose, left_hand_pose, body_pose) {
+        this.right_and_pose = right_hand_pose;
+        this.left_hand_pose = left_hand_pose;
+        this.body_pose = body_pose;
+    }
+
+    update(sketch) {
+        if (this.frameIdx >= this.files_length - 1) {
+            sketch.selfCanvas.clear();
+            return;
+        }
+        if (this.body_pose == undefined || this.body_pose.length <= 0) return;
+        if (!this.isDataLoaded) return;
+
+        if (!this.init && this.isDataLoaded) {
+            this.init = true;
+
+            let mirror_nose_reference = this.body_pose[0].slice(0, 2); // Current nose postion of the user
+            let mirror_left_hip_reference = this.body_pose[24].slice(0, 2); // Current left hip postion of the user
+            let sample_nose_reference = this.sample_pose_frames[0]["body"][0].slice(0, 2); // Position in pixels of the first nose of this.sample_pose_frames
+            let sample_left_hip_reference = this.sample_pose_frames[0]["body"][23].slice(0, 2); // Position in pixels of the first left_hip of this.sample_pose_frames
+
+            let mirror_distance = sketch.dist( //Nose Hip in the mirror
+                mirror_nose_reference[0],
+                mirror_nose_reference[1],
+                mirror_left_hip_reference[0],
+                mirror_left_hip_reference[1]
+            );
+
+            let sample_distance = sketch.dist( //Nose hip in the video
+                sample_nose_reference[0],
+                sample_nose_reference[1],
+                sample_left_hip_reference[0],
+                sample_left_hip_reference[1]
+            );
+
+            this.ratio = mirror_distance / sample_distance;
+            // this.size = [
+            //     this.size[0] * this.ratio,
+            //     this.size[1] * this.ratio
+            // ];
+            this.offset = [
+                mirror_nose_reference[0] - sample_nose_reference[0] * this.ratio,
+                mirror_nose_reference[1] - sample_nose_reference[1] * this.ratio
+            ];
+
+        } else {
+            this.time++;
+            if (this.time > this.timelimit) {
+                sketch.selfCanvas.clear();
+                sketch.activated = false;
+                this.reset();
+                sketch.emit("stop_application", {
+                    "application_name": "sign_training"
+                });
+                return;
+            }
+            if (this.frameIdx in this.sample_pose_frames) {
+                let distances = [];
+                for (let i = 0; i < this.indexes_to_study.length; i++) {
+                    distances.push(
+                        sketch.dist(
+                            this.offset[0] + this.sample_pose_frames[this.frameIdx]["body"][this.indexes_to_study[i]][1] * this.ratio, //Video x
+                            this.offset[1] + this.sample_pose_frames[this.frameIdx]["body"][this.indexes_to_study[i]][2] * this.ratio, //Video y
+                            this.body_pose[this.indexes_to_study[i]][0], //Mirror x
+                            this.body_pose[this.indexes_to_study[i]][1], //Mirror y
+                        )
+                    );
+                }
+                this.diff = distances.reduce((partial_sum, a) => partial_sum + a, 0) / distances.length; //Mean of kpts differences
+                if (this.diff < this.limit) {
+                    this.frameIdx++;
+                    this.time = max(0, this.time - 5);
+                }
+            } else {
+                this.frameIdx++;
+            }
+        }
+    }
+}
