@@ -15,8 +15,6 @@ class Application(BaseApplication):
 
     def listener(self, source, event, data):
         super().listener(source, event, data)
-        # print(name for name in os.listdir('./components/slr_samples/') if os.path.isfile(name))
-        # print(len([name for name in os.listdir('./components/slr_samples/')[0] if os.path.isfile(name)]))
         
         if self.started and source == "slr" and event == "new_sign":
             self.data = data
@@ -25,11 +23,8 @@ class Application(BaseApplication):
                     "guessed_sign": self.data["guessed_sign"], 
                     "probability": self.data["probability"], 
                     "actions": self.data["actions"] 
-                    #"targeted_sign": self.data["targeted_sign"]
-                    #"isGessing": self.data["isGuessing"]
                 }
-                #print(self.data)
-                self.server.send_data(self.name, self.data)
+                self.server.send_data(f'applications-{self.name}-{event}', self.data)
 
         if source == "pose_to_mirror" and event == "mirrored_data":
             self.data = {
@@ -37,4 +32,4 @@ class Application(BaseApplication):
                 "left_hand_pose": data["left_hand_pose"],
                 "body_pose": data["body_pose"]
             }
-            self.server.send_data(self.name, self.data)
+            self.server.send_data(f'applications-{self.name}-{event}', self.data)

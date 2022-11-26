@@ -8,6 +8,8 @@ export class Correction {
     // Une correction est appelée après chaque validation d'un signe
     // Elle dépend de ce signe
     constructor(sketch, action) {
+        sketch.selfCanvas.clear();
+
         this.action = action;
 
         this.body_indexes_to_study = [0, 11, 12, 15, 16, 23, 24];
@@ -33,10 +35,12 @@ export class Correction {
         this.ratio = 1;
 
         this.body_diff = 0; // The lower, the closer the moves are
-        this.hand_diff = 0; // The lower, the closer the moves are
-        this.body_precision = 50; // if this.body_diff < this.body_precision, it goes on
-        this.hand_precision = 50;
+        this.right_hand_diff = 0; // The lower, the closer the moves are
+        this.body_precision = 60; // if this.body_diff < this.body_precision, it goes on
+        this.hand_precision = 500;
         this.sample_pose_frames = [];
+
+        this.is_running = true;
 
         //on parcourt chaque frame et on l'ajoute à la pose_data
         for(let frameIdx = 0; frameIdx < this.files_length; frameIdx++) {
@@ -94,16 +98,23 @@ export class Correction {
     }
 
     update(sketch) {
-        if (this.frameIdx >= this.files_length - 1) {
+        if (this.frameIdx > this.files_length - 1) {
             sketch.selfCanvas.clear();
+            this.is_running = false;
             return;
         }
+        // console.log("test2")
         if (this.body_pose == undefined || this.body_pose.length <= 0) return;
+        // console.log("test3")
         if (this.right_hand_pose == undefined || this.right_hand_pose.length <= 0) return;
+        // console.log("test4")
         if (!this.isDataLoaded) return;
+        // console.log("test5")
+
+        if (this.sample_pose_frames.length != this.files_length) return
         
 
-        if (!this.init && this.isDataLoaded) {
+        if (!this.init) {
             this.init = true;
 
             let mirror_nose_reference = this.body_pose[0].slice(0, 2); // Current nose postion of the user
@@ -126,10 +137,6 @@ export class Correction {
             );
 
             this.ratio = mirror_distance / sample_distance;
-            // this.size = [
-            //     this.size[0] * this.ratio,
-            //     this.size[1] * this.ratio
-            // ];
             this.offset = [
                 mirror_nose_reference[0] - sample_nose_reference[0] * this.ratio,
                 mirror_nose_reference[1] - sample_nose_reference[1] * this.ratio
@@ -139,11 +146,7 @@ export class Correction {
             this.time++;
             if (this.time > this.timelimit) {
                 sketch.selfCanvas.clear();
-                sketch.activated = false;
-                this.reset();
-                sketch.emit("stop_application", {
-                    "application_name": "sign_training"
-                });
+                this.is_running = false;
                 return;
             }
             if (this.frameIdx in this.sample_pose_frames) {
@@ -159,7 +162,7 @@ export class Correction {
                         )
                     );
                 }
-                this.body_diff = body_distances.reduce((partial_sum, a) => partial_sum + a, 0) / body_distances.length; //Mean of kpts differences
+                this.body_diff = body_distances.reduce((partial_sum, a) => partial_sum + a, 0) / (body_distances.length* this.ratio); //Mean of kpts differences
 
                 if (this.sample_pose_frames[this.frameIdx]["right_hand"][0] != [0, 0]) {
                     for (let i = 0; i < this.hand_indexes_to_study.length; i++) {
@@ -172,12 +175,12 @@ export class Correction {
                             )
                         );
                     }
-                    this.right_hand_diff = right_hand_distances.reduce((partial_sum, a) => partial_sum + a, 0) / right_hand_distances.length; //Mean of kpts differences
+                    this.right_hand_diff = right_hand_distances.reduce((partial_sum, a) => partial_sum + a, 0) / (right_hand_distances.length* this.ratio); //Mean of kpts differences
                 }
-                else this.hand_diff = 0;
-
+                else this.right_hand_diff = 0;
                 console.log(this.body_diff, this.right_hand_diff)
-                if (this.body_diff < this.body_precision && this.hand_diff < this.hand_precision) {
+
+                if (this.body_diff < this.body_precision && this.right_hand_diff < this.hand_precision) {
                     this.frameIdx++;
                     this.time = max(0, this.time - 5);
                 }
@@ -186,6 +189,5 @@ export class Correction {
             }
             
         }
-        // this.show(sketch);
     }
 }

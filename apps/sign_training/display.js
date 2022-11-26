@@ -9,11 +9,16 @@ export const sign_training = new  p5(( sketch ) => {
         sketch.selfCanvas = sketch.createCanvas(width, height).position(0, 0).style("z-index", sketch.z_index);
 
         sketch.slr_training = new Guessing(sketch)
-        socket.on(sketch.name, (data) => {
-            sketch.slr_training.update_data(
+        socket.on(`applications-${sketch.name}-new_sign`, (data) => {
+            sketch.slr_training.update_sign_data(
                 data["guessed_sign"],
                 data["probability"],
                 data["actions"],
+            )
+        });
+
+        socket.on(`applications-${sketch.name}-mirrored_data`, (data) => {
+            sketch.slr_training.update_pose_data(
                 data["right_hand_pose"], 
                 data["left_hand_pose"],
                 data["body_pose"],
@@ -36,7 +41,7 @@ export const sign_training = new  p5(( sketch ) => {
     };
 
     sketch.update = () => {
-        sketch.slr_training.update()   
+        sketch.slr_training.update(sketch)   
     }
 
     sketch.show = () => {
