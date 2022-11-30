@@ -38,7 +38,7 @@ export class Correction {
         this.right_hand_diff = 0; // The lower, the closer the moves are
         this.body_precision = 60; // if this.body_diff < this.body_precision, it goes on
         this.hand_precision = 60;
-        this.sample_pose_frames = [];
+        this.sample_pose_frames = {};
 
         this.is_running = true;
 
@@ -46,11 +46,33 @@ export class Correction {
         for(let frameIdx = 0; frameIdx < this.files_length; frameIdx++) {
             loadJSON("./platform/home/apps/sign_training/components/slr_samples/" + this.action +"/"+ frameIdx + ".json",
             (data) => {
-                data = this.rebuilt_frame(data)
-                sketch.slr_training.correction.sample_pose_frames.push(data);
+                sketch.slr_training.correction.sample_pose_frames[frameIdx] = this.rebuilt_frame(data);
             });
             if(frameIdx == this.files_length - 1) this.isDataLoaded = true;
         }
+        // for(let frameIdx = 0; frameIdx < this.files_length; frameIdx++) {
+        //     loadJSON("./platform/home/apps/sign_training/components/slr_samples/" + this.action +"/"+ frameIdx + ".json",
+        //     (data) => {
+        //         let rebuilt_data = this.rebuilt_frame(data)
+        //         sketch.slr_training.correction.sample_pose_frames.push(rebuilt_data);
+        //     });
+        //     if(frameIdx == this.files_length - 1) this.isDataLoaded = true;
+        // }
+        // for(let frameIdx = 0; frameIdx < this.files_length; frameIdx++) {
+        //     loadJSON("./platform/home/apps/sign_training/components/slr_samples/" + this.action +"/"+ frameIdx + ".json",
+        //     (data) => {
+        //         sketch.slr_training.correction.old_sample_pose_frames.push(data);
+        //     });
+        //     if(frameIdx == this.files_length - 1) this.isDataLoaded = true;
+        // }
+        // console.log(this.old_sample_pose_frames)
+        // for (let i = 0; i < this.old_sample_pose_frames.length; i++) {
+        //     console.log("test")
+        //     let rebuilt_data = this.rebuilt_frame(this.old_sample_pose_frames[i])
+        //     this.sample_pose_frames.push(rebuilt_data);
+        // }
+        // // this.sample_pose_frames = this.old_sample_pose_frames.map(this.rebuilt_frame)
+        // console.log(this.sample_pose_frames)
     }
 
     show(sketch) {
@@ -103,15 +125,13 @@ export class Correction {
             this.is_running = false;
             return;
         }
-        // console.log("test2")
         if (this.body_pose == undefined || this.body_pose.length <= 0) return;
-        // console.log("test3")
         if (this.right_hand_pose == undefined || this.right_hand_pose.length <= 0) return;
-        // console.log("test4")
         if (!this.isDataLoaded) return;
-        // console.log("test5")
+        if (this.sample_pose_frames == undefined || this.sample_pose_frames.length <= 0) return;
 
-        if (this.sample_pose_frames.length != this.files_length) return
+        console.log(this.sample_pose_frames)
+        if (Object.keys(this.sample_pose_frames).length != this.files_length) return
         
 
         if (!this.init) {
@@ -119,6 +139,8 @@ export class Correction {
 
             let mirror_nose_reference = this.body_pose[0].slice(0, 2); // Current nose postion of the user
             let mirror_left_hip_reference = this.body_pose[24].slice(0, 2); // Current left hip postion of the user
+            console.log(this.sample_pose_frames[0])
+            console.log(this.sample_pose_frames[0]["body"])
             let sample_nose_reference = this.sample_pose_frames[0]["body"][0].slice(0, 2); // Position in pixels of the first nose of this.sample_pose_frames
             let sample_left_hip_reference = this.sample_pose_frames[0]["body"][24].slice(0, 2); // Position in pixels of the first left_hip of this.sample_pose_frames
 
@@ -149,7 +171,8 @@ export class Correction {
                 this.is_running = false;
                 return;
             }
-            if (this.frameIdx in this.sample_pose_frames) {
+            console.log(this.frameIdx in Object.keys(this.sample_pose_frames))
+            if (this.frameIdx in Object.keys(this.sample_pose_frames)) {
                 let body_distances = [];
                 let right_hand_distances = [];
                 for (let i = 0; i < this.body_indexes_to_study.length; i++) {
