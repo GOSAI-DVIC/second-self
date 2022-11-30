@@ -2,7 +2,7 @@ import { Correction } from "./correction.js"
 
 export class Guessing {
 
-    constructor(sketch) {
+    constructor() {
         this.cyan = color(50, 250, 255);
         this.white = color(255, 255, 255);
         this.red = color(240, 0, 0);
@@ -208,7 +208,6 @@ export class Guessing {
                 this.video.hide();
 
                 this.targeted_sign_idx++;
-                console.log("increasing index to " + this.targeted_sign_idx);
 
                 if (this.targeted_sign_idx < this.actions.length) {
                     if (!this.playing) {
@@ -220,8 +219,6 @@ export class Guessing {
 
             if (this.targeted_sign_idx >= this.actions.length) {
                 this.running = false;
-                console.log(this.actions)
-                console.log("idx too high")
             }
         }
     }

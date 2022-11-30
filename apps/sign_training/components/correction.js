@@ -37,7 +37,7 @@ export class Correction {
         this.body_diff = 0; // The lower, the closer the moves are
         this.right_hand_diff = 0; // The lower, the closer the moves are
         this.body_precision = 60; // if this.body_diff < this.body_precision, it goes on
-        this.hand_precision = 500;
+        this.hand_precision = 60;
         this.sample_pose_frames = [];
 
         this.is_running = true;
@@ -69,16 +69,16 @@ export class Correction {
                 pose_landmarks.push([Math.floor(frame[i]*this.ratio + this.offset[0]), Math.floor(frame[i+1]*this.ratio + this.offset[1])]) 
         }
 
-        let left_hands_landmarks = []
+        let right_hands_landmarks = []
         for (let i = 33*2; i< 33*2+21*2; i++) {
             if (i % 2 == 0)
-                left_hands_landmarks.push([Math.floor(frame[i]*this.ratio + this.offset[0]), Math.floor(frame[i+1]*this.ratio + this.offset[1])]) 
+            right_hands_landmarks.push([Math.floor(frame[i]*this.ratio + this.offset[0]), Math.floor(frame[i+1]*this.ratio + this.offset[1])]) 
         } 
 
-        let right_hands_landmarks = []
+        let left_hands_landmarks = []
         for (let i = 33*2+21*2; i< frame.length; i++) {
             if (i % 2 == 0)
-                right_hands_landmarks.push([Math.floor(frame[i]*this.ratio + this.offset[0]), Math.floor(frame[i+1]*this.ratio + this.offset[1])]) 
+            left_hands_landmarks.push([Math.floor(frame[i]*this.ratio + this.offset[0]), Math.floor(frame[i+1]*this.ratio + this.offset[1])]) 
         } 
 
         data["body"] = pose_landmarks
@@ -164,7 +164,7 @@ export class Correction {
                 }
                 this.body_diff = body_distances.reduce((partial_sum, a) => partial_sum + a, 0) / (body_distances.length* this.ratio); //Mean of kpts differences
 
-                if (this.sample_pose_frames[this.frameIdx]["right_hand"][0] != [0, 0]) {
+                if (this.sample_pose_frames[this.frameIdx]["right_hand"][0][0] == this.sample_pose_frames[this.frameIdx]["right_hand"][0][1] == 0) {
                     for (let i = 0; i < this.hand_indexes_to_study.length; i++) {
                         right_hand_distances.push(
                             sketch.dist(
@@ -178,16 +178,16 @@ export class Correction {
                     this.right_hand_diff = right_hand_distances.reduce((partial_sum, a) => partial_sum + a, 0) / (right_hand_distances.length* this.ratio); //Mean of kpts differences
                 }
                 else this.right_hand_diff = 0;
-                console.log(this.body_diff, this.right_hand_diff)
+                // console.log(this.body_diff, this.right_hand_diff)
 
                 if (this.body_diff < this.body_precision && this.right_hand_diff < this.hand_precision) {
                     this.frameIdx++;
                     this.time = max(0, this.time - 5);
+                    // console.log("Frame " + this.frameIdx + " " + this.action);
                 }
             } else {
                 this.frameIdx++;
             }
-            
         }
     }
 }
