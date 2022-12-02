@@ -50,29 +50,6 @@ export class Correction {
             });
             if(frameIdx == this.files_length - 1) this.isDataLoaded = true;
         }
-        // for(let frameIdx = 0; frameIdx < this.files_length; frameIdx++) {
-        //     loadJSON("./platform/home/apps/sign_training/components/slr_samples/" + this.action +"/"+ frameIdx + ".json",
-        //     (data) => {
-        //         let rebuilt_data = this.rebuilt_frame(data)
-        //         sketch.slr_training.correction.sample_pose_frames.push(rebuilt_data);
-        //     });
-        //     if(frameIdx == this.files_length - 1) this.isDataLoaded = true;
-        // }
-        // for(let frameIdx = 0; frameIdx < this.files_length; frameIdx++) {
-        //     loadJSON("./platform/home/apps/sign_training/components/slr_samples/" + this.action +"/"+ frameIdx + ".json",
-        //     (data) => {
-        //         sketch.slr_training.correction.old_sample_pose_frames.push(data);
-        //     });
-        //     if(frameIdx == this.files_length - 1) this.isDataLoaded = true;
-        // }
-        // console.log(this.old_sample_pose_frames)
-        // for (let i = 0; i < this.old_sample_pose_frames.length; i++) {
-        //     console.log("test")
-        //     let rebuilt_data = this.rebuilt_frame(this.old_sample_pose_frames[i])
-        //     this.sample_pose_frames.push(rebuilt_data);
-        // }
-        // // this.sample_pose_frames = this.old_sample_pose_frames.map(this.rebuilt_frame)
-        // console.log(this.sample_pose_frames)
     }
 
     show(sketch) {
@@ -171,7 +148,6 @@ export class Correction {
                 this.is_running = false;
                 return;
             }
-            console.log(this.frameIdx in Object.keys(this.sample_pose_frames))
             if (this.frameIdx in Object.keys(this.sample_pose_frames)) {
                 let body_distances = [];
                 let right_hand_distances = [];
