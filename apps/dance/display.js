@@ -30,7 +30,9 @@ export const dance = new p5((sketch) => {
         sketch.dance_lesson.reset();
     };
 
-    sketch.pause = () => {};
+    sketch.pause = () => {
+        sketch.clear();
+    };
 
     sketch.windowResized = () => {
         sketch.resizeCanvas(windowWidth, windowHeight);

@@ -29,12 +29,15 @@ class Aria {
 
     resume = () => {
         this.scene.reset();
+        this.selfCanvas.show();
     };
     
     windowResized = () => {}
     
     
-    pause = () => {};
+    pause = () => {
+        this.selfCanvas.hide();
+    };
     
     update = () => {
         this.scene.update()

@@ -1,6 +1,6 @@
 {
     "rythm":{
-        "tempo": 30,
+        "tempo": 83,
         "timeSignatureNum": 4,
         "timeSignatureDenom": 4
     },
@@ -74,7 +74,6 @@
         ["C4", "eighth"],
         ["C5", "eighth"],
 
-        ["C5", "whole"]
-
+        ["C5", "half"]
     ]
 }
