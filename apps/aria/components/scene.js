@@ -94,56 +94,97 @@ export class myScene {
                     this.currentVrm = vrm;
                     this.currentVrm.scene.rotation.y = Math.PI; // Rotate model 180deg to face camera
 
-                    this.rigRotation("RightUpperArm", {
-                        x: 0,
-                        y: 0,
-                        z: -1.5
-                    }, 1, 1);
-                    this.rigRotation("RightLowerArm", {
-                        x: 0,
-                        y: 0,
-                        z: 0
-                    }, 1, 1);
-                    this.rigRotation("LeftUpperArm", {
-                        x: 0,
-                        y: 0,
-                        z: 1.5
-                    }, 1, 1);
-                    this.rigRotation("LeftLowerArm", {
-                        x: 0,
-                        y: 0,
-                        z: 0
-                    }, 1, 1);
+                    // this.rigRotation("RightUpperArm", {
+                    //     x: 0,
+                    //     y: 0,
+                    //     z: -1.5
+                    // }, 1, 1);
+                    // this.rigRotation("RightLowerArm", {
+                    //     x: 0,
+                    //     y: 0,
+                    //     z: 0
+                    // }, 1, 1);
+                    // this.rigRotation("LeftUpperArm", {
+                    //     x: 0,
+                    //     y: 0,
+                    //     z: 1.5
+                    // }, 1, 1);
+                    // this.rigRotation("LeftLowerArm", {
+                    //     x: 0,
+                    //     y: 0,
+                    //     z: 0
+                    // }, 1, 1);
                 });
             },
 
             (progress) => console.log("Loading model...", 100.0 * (progress.loaded / progress.total), "%"),
 
             (error) => console.error(error)
+
         );
 
-        // Animate Rotation Helper function
-
-
-        // Animate Position Helper Function
-        this.rigPosition = (name, position = {
-            x: 0,
-            y: 0,
-            z: 0
-        }, dampener = 1, lerpAmount = 0.3) => {
-            if (!this.currentVrm) {
-                return;
-            }
-            const Part = this.currentVrm.humanoid.getBoneNode(VRMSchema.HumanoidBoneName[name]);
-            if (!Part) {
-                return;
-            }
-            let vector = new THREE.Vector3(position.x * dampener, position.y * dampener, position.z * dampener);
-            Part.position.lerp(vector, lerpAmount); // interpolate
-        };
-
         this.oldLookTarget = new THREE.Euler();
+
+        this.pose_keypoints = ['nose', 'left_eye_inner', 'left_eye', 'left_eye_outer',
+            'right_eye_inner', 'right_eye', 'right_eye_outer',
+            'left_ear', 'right_ear', 'mouth_left', 'mouth_right',
+            'left_shoulder', 'right_shoulder', 'left_elbow',
+            'right_elbow', 'left_wrist', 'right_wrist', 'left_pinky',
+            'right_pinky', 'left_index', 'right_index', 'left_thumb',
+            'right_thumb', 'left_hip', 'right_hip', 'left_knee', 'right_knee',
+            'left_ankle', 'right_ankle', 'left_heel', 'right_heel',
+            'left_foot_index', 'right_foot_index'
+        ];
+
+        this.pose_symmetry_map = 
+        {
+            "nose": "nose",
+            "left_eye_inner": "right_eye_inner",
+            "left_eye": "right_eye",
+            "left_eye_outer": "right_eye_outer",
+            "right_eye_inner": "left_eye_inner",
+            "right_eye": "left_eye",
+            "right_eye_outer": "left_eye_outer",
+            "left_ear": "right_ear",
+            "right_ear": "left_ear",
+            "mouth_left": "mouth_right",
+            "mouth_right": "mouth_left",
+            "left_shoulder": "right_shoulder",
+            "right_shoulder": "left_shoulder",
+            "left_elbow": "right_elbow",
+            "right_elbow": "left_elbow",
+            "left_wrist": "right_wrist",
+            "right_wrist": "left_wrist",
+            "left_pinky": "right_pinky",
+            "right_pinky": "left_pinky",
+            "left_index": "right_index",
+            "right_index": "left_index",
+            "left_thumb": "right_thumb",
+            "right_thumb": "left_thumb",
+            "left_hip": "right_hip",
+            "right_hip": "left_hip",
+            "left_knee": "right_knee",
+            "right_knee": "left_knee",
+            "left_ankle": "right_ankle",
+            "right_ankle": "left_ankle",
+            "left_heel": "right_heel",
+            "right_heel": "left_heel",
+            "left_foot_index": "right_foot_index",
+            "right_foot_index": "left_foot_index"
+        }
     }
+
+    rigPosition(name, position = { x: 0, y: 0, z: 0 }, dampener = 1, lerpAmount = 0.3) {
+        if (!this.currentVrm) {
+            return;
+        }
+        const Part = this.currentVrm.humanoid.getBoneNode(VRMSchema.HumanoidBoneName[name]);
+        if (!Part) {
+            return;
+        }
+        let vector = new THREE.Vector3(position.x * dampener, position.y * dampener, position.z * dampener);
+        Part.position.lerp(vector, lerpAmount); // interpolate
+    };
 
     rigRotation(name, rotation = {
         x: 0,
@@ -240,22 +281,15 @@ export class myScene {
                 runtime: "mediapipe",
                 imageSize: imageSize,
             });
-            // this.currentVrm.scene.position.set(-pose3DLandmarks[0].x, 0, 0);
             this.rigRotation("Hips", riggedPose.Hips.rotation, 0.7);
-            // this.rigPosition(
-            //     "Hips", {
-            //         x: -(pose2DLandmarks[24].x + pose2DLandmarks[23].x -1.35) *2.5/2 , // Reverse direction
-            //         y: riggedPose.Hips.position.y + 1, // Add a bit of height
-            //         z: -riggedPose.Hips.position.z, // Reverse direction
-            //     },
-            //     1,
-            //     0.07
-            // );
             this.rigPosition(
                 "Hips", {
-                    x: -pose2DLandmarks[0].x * 1.8 + 1.2, // Reverse direction
-                    y: -pose2DLandmarks[0].y * 1.8 + 1.8, // Add a bit of height
-                    z: -pose2DLandmarks[0].z * 1.5 + 1.5, // Reverse direction
+                    // x: -pose2DLandmarks[0].x * 1.8 + 1.2, // Reverse direction
+                    // y: -pose2DLandmarks[0].y * 1.8 + 1.8, // Add a bit of height
+                    // z: -pose2DLandmarks[0].z * 1.5 + 1.5, // Reverse direction
+                    x: riggedPose.Hips.position.x, // Reverse direction
+                    y: riggedPose.Hips.position.y + 1, // Add a bit of height
+                    z: -riggedPose.Hips.position.z, // Reverse direction
                 },
                 1,
                 0.07
@@ -334,37 +368,62 @@ export class myScene {
         }
     }
 
+    invertRightLeftPose(pose) {
+        // Invert right/left pose
+        // console.log(pose);
+        if (pose) {
+            let inverted_pose = [];
+            for (let i = 0; i < pose.length; i++) {
+                let point = pose[i];
+                let point_name = this.pose_keypoints[i];
+                let point_opposite_name = this.pose_symmetry_map[point_name];
+                let point_opposite_index = this.pose_keypoints.findIndex((keypoint) => keypoint === point_opposite_name);
+                inverted_pose[point_opposite_index] = point;
+                // console.log("inverting " + i + " to " + point_opposite_index);
+            }
+            // console.log(inverted_pose);
+            return inverted_pose;
+        }
+    }
+
     array_to_landmarks(results) {
         var results_to_array = [];
         for (var key of Object.keys(results)) {
             if (key == "body_world_pose") {
-                var landmarks_array = new Array();
-                var coor = new Object();
-                for (var landmark of results[key]) {
-                    coor = {
+                let landmarks= results[key];
+                // let landmarks = this.invertRightLeftPose(results[key]);
+                var new_landmarks = new Array();
+                var coors = new Object();
+                for (var landmark of landmarks) {
+                    coors = {
                         "x": landmark[0],
                         "y": landmark[1],
                         "z": landmark[2],
                         "visibility": landmark[3]
                     }
-                    landmarks_array.push(Object.assign({}, coor));
+                    new_landmarks.push(Object.assign({}, coors));
                 }
             } else {
-                const min_width = 96;
+                let landmarks= results[key];
+                // let landmarks;
+                // if (key == "body_pose") {
+                //     landmarks = this.invertRightLeftPose(results[key]);
+                // }
+                // else landmarks = results[key];
                 const width = 448;
                 const height = 480;
-                var landmarks_array = new Array();
-                var coor = new Object();
-                for (var landmark of results[key]) {
-                    coor = {
+                var new_landmarks = new Array();
+                var coors = new Object();
+                for (var landmark of landmarks) {
+                    coors = {
                         "x": landmark[0] / width,
                         "y": landmark[1] / height,
                         "z": landmark[2]
                     }
-                    landmarks_array.push(Object.assign({}, coor));
+                    new_landmarks.push(Object.assign({}, coors));
                 }
             }
-            results_to_array[key] = Object.assign({}, landmarks_array);
+            results_to_array[key] = Object.assign({}, new_landmarks);
         }
         return results_to_array
     }
@@ -386,6 +445,7 @@ export class myScene {
 
     update_data(results) {
         var array_to_landmarks_results = this.array_to_landmarks(results);
+        // console.log(array_to_landmarks_results);
         this.animateVRM(array_to_landmarks_results, this.imageSize)
         // console.log(array_to_landmarks_results)
     }

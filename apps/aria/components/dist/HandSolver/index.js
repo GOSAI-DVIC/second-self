@@ -2,7 +2,7 @@ import Vector from "../utils/vector.js";
 import { clamp } from "../utils/helpers.js";
 import { RIGHT, LEFT } from "./../constants.js";
 import { PI } from "./../constants.js";
-import { Int8BufferAttribute } from "three";
+
 /** Class representing hand solver. */
 export class HandSolver {
     /**
@@ -11,29 +11,19 @@ export class HandSolver {
      * @param {Side} side: left or right
      */
     static solve(lm, side = RIGHT) {
-        if (!lm || lm.length < 21) {
+        if (!lm) {
             console.error("Need Hand Landmarks");
             return;
         }
-        // for(let i = 0; i < lm.length; i++)
-        // {
-        //     if(isNaN(lm[i].x) || isNaN(lm[i].y) || isNaN(lm[i].z))
-        //     {
-        //         console.log(lm[i].x, lm[i].y, lm[i].z);
-        //         // return
-        //         console.log(lm)
-        //         // console.log("landmark at " + i +" is undefined");
-        //     }
-        // }
-        
         const palm = [
-            new Vector(lm[0].x),
+            new Vector(lm[0]),
             new Vector(lm[side === RIGHT ? 17 : 5]),
             new Vector(lm[side === RIGHT ? 5 : 17]),
         ];
         const handRotation = Vector.rollPitchYaw(palm[0], palm[1], palm[2]);
         handRotation.y = handRotation.z;
         handRotation.y -= side === LEFT ? 0.4 : 0.4;
+        // let fingerCoeff = 1.5;
         let hand = {};
         hand[side + "Wrist"] = { x: handRotation.x, y: handRotation.y, z: handRotation.z };
         hand[side + "RingProximal"] = { x: 0, y: 0, z: Vector.angleBetween3DCoords(lm[0], lm[13], lm[14]) };
@@ -51,27 +41,36 @@ export class HandSolver {
         hand[side + "LittleProximal"] = { x: 0, y: 0, z: Vector.angleBetween3DCoords(lm[0], lm[17], lm[18]) };
         hand[side + "LittleIntermediate"] = { x: 0, y: 0, z: Vector.angleBetween3DCoords(lm[17], lm[18], lm[19]) };
         hand[side + "LittleDistal"] = { x: 0, y: 0, z: Vector.angleBetween3DCoords(lm[18], lm[19], lm[20]) };
+
         hand = rigFingers(hand, side);
+
         return hand;
     }
 }
+
 /**
  * Converts normalized rotation values into radians clamped by human limits
  * @param {Object} hand : object of labeled joint with normalized rotation values
  * @param {Side} side : left or right
  */
-const rigFingers = (hand, side = RIGHT) => {
-    // console.log(hand)
+const rigFingers = (hand, side) => {
     // Invert modifier based on left vs right side
     const invert = side === RIGHT ? 1 : -1;
     const digits = ["Ring", "Index", "Little", "Thumb", "Middle"];
     const segments = ["Proximal", "Intermediate", "Distal"];
+
     hand[side + "Wrist"].x = clamp(hand[side + "Wrist"].x * 2 * invert, -0.3, 0.3); // twist
-    hand[side + "Wrist"].y = clamp(hand[side + "Wrist"].y * 2.3, side === RIGHT ? -1.2 : -0.6, side === RIGHT ? 0.6 : 1.6);
+    hand[side + "Wrist"].y = clamp(
+        hand[side + "Wrist"].y * 2.3,
+        side === RIGHT ? -1.2 : -0.6,
+        side === RIGHT ? 0.6 : 1.6
+    );
     hand[side + "Wrist"].z = hand[side + "Wrist"].z * -2.3 * invert; //left right
+
     digits.forEach((e) => {
         segments.forEach((j) => {
             const trackedFinger = hand[side + e + j];
+
             if (e === "Thumb") {
                 //dampen thumb rotation depending on segment
                 const dampener = {
@@ -86,11 +85,18 @@ const rigFingers = (hand, side = RIGHT) => {
                 };
                 const newThumb = { x: 0, y: 0, z: 0 };
                 if (j === "Proximal") {
-                    newThumb.z = clamp(startPos.z + trackedFinger.z * -PI * dampener.z * invert, side === RIGHT ? -0.6 : -0.3, side === RIGHT ? 0.3 : 0.6);
+                    newThumb.z = clamp(
+                        startPos.z + trackedFinger.z * -PI * dampener.z * invert,
+                        side === RIGHT ? -0.6 : -0.3,
+                        side === RIGHT ? 0.3 : 0.6
+                    );
                     newThumb.x = clamp(startPos.x + trackedFinger.z * -PI * dampener.x, -0.6, 0.3);
-                    newThumb.y = clamp(startPos.y + trackedFinger.z * -PI * dampener.y * invert, side === RIGHT ? -1 : -0.3, side === RIGHT ? 0.3 : 1);
-                }
-                else {
+                    newThumb.y = clamp(
+                        startPos.y + trackedFinger.z * -PI * dampener.y * invert,
+                        side === RIGHT ? -1 : -0.3,
+                        side === RIGHT ? 0.3 : 1
+                    );
+                } else {
                     newThumb.z = clamp(startPos.z + trackedFinger.z * -PI * dampener.z * invert, -2, 2);
                     newThumb.x = clamp(startPos.x + trackedFinger.z * -PI * dampener.x, -2, 2);
                     newThumb.y = clamp(startPos.y + trackedFinger.z * -PI * dampener.y * invert, -2, 2);
@@ -98,10 +104,13 @@ const rigFingers = (hand, side = RIGHT) => {
                 trackedFinger.x = newThumb.x;
                 trackedFinger.y = newThumb.y;
                 trackedFinger.z = newThumb.z;
-            }
-            else {
+            } else {
                 //will document human limits later
-                trackedFinger.z = clamp(trackedFinger.z * -PI * invert, side === RIGHT ? -PI : 0, side === RIGHT ? 0 : PI);
+                trackedFinger.z = clamp(
+                    trackedFinger.z * -2*PI * invert,
+                    side === RIGHT ? -2*PI : 0,
+                    side === RIGHT ? 0 : 2*PI
+                );
             }
         });
     });

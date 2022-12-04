@@ -3,11 +3,13 @@ import Euler from "../utils/euler.js";
 import { clamp } from "../utils/helpers.js";
 import { RIGHT, LEFT } from "./../constants.js";
 import { PI } from "./../constants.js";
+
 export const offsets = {
     upperLeg: {
         z: 0.1,
     },
 };
+
 /**
  * Calculates leg rotation angles
  * @param {Results} lm : array of 3D pose vectors from tfjs or mediapipe
@@ -26,6 +28,7 @@ export const calcLegs = (lm) => {
         z: "x",
     });
     const hipRotation = Vector.findRotation(lm[23], lm[24]);
+
     const UpperLeg = {
         r: new Vector({
             x: rightUpperLegSphericalCoords.theta,
@@ -38,21 +41,24 @@ export const calcLegs = (lm) => {
             z: leftUpperLegSphericalCoords.phi - hipRotation.z,
         }),
     };
+
     const LowerLeg = {
         r: new Vector({
             x: -Math.abs(rightLowerLegSphericalCoords.theta),
-            y: 0,
+            y: 0, // not relevant
             z: 0, // not relevant
         }),
         l: new Vector({
             x: -Math.abs(leftLowerLegSphericalCoords.theta),
-            y: 0,
+            y: 0, // not relevant
             z: 0, // not relevant
         }),
     };
+
     //Modify Rotations slightly for more natural movement
     const rightLegRig = rigLeg(UpperLeg.r, LowerLeg.r, RIGHT);
     const leftLegRig = rigLeg(UpperLeg.l, LowerLeg.l, LEFT);
+
     return {
         //Scaled
         UpperLeg: {
@@ -70,6 +76,7 @@ export const calcLegs = (lm) => {
         },
     };
 };
+
 /**
  * Converts normalized rotation values into radians clamped by human limits
  * @param {Object} UpperLeg : normalized rotation values
@@ -78,6 +85,7 @@ export const calcLegs = (lm) => {
  */
 export const rigLeg = (UpperLeg, LowerLeg, side = RIGHT) => {
     const invert = side === RIGHT ? 1 : -1;
+
     const rigedUpperLeg = new Euler({
         x: clamp(UpperLeg.x, 0, 0.5) * PI,
         y: clamp(UpperLeg.y, -0.25, 0.25) * PI,
@@ -89,6 +97,7 @@ export const rigLeg = (UpperLeg, LowerLeg, side = RIGHT) => {
         y: LowerLeg.y * PI,
         z: LowerLeg.z * PI,
     });
+
     return {
         UpperLeg: rigedUpperLeg,
         LowerLeg: rigedLowerLeg,
