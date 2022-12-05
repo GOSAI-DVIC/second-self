@@ -299,9 +299,9 @@ export class myScene {
             this.rigRotation("Spine", riggedPose.Spine, 0.45, 0.3);
 
             this.rigRotation("LeftUpperArm", riggedPose.RightUpperArm, 1, 0.3);
-            this.rigRotation("LeftLowerArm", riggedPose.RightLowerArm, 1, 0.3);
+            this.rigRotation("LeftLowerArm", riggedPose.RightLowerArm, 1.5, 0.3);
             this.rigRotation("RightUpperArm", riggedPose.LeftUpperArm, 1, 0.3);
-            this.rigRotation("RightLowerArm", riggedPose.LeftLowerArm, 1, 0.3);
+            this.rigRotation("RightLowerArm", riggedPose.LeftLowerArm, 1.5, 0.6);
 
             // this.rigRotation("LeftUpperLeg", riggedPose.LeftUpperLeg, 1, 0.3);
             // this.rigRotation("LeftLowerLeg", riggedPose.LeftLowerLeg, 1, 0.3);

@@ -107,7 +107,7 @@ const rigFingers = (hand, side) => {
             } else {
                 //will document human limits later
                 trackedFinger.z = clamp(
-                    trackedFinger.z * -2*PI * invert,
+                    trackedFinger.z * -1.5*PI * invert,
                     side === RIGHT ? -2*PI : 0,
                     side === RIGHT ? 0 : 2*PI
                 );

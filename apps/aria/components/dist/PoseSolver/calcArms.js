@@ -71,8 +71,7 @@ export const calcArms = (lm) => {
 export const rigArm = (UpperArm, LowerArm, Hand, side = RIGHT) => {
     // Invert modifier based on left vs right side
     const invert = side === RIGHT ? 1 : -1;
-
-    UpperArm.z *= -2.3 * invert;
+    UpperArm.z *= -3.3 * invert;
     //Modify UpperArm rotationY  by LowerArm X and Z rotations
     UpperArm.y *= PI * invert;
     UpperArm.y -= Math.max(LowerArm.x);
@@ -80,14 +79,14 @@ export const rigArm = (UpperArm, LowerArm, Hand, side = RIGHT) => {
     UpperArm.x -= 0.3 * invert;
 
     LowerArm.z *= -2.14 * invert;
-    LowerArm.y *= 2.14 * invert;
-    LowerArm.x *= 2.14 * invert;
-
+    LowerArm.y *= 4.14 * invert;
+    LowerArm.x *= -4.14 * invert;
+    
     //Clamp values to human limits
-    UpperArm.x = clamp(UpperArm.x, -0.5, PI);
-    LowerArm.x = clamp(LowerArm.x, -0.3, 0.3);
+    UpperArm.x = clamp(UpperArm.x, -1, PI); //* -0.5, PI
+    LowerArm.x = clamp(LowerArm.x, -0.3, 0.3); //* -0.3, 0.3
 
-    Hand.y = clamp(Hand.z * 2, -0.6, 0.6) ; //side to side
+    Hand.y = clamp(Hand.z * 2, -0.6, 0.6) ; //* -0.6, 0.6
     Hand.z = Hand.z * -2.3 * invert; //up down
 
     return {
