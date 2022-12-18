@@ -33,13 +33,17 @@ export const slr_correction_cables = new  p5(( sketch ) => {
     };
 
     sketch.update = () => {
-        console.log(sketch.correction.frameIdx)
         sketch.emit("applications-slr_correction_cables-slr_correction", {
             "action": sketch.correction.actions[sketch.correction.actionIdx],
             "frame_idx": sketch.correction.frameIdx,
             "right_hand_diff": sketch.correction.right_hand_diff,
             "left_hand_diff": sketch.correction.left_hand_diff,
             "body_diff": sketch.correction.body_diff,
+        });
+
+        sketch.emit("applications-slr_correction_cables-sample_viz", {
+            "pose": sketch.correction.cables_sample_pose_frames,
+            "frameIdx": sketch.correction.frameIdx,
         });
         sketch.correction.update(sketch)   
     }

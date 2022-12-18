@@ -30,6 +30,10 @@ class Application(BaseApplication):
         def emit_correction(data):
             self.server.send_data(f'applications-{self.name}-slr_correction', data)
 
+        @self.server.sio.on("applications-slr_correction_cables-sample_viz")
+        def emit_correction(data):
+            self.server.send_data(f'applications-{self.name}-sample_viz', data)
+
     def listener(self, source, event, data):
         super().listener(source, event, data)
 
