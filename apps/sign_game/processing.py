@@ -7,11 +7,11 @@ class Application(BaseApplication):
     def __init__(self, name, hal, server, manager):
         super().__init__(name, hal, server, manager)
         self.requires["slr"] = ["new_sign"]
-        self.requires["pose_to_mirror"] = ["mirrored_data"]
+        # self.requires["pose_to_mirror"] = ["mirrored_data"]
 
         self.is_exclusive = True
-        self.applications_allowed = ["menu", "face", "body", "hands"]
-        self.applications_required = ["menu", "face", "body", "hands"]
+        self.applications_allowed = ["menu", "hands"]
+        self.applications_required = ["menu", "hands"]
 
     def listener(self, source, event, data):
         super().listener(source, event, data)
@@ -26,10 +26,10 @@ class Application(BaseApplication):
                 }
                 self.server.send_data(f'applications-{self.name}-{event}', self.data)
 
-        if source == "pose_to_mirror" and event == "mirrored_data":
-            self.data = {
-                "right_hand_pose": data["right_hand_pose"],
-                "left_hand_pose": data["left_hand_pose"],
-                "body_pose": data["body_pose"]
-            }
-            self.server.send_data(f'applications-{self.name}-{event}', self.data)
+        # if source == "pose_to_mirror" and event == "mirrored_data":
+        #     self.data = {
+        #         "right_hand_pose": data["right_hand_pose"],
+        #         "left_hand_pose": data["left_hand_pose"],
+        #         "body_pose": data["body_pose"]
+        #     }
+        #     self.server.send_data(f'applications-{self.name}-{event}', self.data)

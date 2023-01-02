@@ -8,7 +8,7 @@ export const sign_game = new  p5(( sketch ) => {
     sketch.set = (width, height, socket) => {
         sketch.selfCanvas = sketch.createCanvas(width, height).position(0, 0).style("z-index", sketch.z_index);
 
-        sketch.sign_game = new Engine()
+        sketch.sign_game = new Engine(sketch)
         socket.on(`applications-${sketch.name}-new_sign`, (data) => {
             sketch.sign_game.update_sign_data(
                 data["guessed_sign"],

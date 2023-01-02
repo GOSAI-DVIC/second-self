@@ -1,5 +1,5 @@
 export class Engine {
-    constructor() {
+    constructor(sketch) {
         //VN ENGINE SCRIPT by SmexGames
         this.inputFile = []
         this.processedScript = []
@@ -20,6 +20,8 @@ export class Engine {
         this.ratio;
         this.ratioX
         this.ratioY;
+
+        this.sketch = sketch;
 
         this.ElementTypes = {
             DIALOG: 1,
@@ -69,7 +71,9 @@ export class Engine {
     update() {}
 
     update_sign_data(results) {
-        this.right_hand_pose = results.rightHandLandmarks;
+        this.guessed_sign = results.guessed_sign;
+        this.probability = results.probability;
+        this.actions = results.actions;
     }
 
     update_pose_data(results) {
@@ -90,21 +94,21 @@ export class Engine {
         cl_lastClicked = null;
         cl_clickables = [];
 
-        startButton = new Clickable()
-        startButton.onOutside = function () { startButton.color = '#FFFFFF80' }
-        startButton.onHover = function () { startButton.color = '#FFFFFFC0' }
-
-        startButton.cornerRadius = 10;       //Corner radius of the clickable (float)
-        startButton.strokeWeight = 2;        //Stroke width of the clickable (float)
-        startButton.stroke = "#000000";      //Border color of the clickable (hex number as a string)
-        startButton.text = "";       //Text of the clickable (string)
-        startButton.textColor = "#000000";   //Color of the text (hex number as a string)
-        startButton.textSize = 12;           //Size of the text (integer)
-        startButton.locate(width / 3, .5 * height)
-        startButton.width = (width / 3)
-        startButton.height = ((height - 50) / 5)
-
-        startButton.onRelease = function () {
+        this.startButton = new Clickable()
+        this.startButton.onOutside = function () { this.startButton.color = '#FFFFFF80' }
+        this.startButton.onHover = function () { this.startButton.color = '#FFFFFFC0' }
+        
+        this.startButton.cornerRadius = 10;       //Corner radius of the clickable (float)
+        this.startButton.strokeWeight = 2;        //Stroke width of the clickable (float)
+        this.startButton.stroke = "#000000";      //Border color of the clickable (hex number as a string)
+        this.startButton.text = "";       //Text of the clickable (string)
+        this.startButton.textColor = "#000000";   //Color of the text (hex number as a string)
+        this.startButton.textSize = 12;           //Size of the text (integer)
+        this.startButton.locate(width / 3, .5 * height)
+        this.startButton.width = (width / 3)
+        this.startButton.height = ((height - 50) / 5)
+        
+        this.startButton.onRelease = function () {
             this.currentIndex = 0
             this.gameStarted = true
         }
@@ -116,9 +120,9 @@ export class Engine {
         this.currentBackground
         this.variables = new Object
         this.gameStarted = false
-        initCharArray()
-        processInputFile()
-        loadAllCharacters()
+        this.initCharArray()
+        this.processInputFile()
+        this.loadAllCharacters()
     }
 
     preload() {
@@ -138,7 +142,7 @@ export class Engine {
     loadAllCharacters() {
         for (i = 0; i < this.processedScript.length - 1; i++) {
             if (this.processedScript[i].type == this.ElementTypes.DIALOG) {
-                if (!isCharacterDefined(this.processedScript[i].characterName)) {
+                if (!this.isCharacterDefined(this.processedScript[i].characterName)) {
                     var c = new Character(this.processedScript[i].characterName);
                     this.characters.push(c)
                 }
@@ -154,23 +158,23 @@ export class Engine {
     }
 
     jump(tagName) {
-        var jmpTag = getTagByName(tagName)
+        var jmpTag = this.getTagByName(tagName)
         this.currentIndex = jmpTag[1]
     }
 
     handleMenuClick(menuName, item) { //TODO: à appeler quand on réalise un signe
-        var menu = getMenuByName(menuName)
+        var menu = this.getMenuByName(menuName)
         menu.handleClick(item)
     }
     
     handleMenuHover(menuName, item) { //* Plus utile
-        var menu = getMenuByName(menuName)
+        var menu = this.getMenuByName(menuName)
         menu.handleHover(item)
     
     }
     
     handleMenuOutside(menuName, item) { //* Plus utile
-        var menu = getMenuByName(menuName)
+        var menu = this.getMenuByName(menuName)
         menu.handleOutside(item)
     }
     
@@ -201,19 +205,19 @@ export class Engine {
     consumeKeyword(line, i, keyword, prefixLen) {
         var start = i;
         if (keyword == "color") {
-            i += requireToken(TokenTypes.OpenParen, line, i)
-            var res = requireTokenAndValue(TokenTypes.Number, line, i)
+            i += this.requireToken(TokenTypes.OpenParen, line, i)
+            var res = this.requireTokenAndValue(TokenTypes.Number, line, i)
             i += res[0]
             var num1 = res[1]
-            i += requireToken(TokenTypes.Comma, line, i)
-            var res = requireTokenAndValue(TokenTypes.Number, line, i)
+            i += this.requireToken(TokenTypes.Comma, line, i)
+            var res = this.requireTokenAndValue(TokenTypes.Number, line, i)
             i += res[0]
             var num2 = res[1]
-            i += requireToken(TokenTypes.Comma, line, i)
-            res = requireTokenAndValue(TokenTypes.Number, line, i)
+            i += this.requireToken(TokenTypes.Comma, line, i)
+            res = this.requireTokenAndValue(TokenTypes.Number, line, i)
             i += res[0]
             var num3 = res[1]
-            i += requireToken(TokenTypes.CloseParen, line, i)
+            i += this.requireToken(TokenTypes.CloseParen, line, i)
             return [TokenTypes.ColorDefinition, prefixLen + i - start, color(num1, num2, num3)]
         }
         else if (keyword == "LEFT" || keyword == "RIGHT" || keyword == "CENTER")
@@ -243,10 +247,10 @@ export class Engine {
         }
         if (line[index] == ",")
             return [TokenTypes.Comma, index - start + 1]
-        if (isDigitAt(line, index)) {
+        if (this.isDigitAt(line, index)) {
             var num = parseInt(line[index])
             var count = 1
-            while (isDigitAt(line, index + count)) {
+            while (this.isDigitAt(line, index + count)) {
                 num *= 10;
                 num += parseInt(line[index + count])
                 count++
@@ -254,16 +258,16 @@ export class Engine {
             return [TokenTypes.Number, index - start + count, num]
         }
         id = "";
-        if (isAlphaAt(line, index)) {
+        if (this.isAlphaAt(line, index)) {
             id += line[index]
             var count = 1
-            while (isAlphaOrDigitAt(line, index + count)) {
+            while (this.isAlphaOrDigitAt(line, index + count)) {
                 id += line[index + count]
                 count++
             }
 
             if (Object.values(Keywords).includes(id)) {
-                return consumeKeyword(line, index + count, id, index - start + count)
+                return this.consumeKeyword(line, index + count, id, index - start + count)
             }
 
             return [TokenTypes.Identifier, index - start + count, id]
@@ -271,14 +275,14 @@ export class Engine {
     }
 
     requireToken(type, line, index) {
-        var tokenResult = consumeToken(line, index)
+        var tokenResult = this.consumeToken(line, index)
         if (tokenResult[0] == type)
             return tokenResult[1]
         throw "Expected token " + type + " but saw " + tokenResult[0] + " at position " + index + " of line " + line
     }
 
     requireTokenAndValue(type, line, index) {
-        var tokenResult = consumeToken(line, index);
+        var tokenResult = this.consumeToken(line, index);
         if (tokenResult[0] == type)
             return [tokenResult[1], tokenResult[2]];
         if (type == TokenTypes.Value) {
@@ -296,19 +300,19 @@ export class Engine {
 
     parseCharacter(line) {
         for (var i = 0; i < line.length; i++) {
-            i += requireToken(TokenTypes.OpenParen, line, i)
-            var res = requireTokenAndValue(TokenTypes.QuotedString, line, i)
+            i += this.requireToken(TokenTypes.OpenParen, line, i)
+            var res = this.requireTokenAndValue(TokenTypes.QuotedString, line, i)
             i += res[0]
             var id = res[1]
-            i += requireToken(TokenTypes.Comma, line, i)
-            res = requireTokenAndValue(TokenTypes.QuotedString, line, i)
+            i += this.requireToken(TokenTypes.Comma, line, i)
+            res = this.requireTokenAndValue(TokenTypes.QuotedString, line, i)
             i += res[0]
             var path = res[1]
-            i += requireToken(TokenTypes.Comma, line, i)
-            res = requireTokenAndValue(TokenTypes.ColorDefinition, line, i)
+            i += this.requireToken(TokenTypes.Comma, line, i)
+            res = this.requireTokenAndValue(TokenTypes.ColorDefinition, line, i)
             i += res[0]
             var color = res[1]
-            i += requireToken(TokenTypes.CloseParen, line, i)
+            i += this.requireToken(TokenTypes.CloseParen, line, i)
 
             // the contructor actually places these in an array, as a convenience
             new Character(id, color, path)
@@ -317,15 +321,15 @@ export class Engine {
 
     parseImage(line) {
         for (var i = 0; i < line.length; i++) {
-            i += requireToken(TokenTypes.OpenParen, line, i)
-            var res = requireTokenAndValue(TokenTypes.Identifier, line, i)
+            i += this.requireToken(TokenTypes.OpenParen, line, i)
+            var res = this.requireTokenAndValue(TokenTypes.Identifier, line, i)
             i += res[0]
             var id = res[1]
-            i += requireToken(TokenTypes.Comma, line, i)
-            res = requireTokenAndValue(TokenTypes.QuotedString, line, i)
+            i += this.requireToken(TokenTypes.Comma, line, i)
+            res = this.requireTokenAndValue(TokenTypes.QuotedString, line, i)
             i += res[0]
             var path = res[1]
-            i += requireToken(TokenTypes.CloseParen, line, i)
+            i += this.requireToken(TokenTypes.CloseParen, line, i)
 
             // the contructor actually places these in an array, as a convenience
             new MyImage(id, path)
@@ -334,11 +338,11 @@ export class Engine {
 
     parseBG(line) {
         for (var i = 0; i < line.length; i++) {
-            i += requireToken(TokenTypes.OpenParen, line, i)
-            var res = requireTokenAndValue(TokenTypes.Identifier, line, i)
+            i += this.requireToken(TokenTypes.OpenParen, line, i)
+            var res = this.requireTokenAndValue(TokenTypes.Identifier, line, i)
             i += res[0]
             var id = res[1]
-            i += requireToken(TokenTypes.CloseParen, line, i)
+            i += this.requireToken(TokenTypes.CloseParen, line, i)
 
             this.processedScript.push(new CommandBG(id))
         }
@@ -346,15 +350,15 @@ export class Engine {
 
     parseShow(line) {
         for (var i = 0; i < line.length; i++) {
-            i += requireToken(TokenTypes.OpenParen, line, i)
-            var res = requireTokenAndValue(TokenTypes.QuotedString, line, i)
+            i += this.requireToken(TokenTypes.OpenParen, line, i)
+            var res = this.requireTokenAndValue(TokenTypes.QuotedString, line, i)
             i += res[0]
             var id = res[1]
-            i += requireToken(TokenTypes.Comma, line, i)
-            res = requireTokenAndValue(TokenTypes.LCR, line, i)
+            i += this.requireToken(TokenTypes.Comma, line, i)
+            res = this.requireTokenAndValue(TokenTypes.LCR, line, i)
             i += res[0]
             var pos = res[1]
-            i += requireToken(TokenTypes.CloseParen, line, i)
+            i += this.requireToken(TokenTypes.CloseParen, line, i)
 
             this.processedScript.push(new CommandShow(id, pos))
         }
@@ -362,11 +366,11 @@ export class Engine {
 
     parseTag(line) {
         for (var i = 0; i < line.length; i++) {
-            i += requireToken(TokenTypes.OpenParen, line, i)
-            var res = requireTokenAndValue(TokenTypes.Identifier, line, i)
+            i += this.requireToken(TokenTypes.OpenParen, line, i)
+            var res = this.requireTokenAndValue(TokenTypes.Identifier, line, i)
             i += res[0]
             var id = res[1]
-            i += requireToken(TokenTypes.CloseParen, line, i)
+            i += this.requireToken(TokenTypes.CloseParen, line, i)
 
             new CommandTag(id, this.processedScript.length)
         }
@@ -375,11 +379,11 @@ export class Engine {
 
     parseHide(line) {
         for (var i = 0; i < line.length; i++) {
-            i += requireToken(TokenTypes.OpenParen, line, i)
-            var res = requireTokenAndValue(TokenTypes.QuotedString, line, i)
+            i += this.requireToken(TokenTypes.OpenParen, line, i)
+            var res = this.requireTokenAndValue(TokenTypes.QuotedString, line, i)
             i += res[0]
             var id = res[1]
-            i += requireToken(TokenTypes.CloseParen, line, i)
+            i += this.requireToken(TokenTypes.CloseParen, line, i)
 
             this.processedScript.push(new CommandHide(id))
         }
@@ -387,11 +391,11 @@ export class Engine {
 
     parseJump(line) {
         for (var i = 0; i < line.length; i++) {
-            i += requireToken(TokenTypes.OpenParen, line, i)
-            var res = requireTokenAndValue(TokenTypes.Identifier, line, i)
+            i += this.requireToken(TokenTypes.OpenParen, line, i)
+            var res = this.requireTokenAndValue(TokenTypes.Identifier, line, i)
             i += res[0]
             var id = res[1]
-            i += requireToken(TokenTypes.CloseParen, line, i)
+            i += this.requireToken(TokenTypes.CloseParen, line, i)
 
             this.processedScript.push(new CommandJump(id))
         }
@@ -399,35 +403,35 @@ export class Engine {
 
     parseMenu(line) {
         for (var i = 0; i < line.length; i++) {
-            i += requireToken(TokenTypes.OpenParen, line, i)
-            var res = requireTokenAndValue(TokenTypes.QuotedString, line, i)
+            i += this.requireToken(TokenTypes.OpenParen, line, i)
+            var res = this.requireTokenAndValue(TokenTypes.QuotedString, line, i)
             i += res[0]
             var menuName = res[1]
-            i += requireToken(TokenTypes.Comma, line, i)
+            i += this.requireToken(TokenTypes.Comma, line, i)
 
-            var res = requireTokenAndValue(TokenTypes.Number, line, i)
+            var res = this.requireTokenAndValue(TokenTypes.Number, line, i)
             i += res[0]
             var menuItems = []
             var paramCount = res[1]
             while (paramCount > 0) {
                 var menuItem = []
 
-                i += requireToken(TokenTypes.Comma, line, i)
+                i += this.requireToken(TokenTypes.Comma, line, i)
 
-                var res = requireTokenAndValue(TokenTypes.QuotedString, line, i)
+                var res = this.requireTokenAndValue(TokenTypes.QuotedString, line, i)
                 i += res[0]
                 menuItem.push(res[1])
 
-                i += requireToken(TokenTypes.Comma, line, i)
+                i += this.requireToken(TokenTypes.Comma, line, i)
 
-                var res = requireTokenAndValue(TokenTypes.Identifier, line, i)
+                var res = this.requireTokenAndValue(TokenTypes.Identifier, line, i)
                 i += res[0]
                 menuItem.push(res[1])
 
                 menuItems.push(menuItem)
                 paramCount--
             }
-            i += requireToken(TokenTypes.CloseParen, line, i)
+            i += this.requireToken(TokenTypes.CloseParen, line, i)
 
             this.processedScript.push(new CommandMenu(menuName, menuItems))
         }
@@ -435,15 +439,15 @@ export class Engine {
 
     parseVariable(line) {
         for (var i = 0; i < line.length; i++) {
-            i += requireToken(TokenTypes.OpenParen, line, i)
-            var res = requireTokenAndValue(TokenTypes.Identifier, line, i)
+            i += this.requireToken(TokenTypes.OpenParen, line, i)
+            var res = this.requireTokenAndValue(TokenTypes.Identifier, line, i)
             i += res[0]
             var id = res[1]
-            i += requireToken(TokenTypes.Comma, line, i)
-            res = requireTokenAndValue(TokenTypes.Value, line, i)
+            i += this.requireToken(TokenTypes.Comma, line, i)
+            res = this.requireTokenAndValue(TokenTypes.Value, line, i)
             i += res[0]
             var val = res[1]
-            i += requireToken(TokenTypes.CloseParen, line, i)
+            i += this.requireToken(TokenTypes.CloseParen, line, i)
         }
 
         this.processedScript.push(new CommandVariable(id, val))
@@ -451,19 +455,19 @@ export class Engine {
 
     parseConditional(line) {
         for (var i = 0; i < line.length; i++) {
-            i += requireToken(TokenTypes.OpenParen, line, i)
-            var res = requireTokenAndValue(TokenTypes.Identifier, line, i)
+            i += this.requireToken(TokenTypes.OpenParen, line, i)
+            var res = this.requireTokenAndValue(TokenTypes.Identifier, line, i)
             i += res[0]
             var variableName = res[1]
-            i += requireToken(TokenTypes.Comma, line, i)
-            res = requireTokenAndValue(TokenTypes.Identifier, line, i)
+            i += this.requireToken(TokenTypes.Comma, line, i)
+            res = this.requireTokenAndValue(TokenTypes.Identifier, line, i)
             i += res[0]
             var trueTag = res[1]
-            i += requireToken(TokenTypes.Comma, line, i)
-            res = requireTokenAndValue(TokenTypes.Identifier, line, i)
+            i += this.requireToken(TokenTypes.Comma, line, i)
+            res = this.requireTokenAndValue(TokenTypes.Identifier, line, i)
             i += res[0]
             var falseTag = res[1]
-            i += requireToken(TokenTypes.CloseParen, line, i)
+            i += this.requireToken(TokenTypes.CloseParen, line, i)
         }
 
         this.processedScript.push(new CommandConditional(variableName, trueTag, falseTag))
@@ -471,15 +475,15 @@ export class Engine {
 
     parseSetSprite(line) {
         for (var i = 0; i < line.length; i++) {
-            i += requireToken(TokenTypes.OpenParen, line, i)
-            var res = requireTokenAndValue(TokenTypes.QuotedString, line, i)
+            i += this.requireToken(TokenTypes.OpenParen, line, i)
+            var res = this.requireTokenAndValue(TokenTypes.QuotedString, line, i)
             i += res[0]
             var id = res[1]
-            i += requireToken(TokenTypes.Comma, line, i)
-            res = requireTokenAndValue(TokenTypes.Number, line, i)
+            i += this.requireToken(TokenTypes.Comma, line, i)
+            res = this.requireTokenAndValue(TokenTypes.Number, line, i)
             i += res[0]
             var val = res[1]
-            i += requireToken(TokenTypes.CloseParen, line, i)
+            i += this.requireToken(TokenTypes.CloseParen, line, i)
         }
 
         this.processedScript.push(new CommandSetSprite(id, val))
@@ -496,39 +500,39 @@ export class Engine {
             }
             else if (this.inputFile[line].startsWith("$")) {
                 if (this.inputFile[line].startsWith("$defineC")) {
-                    parseCharacter(this.inputFile[line].substring(8))
+                    this.parseCharacter(this.inputFile[line].substring(8))
                 }
                 else if (this.inputFile[line].startsWith("$defineImg")) {
-                    parseImage(this.inputFile[line].substring(10))
+                    this.parseImage(this.inputFile[line].substring(10))
                 }
                 else if (this.inputFile[line].startsWith("$bg")) {
-                    parseBG(this.inputFile[line].substring(3))
+                    this.parseBG(this.inputFile[line].substring(3))
                 }
                 else if (this.inputFile[line].startsWith("$show")) {
-                    parseShow(this.inputFile[line].substring(5))
+                    this.parseShow(this.inputFile[line].substring(5))
                 }
                 else if (this.inputFile[line].startsWith("$hide")) {
-                    parseHide(this.inputFile[line].substring(5))
+                    this.parseHide(this.inputFile[line].substring(5))
                 }
                 else if (this.inputFile[line].startsWith("$tag")) {
-                    parseTag(this.inputFile[line].substring(4))
+                    this.parseTag(this.inputFile[line].substring(4))
                 }
                 else if (this.inputFile[line].startsWith("$jump")) {
-                    parseJump(this.inputFile[line].substring(5))
+                    this.parseJump(this.inputFile[line].substring(5))
                 }
                 else if (this.inputFile[line].startsWith("$menu")) {
-                    parseMenu(this.inputFile[line].substring(5))
+                    this.parseMenu(this.inputFile[line].substring(5))
                 }
                 else if (this.inputFile[line].startsWith("$setVar")) {
-                    parseVariable(this.inputFile[line].substring(7))
+                    this.parseVariable(this.inputFile[line].substring(7))
                 }
 
                 else if (this.inputFile[line].startsWith("$if")) {
-                    parseConditional(this.inputFile[line].substring(3))
+                    this.parseConditional(this.inputFile[line].substring(3))
                 }
 
                 else if (this.inputFile[line].startsWith("$setSprite")) {
-                    parseSetSprite(this.inputFile[line].substring(10))
+                    this.parseSetSprite(this.inputFile[line].substring(10))
                 }
 
             }
@@ -610,20 +614,20 @@ export class Engine {
 
 
     setup() {
-        createCanvas(min(windowWidth,800), min(windowHeight,600));
+        this.sketch.createCanvas(min(windowWidth,800), min(windowHeight,600));
         this.ratioY = height/600
         this.ratioX = width/800
     
         this.ratio = this.ratioY;
         
-        reset()
+        this.reset()
         // song.playMode('restart')
         // song.play()
-
-        scribble = new Scribble();
-        scribble.bowing = 0
-        scribble.maxOffset = .1
-        scribble.roughness = 10;
+        //TODO AJOUTER L'import de scribble.js
+        this.scribble = new Scribble();
+        this.scribble.bowing = 0
+        this.scribble.maxOffset = .1
+        this.scribble.roughness = 10;
     }
 
     mouseReleased() {
@@ -631,7 +635,7 @@ export class Engine {
             if (this.currentIndex + 1 >= this.processedScript.length) {
                 this.currentIndex = 0
                 this.gameStarted = false
-                reset()
+                this.reset()
 
             } else {
                 this.currentIndex++
@@ -642,76 +646,76 @@ export class Engine {
     }
 
     renderGUI() {
-        strokeWeight(4*this.ratio)
-        scribble.scribbleFilling([20*this.ratioX, 20*this.ratioX, 780*this.ratioX, 780*this.ratioX], [450*this.ratioY, 590*this.ratioY, 590*this.ratioY, 450*this.ratioY], 2, -20)
+        this.sketch.strokeWeight(4*this.ratio)
+        this.scribble.scribbleFilling([20*this.ratioX, 20*this.ratioX, 780*this.ratioX, 780*this.ratioX], [450*this.ratioY, 590*this.ratioY, 590*this.ratioY, 450*this.ratioY], 2, -20)
     }
 
     renderText() {
-        fill(255)
-        stroke(0)
-        strokeWeight(8*this.ratio)
-        textFont(font)
-        textAlign(LEFT)
+        this.sketch.fill(255)
+        this.sketch.stroke(0)
+        this.sketch.strokeWeight(8*this.ratio)
+        this.sketch.textFont(font)
+        this.sketch.textAlign(LEFT)
 
         this.processedScript[this.currentIndex].render()
 
         if (this.processedScript[this.currentIndex].type == this.ElementTypes.COMMAND && this.processedScript[this.currentIndex].commandType != CommandTypes.END) {
-            mouseReleased()
+            this.mouseReleased()
         }
     }
 
     draw() {
         if (this.gameStarted) {
-            background(220);
+            this.sketch.background(220);
 
             if (this.currentBackground != null) {
-                imageMode(CORNER)
-                image(this.currentBackground, 0, 0, width, height)
+                this.sketch.imageMode(CORNER)
+                this.sketch.image(this.currentBackground, 0, 0, width, height)
             }
             else {
-                background(0)
+                this.sketch.background(0)
             }
 
-            stroke(150, 150, 255)
+            this.sketch.stroke(150, 150, 255)
 
-            drawAllCharacterSprites()
+            this.sketch.drawAllCharacterSprites()
 
             if (this.enableGUI) {
-                renderGUI()
+                this.renderGUI()
             }
             if (this.enableText) {
-                renderText()
+                this.renderText()
             }
             
         }
 
         else {
         
-            push()
-            imageMode(CORNER)
-            image(title, 0, 0, width, height)
-            pop()
-            push()
-            startButton.draw()
-            pop()
-            push()
-            textAlign(CENTER, CENTER)
-            rectMode(CENTER)
-            fill(255)
-            stroke(0)
-            strokeWeight(8*this.ratio)
-            textFont(font)
+            this.sketch.push()
+            this.sketch.imageMode(CORNER)
+            this.sketch.image(title, 0, 0, width, height)
+            this.sketch.pop()
+            this.sketch.push()
+            this.startButton.draw()
+            this.sketch.pop()
+            this.sketch.push()
+            this.sketch.textAlign(CENTER, CENTER)
+            this.sketch.rectMode(CENTER)
+            this.sketch.fill(255)
+            this.sketch.stroke(0)
+            this.sketch.strokeWeight(8*this.ratio)
+            this.sketch.textFont(font)
 
-            textSize(24*this.ratio)
-            text("Start", width / 2, startButton.y + startButton.height / 2)
-            pop()
+            this.sketch.textSize(24*this.ratio)
+            this.sketch.text("Start", width / 2, startButton.y + startButton.height / 2)
+            this.sketch.pop()
         }
 
     }
 
     drawAllCharacterSprites() {
         for (var i = 0; i < this.characters.length; i++) {
-            this.characters[i].drawSprite() //TODO: remplacer par la fonction qui lit la vidéo corresepondante
+            this.characters[i].drawSprite() 
         }
 
     }
@@ -722,7 +726,7 @@ export class Engine {
             this.characters[i].lastSprite = 0
         }
     }
-    
+
     windowResized() {
     resizeCanvas(min(windowWidth,800), min(windowHeight,600))
     }
@@ -751,7 +755,7 @@ class Character {
                 loadImage(path + "/" + name + suffix + ".png", img => { if (img != null) this.sprites[i] = img })
             } //TODO Faire en sorte que la vidéo soit chargée
         }
-        this.characters.push(this)
+        characters.push(this)
 
         this.currentSprite = 0
     }
@@ -775,7 +779,7 @@ class Character {
             if (this.currentSprite != 0 && this.sprites[this.currentSprite] != null) {
                 imageMode(CENTER)
                 
-                  this.sprites[this.currentSprite].resize(this.sprites[this.currentSprite].width * this.ratioX, this.sprites[this.currentSprite].height * this.ratioY)
+                  this.sprites[this.currentSprite].resize(this.sprites[this.currentSprite].width * ratioX, this.sprites[this.currentSprite].height * ratioY)
                   
                 
                 image(this.sprites[this.currentSprite], this.xpos, this.ypos)
@@ -789,7 +793,7 @@ class MyImage {
         this.name = name
         this.path = path
         loadImage(path, img => { this.p5Image = img })
-        this.images.push(this)
+        images.push(this)
 
         this.currentSprite = 0
     }
@@ -802,21 +806,22 @@ class MyImage {
 
 class CommandTag extends ScriptElement {
     constructor(tagName, lineNumber) {
-        super(this.ElementTypes.COMMAND)
+        super(ElementTypes.COMMAND)
         this.tagName = tagName
         this.lineNumber = lineNumber
-        this.tags.push([tagName, lineNumber])
+        tags.push([tagName, lineNumber])
 
     }
+
 }
 
 class CommandEnd extends ScriptElement {
     constructor() {
-        super(this.ElementTypes.COMMAND, CommandTypes.END)
+        super(ElementTypes.COMMAND, CommandTypes.END)
     }
 
     render() {
-        text(this.endText, 40, 460, 540, height - 40)
+        text(endText, 40, 460, 540, height - 40)
         
 
     
@@ -825,7 +830,7 @@ class CommandEnd extends ScriptElement {
 
 class CommandBG extends ScriptElement {
     constructor(name) {
-        super(this.ElementTypes.COMMAND)
+        super(ElementTypes.COMMAND)
         this.name = name
         if (this.name != "none") {
             this.myImage = getImageByName(name)
@@ -834,9 +839,9 @@ class CommandBG extends ScriptElement {
 
     render() {
         if (this.name == "none") {
-            this.currentBackground = null
+            currentBackground = null
         } else {
-            this.currentBackground = this.myImage.p5Image
+            currentBackground = this.myImage.p5Image
 
         }
 
@@ -846,7 +851,7 @@ class CommandBG extends ScriptElement {
 
 class CommandShow extends ScriptElement {
     constructor(name, pos) {
-        super(this.ElementTypes.COMMAND)
+        super(ElementTypes.COMMAND)
         this.characterName = name
         this.pos = pos
     }
@@ -866,7 +871,7 @@ class CommandShow extends ScriptElement {
 
 class CommandHide extends ScriptElement {
     constructor(name) {
-        super(this.ElementTypes.COMMAND)
+        super(ElementTypes.COMMAND)
         this.characterName = name
     }
 
@@ -879,7 +884,7 @@ class CommandHide extends ScriptElement {
 
 class CommandJump extends ScriptElement {
     constructor(tagName) {
-        super(this.ElementTypes.COMMAND)
+        super(ElementTypes.COMMAND)
         this.tagName = tagName
     }
 
@@ -890,21 +895,21 @@ class CommandJump extends ScriptElement {
 
 class CommandVariable extends ScriptElement {
     constructor(Name, ValueToSet) {
-        super(this.ElementTypes.COMMAND)
+        super(ElementTypes.COMMAND)
         this.name = Name
         this.value = ValueToSet
 
-        this.variables[Name] = false // at definition time, we can't set the values, only when walking the processed script can we do that
+        variables[Name] = false // at definition time, we can't set the values, only when walking the processed script can we do that
     }
 
     render() {
-        this.variables[this.name] = this.value
+        variables[this.name] = this.value
     }
 }
 
 class CommandConditional extends ScriptElement {
     constructor(variableName, trueTag, falseTag) {
-        super(this.ElementTypes.COMMAND)
+        super(ElementTypes.COMMAND)
         this.variableName = variableName
         this.trueTag = trueTag
         this.falseTag = falseTag
@@ -912,7 +917,7 @@ class CommandConditional extends ScriptElement {
     }
 
     render() {
-        if (this.variables[this.variableName] === "true") {
+        if (variables[this.variableName] === "true") {
             jump(this.trueTag)
         } else {
             jump(this.falseTag)
@@ -923,7 +928,7 @@ class CommandConditional extends ScriptElement {
 
 class CommandSetSprite extends ScriptElement {
     constructor(charName, spriteIndex) {
-        super(this.ElementTypes.COMMAND)
+        super(ElementTypes.COMMAND)
         this.character = getCharacterByName(charName)
         this.spriteIndex = spriteIndex
     }
@@ -935,19 +940,18 @@ class CommandSetSprite extends ScriptElement {
 }
 
 class CommandMenu extends ScriptElement {
-    constructor(menuName, menuItems, ratio) {
-        super(this.ElementTypes.MENU)
+    constructor(menuName, menuItems) {
+        super(ElementTypes.MENU)
         this.menuName = menuName
         this.menuItems = menuItems
         this.everdrawn = false
         this.buttons = []
-        this.menus.push(this)
-        this.ratio = ratio
+        menus.push(this)
     }
 
     handleClick(item) { //* A appeler lors d'un signe
-        this.canAdvance = true
-        this.enableGUI = true
+        canAdvance = true
+        enableGUI = true
         jump(this.menuItems[item][1])
     }
 
@@ -964,8 +968,8 @@ class CommandMenu extends ScriptElement {
     }
 
     render() {
-        this.canAdvance = false
-        this.enableGUI = false
+        canAdvance = false
+        enableGUI = false
         if (!this.everdrawn) {
             for (let i = 0; i < this.menuItems.length; i++) {
                 this.buttons.push(new Clickable())
@@ -1004,22 +1008,22 @@ class CommandMenu extends ScriptElement {
 
             push()
             textAlign(CENTER, CENTER)
-            textSize(24*this.ratio)
+            textSize(24*ratio)
             text(this.menuItems[i][0], width / 2, 50 + (((height - 50) / this.menuItems.length) * i) + (this.buttons[i].height / 2))
             pop()
         }
     }
 }
 
+
+
+
 class Dialog extends ScriptElement {
-    constructor(characterName, dialog, command = null, ratio, ratioX, ratioY) {
-        super(this.ElementTypes.DIALOG)
+    constructor(characterName, dialog, command = null) {
+        super(ElementTypes.DIALOG)
         this.characterName = characterName
         this.dialog = dialog
         this.command = command
-        this.ratio=ratio
-        this.ratioX=ratioX
-        this.ratioY=ratioY
     }
 
     render() {
@@ -1027,11 +1031,11 @@ class Dialog extends ScriptElement {
 
         if (this.characterName != "N") {
 
-            textSize(24* this.ratio)
+            textSize(24* ratio)
             var char = getCharacterByName(this.characterName)
             fill(char.charColor)
 
-            text(this.characterName + ":", 20*ratioX, 420*this.ratioY, width / 2, 460*this.ratioY)
+            text(this.characterName + ":", 20*ratioX, 420*ratioY, width / 2, 460*ratioY)
 
             if (this.command && this.command.length) {
                 if (this.command.includes("LEFT"))
@@ -1042,9 +1046,9 @@ class Dialog extends ScriptElement {
                     char.setPos("CENTER")
             }
         }
-        textSize(20* this.ratioY)
+        textSize(20* ratioY)
         fill(255)
-        text(this.dialog, 40*this.ratioX, 460*this.ratioY, 740*this.ratioX, height - 40)
+        text(this.dialog, 40*ratioX, 460*ratioY, 740*ratioX, height - 40)
     }
 }
 
