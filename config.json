@@ -1,8 +1,7 @@
 {
     "name": "Second Self",
     "camera": {
-        "type": "standard",
-        "flip": true,
+        "type": "intel",
         "width": 640,
         "height": 480,
         "orientation": "horizontal",
@@ -11,7 +10,7 @@
         "y_offset": 100
     },
     "applications": {
-        "startup": ["menu", "hands", "body", "face","sign_training"],
+        "startup": ["menu", "hands", "body", "face"],
         "disabled": ["bounce", "raw_hands", "show_ping", "score_player", "show_frequency", "sign_language"]
     },
     "microphone": {
