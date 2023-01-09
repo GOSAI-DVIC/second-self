@@ -1,11 +1,11 @@
 #NOTE: ON MY MACHINE, THIS EDITOR DOES NOT RUN IN MICROSOFT EDGE DUE TO ISSUES WITH p5.SOUND. IF THIS HAPPENS TO YOU, CTRL+F FOR "song" IN ENGINE.JS AND COMMENT OUT EACH LINE (SHOULD ONLY BE 3)
 
 $tag(start)
-
-$defineC("NYU-Chan", "characters/nyu_chan", color(84, 28, 137))
-$defineC("Barry", "characters/Barry", color ( 255 , 225 , 100))
-$defineImg(Empty,"backgrounds/Empty.png")
-$defineImg(Bedroom,"backgrounds/Bedroom.png")
+#./platform/home/apps/sign_game/components/
+$defineC("NYU-Chan", "./platform/home/apps/sign_game/components/characters/nyu_chan", color(84, 28, 137), 4)
+$defineC("Barry", "./platform/home/apps/sign_game/components/characters/Barry", color ( 255 , 225 , 100), 2)
+$defineImg(Empty,"./platform/home/apps/sign_game/components/backgrounds/Empty.png")
+$defineImg(Bedroom,"./platform/home/apps/sign_game/components/backgrounds/Bedroom.png")
 
 $bg(Empty) 
  

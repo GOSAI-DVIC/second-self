@@ -1,24 +1,24 @@
 export class Engine {
     constructor(sketch) {
         //VN ENGINE SCRIPT by SmexGames
-        this.inputFile = []
-        this.processedScript = []
-        this.currentIndex = 0
-        this.endText = "-End of Script-"
-        this.characters = []
-        this.images = []
-        this.tags = []
-        this.menus = []
-        this.canAdvance = true
-        this.DEBUG = false
-        this.enableGUI = true
-        this.enableText = true
+        // this.sketch.inputFile = [];
+        this.processedScript = [];
+        this.currentIndex = 0;
+        this.endText = "-End of Script-";
+        this.characters = [];
+        this.images = [];
+        this.tags = [];
+        this.menus = [];
+        this.canAdvance = true;
+        this.DEBUG = false;
+        this.enableGUI = true;
+        this.enableText = true;
         this.state = 0;
-        this.currentBackground
-        this.variables = new Object
-        this.gameStarted = false
+        this.currentBackground;
+        this.variables = new Object;
+        this.gameStarted = false;
         this.ratio;
-        this.ratioX
+        this.ratioX;
         this.ratioY;
 
         this.sketch = sketch;
@@ -64,9 +64,34 @@ export class Engine {
             False: "false",
         }
         Object.freeze(this.Keywords)
+        // this.preload();
+        // this.setup()
     }
 
-    show() {}
+    show() {
+        if (this.gameStarted) {
+            // this.sketch.background(220);
+
+            if (this.currentBackground != null) {
+                this.sketch.imageMode(CORNER)
+                this.sketch.image(this.currentBackground, 0, 0, width, height)
+            }
+            else {
+                this.sketch.background(0)
+            }
+
+            this.sketch.stroke(150, 150, 255)
+
+            this.drawAllCharacterSprites()
+
+            if (this.enableGUI) {
+                this.renderGUI()
+            }
+            if (this.enableText) {
+                this.renderText()
+            }
+        }
+    }
 
     update() {}
 
@@ -89,29 +114,12 @@ export class Engine {
         this.tags = []
         this.menus = []
 
-        cl_mouseWasPressed = false;
-        cl_lastHovered = null;
-        cl_lastClicked = null;
-        cl_clickables = [];
+        this.cl_mouseWasPressed = false;
+        this.cl_lastHovered = null;
+        this.cl_lastClicked = null;
+        this.cl_clickables = [];
 
-        this.startButton = new Clickable()
-        this.startButton.onOutside = function () { this.startButton.color = '#FFFFFF80' }
-        this.startButton.onHover = function () { this.startButton.color = '#FFFFFFC0' }
-        
-        this.startButton.cornerRadius = 10;       //Corner radius of the clickable (float)
-        this.startButton.strokeWeight = 2;        //Stroke width of the clickable (float)
-        this.startButton.stroke = "#000000";      //Border color of the clickable (hex number as a string)
-        this.startButton.text = "";       //Text of the clickable (string)
-        this.startButton.textColor = "#000000";   //Color of the text (hex number as a string)
-        this.startButton.textSize = 12;           //Size of the text (integer)
-        this.startButton.locate(width / 3, .5 * height)
-        this.startButton.width = (width / 3)
-        this.startButton.height = ((height - 50) / 5)
-        
-        this.startButton.onRelease = function () {
-            this.currentIndex = 0
-            this.gameStarted = true
-        }
+        this.currentIndex = 0
 
         this.canAdvance = true
         this.enableGUI = true
@@ -119,18 +127,10 @@ export class Engine {
         this.state = 0;
         this.currentBackground
         this.variables = new Object
-        this.gameStarted = false
+        this.gameStarted = true
         this.initCharArray()
         this.processInputFile()
         this.loadAllCharacters()
-    }
-
-    preload() {
-        this.inputFile = loadStrings("script.txt")
-
-        font = loadFont("fonts/PressStart2P.ttf")
-        title = loadImage("backgrounds/Titlescreen.png")
-        // song = loadSound("song.ogg")
     }
 
     initCharArray() {
@@ -140,10 +140,15 @@ export class Engine {
 
     // Walk through the process script and create an array of the characters that were defined
     loadAllCharacters() {
-        for (i = 0; i < this.processedScript.length - 1; i++) {
+        for (var i = 0; i < this.processedScript.length - 1; i++) {
             if (this.processedScript[i].type == this.ElementTypes.DIALOG) {
                 if (!this.isCharacterDefined(this.processedScript[i].characterName)) {
-                    var c = new Character(this.processedScript[i].characterName);
+
+                    // for (let char of this.characters) {
+                    //     console.log(char.name)
+                    // }
+                    // console.log("\n")
+                    var c = new Character(this, this.processedScript[i].characterName);
                     this.characters.push(c)
                 }
             }
@@ -151,8 +156,19 @@ export class Engine {
     }
 
     isCharacterDefined(name) {
-        for (var char in this.characters) {
-            if (char.name === name) return true
+        // for (let char of this.characters) {
+        //     console.log(char.name)
+        // }
+        // console.log("\n")
+        for (let char of this.characters) {
+            if (char.name === name) {
+                // console.log("Character " + name + " is already defined")
+                return true
+            }
+            // else {
+            //     console.log("Character " + name + " is not defined in");
+            //     console.log(this.characters);
+            // }
         }
         return false
     }
@@ -189,7 +205,7 @@ export class Engine {
     }
 
     isAlphaOrDigitAt(str, i) {
-        if (isAlphaAt(str, i) || isDigitAt(str, i))
+        if (this.isAlphaAt(str, i) || this.isDigitAt(str, i))
             return true
     }
 
@@ -205,25 +221,25 @@ export class Engine {
     consumeKeyword(line, i, keyword, prefixLen) {
         var start = i;
         if (keyword == "color") {
-            i += this.requireToken(TokenTypes.OpenParen, line, i)
-            var res = this.requireTokenAndValue(TokenTypes.Number, line, i)
+            i += this.requireToken(this.TokenTypes.OpenParen, line, i)
+            var res = this.requireTokenAndValue(this.TokenTypes.Number, line, i)
             i += res[0]
             var num1 = res[1]
-            i += this.requireToken(TokenTypes.Comma, line, i)
-            var res = this.requireTokenAndValue(TokenTypes.Number, line, i)
+            i += this.requireToken(this.TokenTypes.Comma, line, i)
+            var res = this.requireTokenAndValue(this.TokenTypes.Number, line, i)
             i += res[0]
             var num2 = res[1]
-            i += this.requireToken(TokenTypes.Comma, line, i)
-            res = this.requireTokenAndValue(TokenTypes.Number, line, i)
+            i += this.requireToken(this.TokenTypes.Comma, line, i)
+            res = this.requireTokenAndValue(this.TokenTypes.Number, line, i)
             i += res[0]
             var num3 = res[1]
-            i += this.requireToken(TokenTypes.CloseParen, line, i)
-            return [TokenTypes.ColorDefinition, prefixLen + i - start, color(num1, num2, num3)]
+            i += this.requireToken(this.TokenTypes.CloseParen, line, i)
+            return [this.TokenTypes.ColorDefinition, prefixLen + i - start, this.sketch.color(num1, num2, num3)]
         }
         else if (keyword == "LEFT" || keyword == "RIGHT" || keyword == "CENTER")
-            return [TokenTypes.LCR, prefixLen + i - start, keyword]
+            return [this.TokenTypes.LCR, prefixLen + i - start, keyword]
         else if (keyword == "true" || keyword == "false")
-            return [TokenTypes.TrueOrFalse, prefixLen + i - start, keyword]
+            return [this.TokenTypes.TrueOrFalse, prefixLen + i - start, keyword]
     }
 
     consumeToken(line, index) {
@@ -232,10 +248,10 @@ export class Engine {
             index++
         }
         if (line[index] == "(")
-            return [TokenTypes.OpenParen, index - start + 1]
+            return [this.TokenTypes.OpenParen, index - start + 1]
 
         if (line[index] == ")")
-            return [TokenTypes.CloseParen, index - start + 1]
+            return [this.TokenTypes.CloseParen, index - start + 1]
         if (line[index] == "\"") {
             var qs = ""
             var count = 1
@@ -243,10 +259,10 @@ export class Engine {
                 qs += line[index + count]
                 count++
             }
-            return [TokenTypes.QuotedString, index - start + count + 1, qs]
+            return [this.TokenTypes.QuotedString, index - start + count + 1, qs]
         }
         if (line[index] == ",")
-            return [TokenTypes.Comma, index - start + 1]
+            return [this.TokenTypes.Comma, index - start + 1]
         if (this.isDigitAt(line, index)) {
             var num = parseInt(line[index])
             var count = 1
@@ -255,9 +271,9 @@ export class Engine {
                 num += parseInt(line[index + count])
                 count++
             }
-            return [TokenTypes.Number, index - start + count, num]
+            return [this.TokenTypes.Number, index - start + count, num]
         }
-        id = "";
+        let id = "";
         if (this.isAlphaAt(line, index)) {
             id += line[index]
             var count = 1
@@ -266,11 +282,11 @@ export class Engine {
                 count++
             }
 
-            if (Object.values(Keywords).includes(id)) {
+            if (Object.values(this.Keywords).includes(id)) {
                 return this.consumeKeyword(line, index + count, id, index - start + count)
             }
 
-            return [TokenTypes.Identifier, index - start + count, id]
+            return [this.TokenTypes.Identifier, index - start + count, id]
         }
     }
 
@@ -285,12 +301,12 @@ export class Engine {
         var tokenResult = this.consumeToken(line, index);
         if (tokenResult[0] == type)
             return [tokenResult[1], tokenResult[2]];
-        if (type == TokenTypes.Value) {
+        if (type == this.TokenTypes.Value) {
             // this should except numbers or keywords (true, false)
-            if (tokenResult[0] == TokenTypes.Number) {
+            if (tokenResult[0] == this.TokenTypes.Number) {
                 return [tokenResult[1], tokenResult[2]];
             }
-            if (tokenResult[0] == TokenTypes.TrueOrFalse) {
+            if (tokenResult[0] == this.TokenTypes.TrueOrFalse) {
                 return [tokenResult[1], tokenResult[2]];
             }
         }
@@ -300,275 +316,282 @@ export class Engine {
 
     parseCharacter(line) {
         for (var i = 0; i < line.length; i++) {
-            i += this.requireToken(TokenTypes.OpenParen, line, i)
-            var res = this.requireTokenAndValue(TokenTypes.QuotedString, line, i)
+            i += this.requireToken(this.TokenTypes.OpenParen, line, i)
+            var res = this.requireTokenAndValue(this.TokenTypes.QuotedString, line, i)
             i += res[0]
             var id = res[1]
-            i += this.requireToken(TokenTypes.Comma, line, i)
-            res = this.requireTokenAndValue(TokenTypes.QuotedString, line, i)
+
+            i += this.requireToken(this.TokenTypes.Comma, line, i)
+            res = this.requireTokenAndValue(this.TokenTypes.QuotedString, line, i)
             i += res[0]
             var path = res[1]
-            i += this.requireToken(TokenTypes.Comma, line, i)
-            res = this.requireTokenAndValue(TokenTypes.ColorDefinition, line, i)
+
+            i += this.requireToken(this.TokenTypes.Comma, line, i)
+            res = this.requireTokenAndValue(this.TokenTypes.ColorDefinition, line, i)
             i += res[0]
             var color = res[1]
-            i += this.requireToken(TokenTypes.CloseParen, line, i)
+
+            i += this.requireToken(this.TokenTypes.Comma, line, i)
+            res = this.requireTokenAndValue(this.TokenTypes.Number, line, i)
+            i += res[0]
+            var framesNb = res[1] 
+
+            i += this.requireToken(this.TokenTypes.CloseParen, line, i)
 
             // the contructor actually places these in an array, as a convenience
-            new Character(id, color, path)
+            var c = new Character(this, id, color, path, framesNb)
+            this.characters.push(c)
+
         }
     }
 
     parseImage(line) {
         for (var i = 0; i < line.length; i++) {
-            i += this.requireToken(TokenTypes.OpenParen, line, i)
-            var res = this.requireTokenAndValue(TokenTypes.Identifier, line, i)
+            i += this.requireToken(this.TokenTypes.OpenParen, line, i)
+            var res = this.requireTokenAndValue(this.TokenTypes.Identifier, line, i)
             i += res[0]
             var id = res[1]
-            i += this.requireToken(TokenTypes.Comma, line, i)
-            res = this.requireTokenAndValue(TokenTypes.QuotedString, line, i)
+            i += this.requireToken(this.TokenTypes.Comma, line, i)
+            res = this.requireTokenAndValue(this.TokenTypes.QuotedString, line, i)
             i += res[0]
             var path = res[1]
-            i += this.requireToken(TokenTypes.CloseParen, line, i)
+            i += this.requireToken(this.TokenTypes.CloseParen, line, i)
 
             // the contructor actually places these in an array, as a convenience
-            new MyImage(id, path)
+            new MyImage(id, path, this.images, this.sketch)
         }
     }
 
     parseBG(line) {
         for (var i = 0; i < line.length; i++) {
-            i += this.requireToken(TokenTypes.OpenParen, line, i)
-            var res = this.requireTokenAndValue(TokenTypes.Identifier, line, i)
+            i += this.requireToken(this.TokenTypes.OpenParen, line, i)
+            var res = this.requireTokenAndValue(this.TokenTypes.Identifier, line, i)
             i += res[0]
             var id = res[1]
-            i += this.requireToken(TokenTypes.CloseParen, line, i)
+            i += this.requireToken(this.TokenTypes.CloseParen, line, i)
 
-            this.processedScript.push(new CommandBG(id))
+            this.processedScript.push(new CommandBG(id, this))
         }
     }
 
     parseShow(line) {
         for (var i = 0; i < line.length; i++) {
-            i += this.requireToken(TokenTypes.OpenParen, line, i)
-            var res = this.requireTokenAndValue(TokenTypes.QuotedString, line, i)
+            i += this.requireToken(this.TokenTypes.OpenParen, line, i)
+            var res = this.requireTokenAndValue(this.TokenTypes.QuotedString, line, i)
             i += res[0]
             var id = res[1]
-            i += this.requireToken(TokenTypes.Comma, line, i)
-            res = this.requireTokenAndValue(TokenTypes.LCR, line, i)
+            i += this.requireToken(this.TokenTypes.Comma, line, i)
+            res = this.requireTokenAndValue(this.TokenTypes.LCR, line, i)
             i += res[0]
             var pos = res[1]
-            i += this.requireToken(TokenTypes.CloseParen, line, i)
+            i += this.requireToken(this.TokenTypes.CloseParen, line, i)
 
-            this.processedScript.push(new CommandShow(id, pos))
+            this.processedScript.push(new CommandShow(id, pos, this))
         }
     }
 
     parseTag(line) {
         for (var i = 0; i < line.length; i++) {
-            i += this.requireToken(TokenTypes.OpenParen, line, i)
-            var res = this.requireTokenAndValue(TokenTypes.Identifier, line, i)
+            i += this.requireToken(this.TokenTypes.OpenParen, line, i)
+            var res = this.requireTokenAndValue(this.TokenTypes.Identifier, line, i)
             i += res[0]
             var id = res[1]
-            i += this.requireToken(TokenTypes.CloseParen, line, i)
+            i += this.requireToken(this.TokenTypes.CloseParen, line, i)
 
-            new CommandTag(id, this.processedScript.length)
+            new CommandTag(id, this.ElementTypes, this.processedScript.length, this.tags)
         }
     }
 
 
     parseHide(line) {
         for (var i = 0; i < line.length; i++) {
-            i += this.requireToken(TokenTypes.OpenParen, line, i)
-            var res = this.requireTokenAndValue(TokenTypes.QuotedString, line, i)
+            i += this.requireToken(this.TokenTypes.OpenParen, line, i)
+            var res = this.requireTokenAndValue(this.TokenTypes.QuotedString, line, i)
             i += res[0]
             var id = res[1]
-            i += this.requireToken(TokenTypes.CloseParen, line, i)
+            i += this.requireToken(this.TokenTypes.CloseParen, line, i)
 
-            this.processedScript.push(new CommandHide(id))
+            this.processedScript.push(new CommandHide(id, this.ElementTypes, this.getCharacterByName))
         }
     }
 
     parseJump(line) {
         for (var i = 0; i < line.length; i++) {
-            i += this.requireToken(TokenTypes.OpenParen, line, i)
-            var res = this.requireTokenAndValue(TokenTypes.Identifier, line, i)
+            i += this.requireToken(this.TokenTypes.OpenParen, line, i)
+            var res = this.requireTokenAndValue(this.TokenTypes.Identifier, line, i)
             i += res[0]
             var id = res[1]
-            i += this.requireToken(TokenTypes.CloseParen, line, i)
+            i += this.requireToken(this.TokenTypes.CloseParen, line, i)
 
-            this.processedScript.push(new CommandJump(id))
+            this.processedScript.push(new CommandJump(id, this.ElementTypes, this.jump))
         }
     }
 
     parseMenu(line) {
         for (var i = 0; i < line.length; i++) {
-            i += this.requireToken(TokenTypes.OpenParen, line, i)
-            var res = this.requireTokenAndValue(TokenTypes.QuotedString, line, i)
+            i += this.requireToken(this.TokenTypes.OpenParen, line, i)
+            var res = this.requireTokenAndValue(this.TokenTypes.QuotedString, line, i)
             i += res[0]
             var menuName = res[1]
-            i += this.requireToken(TokenTypes.Comma, line, i)
+            i += this.requireToken(this.TokenTypes.Comma, line, i)
 
-            var res = this.requireTokenAndValue(TokenTypes.Number, line, i)
+            var res = this.requireTokenAndValue(this.TokenTypes.Number, line, i)
             i += res[0]
             var menuItems = []
             var paramCount = res[1]
             while (paramCount > 0) {
                 var menuItem = []
 
-                i += this.requireToken(TokenTypes.Comma, line, i)
+                i += this.requireToken(this.TokenTypes.Comma, line, i)
 
-                var res = this.requireTokenAndValue(TokenTypes.QuotedString, line, i)
+                var res = this.requireTokenAndValue(this.TokenTypes.QuotedString, line, i)
                 i += res[0]
                 menuItem.push(res[1])
 
-                i += this.requireToken(TokenTypes.Comma, line, i)
+                i += this.requireToken(this.TokenTypes.Comma, line, i)
 
-                var res = this.requireTokenAndValue(TokenTypes.Identifier, line, i)
+                var res = this.requireTokenAndValue(this.TokenTypes.Identifier, line, i)
                 i += res[0]
                 menuItem.push(res[1])
 
                 menuItems.push(menuItem)
                 paramCount--
             }
-            i += this.requireToken(TokenTypes.CloseParen, line, i)
+            i += this.requireToken(this.TokenTypes.CloseParen, line, i)
 
-            this.processedScript.push(new CommandMenu(menuName, menuItems))
+            this.processedScript.push(new CommandMenu(menuName, menuItems, this))
         }
     }
 
     parseVariable(line) {
         for (var i = 0; i < line.length; i++) {
-            i += this.requireToken(TokenTypes.OpenParen, line, i)
-            var res = this.requireTokenAndValue(TokenTypes.Identifier, line, i)
+            i += this.requireToken(this.TokenTypes.OpenParen, line, i)
+            var res = this.requireTokenAndValue(this.TokenTypes.Identifier, line, i)
             i += res[0]
             var id = res[1]
-            i += this.requireToken(TokenTypes.Comma, line, i)
-            res = this.requireTokenAndValue(TokenTypes.Value, line, i)
+            i += this.requireToken(this.TokenTypes.Comma, line, i)
+            res = this.requireTokenAndValue(this.TokenTypes.Value, line, i)
             i += res[0]
             var val = res[1]
-            i += this.requireToken(TokenTypes.CloseParen, line, i)
+            i += this.requireToken(this.TokenTypes.CloseParen, line, i)
         }
 
-        this.processedScript.push(new CommandVariable(id, val))
+        this.processedScript.push(new CommandVariable(id, val, this.ElementTypes, this.variables))
     }
 
     parseConditional(line) {
         for (var i = 0; i < line.length; i++) {
-            i += this.requireToken(TokenTypes.OpenParen, line, i)
-            var res = this.requireTokenAndValue(TokenTypes.Identifier, line, i)
+            i += this.requireToken(this.TokenTypes.OpenParen, line, i)
+            var res = this.requireTokenAndValue(this.TokenTypes.Identifier, line, i)
             i += res[0]
             var variableName = res[1]
-            i += this.requireToken(TokenTypes.Comma, line, i)
-            res = this.requireTokenAndValue(TokenTypes.Identifier, line, i)
+            i += this.requireToken(this.TokenTypes.Comma, line, i)
+            res = this.requireTokenAndValue(this.TokenTypes.Identifier, line, i)
             i += res[0]
             var trueTag = res[1]
-            i += this.requireToken(TokenTypes.Comma, line, i)
-            res = this.requireTokenAndValue(TokenTypes.Identifier, line, i)
+            i += this.requireToken(this.TokenTypes.Comma, line, i)
+            res = this.requireTokenAndValue(this.TokenTypes.Identifier, line, i)
             i += res[0]
             var falseTag = res[1]
-            i += this.requireToken(TokenTypes.CloseParen, line, i)
+            i += this.requireToken(this.TokenTypes.CloseParen, line, i)
         }
 
-        this.processedScript.push(new CommandConditional(variableName, trueTag, falseTag))
+        this.processedScript.push(new CommandConditional(variableName, trueTag, falseTag, this.ElementTypes,  this.jump))
     }
 
     parseSetSprite(line) {
         for (var i = 0; i < line.length; i++) {
-            i += this.requireToken(TokenTypes.OpenParen, line, i)
-            var res = this.requireTokenAndValue(TokenTypes.QuotedString, line, i)
+            i += this.requireToken(this.TokenTypes.OpenParen, line, i)
+            var res = this.requireTokenAndValue(this.TokenTypes.QuotedString, line, i)
             i += res[0]
             var id = res[1]
-            i += this.requireToken(TokenTypes.Comma, line, i)
-            res = this.requireTokenAndValue(TokenTypes.Number, line, i)
+            i += this.requireToken(this.TokenTypes.Comma, line, i)
+            res = this.requireTokenAndValue(this.TokenTypes.Number, line, i)
             i += res[0]
             var val = res[1]
-            i += this.requireToken(TokenTypes.CloseParen, line, i)
+            i += this.requireToken(this.TokenTypes.CloseParen, line, i)
         }
-
-        this.processedScript.push(new CommandSetSprite(id, val))
+        this.processedScript.push(new CommandSetSprite(id, val, this))
     }
-
 
 
     //create processedScript which is an array of ScriptElement objects
     processInputFile() {
-
-        for (var line in this.inputFile) {
-            if (this.inputFile[line].startsWith("#") || this.inputFile[line].trim().length == 0) {
+        for (var line in this.sketch.inputFile) {
+            if (this.sketch.inputFile[line].startsWith("#") || this.sketch.inputFile[line].trim().length == 0) {
                 // do nothing with comments and empty lines
             }
-            else if (this.inputFile[line].startsWith("$")) {
-                if (this.inputFile[line].startsWith("$defineC")) {
-                    this.parseCharacter(this.inputFile[line].substring(8))
+            else if (this.sketch.inputFile[line].startsWith("$")) {
+                if (this.sketch.inputFile[line].startsWith("$defineC")) {
+                    this.parseCharacter(this.sketch.inputFile[line].substring(8))
                 }
-                else if (this.inputFile[line].startsWith("$defineImg")) {
-                    this.parseImage(this.inputFile[line].substring(10))
+                else if (this.sketch.inputFile[line].startsWith("$defineImg")) {
+                    this.parseImage(this.sketch.inputFile[line].substring(10))
                 }
-                else if (this.inputFile[line].startsWith("$bg")) {
-                    this.parseBG(this.inputFile[line].substring(3))
+                else if (this.sketch.inputFile[line].startsWith("$bg")) {
+                    this.parseBG(this.sketch.inputFile[line].substring(3))
                 }
-                else if (this.inputFile[line].startsWith("$show")) {
-                    this.parseShow(this.inputFile[line].substring(5))
+                else if (this.sketch.inputFile[line].startsWith("$show")) {
+                    this.parseShow(this.sketch.inputFile[line].substring(5))
                 }
-                else if (this.inputFile[line].startsWith("$hide")) {
-                    this.parseHide(this.inputFile[line].substring(5))
-                }
-                else if (this.inputFile[line].startsWith("$tag")) {
-                    this.parseTag(this.inputFile[line].substring(4))
-                }
-                else if (this.inputFile[line].startsWith("$jump")) {
-                    this.parseJump(this.inputFile[line].substring(5))
-                }
-                else if (this.inputFile[line].startsWith("$menu")) {
-                    this.parseMenu(this.inputFile[line].substring(5))
-                }
-                else if (this.inputFile[line].startsWith("$setVar")) {
-                    this.parseVariable(this.inputFile[line].substring(7))
-                }
+                // else if (this.sketch.inputFile[line].startsWith("$hide")) {
+                //     this.parseHide(this.sketch.inputFile[line].substring(5))
+                // }
+                // else if (this.sketch.inputFile[line].startsWith("$tag")) {
+                //     this.parseTag(this.sketch.inputFile[line].substring(4))
+                // }
+                // else if (this.sketch.inputFile[line].startsWith("$jump")) {
+                //     this.parseJump(this.sketch.inputFile[line].substring(5))
+                // }
+                // else if (this.sketch.inputFile[line].startsWith("$menu")) {
+                //     this.parseMenu(this.sketch.inputFile[line].substring(5))
+                // }
+                // else if (this.sketch.inputFile[line].startsWith("$setVar")) {
+                //     this.parseVariable(this.sketch.inputFile[line].substring(7))
+                // }
 
-                else if (this.inputFile[line].startsWith("$if")) {
-                    this.parseConditional(this.inputFile[line].substring(3))
-                }
+                // else if (this.sketch.inputFile[line].startsWith("$if")) {
+                //     this.parseConditional(this.sketch.inputFile[line].substring(3))
+                // }
 
-                else if (this.inputFile[line].startsWith("$setSprite")) {
-                    this.parseSetSprite(this.inputFile[line].substring(10))
-                }
+                // else if (this.sketch.inputFile[line].startsWith("$setSprite")) {
+                //     this.parseSetSprite(this.sketch.inputFile[line].substring(10))
+                // }
 
             }
             else {
                 // anything left is either an empty line, or a character name followed by dialog
-                if (this.inputFile[line].trim() == "END") {
-                    this.processedScript.push(new CommandEnd())
+                if (this.sketch.inputFile[line].trim() == "END") {
+                    this.processedScript.push(new CommandEnd(this.ElementTypes, this.CommandTypes, this.endText))
                 }
                 else {
 
-                    let splitRes = split(this.inputFile[line], ": ")
+                    let splitRes = split(this.sketch.inputFile[line], ": ")
 
                     if (splitRes[1]) {
                         var cmd = split(splitRes[1], "&")
                         if (!cmd[1])
-                            this.processedScript.push(new Dialog(splitRes[0], splitRes[1]))
+                        {
+                            this.processedScript.push(new Dialog(this, splitRes[0], splitRes[1], ))
+                        }
                         else
-                            this.processedScript.push(new Dialog(splitRes[0], cmd[0], cmd[1]))
+                            this.processedScript.push(new Dialog(this, splitRes[0], cmd[0], cmd[1]))
                     }
-                    else if (this.inputFile[line][0] == "&") {
+                    else if (this.sketch.inputFile[line][0] == "&") {
                     }
                 }
             }
-
         }
     }
 
     getPositionInstructions() {
-        if (this.inputFile[this.currentIndex][1][1]) {
+        if (this.sketch.inputFile[this.currentIndex][1][1]) {
             return
         }
     }
 
     getCharacterByName(nameString) {
-
-        for (i = 0; i <= this.characters.length; i++) {
+        for (var i = 0; i <= this.characters.length; i++) {
             if (this.characters[i].name === nameString) {
                 return this.characters[i]
             }
@@ -603,8 +626,8 @@ export class Engine {
 
 
     getImageByName(nameString) {
-
-        for (i = 0; i <= this.images.length; i++) {
+        // if (this.images == undefined) return null
+        for (var i = 0; i <= this.images.length; i++) {
             if (this.images[i].name === nameString) {
                 return this.images[i]
             }
@@ -614,19 +637,20 @@ export class Engine {
 
 
     setup() {
-        this.sketch.createCanvas(min(windowWidth,800), min(windowHeight,600));
-        this.ratioY = height/600
-        this.ratioX = width/800
+        // this.sketch.createCanvas(this.sketch.min(this.sketch.windowWidth,800), this.sketch.min(this.sketch.windowHeight,600));
+        // this.ratioY = this.sketch.min(this.sketch.windowHeight)/height;
+        // this.ratioX = this.sketch.min(this.sketch.windowWidth)/width;
+        this.ratioY = 1;
+        this.ratioX = 1;
     
         this.ratio = this.ratioY;
         
-        this.reset()
+        this.reset();
         // song.playMode('restart')
         // song.play()
-        //TODO AJOUTER L'import de scribble.js
         this.scribble = new Scribble();
-        this.scribble.bowing = 0
-        this.scribble.maxOffset = .1
+        this.scribble.bowing = 0;
+        this.scribble.maxOffset = .1;
         this.scribble.roughness = 10;
     }
 
@@ -639,7 +663,6 @@ export class Engine {
 
             } else {
                 this.currentIndex++
-
             }
 
         }
@@ -654,63 +677,13 @@ export class Engine {
         this.sketch.fill(255)
         this.sketch.stroke(0)
         this.sketch.strokeWeight(8*this.ratio)
-        this.sketch.textFont(font)
+        this.sketch.textFont(this.sketch.font)
         this.sketch.textAlign(LEFT)
 
         this.processedScript[this.currentIndex].render()
-
-        if (this.processedScript[this.currentIndex].type == this.ElementTypes.COMMAND && this.processedScript[this.currentIndex].commandType != CommandTypes.END) {
+        if (this.processedScript[this.currentIndex].type == this.ElementTypes.COMMAND && this.processedScript[this.currentIndex].commandType != this.CommandTypes.END) {
             this.mouseReleased()
         }
-    }
-
-    draw() {
-        if (this.gameStarted) {
-            this.sketch.background(220);
-
-            if (this.currentBackground != null) {
-                this.sketch.imageMode(CORNER)
-                this.sketch.image(this.currentBackground, 0, 0, width, height)
-            }
-            else {
-                this.sketch.background(0)
-            }
-
-            this.sketch.stroke(150, 150, 255)
-
-            this.sketch.drawAllCharacterSprites()
-
-            if (this.enableGUI) {
-                this.renderGUI()
-            }
-            if (this.enableText) {
-                this.renderText()
-            }
-            
-        }
-
-        else {
-        
-            this.sketch.push()
-            this.sketch.imageMode(CORNER)
-            this.sketch.image(title, 0, 0, width, height)
-            this.sketch.pop()
-            this.sketch.push()
-            this.startButton.draw()
-            this.sketch.pop()
-            this.sketch.push()
-            this.sketch.textAlign(CENTER, CENTER)
-            this.sketch.rectMode(CENTER)
-            this.sketch.fill(255)
-            this.sketch.stroke(0)
-            this.sketch.strokeWeight(8*this.ratio)
-            this.sketch.textFont(font)
-
-            this.sketch.textSize(24*this.ratio)
-            this.sketch.text("Start", width / 2, startButton.y + startButton.height / 2)
-            this.sketch.pop()
-        }
-
     }
 
     drawAllCharacterSprites() {
@@ -727,9 +700,9 @@ export class Engine {
         }
     }
 
-    windowResized() {
-    resizeCanvas(min(windowWidth,800), min(windowHeight,600))
-    }
+    // windowResized() {
+    //     this.sketch.resizeCanvas(this.sketch.min(this.sketch.windowWidth,800), this.sketch.min(this.sketch.windowHeight,600))
+    // }
 }
 
 class ScriptElement {
@@ -740,22 +713,24 @@ class ScriptElement {
 }
 
 class Character {
-    constructor(name, charColor = 255, path = [], xpos = width / 2, ypos = height / 2,) {
+    constructor(engine, name, charColor = 255, path = [], framesNb = 10, xpos = width / 2, ypos = height / 2) {
         this.name = name
         this.charColor = charColor
         this.path = path
         this.xpos = xpos
         this.ypos = ypos
         this.lastSprite = 0
+        this.engine = engine
 
         this.sprites = []
         if (path.length) {
-            for (let i = 1; i <= 10; i++) {
+            for (let i = 1; i <= framesNb; i++) {
                 var suffix = i.toString().padStart(2, '0')
-                loadImage(path + "/" + name + suffix + ".png", img => { if (img != null) this.sprites[i] = img })
+                this.engine.sketch.loadImage(path + "/" + name + suffix + ".png", img => { if (img != null) this.sprites[i] = img })
+
             } //TODO Faire en sorte que la vidéo soit chargée
         }
-        characters.push(this)
+        // this.engine.characters.push(this)
 
         this.currentSprite = 0
     }
@@ -777,22 +752,21 @@ class Character {
     drawSprite() { //TODO Ajouter une fonction pour la lecture de vidéo
         if (this.path.length) {
             if (this.currentSprite != 0 && this.sprites[this.currentSprite] != null) {
-                imageMode(CENTER)
-                
-                  this.sprites[this.currentSprite].resize(this.sprites[this.currentSprite].width * ratioX, this.sprites[this.currentSprite].height * ratioY)
-                  
-                
-                image(this.sprites[this.currentSprite], this.xpos, this.ypos)
+                this.engine.sketch.imageMode(CENTER)
+                console.log(this.sprites[this.currentSprite].width, this.sprites[this.currentSprite].height)
+                // console.log(this.sprites[this.currentSprite].width * this.engine.ratioX, this.sprites[this.currentSprite].height * this.engine.ratioY)
+                this.sprites[this.currentSprite].resize(this.sprites[this.currentSprite].width * this.engine.ratioX, this.sprites[this.currentSprite].height * this.engine.ratioY)
+                this.engine.sketch.image(this.sprites[this.currentSprite], this.xpos, this.ypos)
             }
         }
     }
 }
 
 class MyImage {
-    constructor(name, path) {
+    constructor(name, path, images, sketch) {
         this.name = name
         this.path = path
-        loadImage(path, img => { this.p5Image = img })
+        sketch.loadImage(path, img => { this.p5Image = img })
         images.push(this)
 
         this.currentSprite = 0
@@ -805,7 +779,7 @@ class MyImage {
 
 
 class CommandTag extends ScriptElement {
-    constructor(tagName, lineNumber) {
+    constructor(tagName, ElementTypes,  lineNumber, tags) {
         super(ElementTypes.COMMAND)
         this.tagName = tagName
         this.lineNumber = lineNumber
@@ -816,12 +790,13 @@ class CommandTag extends ScriptElement {
 }
 
 class CommandEnd extends ScriptElement {
-    constructor() {
-        super(ElementTypes.COMMAND, CommandTypes.END)
+    constructor(ElementTypes, CommandTypes, endText) {
+        super(ElementTypes.COMMAND, CommandTypes.END);
+        this.endText = endText;
     }
 
     render() {
-        text(endText, 40, 460, 540, height - 40)
+        text(this.endText, 40, 460, 540, height - 40)
         
 
     
@@ -829,19 +804,21 @@ class CommandEnd extends ScriptElement {
 }
 
 class CommandBG extends ScriptElement {
-    constructor(name) {
-        super(ElementTypes.COMMAND)
-        this.name = name
+    constructor(name, engine) {
+        super(engine.ElementTypes.COMMAND)
+        this.name = name;
+        this.engine = engine;
         if (this.name != "none") {
-            this.myImage = getImageByName(name)
+            //TODO check if the image exists
+            this.myImage = this.engine.getImageByName(name)
         }
     }
 
     render() {
         if (this.name == "none") {
-            currentBackground = null
+            this.engine.currentBackground = null
         } else {
-            currentBackground = this.myImage.p5Image
+            this.engine.currentBackground = this.myImage.p5Image
 
         }
 
@@ -850,14 +827,15 @@ class CommandBG extends ScriptElement {
 
 
 class CommandShow extends ScriptElement {
-    constructor(name, pos) {
-        super(ElementTypes.COMMAND)
+    constructor(name, pos, engine) {
+        super(engine.ElementTypes.COMMAND)
         this.characterName = name
         this.pos = pos
+        this.engine = engine
     }
 
     render() {
-        var char = getCharacterByName(this.characterName)
+        var char = this.engine.getCharacterByName(this.characterName)
         char.setPos(this.pos)
         if (char.lastSprite == 0) {
             char.setSprite(1)
@@ -870,31 +848,33 @@ class CommandShow extends ScriptElement {
 }
 
 class CommandHide extends ScriptElement {
-    constructor(name) {
+    constructor(name, ElementTypes, getCharacterByName) {
         super(ElementTypes.COMMAND)
         this.characterName = name
+        this.getCharacterByName = getCharacterByName
     }
 
     render() {
-        var char = getCharacterByName(this.characterName)
+        var char = this.getCharacterByName(this.characterName)
         char.setSprite(0)
         // Hide 
     }
 }
 
 class CommandJump extends ScriptElement {
-    constructor(tagName) {
+    constructor(tagName, ElementTypes, jump) {
         super(ElementTypes.COMMAND)
         this.tagName = tagName
+        this.jump = jump
     }
 
     render() {
-        jump(this.tagName)
+        this.jump(this.tagName)
     }
 }
 
 class CommandVariable extends ScriptElement {
-    constructor(Name, ValueToSet) {
+    constructor(Name, ValueToSet, ElementTypes, variables) {
         super(ElementTypes.COMMAND)
         this.name = Name
         this.value = ValueToSet
@@ -908,28 +888,28 @@ class CommandVariable extends ScriptElement {
 }
 
 class CommandConditional extends ScriptElement {
-    constructor(variableName, trueTag, falseTag) {
+    constructor(variableName, trueTag, falseTag, ElementTypes, jump) {
         super(ElementTypes.COMMAND)
         this.variableName = variableName
         this.trueTag = trueTag
         this.falseTag = falseTag
-
+        this.jump = jump
     }
 
     render() {
         if (variables[this.variableName] === "true") {
-            jump(this.trueTag)
+            this.jump(this.trueTag)
         } else {
-            jump(this.falseTag)
+            this.jump(this.falseTag)
         }
 
     }
 }
 
 class CommandSetSprite extends ScriptElement {
-    constructor(charName, spriteIndex) {
-        super(ElementTypes.COMMAND)
-        this.character = getCharacterByName(charName)
+    constructor(charName, spriteIndex, engine) {
+        super(engine.ElementTypes.COMMAND)
+        this.character = engine.getCharacterByName(charName)
         this.spriteIndex = spriteIndex
     }
 
@@ -940,36 +920,37 @@ class CommandSetSprite extends ScriptElement {
 }
 
 class CommandMenu extends ScriptElement {
-    constructor(menuName, menuItems) {
-        super(ElementTypes.MENU)
+    constructor(menuName, menuItems, engine) {
+        super(engine.ElementTypes.MENU)
         this.menuName = menuName
         this.menuItems = menuItems
         this.everdrawn = false
         this.buttons = []
-        menus.push(this)
+        this.engine = engine
+        engine.menus.push(this)
     }
 
     handleClick(item) { //* A appeler lors d'un signe
-        canAdvance = true
-        enableGUI = true
-        jump(this.menuItems[item][1])
+        this.engine.canAdvance = true
+        this.engine.enableGUI = true
+        this.engine.jump(this.menuItems[item][1])
     }
 
     handleHover(item) { //* Plus utile
-        push()
+        this.engine.sketch.push()
         this.buttons[item].color = "#FFFFFFC0"
-        pop()
+        this.engine.sketch.pop()
     }
 
     handleOutside(item) { //* Plus utile
-        push()
+        this.engine.sketch.push()
         this.buttons[item].color = "#FFFFFF80"
-        pop()
+        this.engine.sketch.pop()
     }
 
     render() {
-        canAdvance = false
-        enableGUI = false
+        this.engine.canAdvance = false
+        this.engine.enableGUI = false
         if (!this.everdrawn) {
             for (let i = 0; i < this.menuItems.length; i++) {
                 this.buttons.push(new Clickable())
@@ -988,54 +969,54 @@ class CommandMenu extends ScriptElement {
                 this.buttons[i].height = ((height - 50) / this.menuItems.length) * .50
                 let menuName = this.menuName
                 this.buttons[i].onHover = function () { //* Plus utile
-                    return handleMenuHover(menuName, i);
+                    return this.engine.handleMenuHover(menuName, i);
                 }
 
                 this.buttons[i].onOutside = function () { //* Plus utile
-                    return handleMenuOutside(menuName, i)
+                    return this.engine.handleMenuOutside(menuName, i)
                 }
 
                 this.buttons[i].onRelease = function () { //* A appeler lors d'un signe
-                    return handleMenuClick(menuName, i)
+                    return this.engine.handleMenuClick(menuName, i)
                 }
             }
             this.everdrawn = true
         }
         for (let i = 0; i < this.menuItems.length; i++) {
-            push()
+            this.engine.sketch.push()
             this.buttons[i].draw()
-            pop()
+            this.engine.sketch.pop()
 
-            push()
-            textAlign(CENTER, CENTER)
-            textSize(24*ratio)
-            text(this.menuItems[i][0], width / 2, 50 + (((height - 50) / this.menuItems.length) * i) + (this.buttons[i].height / 2))
-            pop()
+            this.engine.sketch.push()
+            this.engine.sketch.textAlign(CENTER, CENTER)
+            this.engine.sketch.textSize(24*ratio)
+            this.engine.sketch.text(this.menuItems[i][0], width / 2, 50 + (((height - 50) / this.menuItems.length) * i) + (this.buttons[i].height / 2))
+            this.engine.sketch.pop()
         }
     }
 }
 
 
-
-
 class Dialog extends ScriptElement {
-    constructor(characterName, dialog, command = null) {
-        super(ElementTypes.DIALOG)
+    constructor(engine, characterName, dialog, command = null) {
+        super(engine.ElementTypes.DIALOG)
         this.characterName = characterName
         this.dialog = dialog
         this.command = command
+        this.engine = engine
+
     }
 
     render() {
-        textAlign(LEFT)
+        this.engine.sketch.textAlign(LEFT)
 
         if (this.characterName != "N") {
 
-            textSize(24* ratio)
-            var char = getCharacterByName(this.characterName)
+            this.engine.sketch.textSize(24* this.engine.ratio)
+            var char = this.engine.getCharacterByName(this.characterName)
             fill(char.charColor)
 
-            text(this.characterName + ":", 20*ratioX, 420*ratioY, width / 2, 460*ratioY)
+            text(this.characterName + ":", 20*this.engine.ratioX, 420*this.engine.ratioY, width / 2, 460*this.engine.ratioY)
 
             if (this.command && this.command.length) {
                 if (this.command.includes("LEFT"))
@@ -1046,13 +1027,8 @@ class Dialog extends ScriptElement {
                     char.setPos("CENTER")
             }
         }
-        textSize(20* ratioY)
-        fill(255)
-        text(this.dialog, 40*ratioX, 460*ratioY, 740*ratioX, height - 40)
+        this.engine.sketch.textSize(20* this.engine.ratioY)
+        this.engine.sketch.fill(255)
+        this.engine.sketch.text(this.dialog, 40*this.engine.ratioX, 460*this.engine.ratioY, 740*this.engine.ratioX, height - 40)
     }
 }
-
-
-
-
-

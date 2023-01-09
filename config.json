@@ -11,7 +11,7 @@
         "y_offset": 100
     },
     "applications": {
-        "startup": ["menu", "hands", "body", "face","sign_training"],
+        "startup": ["hands", "sign_game"],
         "disabled": ["bounce", "raw_hands", "show_ping", "score_player", "show_frequency", "sign_language"]
     },
     "microphone": {
