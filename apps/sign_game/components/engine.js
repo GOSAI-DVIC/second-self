@@ -534,29 +534,29 @@ export class Engine {
                 else if (this.sketch.inputFile[line].startsWith("$show")) {
                     this.parseShow(this.sketch.inputFile[line].substring(5))
                 }
-                // else if (this.sketch.inputFile[line].startsWith("$hide")) {
-                //     this.parseHide(this.sketch.inputFile[line].substring(5))
-                // }
-                // else if (this.sketch.inputFile[line].startsWith("$tag")) {
-                //     this.parseTag(this.sketch.inputFile[line].substring(4))
-                // }
-                // else if (this.sketch.inputFile[line].startsWith("$jump")) {
-                //     this.parseJump(this.sketch.inputFile[line].substring(5))
-                // }
-                // else if (this.sketch.inputFile[line].startsWith("$menu")) {
-                //     this.parseMenu(this.sketch.inputFile[line].substring(5))
-                // }
-                // else if (this.sketch.inputFile[line].startsWith("$setVar")) {
-                //     this.parseVariable(this.sketch.inputFile[line].substring(7))
-                // }
+                else if (this.sketch.inputFile[line].startsWith("$hide")) {
+                    this.parseHide(this.sketch.inputFile[line].substring(5))
+                }
+                else if (this.sketch.inputFile[line].startsWith("$tag")) {
+                    this.parseTag(this.sketch.inputFile[line].substring(4))
+                }
+                else if (this.sketch.inputFile[line].startsWith("$jump")) {
+                    this.parseJump(this.sketch.inputFile[line].substring(5))
+                }
+                else if (this.sketch.inputFile[line].startsWith("$menu")) {
+                    this.parseMenu(this.sketch.inputFile[line].substring(5))
+                }
+                else if (this.sketch.inputFile[line].startsWith("$setVar")) {
+                    this.parseVariable(this.sketch.inputFile[line].substring(7))
+                }
 
-                // else if (this.sketch.inputFile[line].startsWith("$if")) {
-                //     this.parseConditional(this.sketch.inputFile[line].substring(3))
-                // }
+                else if (this.sketch.inputFile[line].startsWith("$if")) {
+                    this.parseConditional(this.sketch.inputFile[line].substring(3))
+                }
 
-                // else if (this.sketch.inputFile[line].startsWith("$setSprite")) {
-                //     this.parseSetSprite(this.sketch.inputFile[line].substring(10))
-                // }
+                else if (this.sketch.inputFile[line].startsWith("$setSprite")) {
+                    this.parseSetSprite(this.sketch.inputFile[line].substring(10))
+                }
 
             }
             else {
@@ -640,6 +640,9 @@ export class Engine {
         // this.sketch.createCanvas(this.sketch.min(this.sketch.windowWidth,800), this.sketch.min(this.sketch.windowHeight,600));
         // this.ratioY = this.sketch.min(this.sketch.windowHeight)/height;
         // this.ratioX = this.sketch.min(this.sketch.windowWidth)/width;
+        // this.ratioY = height/600
+        // this.ratioX = width/800
+        // console.log(this.ratioX, this.ratioY)
         this.ratioY = 1;
         this.ratioX = 1;
     
@@ -700,9 +703,12 @@ export class Engine {
         }
     }
 
-    // windowResized() {
-    //     this.sketch.resizeCanvas(this.sketch.min(this.sketch.windowWidth,800), this.sketch.min(this.sketch.windowHeight,600))
-    // }
+    windowResized() {
+        // console.log(this.sketch.windowWidth, this.sketch.windowHeight)
+        this.sketch.resizeCanvas(this.sketch.min(this.sketch.windowWidth, 800), this.sketch.min(this.sketch.windowHeight, 600))
+        // this.sketch.resizeCanvas(this.sketch.min(this.sketch.windowWidth, width), this.sketch.min(this.sketch.windowHeight, height))
+        // this.sketch.resizeCanvas(width, height)
+    }
 }
 
 class ScriptElement {
@@ -725,8 +731,13 @@ class Character {
         this.sprites = []
         if (path.length) {
             for (let i = 1; i <= framesNb; i++) {
-                var suffix = i.toString().padStart(2, '0')
-                this.engine.sketch.loadImage(path + "/" + name + suffix + ".png", img => { if (img != null) this.sprites[i] = img })
+                var suffix = i.toString().padStart(2, '0')  
+                // console.log("loading image at " + path + "/" + name + suffix + ".png")
+                this.engine.sketch.loadImage(path + "/" + name + suffix + ".png", img => { 
+                    if (img != null) {
+                        this.sprites[i] = img;
+                    }
+                })
 
             } //TODO Faire en sorte que la vidéo soit chargée
         }
@@ -753,10 +764,14 @@ class Character {
         if (this.path.length) {
             if (this.currentSprite != 0 && this.sprites[this.currentSprite] != null) {
                 this.engine.sketch.imageMode(CENTER)
-                console.log(this.sprites[this.currentSprite].width, this.sprites[this.currentSprite].height)
+                // console.log(this.engine.ratioX, this.engine.ratioY)
                 // console.log(this.sprites[this.currentSprite].width * this.engine.ratioX, this.sprites[this.currentSprite].height * this.engine.ratioY)
+                console.log(this.sprites[this.currentSprite].width, this.sprites[this.currentSprite].height)
+                // this.sprites[this.currentSprite].resize(this.sprites[this.currentSprite].width * this.engine.ratioX, this.sprites[this.currentSprite].height * this.engine.ratioY)
                 this.sprites[this.currentSprite].resize(this.sprites[this.currentSprite].width * this.engine.ratioX, this.sprites[this.currentSprite].height * this.engine.ratioY)
-                this.engine.sketch.image(this.sprites[this.currentSprite], this.xpos, this.ypos)
+                // console.log(this.sprites[this.currentSprite].pixels)
+                // this.engine.sketch.image(this.sprites[this.currentSprite], this.xpos, this.ypos)
+                this.engine.sketch.image(this.sprites[this.currentSprite], 100,100)
             }
         }
     }
@@ -797,9 +812,6 @@ class CommandEnd extends ScriptElement {
 
     render() {
         text(this.endText, 40, 460, 540, height - 40)
-        
-
-    
     }
 }
 

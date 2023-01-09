@@ -16,15 +16,15 @@ class Application(BaseApplication):
     def listener(self, source, event, data):
         super().listener(source, event, data)
         
-        if self.started and source == "slr" and event == "new_sign":
-            self.data = data
-            if self.data is not None:
-                self.data = {
-                    "guessed_sign": self.data["guessed_sign"], 
-                    "probability": self.data["probability"], 
-                    "actions": self.data["actions"] 
-                }
-                self.server.send_data(f'applications-{self.name}-{event}', self.data)
+        # if self.started and source == "slr" and event == "new_sign":
+        #     self.data = data
+        #     if self.data is not None:
+        #         self.data = {
+        #             "guessed_sign": self.data["guessed_sign"], 
+        #             "probability": self.data["probability"], 
+        #             "actions": self.data["actions"] 
+        #         }
+        #         self.server.send_data(f'applications-{self.name}-{event}', self.data)
 
         # if source == "pose_to_mirror" and event == "mirrored_data":
         #     self.data = {
