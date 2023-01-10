@@ -764,14 +764,8 @@ class Character {
         if (this.path.length) {
             if (this.currentSprite != 0 && this.sprites[this.currentSprite] != null) {
                 this.engine.sketch.imageMode(CENTER)
-                // console.log(this.engine.ratioX, this.engine.ratioY)
-                // console.log(this.sprites[this.currentSprite].width * this.engine.ratioX, this.sprites[this.currentSprite].height * this.engine.ratioY)
-                console.log(this.sprites[this.currentSprite].width, this.sprites[this.currentSprite].height)
-                // this.sprites[this.currentSprite].resize(this.sprites[this.currentSprite].width * this.engine.ratioX, this.sprites[this.currentSprite].height * this.engine.ratioY)
                 this.sprites[this.currentSprite].resize(this.sprites[this.currentSprite].width * this.engine.ratioX, this.sprites[this.currentSprite].height * this.engine.ratioY)
-                // console.log(this.sprites[this.currentSprite].pixels)
-                // this.engine.sketch.image(this.sprites[this.currentSprite], this.xpos, this.ypos)
-                this.engine.sketch.image(this.sprites[this.currentSprite], 100,100)
+                this.engine.sketch.image(this.sprites[this.currentSprite], this.xpos, this.ypos)
             }
         }
     }

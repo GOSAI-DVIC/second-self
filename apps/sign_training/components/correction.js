@@ -107,17 +107,13 @@ export class Correction {
         if (!this.isDataLoaded) return;
         if (this.sample_pose_frames == undefined || this.sample_pose_frames.length <= 0) return;
 
-        console.log(this.sample_pose_frames)
         if (Object.keys(this.sample_pose_frames).length != this.files_length) return
-        
 
         if (!this.init) {
             this.init = true;
 
             let mirror_nose_reference = this.body_pose[0].slice(0, 2); // Current nose postion of the user
             let mirror_left_hip_reference = this.body_pose[24].slice(0, 2); // Current left hip postion of the user
-            console.log(this.sample_pose_frames[0])
-            console.log(this.sample_pose_frames[0]["body"])
             let sample_nose_reference = this.sample_pose_frames[0]["body"][0].slice(0, 2); // Position in pixels of the first nose of this.sample_pose_frames
             let sample_left_hip_reference = this.sample_pose_frames[0]["body"][24].slice(0, 2); // Position in pixels of the first left_hip of this.sample_pose_frames
 

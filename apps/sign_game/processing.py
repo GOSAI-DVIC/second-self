@@ -6,7 +6,7 @@ class Application(BaseApplication):
 
     def __init__(self, name, hal, server, manager):
         super().__init__(name, hal, server, manager)
-        self.requires["slr"] = ["new_sign"]
+        # self.requires["slr"] = ["new_sign"]
         # self.requires["pose_to_mirror"] = ["mirrored_data"]
 
         self.is_exclusive = True
