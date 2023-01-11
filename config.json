@@ -10,7 +10,7 @@
         "y_offset": 100
     },
     "applications": {
-        "startup": ["menu", "hands", "body", "face"],
+        "startup": ["menu", "body", "face", "hands", "slr_correction_cables"],
         "disabled": ["bounce", "raw_hands", "show_ping", "score_player", "show_frequency", "sign_language"]
     },
     "microphone": {
