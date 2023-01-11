@@ -100,7 +100,7 @@ export class Menu {
         for (let app in this.started_applications) 
         {
             const app_name = this.started_applications[app].name;
-            if (app_name != "menu" && app_name != "body" && app_name != "face" && app_name != "hands" || sketch.millis() - this.last_interraction_time < 10000) this.display_tips = false;    
+            if (app_name != "menu" && app_name != "body" && app_name != "face" && app_name != "hands" && app_name !=  "slr_correction_cables"|| sketch.millis() - this.last_interraction_time < 10000) this.display_tips = false;    
         }
 
         if (
