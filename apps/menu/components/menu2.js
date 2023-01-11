@@ -136,7 +136,7 @@ export class Menu {
         if (this.display_tips) {
             sketch.fill(155);
             sketch.strokeWeight(2);
-            sketch.textSize(20);
+            sketch.textSize(30);
             sketch.text(`Activate the bubble with the right index finger to launch applications`, width/2 - 25, height-50);
         }
         
