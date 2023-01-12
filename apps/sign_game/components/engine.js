@@ -974,13 +974,13 @@ class CommandMenu extends ScriptElement {
                 this.buttons[i].width = (width / 2)
                 this.buttons[i].height = ((height - 50) / this.menuItems.length) * .50
                 let menuName = this.menuName
-                this.buttons[i].onHover = function () { //* Plus utile
-                    return this.engine.handleMenuHover(menuName, i);
-                }
+                // this.buttons[i].onHover = function () { //* Plus utile
+                //     return this.engine.handleMenuHover(menuName, i);
+                // }
 
-                this.buttons[i].onOutside = function () { //* Plus utile
-                    return this.engine.handleMenuOutside(menuName, i)
-                }
+                // this.buttons[i].onOutside = function () { //* Plus utile
+                //     return this.engine.handleMenuOutside(menuName, i)
+                // }
 
                 this.buttons[i].onRelease = function () { //* A appeler lors d'un signe
                     return this.engine.handleMenuClick(menuName, i)
