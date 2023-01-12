@@ -2,6 +2,12 @@ export class Engine {
     constructor(sketch) {
         //VN ENGINE SCRIPT by SmexGames
         // this.sketch.inputFile = [];
+        // targeted_signs contient les signes à reproduire sur le moment
+        // la value de chacun est son count de validation
+        this.guessed_sign = "";
+        this.valid_sign = "";
+        this.targeted_signs = {};
+
         this.processedScript = [];
         this.currentIndex = 0;
         this.endText = "-End of Script-";
@@ -16,7 +22,7 @@ export class Engine {
         this.state = 0;
         this.currentBackground;
         this.variables = new Object;
-        this.gameStarted = false;
+        this.gameStarted = true;
         this.ratio;
         this.ratioX;
         this.ratioY;
@@ -66,6 +72,20 @@ export class Engine {
         Object.freeze(this.Keywords)
         // this.preload();
         // this.setup()
+
+        sketch.mouseReleased = () => {
+            if (this.canAdvance) {
+                if (this.currentIndex + 1 >= this.processedScript.length) {
+                    this.currentIndex = 0
+                    this.gameStarted = false
+                    this.reset()
+    
+                } else {
+                    this.currentIndex++;
+                }
+    
+            }
+        }
     }
 
     show() {
@@ -93,7 +113,18 @@ export class Engine {
         }
     }
 
-    update() {}
+    update() {
+        if (Object.keys(this.targeted_signs).includes(this.guessed_sign) ) {
+            this.targeted_signs[this.guessed_sign] += 1;
+        }
+        else {
+            this.targeted_signs[this.guessed_sign] = 0;
+        }
+
+        if (this.targeted_signs[this.guessed_sign] >= 6)  { 
+            this.valid_sign = this.guessed_sign;
+        }
+    }
 
     update_sign_data(results) {
         this.guessed_sign = results.guessed_sign;
@@ -108,6 +139,9 @@ export class Engine {
     }
 
     reset() {
+        this.count_valid = 0;
+        this.targeted_signs = [];
+
         this.processedScript = []
         this.currentIndex = 0
         this.characters = []
@@ -143,11 +177,6 @@ export class Engine {
         for (var i = 0; i < this.processedScript.length - 1; i++) {
             if (this.processedScript[i].type == this.ElementTypes.DIALOG) {
                 if (!this.isCharacterDefined(this.processedScript[i].characterName)) {
-
-                    // for (let char of this.characters) {
-                    //     console.log(char.name)
-                    // }
-                    // console.log("\n")
                     var c = new Character(this, this.processedScript[i].characterName);
                     this.characters.push(c)
                 }
@@ -156,19 +185,10 @@ export class Engine {
     }
 
     isCharacterDefined(name) {
-        // for (let char of this.characters) {
-        //     console.log(char.name)
-        // }
-        // console.log("\n")
         for (let char of this.characters) {
             if (char.name === name) {
-                // console.log("Character " + name + " is already defined")
                 return true
             }
-            // else {
-            //     console.log("Character " + name + " is not defined in");
-            //     console.log(this.characters);
-            // }
         }
         return false
     }
@@ -183,13 +203,13 @@ export class Engine {
         menu.handleClick(item)
     }
     
-    handleMenuHover(menuName, item) { //* Plus utile
+    handleMenuHover(menuName, item) {
         var menu = this.getMenuByName(menuName)
         menu.handleHover(item)
     
     }
     
-    handleMenuOutside(menuName, item) { //* Plus utile
+    handleMenuOutside(menuName, item) {
         var menu = this.getMenuByName(menuName)
         menu.handleOutside(item)
     }
@@ -358,7 +378,7 @@ export class Engine {
             i += this.requireToken(this.TokenTypes.CloseParen, line, i)
 
             // the contructor actually places these in an array, as a convenience
-            new MyImage(id, path, this.images, this.sketch)
+            new MyImage(id, path, this)
         }
     }
 
@@ -397,8 +417,8 @@ export class Engine {
             i += res[0]
             var id = res[1]
             i += this.requireToken(this.TokenTypes.CloseParen, line, i)
-
-            new CommandTag(id, this.ElementTypes, this.processedScript.length, this.tags)
+            console.log(this.lineNumber)
+            new CommandTag(id, this)
         }
     }
 
@@ -411,7 +431,7 @@ export class Engine {
             var id = res[1]
             i += this.requireToken(this.TokenTypes.CloseParen, line, i)
 
-            this.processedScript.push(new CommandHide(id, this.ElementTypes, this.getCharacterByName))
+            this.processedScript.push(new CommandHide(id, this))
         }
     }
 
@@ -423,7 +443,7 @@ export class Engine {
             var id = res[1]
             i += this.requireToken(this.TokenTypes.CloseParen, line, i)
 
-            this.processedScript.push(new CommandJump(id, this.ElementTypes, this.jump))
+            this.processedScript.push(new CommandJump(id, this.ElementTypes, this))
         }
     }
 
@@ -476,7 +496,7 @@ export class Engine {
             i += this.requireToken(this.TokenTypes.CloseParen, line, i)
         }
 
-        this.processedScript.push(new CommandVariable(id, val, this.ElementTypes, this.variables))
+        this.processedScript.push(new CommandVariable(id, val, this))
     }
 
     parseConditional(line) {
@@ -496,7 +516,7 @@ export class Engine {
             i += this.requireToken(this.TokenTypes.CloseParen, line, i)
         }
 
-        this.processedScript.push(new CommandConditional(variableName, trueTag, falseTag, this.ElementTypes,  this.jump))
+        this.processedScript.push(new CommandConditional(variableName, trueTag, falseTag, this))
     }
 
     parseSetSprite(line) {
@@ -562,7 +582,7 @@ export class Engine {
             else {
                 // anything left is either an empty line, or a character name followed by dialog
                 if (this.sketch.inputFile[line].trim() == "END") {
-                    this.processedScript.push(new CommandEnd(this.ElementTypes, this.CommandTypes, this.endText))
+                    this.processedScript.push(new CommandEnd(this))
                 }
                 else {
 
@@ -603,7 +623,7 @@ export class Engine {
 
     getMenuByName(nameString) {
 
-        for (i = 0; i <= this.menus.length; i++) {
+        for (var i = 0; i <= this.menus.length; i++) {
             if (this.menus[i].menuName === nameString) {
                 return this.menus[i]
             }
@@ -615,8 +635,8 @@ export class Engine {
 
     getTagByName(nameString) {
 
-        for (i = 0; i <= this.tags.length; i++) {
-            if (this.tags[i][0] === nameString) {
+        for (var i = 0; i < this.tags.length; i++) {
+                if (this.tags[i][0] === nameString) {
                 return this.tags[i]
             }
         }
@@ -626,8 +646,8 @@ export class Engine {
 
 
     getImageByName(nameString) {
-        // if (this.images == undefined) return null
-        for (var i = 0; i <= this.images.length; i++) {
+        // if (this.images == undefined) return null //TODO a retirer
+        for (var i = 0; i < this.images.length; i++) { //* anciennement i <=
             if (this.images[i].name === nameString) {
                 return this.images[i]
             }
@@ -657,19 +677,7 @@ export class Engine {
         this.scribble.roughness = 10;
     }
 
-    mouseReleased() {
-        if (this.canAdvance) {
-            if (this.currentIndex + 1 >= this.processedScript.length) {
-                this.currentIndex = 0
-                this.gameStarted = false
-                this.reset()
 
-            } else {
-                this.currentIndex++
-            }
-
-        }
-    }
 
     renderGUI() {
         this.sketch.strokeWeight(4*this.ratio)
@@ -684,8 +692,9 @@ export class Engine {
         this.sketch.textAlign(LEFT)
 
         this.processedScript[this.currentIndex].render()
+
         if (this.processedScript[this.currentIndex].type == this.ElementTypes.COMMAND && this.processedScript[this.currentIndex].commandType != this.CommandTypes.END) {
-            this.mouseReleased()
+            this.sketch.mouseReleased()
         }
     }
 
@@ -703,12 +712,7 @@ export class Engine {
         }
     }
 
-    windowResized() {
-        // console.log(this.sketch.windowWidth, this.sketch.windowHeight)
-        this.sketch.resizeCanvas(this.sketch.min(this.sketch.windowWidth, 800), this.sketch.min(this.sketch.windowHeight, 600))
-        // this.sketch.resizeCanvas(this.sketch.min(this.sketch.windowWidth, width), this.sketch.min(this.sketch.windowHeight, height))
-        // this.sketch.resizeCanvas(width, height)
-    }
+    
 }
 
 class ScriptElement {
@@ -772,11 +776,11 @@ class Character {
 }
 
 class MyImage {
-    constructor(name, path, images, sketch) {
+    constructor(name, path, engine) {
         this.name = name
         this.path = path
-        sketch.loadImage(path, img => { this.p5Image = img })
-        images.push(this)
+        engine.sketch.loadImage(path, img => { this.p5Image = img })
+        engine.images.push(this)
 
         this.currentSprite = 0
     }
@@ -788,24 +792,24 @@ class MyImage {
 
 
 class CommandTag extends ScriptElement {
-    constructor(tagName, ElementTypes,  lineNumber, tags) {
-        super(ElementTypes.COMMAND)
+    constructor(tagName, engine) {
+        super(engine.ElementTypes.COMMAND)
         this.tagName = tagName
-        this.lineNumber = lineNumber
-        tags.push([tagName, lineNumber])
+        this.lineNumber = engine.processedScript.length
+        engine.tags.push([tagName, this.lineNumber])
 
     }
 
 }
 
 class CommandEnd extends ScriptElement {
-    constructor(ElementTypes, CommandTypes, endText) {
-        super(ElementTypes.COMMAND, CommandTypes.END);
-        this.endText = endText;
+    constructor(engine) {
+        super(engine.ElementTypes.COMMAND, engine.CommandTypes.END);
+        this.engine = this.engine;
     }
 
     render() {
-        text(this.endText, 40, 460, 540, height - 40)
+        text(this.engine.endText, 40, 460, 540, height - 40)
     }
 }
 
@@ -816,7 +820,7 @@ class CommandBG extends ScriptElement {
         this.engine = engine;
         if (this.name != "none") {
             //TODO check if the image exists
-            this.myImage = this.engine.getImageByName(name)
+            this.myImage = this.engine.getImageByName(this.name)
         }
     }
 
@@ -825,9 +829,7 @@ class CommandBG extends ScriptElement {
             this.engine.currentBackground = null
         } else {
             this.engine.currentBackground = this.myImage.p5Image
-
         }
-
     }
 }
 
@@ -854,59 +856,60 @@ class CommandShow extends ScriptElement {
 }
 
 class CommandHide extends ScriptElement {
-    constructor(name, ElementTypes, getCharacterByName) {
-        super(ElementTypes.COMMAND)
+    constructor(name, engine) {
+        super(engine.ElementTypes.COMMAND)
+        this.engine = engine;
         this.characterName = name
-        this.getCharacterByName = getCharacterByName
     }
 
     render() {
-        var char = this.getCharacterByName(this.characterName)
+        var char = this.engine.getCharacterByName(this.characterName)
         char.setSprite(0)
         // Hide 
     }
 }
 
 class CommandJump extends ScriptElement {
-    constructor(tagName, ElementTypes, jump) {
+    constructor(tagName, ElementTypes, engine) {
         super(ElementTypes.COMMAND)
         this.tagName = tagName
-        this.jump = jump
+        this.engine = engine
     }
 
     render() {
-        this.jump(this.tagName)
+        this.engine.jump(this.tagName)
     }
 }
 
 class CommandVariable extends ScriptElement {
-    constructor(Name, ValueToSet, ElementTypes, variables) {
-        super(ElementTypes.COMMAND)
+    constructor(Name, ValueToSet, engine) {
+        super(engine.ElementTypes.COMMAND)
         this.name = Name
         this.value = ValueToSet
+        this.engine = engine
 
-        variables[Name] = false // at definition time, we can't set the values, only when walking the processed script can we do that
+        this.engine.variables[Name] = false // at definition time, we can't set the values, only when walking the processed script can we do that
     }
 
     render() {
-        variables[this.name] = this.value
+        this.engine.variables[this.name] = this.value
     }
 }
 
 class CommandConditional extends ScriptElement {
-    constructor(variableName, trueTag, falseTag, ElementTypes, jump) {
-        super(ElementTypes.COMMAND)
+    constructor(variableName, trueTag, falseTag, engine) {
+        super(engine.ElementTypes.COMMAND)
         this.variableName = variableName
         this.trueTag = trueTag
         this.falseTag = falseTag
-        this.jump = jump
+        this.engine = engine
     }
 
     render() {
-        if (variables[this.variableName] === "true") {
-            this.jump(this.trueTag)
+        if (this.engine.variables[this.variableName] === "true") {
+            this.engine.jump(this.trueTag)
         } else {
-            this.jump(this.falseTag)
+            this.engine.jump(this.falseTag)
         }
 
     }
@@ -933,7 +936,7 @@ class CommandMenu extends ScriptElement {
         this.everdrawn = false
         this.buttons = []
         this.engine = engine
-        engine.menus.push(this)
+        this.engine.menus.push(this)
     }
 
     handleClick(item) { //* A appeler lors d'un signe
@@ -974,16 +977,19 @@ class CommandMenu extends ScriptElement {
                 this.buttons[i].width = (width / 2)
                 this.buttons[i].height = ((height - 50) / this.menuItems.length) * .50
                 let menuName = this.menuName
-                // this.buttons[i].onHover = function () { //* Plus utile
-                //     return this.engine.handleMenuHover(menuName, i);
-                // }
 
-                // this.buttons[i].onOutside = function () { //* Plus utile
-                //     return this.engine.handleMenuOutside(menuName, i)
-                // }
+                let engine = this.engine
+                this.buttons[i].onHover = function () {
+                    return engine.handleMenuHover(menuName, i);
+                }
+                
+                this.buttons[i].onOutside = function () {
+                    return engine.handleMenuOutside(menuName, i)
+                }
 
+                
                 this.buttons[i].onRelease = function () { //* A appeler lors d'un signe
-                    return this.engine.handleMenuClick(menuName, i)
+                    return engine.handleMenuClick(menuName, i)
                 }
             }
             this.everdrawn = true
@@ -995,7 +1001,7 @@ class CommandMenu extends ScriptElement {
 
             this.engine.sketch.push()
             this.engine.sketch.textAlign(CENTER, CENTER)
-            this.engine.sketch.textSize(24*ratio)
+            this.engine.sketch.textSize(24*this.engine.ratio)
             this.engine.sketch.text(this.menuItems[i][0], width / 2, 50 + (((height - 50) / this.menuItems.length) * i) + (this.buttons[i].height / 2))
             this.engine.sketch.pop()
         }
