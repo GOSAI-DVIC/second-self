@@ -1,0 +1,38 @@
+#NOTE: ON MY MACHINE, THIS EDITOR DOES NOT RUN IN MICROSOFT EDGE DUE TO ISSUES WITH p5.SOUND. IF THIS HAPPENS TO YOU, CTRL+F FOR "song" IN ENGINE.JS AND COMMENT OUT EACH LINE (SHOULD ONLY BE 3)
+
+$tag(start)
+$defineC("NYU-Chan", "./platform/home/apps/sign_game/components/characters/nyu_chan", color(84, 28, 137), 4)
+$defineImg(Empty,"./platform/home/apps/sign_game/components/backgrounds/Empty.png")
+
+
+$bg(Empty) 
+$bg(none)
+ 
+
+N: This is NYU-Chan. 
+NYU-Chan: I had a fantastic idea for my Creative Coding final!
+
+
+$show("NYU-Chan", CENTER)
+$setSprite("NYU-Chan", 3)
+$hide("NYU-Chan")
+NYU-Chan: But Hey...&show(RIGHT)
+
+
+$menu("JokeMenu", 2, "Yes", afterJokeMenu, "No", afterJokeMenu2)
+$tag(afterJokeMenu)
+N: Oh whoops, sorry I think I loaded the wrong menu.
+$tag(afterJokeMenu2)
+N: Anyways... let's walk through the creation of the engine.
+
+
+$if(movieFlag, yesResponse, noResponse)
+$setVar(testFlag, false)
+$setVar(testFlag, 314)
+
+
+$tag(endLabel)
+
+END
+
+

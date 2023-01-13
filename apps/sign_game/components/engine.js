@@ -417,7 +417,6 @@ export class Engine {
             i += res[0]
             var id = res[1]
             i += this.requireToken(this.TokenTypes.CloseParen, line, i)
-            console.log(this.lineNumber)
             new CommandTag(id, this)
         }
     }
@@ -583,6 +582,7 @@ export class Engine {
                 // anything left is either an empty line, or a character name followed by dialog
                 if (this.sketch.inputFile[line].trim() == "END") {
                     this.processedScript.push(new CommandEnd(this))
+                    
                 }
                 else {
 
@@ -611,7 +611,7 @@ export class Engine {
     }
 
     getCharacterByName(nameString) {
-        for (var i = 0; i <= this.characters.length; i++) {
+        for (var i = 0; i < this.characters.length; i++) { //* anciennement i <=
             if (this.characters[i].name === nameString) {
                 return this.characters[i]
             }
@@ -623,7 +623,7 @@ export class Engine {
 
     getMenuByName(nameString) {
 
-        for (var i = 0; i <= this.menus.length; i++) {
+        for (var i = 0; i < this.menus.length; i++) { //* anciennement i <=
             if (this.menus[i].menuName === nameString) {
                 return this.menus[i]
             }
@@ -635,7 +635,7 @@ export class Engine {
 
     getTagByName(nameString) {
 
-        for (var i = 0; i < this.tags.length; i++) {
+        for (var i = 0; i < this.tags.length; i++) { //* anciennement i <=
                 if (this.tags[i][0] === nameString) {
                 return this.tags[i]
             }
@@ -805,11 +805,15 @@ class CommandTag extends ScriptElement {
 class CommandEnd extends ScriptElement {
     constructor(engine) {
         super(engine.ElementTypes.COMMAND, engine.CommandTypes.END);
-        this.engine = this.engine;
+        this.engine = engine;
     }
 
     render() {
         text(this.engine.endText, 40, 460, 540, height - 40)
+        console.log("stopping applicaion")
+        this.engine.sketch.emit("core-app_manager-stop_application", {
+            "application_name": "sign_game"
+        });
     }
 }
 
@@ -930,13 +934,13 @@ class CommandSetSprite extends ScriptElement {
 
 class CommandMenu extends ScriptElement {
     constructor(menuName, menuItems, engine) {
-        super(engine.ElementTypes.MENU)
-        this.menuName = menuName
-        this.menuItems = menuItems
-        this.everdrawn = false
-        this.buttons = []
-        this.engine = engine
-        this.engine.menus.push(this)
+        super(engine.ElementTypes.MENU);
+        this.menuName = menuName;
+        this.menuItems = menuItems;
+        this.everdrawn = false;
+        this.buttons = [];
+        this.engine = engine;
+        if (engine.getMenuByName(menuName) == null) this.engine.menus.push(this);
     }
 
     handleClick(item) { //* A appeler lors d'un signe
@@ -952,6 +956,7 @@ class CommandMenu extends ScriptElement {
     }
 
     handleOutside(item) { //* Plus utile
+        if (this.buttons.length == 0) return;
         this.engine.sketch.push()
         this.buttons[item].color = "#FFFFFF80"
         this.engine.sketch.pop()
@@ -984,7 +989,7 @@ class CommandMenu extends ScriptElement {
                 }
                 
                 this.buttons[i].onOutside = function () {
-                    return engine.handleMenuOutside(menuName, i)
+                    return engine.handleMenuOutside(menuName, i);
                 }
 
                 
