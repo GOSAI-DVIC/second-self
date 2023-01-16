@@ -166,6 +166,13 @@ export class Engine {
         this.processInputFile()
         this.loadAllCharacters()
     }
+    
+    stop() {
+        this.sketch.emit("core-app_manager-stop_application", {
+            "application_name": "sign_game"
+        });
+        this.gameStarted = false;
+    }
 
     initCharArray() {
         this.characters = []
@@ -809,11 +816,10 @@ class CommandEnd extends ScriptElement {
     }
 
     render() {
-        text(this.engine.endText, 40, 460, 540, height - 40)
-        console.log("stopping applicaion")
-        this.engine.sketch.emit("core-app_manager-stop_application", {
-            "application_name": "sign_game"
-        });
+        text(this.engine.endText, 40, 460, 540, height - 40);
+        if (this.engine.gameStarted) {
+            this.engine.stop()
+        }
     }
 }
 
