@@ -34,6 +34,7 @@ export class Guessing {
     }
 
     playTuto() {
+
         if (this.targeted_sign_idx >= this.actions.length) return;
         this.playable = false;
         this.playing = true;
@@ -100,7 +101,7 @@ export class Guessing {
 
             sketch.textSize(32);
             sketch.fill(this.white);
-            sketch.text(this.targeted_sign, 0, 145);
+            if (this.targeted_sign != undefined) sketch.text(this.targeted_sign, 0, 145);
 
             //Affichage de la séquence
             sketch.fill(this.dark_blue);
