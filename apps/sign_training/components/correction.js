@@ -37,7 +37,7 @@ export class Correction {
         this.body_diff = 0; // The lower, the closer the moves are
         this.right_hand_diff = 0; // The lower, the closer the moves are
         this.body_precision = 60; // if this.body_diff < this.body_precision, it goes on
-        this.hand_precision = 60;
+        this.hand_precision = 50;
         this.sample_pose_frames = {};
 
         this.is_running = true;
@@ -173,7 +173,6 @@ export class Correction {
                     this.right_hand_diff = right_hand_distances.reduce((partial_sum, a) => partial_sum + a, 0) / (right_hand_distances.length* this.ratio); //Mean of kpts differences
                 }
                 else this.right_hand_diff = 0;
-                // console.log(this.body_diff, this.right_hand_diff)
 
                 if (this.body_diff < this.body_precision && this.right_hand_diff < this.hand_precision) {
                     this.frameIdx++;

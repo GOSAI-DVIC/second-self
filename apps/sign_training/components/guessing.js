@@ -18,7 +18,8 @@ export class Guessing {
 
         this.playing = false;
         this.playable = true;
-        this.start_playing = 0;
+        this.last_played = Date.now();
+        this.last_interract = Date.now();
 
         this.running = true;
         this.count_valid = 0;
@@ -33,17 +34,19 @@ export class Guessing {
     }
 
     playTuto() {
+
+        if (this.targeted_sign_idx >= this.actions.length) return;
         this.playable = false;
         this.playing = true;
         this.targeted_sign = this.actions[this.targeted_sign_idx]
-        this.video = createVideo(["./platform/home/apps/sign_training/components/videos/" + this.targeted_sign + ".webm"]);
+        this.video = createVideo(["./platform/home/apps/sign_training/components/videos/" + this.targeted_sign.replaceAll(" ", "_") + ".webm"]);
         this.video.autoplay();
         this.video.volume(0);
         this.video.size(550, 350);
         this.video.position(width/2, 50); //1500, 50
         this.video.play();
         this.guessed_sign = "empty";
-        this.start_tuto = Date.now();
+        this.last_played = Date.now();
     }
 
     update_sign_data(guessed_sign, probability, actions) {
@@ -51,9 +54,8 @@ export class Guessing {
             this.actions = actions
         }
 
-        if (guessed_sign != undefined) {
-            this.guessed_sign = guessed_sign;
-        }
+        // if (Date.now() - this.last_interract < 3000) this.guessed_sign = "empty";
+        if (guessed_sign != undefined) this.guessed_sign = guessed_sign;
         
         if (probability != undefined) {
             this.probability = probability;
@@ -99,7 +101,7 @@ export class Guessing {
 
             sketch.textSize(32);
             sketch.fill(this.white);
-            sketch.text(this.targeted_sign, 0, 145);
+            if (this.targeted_sign != undefined) sketch.text(this.targeted_sign, 0, 145);
 
             //Affichage de la séquence
             sketch.fill(this.dark_blue);
@@ -131,16 +133,15 @@ export class Guessing {
     reset() {
         this.playing = false;
         this.playable = true;
-        this.start_playing = 0;
+        this.last_played = Date.now();
         this.running = true;
         this.count_valid = 0;
         this.targeted_sign_idx = 0;
     }
 
     update(sketch) {
-        if (Date.now() - this.start_tuto > 60000) {
-            this.running = false;
-        }
+        if (Date.now() - this.last_interract > 60000) this.running = false;
+        // if (Date.now() - this.last_interract < 3000) this.guessed_sign = "empty";
 
         if (this.actions == undefined) return;
 
@@ -154,7 +155,7 @@ export class Guessing {
 
             if (this.video != undefined) {
                 // on rejoue la vidéo toutes les 10 secondes si l'utilisateur ne trouve pas le mot
-                if (Date.now() - this.start_tuto > 15000) {
+                if (Date.now() - this.last_played > 15000) {
                     this.video.hide();
                     this.playTuto();
                     return;
@@ -201,13 +202,16 @@ export class Guessing {
             else {
                 this.count_valid = 0;
             }
-
-            if (this.count_valid >= 6)  { 
+            
+            if (this.count_valid >= 6 && Date.now() - this.last_interract > 3000)  { 
                 this.correction = new Correction(sketch, this.targeted_sign);
                 this.is_correction_running = true;
                 this.video.hide();
 
                 this.targeted_sign_idx++;
+
+                this.last_interract = Date.now();
+                this.guessed_sign = "empty";
 
                 if (this.targeted_sign_idx < this.actions.length) {
                     if (!this.playing) {
