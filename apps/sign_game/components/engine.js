@@ -29,6 +29,8 @@ export class Engine {
 
         this.sketch = sketch;
 
+        this.lastInterraction = Date.now();
+
         this.ElementTypes = {
             DIALOG: 1,
             IMAGE: 2,
@@ -103,6 +105,7 @@ export class Engine {
             this.sketch.stroke(150, 150, 255)
 
             this.drawAllCharacterSprites()
+            this.playAllCharacterAnimations()
 
             if (this.enableGUI) {
                 this.renderGUI()
@@ -114,6 +117,8 @@ export class Engine {
     }
 
     update() {
+        if (Date.now() - this.lastInterraction > 60000) this.stop();
+
         if (Object.keys(this.targeted_signs).includes(this.guessed_sign) ) {
             this.targeted_signs[this.guessed_sign] += 1;
         }
@@ -363,10 +368,15 @@ export class Engine {
             i += res[0]
             var framesNb = res[1] 
 
+            i += this.requireToken(this.TokenTypes.Comma, line, i)
+            res = this.requireTokenAndValue(this.TokenTypes.Number, line, i)
+            i += res[0]
+            var animationsNb = res[1] 
+
             i += this.requireToken(this.TokenTypes.CloseParen, line, i)
 
             // the contructor actually places these in an array, as a convenience
-            var c = new Character(this, id, color, path, framesNb)
+            var c = new Character(this, id, color, path, framesNb, animationsNb)
             this.characters.push(c)
 
         }
@@ -540,6 +550,21 @@ export class Engine {
         this.processedScript.push(new CommandSetSprite(id, val, this))
     }
 
+    parseSetAnimation(line) {
+        for (var i = 0; i < line.length; i++) {
+            i += this.requireToken(this.TokenTypes.OpenParen, line, i)
+            var res = this.requireTokenAndValue(this.TokenTypes.QuotedString, line, i)
+            i += res[0]
+            var id = res[1]
+            i += this.requireToken(this.TokenTypes.Comma, line, i)
+            res = this.requireTokenAndValue(this.TokenTypes.Number, line, i)
+            i += res[0]
+            var val = res[1]
+            i += this.requireToken(this.TokenTypes.CloseParen, line, i)
+        }
+        this.processedScript.push(new CommandSetAnimation(id, val, this))
+    }
+
 
     //create processedScript which is an array of ScriptElement objects
     processInputFile() {
@@ -582,6 +607,10 @@ export class Engine {
 
                 else if (this.sketch.inputFile[line].startsWith("$setSprite")) {
                     this.parseSetSprite(this.sketch.inputFile[line].substring(10))
+                }
+
+                else if (this.sketch.inputFile[line].startsWith("$setAnimation")) {
+                    this.parseSetAnimation(this.sketch.inputFile[line].substring(10))
                 }
 
             }
@@ -714,11 +743,24 @@ export class Engine {
 
     clearAllSprites() {
         for (var i = 0; i < this.characters.length; i++) {
-            this.characters[i].setSprite(0) //TODO: remplacer par la fonction qui clear les videos
+            this.characters[i].setSprite(0)
             this.characters[i].lastSprite = 0
         }
     }
 
+    playAllCharacterAnimations() {
+        for (var i = 0; i < this.characters.length; i++) {
+            this.characters[i].playAnimation() 
+        }
+
+    }
+
+    clearAllAnimations() {
+        for (var i = 0; i < this.characters.length; i++) {
+            this.characters[i].setAnimation(undefined)
+            this.characters[i].lastAnimation = undefined
+        }
+    }
     
 }
 
@@ -730,35 +772,61 @@ class ScriptElement {
 }
 
 class Character {
-    constructor(engine, name, charColor = 255, path = [], framesNb = 10, xpos = width / 2, ypos = height / 2) {
+    constructor(engine, name, charColor = 255, path = [], framesNb = 10, animationsNames, xpos = width / 2, ypos = height / 2) {
         this.name = name
         this.charColor = charColor
         this.path = path
         this.xpos = xpos
         this.ypos = ypos
         this.lastSprite = 0
+        this.lastAnimation = undefined
+
+        this.lastTimeAnimationWasPlayed = -15000;
+        this.isAnimationPlaying = false;
+        this.isAnimationPlayable = true;
+
         this.engine = engine
 
+        // Chargement des sprites
         this.sprites = []
         if (path.length) {
             for (let i = 1; i <= framesNb; i++) {
                 var suffix = i.toString().padStart(2, '0')  
                 // console.log("loading image at " + path + "/" + name + suffix + ".png")
-                this.engine.sketch.loadImage(path + "/" + name + suffix + ".png", img => { 
+                this.engine.sketch.loadImage(path + "/sprites/" + name + suffix + ".png", img => { 
                     if (img != null) {
                         this.sprites[i] = img;
                     }
                 })
 
-            } //TODO Faire en sorte que la vidéo soit chargée
+            }
+        }
+
+        // Chargement des animations
+        this.animations = {}
+        if (path.length) {
+            for (let animationName in animationsNames) {
+                this.engine.sketch.createVideo([path + "/animations/" + animationName.replaceAll(" ", "_") + ".webm"], video => { 
+                    if (video != null) {
+                        this.animations[animationName] = video;
+                    }
+                });
+            }
         }
         // this.engine.characters.push(this)
 
         this.currentSprite = 0
+        this.currentAnimation = undefined
     }
 
     setSprite(i) {
         this.currentSprite = i
+        this.currentAnimation = undefined
+    }
+
+    setAnimation(name) {
+        this.currentAnimation = this.animations[name]
+        this.currentSprite = 0
     }
 
     setPos(pos) {
@@ -771,12 +839,43 @@ class Character {
             this.xpos = quarter * 3
     }
 
-    drawSprite() { //TODO Ajouter une fonction pour la lecture de vidéo
+    drawSprite() {
         if (this.path.length) {
             if (this.currentSprite != 0 && this.sprites[this.currentSprite] != null) {
                 this.engine.sketch.imageMode(CENTER)
                 this.sprites[this.currentSprite].resize(this.sprites[this.currentSprite].width * this.engine.ratioX, this.sprites[this.currentSprite].height * this.engine.ratioY)
                 this.engine.sketch.image(this.sprites[this.currentSprite], this.xpos, this.ypos)
+            }
+        }
+    }
+
+    playAnimation() {
+        // si la vidéo existe
+        if (this.path.length && this.currentAnimation != undefined) {
+            if (this.video.elt.ended) 
+                this.isAnimationPlaying = false;
+                
+            // si la vidéo n'est pas en train de jouer et qu'elle est jouable
+            if (!this.isVideoPlaying && this.isAnimationPlayable) //|| Date.now() - this.lastTimeAnimationWasPlayed > 15000)    
+            {
+                this.currentAnimation.hide();
+                this.isAnimationPlayable = false;
+                this.isAnimationPlaying = true;
+                this.currentAnimation.autoplay();
+                this.currentAnimation.volume(0);
+                this.currentAnimation.size(this.currentAnimation.width * this.engine.ratioX, this.currentAnimation.height * this.engine.ratioY);
+                this.currentAnimation.position(this.xpos, this.ypos); //1500, 50
+                this.currentAnimation.play();
+                this.engine.lastTimeAnimationWasPlayed = Date.now();
+            }
+        }
+    }
+
+    stopAnimation() {
+        if (this.path.length) {
+            if (this.currentAnimation != undefined) {
+                this.currentAnimation.pause();
+                this.currentAnimation.hide();
             }
         }
     }
@@ -875,9 +974,11 @@ class CommandHide extends ScriptElement {
     render() {
         var char = this.engine.getCharacterByName(this.characterName)
         char.setSprite(0)
+        char.setAnimation(undefined)
         // Hide 
     }
 }
+
 
 class CommandJump extends ScriptElement {
     constructor(tagName, ElementTypes, engine) {
@@ -935,6 +1036,19 @@ class CommandSetSprite extends ScriptElement {
     render() {
         this.character.setSprite(this.spriteIndex)
         this.character.lastSprite = this.spriteIndex
+    }
+}
+
+class CommandSetAnimation extends ScriptElement {
+    constructor(charName, animationName, engine) {
+        super(engine.ElementTypes.COMMAND)
+        this.character = engine.getCharacterByName(charName)
+        this.animationName = animationName
+    }
+
+    render() {
+        this.character.setAnimation(this.animationName)
+        this.character.lastAnimation = this.characters.animations[this.animationName]
     }
 }
 
