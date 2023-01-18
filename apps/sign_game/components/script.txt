@@ -17,7 +17,7 @@ $bg(Market)
 $show("Lina", CENTER)
 
 $setSprite("Lina", "Lina01")
-# &setAnimation("Lina", "hello")
+$setAnimation("Lina", "hello")
 
 Lina: Hello, welcome to the mirror sign language learning game. My name is Lina. Make the sign "ok" to skip the text.
 

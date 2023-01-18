@@ -17,10 +17,10 @@ export const sign_game = new p5((sketch) => {
             .style("z-index", sketch.z_index);
             
         socket.on("applications-sign_game-characters", (data) => {
-            sketch.sign_game.update_characters(
-                data
-            );
-            sketch.sign_game.setup();
+            // sketch.sign_game.update_characters(
+            //     data
+            // );
+            sketch.sign_game.setup(data);
             sketch.activated = true;
         });
 

@@ -19,14 +19,13 @@ export class Engine {
         this.images = [];
         this.tags = [];
         this.menus = [];
-        this.canAdvance = true;
+        this.canAdvance = false;
         this.DEBUG = false;
         this.enableGUI = true;
         this.enableText = true;
         this.state = 0;
         this.currentBackground;
         this.variables = new Object;
-        this.gameStarted = true;
         this.ratio;
         this.ratioX;
         this.ratioY;
@@ -95,28 +94,27 @@ export class Engine {
     }
 
     show() {
-        if (this.gameStarted) {
-            // this.sketch.background(220);
+        if (!this.gameStarted) return;
 
-            if (this.currentBackground != null) {
-                this.sketch.imageMode(CORNER)
-                this.sketch.image(this.currentBackground, 0, 0, width, height)
-            }
-            else {
-                this.sketch.background(0)
-            }
+        if (this.currentBackground != null) {
+            this.sketch.imageMode(CORNER)
+            console.log(this.currentBackground.name)
+            this.sketch.image(this.currentBackground, 0, 0, width, height)
+        }
+        else {
+            this.sketch.background(0)
+        }
 
-            this.sketch.stroke(150, 150, 255)
+        this.sketch.stroke(150, 150, 255)
 
-            this.drawAllCharacterSprites()
-            this.playAllCharacterAnimations()
+        this.drawAllCharacterSprites()
+        this.playAllCharacterAnimations()
 
-            if (this.enableGUI) {
-                this.renderGUI()
-            }
-            if (this.enableText) {
-                this.renderText()
-            }
+        if (this.enableGUI) {
+            this.renderGUI()
+        }
+        if (this.enableText) {
+            this.renderText()
         }
     }
 
@@ -538,16 +536,13 @@ export class Engine {
         for (var i = 0; i < line.length; i++) {
             i += this.requireToken(this.TokenTypes.OpenParen, line, i)
             var res = this.requireTokenAndValue(this.TokenTypes.QuotedString, line, i)
-            console.log("test1")
             i += res[0]
             var id = res[1]
             i += this.requireToken(this.TokenTypes.Comma, line, i)
             res = this.requireTokenAndValue(this.TokenTypes.QuotedString, line, i)
-            console.log("test2")
             i += res[0]
             var val = res[1]
             i += this.requireToken(this.TokenTypes.CloseParen, line, i)
-            console.log("test3")
         }
         this.processedScript.push(new CommandSetSprite(id, val, this))
     }
@@ -612,7 +607,7 @@ export class Engine {
                 }
 
                 else if (this.sketch.inputFile[line].startsWith("$setAnimation")) {
-                    this.parseSetAnimation(this.sketch.inputFile[line].substring(10))
+                    this.parseSetAnimation(this.sketch.inputFile[line].substring(13));
                 }
 
             }
@@ -649,7 +644,7 @@ export class Engine {
     }
 
     getCharacterByName(nameString) {
-        for (var i = 0; i < this.characters.length; i++) { //* anciennement i <=
+        for (var i = 0; i < this.characters.length; i++) {
             if (this.characters[i].name === nameString) {
                 return this.characters[i]
             }
@@ -661,7 +656,7 @@ export class Engine {
 
     getMenuByName(nameString) {
 
-        for (var i = 0; i < this.menus.length; i++) { //* anciennement i <=
+        for (var i = 0; i < this.menus.length; i++) {
             if (this.menus[i].menuName === nameString) {
                 return this.menus[i]
             }
@@ -673,7 +668,7 @@ export class Engine {
 
     getTagByName(nameString) {
 
-        for (var i = 0; i < this.tags.length; i++) { //* anciennement i <=
+        for (var i = 0; i < this.tags.length; i++) {
                 if (this.tags[i][0] === nameString) {
                 return this.tags[i]
             }
@@ -684,8 +679,8 @@ export class Engine {
 
 
     getImageByName(nameString) {
-        // if (this.images == undefined) return null //TODO a retirer
-        for (var i = 0; i < this.images.length; i++) { //* anciennement i <=
+        // if (this.images == undefined) return null
+        for (var i = 0; i < this.images.length; i++) {
             if (this.images[i].name === nameString) {
                 return this.images[i]
             }
@@ -694,13 +689,13 @@ export class Engine {
     }
 
 
-    setup() {
+    setup(charactersFiles) {
         // this.sketch.createCanvas(this.sketch.min(this.sketch.windowWidth,800), this.sketch.min(this.sketch.windowHeight,600));
         // this.ratioY = this.sketch.min(this.sketch.windowHeight)/height;
         // this.ratioX = this.sketch.min(this.sketch.windowWidth)/width;
         // this.ratioY = height/600
         // this.ratioX = width/800
-        // console.log(this.ratioX, this.ratioY)
+        this.charactersFiles = charactersFiles
         this.ratioY = 1;
         this.ratioX = 1;
     
@@ -805,14 +800,15 @@ class Character {
         this.animations = {}
         if (path.length) {
             for (let animationName of filesNamesDict["animations"]) {
-                this.engine.sketch.createVideo([path + "/animations/" + animationName], video => { 
+                let video = this.engine.sketch.createVideo([path + "/animations/" + animationName],  () => { 
                     if (video != null) {
-                        this.animations[animationName.substring(0, spriteName.indexOf("."))] = video;
+                        video.loop();
+                        video.hide();
+                        this.animations[animationName.substring(0, animationName.indexOf("."))] = video;
                     }
                 });
             }
         }
-        // this.engine.characters.push(this)
 
         this.currentSprite = 0
         this.currentAnimation = undefined
@@ -820,7 +816,7 @@ class Character {
 
     setSprite(spriteName) {
         this.currentSprite = spriteName
-        this.currentAnimation = undefined
+        this.stopAnimation();
     }
 
     setAnimation(name) {
@@ -844,8 +840,6 @@ class Character {
                 this.engine.sketch.imageMode(CENTER)
                 this.sprites[this.currentSprite].resize(this.sprites[this.currentSprite].width * this.engine.ratioX, this.sprites[this.currentSprite].height * this.engine.ratioY)
                 this.engine.sketch.image(this.sprites[this.currentSprite], this.xpos, this.ypos)
-
-                console.log("drawing sprite " + this.currentSprite)
             }
         }
     }
@@ -859,10 +853,10 @@ class Character {
             // si la vidéo n'est pas en train de jouer et qu'elle est jouable
             if (!this.isVideoPlaying && this.isAnimationPlayable) //|| Date.now() - this.lastTimeAnimationWasPlayed > 15000)    
             {
-                this.currentAnimation.hide();
+                console.log(this.currentAnimation)
+                this.currentAnimation.show();
                 this.isAnimationPlayable = false;
                 this.isAnimationPlaying = true;
-                this.currentAnimation.autoplay();
                 this.currentAnimation.volume(0);
                 this.currentAnimation.size(this.currentAnimation.width * this.engine.ratioX, this.currentAnimation.height * this.engine.ratioY);
                 this.currentAnimation.position(this.xpos, this.ypos); //1500, 50
@@ -877,6 +871,7 @@ class Character {
             if (this.currentAnimation != undefined) {
                 this.currentAnimation.pause();
                 this.currentAnimation.hide();
+                this.currentAnimation != undefined
             }
         }
     }
@@ -929,7 +924,6 @@ class CommandBG extends ScriptElement {
         this.name = name;
         this.engine = engine;
         if (this.name != "none") {
-            //TODO check if the image exists
             this.myImage = this.engine.getImageByName(this.name)
         }
     }
@@ -1049,7 +1043,7 @@ class CommandSetAnimation extends ScriptElement {
 
     render() {
         this.character.setAnimation(this.animationName)
-        this.character.lastAnimation = this.characters.animations[this.animationName]
+        this.character.lastAnimation = this.character.animations[this.animationName]
     }
 }
 
@@ -1128,7 +1122,7 @@ class CommandMenu extends ScriptElement {
             this.engine.sketch.push()
             this.engine.sketch.textAlign(CENTER, CENTER)
             this.engine.sketch.textSize(24*this.engine.ratio)
-            this.engine.sketch.text(this.menuItems[i][0], width / 2, 50 + (((height - 50) / this.menuItems.length) * i) + (this.buttons[i].height / 2))
+            this.engine.sketch.text(this.menuItems[i][0], width / 2 + 100, 50 + (((height - 50) / this.menuItems.length) * i) + (this.buttons[i].height / 2))
             this.engine.sketch.pop()
         }
     }
@@ -1152,9 +1146,8 @@ class Dialog extends ScriptElement {
 
             this.engine.sketch.textSize(24* this.engine.ratio)
             var char = this.engine.getCharacterByName(this.characterName)
-            fill(char.charColor)
-
-            text(this.characterName + ":", 20*this.engine.ratioX, 420*this.engine.ratioY, width / 2, 460*this.engine.ratioY)
+            this.engine.sketch.fill(char.charColor)
+            this.engine.sketch.text(this.characterName + ":", 20*this.engine.ratioX, 420*this.engine.ratioY, width / 2, 460*this.engine.ratioY)
 
             if (this.command && this.command.length) {
                 if (this.command.includes("LEFT"))
