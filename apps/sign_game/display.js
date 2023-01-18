@@ -7,8 +7,7 @@ export const sign_game = new p5((sketch) => {
 
     sketch.setup_game = () => {
         sketch.sign_game = new Engine(sketch);
-        sketch.sign_game.setup();
-        sketch.activated = true;
+        
     };
 
     sketch.set = (width, height, socket) => {
@@ -16,8 +15,16 @@ export const sign_game = new p5((sketch) => {
             .createCanvas(width, height)
             .position(0, 0)
             .style("z-index", sketch.z_index);
+            
+        socket.on("applications-sign_game-characters", (data) => {
+            sketch.sign_game.update_characters(
+                data
+            );
+            sketch.sign_game.setup();
+            sketch.activated = true;
+        });
 
-        socket.on("applications-${sketch.name}-new_sign", (data) => {
+        socket.on(`applications-${sketch.name}-new_sign`, (data) => {
             sketch.sign_game.update_sign_data(
                 data["guessed_sign"],
                 data["probability"],
@@ -25,7 +32,7 @@ export const sign_game = new p5((sketch) => {
             );
         });
 
-        socket.on("applications-${sketch.name}-mirrored_data", (data) => {
+        socket.on(`applications-${sketch.name}-mirrored_data`, (data) => {
             sketch.sign_game.update_pose_data(
                 data["right_hand_pose"],
                 data["left_hand_pose"],

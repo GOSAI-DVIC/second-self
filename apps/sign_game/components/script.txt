@@ -2,37 +2,38 @@
 
 $tag(start)
 #./platform/home/apps/sign_game/components/
-$defineC(Lina”, “./platform/home/apps/sign_game/components/characters/Lina, color(84, 28, 137), 3)
-$defineC("Grandmother", "./platform/home/apps/sign_game/components/characters/grandmother", color ( 255 , 225 , 100), 2)
-$defineC("Saleswoman", "./platform/home/apps/sign_game/components/characters/saleswoman", color ( 255 , 100, 225), 2)
+$defineC("Lina", "./platform/home/apps/sign_game/components/characters/Lina", color(84, 28, 137))
+$defineC("Grandmother", "./platform/home/apps/sign_game/components/characters/Grandmother", color ( 255 , 225 , 100))
+$defineC("Seller", "./platform/home/apps/sign_game/components/characters/Seller", color ( 255 , 100, 225))
 $defineImg(Empty,"./platform/home/apps/sign_game/components/backgrounds/Empty.png")
-$defineImg(Shop,"./platform/home/apps/sign_game/components/backgrounds/Shop.png")
-$defineImg(Paths,"./platform/home/apps/sign_game/components/backgrounds/Paths.png")
-$defineImg(City,"./platform/home/apps/sign_game/components/backgrounds/City.png")
-$defineImg(House,"./platform/home/apps/sign_game/components/backgrounds/House.png")
+$defineImg(Market,"./platform/home/apps/sign_game/components/backgrounds/Market.jpeg")
+$defineImg(Path,"./platform/home/apps/sign_game/components/backgrounds/Path.jpeg")
+$defineImg(City,"./platform/home/apps/sign_game/components/backgrounds/City.jpeg")
+$defineImg(Home,"./platform/home/apps/sign_game/components/backgrounds/Home.jpeg")
+$defineImg(Street,"./platform/home/apps/sign_game/components/backgrounds/Street.jpeg")
 
-$bg(Empty) 
+$bg(Market) 
 
 $show("Lina", CENTER)
 
-$setSprite("Lina", 1)
-&setAnimation("Lina", "hello)
+$setSprite("Lina", "Lina01")
+# &setAnimation("Lina", "hello")
 
 Lina: Hello, welcome to the mirror sign language learning game. My name is Lina. Make the sign "ok" to skip the text.
 
-$setSprite("Lina", 2)
+$setSprite("Lina", "Lina02")
 
 Lina: In this game you will be able to interact with the mirror by making gestures in sign language to live an adventure. Make the sign "ok" to skip the text.
 
-$setSprite("Lina", 3)
+$setSprite("Lina", "Lina03")
 
 Lina: Each time you make a sign, you will have a visual correction on which you will have to place yourself to verify that you have understood the sign correctly.
 
-$setSprite("Lina", 2)
+$setSprite("Lina", "Lina02")
 
 Lina: You will be able to make choices during the game according to your desires. All in sign language of course!
 
-$setSprite("Lina", 4)
+$setSprite("Lina", "Lina04")
 
 Lina: I'm a little hungry, how about a bite to eat?
 

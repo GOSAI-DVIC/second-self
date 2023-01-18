@@ -1,3 +1,6 @@
+// TODO rajouter des objets à mettre au premier plan
+// TODO modifier les events de tous les display
+
 export class Engine {
     constructor(sketch) {
         //VN ENGINE SCRIPT by SmexGames
@@ -12,6 +15,7 @@ export class Engine {
         this.currentIndex = 0;
         this.endText = "-End of Script-";
         this.characters = [];
+        this.charactersFiles = {};
         this.images = [];
         this.tags = [];
         this.menus = [];
@@ -346,6 +350,11 @@ export class Engine {
         throw "Expected token " + type + " but saw " + tokenResult[0] + " at position " + index + " of line " + line;
     }
 
+    update_characters(charactersFiles) {
+        this.charactersFiles = charactersFiles
+    }
+
+
     parseCharacter(line) {
         for (var i = 0; i < line.length; i++) {
             i += this.requireToken(this.TokenTypes.OpenParen, line, i)
@@ -363,20 +372,10 @@ export class Engine {
             i += res[0]
             var color = res[1]
 
-            i += this.requireToken(this.TokenTypes.Comma, line, i)
-            res = this.requireTokenAndValue(this.TokenTypes.Number, line, i)
-            i += res[0]
-            var framesNb = res[1] 
-
-            i += this.requireToken(this.TokenTypes.Comma, line, i)
-            res = this.requireTokenAndValue(this.TokenTypes.Number, line, i)
-            i += res[0]
-            var animationsNb = res[1] 
-
             i += this.requireToken(this.TokenTypes.CloseParen, line, i)
 
             // the contructor actually places these in an array, as a convenience
-            var c = new Character(this, id, color, path, framesNb, animationsNb)
+            var c = new Character(this, id, color, path, this.charactersFiles[id])
             this.characters.push(c)
 
         }
@@ -539,13 +538,16 @@ export class Engine {
         for (var i = 0; i < line.length; i++) {
             i += this.requireToken(this.TokenTypes.OpenParen, line, i)
             var res = this.requireTokenAndValue(this.TokenTypes.QuotedString, line, i)
+            console.log("test1")
             i += res[0]
             var id = res[1]
             i += this.requireToken(this.TokenTypes.Comma, line, i)
-            res = this.requireTokenAndValue(this.TokenTypes.Number, line, i)
+            res = this.requireTokenAndValue(this.TokenTypes.QuotedString, line, i)
+            console.log("test2")
             i += res[0]
             var val = res[1]
             i += this.requireToken(this.TokenTypes.CloseParen, line, i)
+            console.log("test3")
         }
         this.processedScript.push(new CommandSetSprite(id, val, this))
     }
@@ -557,7 +559,7 @@ export class Engine {
             i += res[0]
             var id = res[1]
             i += this.requireToken(this.TokenTypes.Comma, line, i)
-            res = this.requireTokenAndValue(this.TokenTypes.Number, line, i)
+            res = this.requireTokenAndValue(this.TokenTypes.QuotedString, line, i)
             i += res[0]
             var val = res[1]
             i += this.requireToken(this.TokenTypes.CloseParen, line, i)
@@ -772,7 +774,7 @@ class ScriptElement {
 }
 
 class Character {
-    constructor(engine, name, charColor = 255, path = [], framesNb = 10, animationsNames, xpos = width / 2, ypos = height / 2) {
+    constructor(engine, name, charColor = 255, path = [], filesNamesDict = {}, xpos = width / 2, ypos = height / 2) {
         this.name = name
         this.charColor = charColor
         this.path = path
@@ -788,27 +790,24 @@ class Character {
         this.engine = engine
 
         // Chargement des sprites
-        this.sprites = []
+        this.sprites = {}
         if (path.length) {
-            for (let i = 1; i <= framesNb; i++) {
-                var suffix = i.toString().padStart(2, '0')  
-                // console.log("loading image at " + path + "/" + name + suffix + ".png")
-                this.engine.sketch.loadImage(path + "/sprites/" + name + suffix + ".png", img => { 
+            for (let spriteName of filesNamesDict["sprites"]) {
+                this.engine.sketch.loadImage(path + "/sprites/" + spriteName, img => { 
                     if (img != null) {
-                        this.sprites[i] = img;
+                        this.sprites[spriteName.substring(0, spriteName.indexOf("."))] = img;
                     }
                 })
-
             }
         }
 
         // Chargement des animations
         this.animations = {}
         if (path.length) {
-            for (let animationName in animationsNames) {
-                this.engine.sketch.createVideo([path + "/animations/" + animationName.replaceAll(" ", "_") + ".webm"], video => { 
+            for (let animationName of filesNamesDict["animations"]) {
+                this.engine.sketch.createVideo([path + "/animations/" + animationName], video => { 
                     if (video != null) {
-                        this.animations[animationName] = video;
+                        this.animations[animationName.substring(0, spriteName.indexOf("."))] = video;
                     }
                 });
             }
@@ -819,8 +818,8 @@ class Character {
         this.currentAnimation = undefined
     }
 
-    setSprite(i) {
-        this.currentSprite = i
+    setSprite(spriteName) {
+        this.currentSprite = spriteName
         this.currentAnimation = undefined
     }
 
@@ -830,7 +829,7 @@ class Character {
     }
 
     setPos(pos) {
-        var quarter = width / 4
+        var quarter = width / 3
         if (pos == "LEFT")
             this.xpos = quarter
         else if (pos == "CENTER")
@@ -845,6 +844,8 @@ class Character {
                 this.engine.sketch.imageMode(CENTER)
                 this.sprites[this.currentSprite].resize(this.sprites[this.currentSprite].width * this.engine.ratioX, this.sprites[this.currentSprite].height * this.engine.ratioY)
                 this.engine.sketch.image(this.sprites[this.currentSprite], this.xpos, this.ypos)
+
+                console.log("drawing sprite " + this.currentSprite)
             }
         }
     }
