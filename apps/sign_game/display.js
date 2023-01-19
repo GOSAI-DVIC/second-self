@@ -20,6 +20,8 @@ export const sign_game = new p5((sketch) => {
             // sketch.sign_game.update_characters(
             //     data
             // );
+            console.log("update_characters")
+
             sketch.sign_game.setup(data);
             sketch.activated = true;
         });

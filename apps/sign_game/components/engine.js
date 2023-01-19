@@ -97,9 +97,9 @@ export class Engine {
         if (!this.gameStarted) return;
 
         if (this.currentBackground != null) {
-            this.sketch.imageMode(CORNER)
-            console.log(this.currentBackground.name)
-            this.sketch.image(this.currentBackground, 0, 0, width, height)
+            this.sketch.imageMode(CORNER);
+            console.log(this.currentBackground.name);
+            this.sketch.image(this.currentBackground, 0, 0, width, height);
         }
         else {
             this.sketch.background(0)
@@ -795,7 +795,7 @@ class Character {
                 })
             }
         }
-
+        // console.log("loading animations")
         // Chargement des animations
         this.animations = {}
         if (path.length) {
@@ -820,12 +820,31 @@ class Character {
     }
 
     setAnimation(name) {
-        this.currentAnimation = this.animations[name]
-        this.currentSprite = 0
+        // (new Promise((resolve, reject) => {
+        //     if(name in Object.keys(this.animations)) resolve(this.animations[name]);
+        // })).then((animation) => {
+        //     console.log(animation);
+        //     this.currentAnimation = animation;
+        //     this.currentSprite = 0;
+        // });
+
+        (new Promise((resolve, reject) => {
+            setTimeout(() => {
+              resolve(this.animations[name] != undefined);
+            }, 100);
+        })).then((isAnimAvaible) => {
+            if (isAnimAvaible) 
+            {
+                this.currentAnimation = this.animations[name];
+                this.currentSprite = 0;
+            }
+            else this.setAnimation(name)
+        });
+          
     }
 
     setPos(pos) {
-        var quarter = width / 3
+        var quarter = width / 4
         if (pos == "LEFT")
             this.xpos = quarter
         else if (pos == "CENTER")
@@ -846,21 +865,23 @@ class Character {
 
     playAnimation() {
         // si la vidéo existe
+        // console.log("play animation")
+        // console.log(this.currentAnimation);
+        // console.log(this.animations["hello"])
         if (this.path.length && this.currentAnimation != undefined) {
-            if (this.video.elt.ended) 
+            if (this.currentAnimation.elt.ended)
                 this.isAnimationPlaying = false;
                 
             // si la vidéo n'est pas en train de jouer et qu'elle est jouable
             if (!this.isVideoPlaying && this.isAnimationPlayable) //|| Date.now() - this.lastTimeAnimationWasPlayed > 15000)    
             {
-                console.log(this.currentAnimation)
                 this.currentAnimation.show();
                 this.isAnimationPlayable = false;
                 this.isAnimationPlaying = true;
                 this.currentAnimation.volume(0);
                 this.currentAnimation.size(this.currentAnimation.width * this.engine.ratioX, this.currentAnimation.height * this.engine.ratioY);
-                this.currentAnimation.position(this.xpos, this.ypos); //1500, 50
-                this.currentAnimation.play();
+                this.currentAnimation.position(this.xpos, this.ypos);
+                // this.currentAnimation.play();
                 this.engine.lastTimeAnimationWasPlayed = Date.now();
             }
         }
