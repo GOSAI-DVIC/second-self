@@ -175,6 +175,8 @@ export class Engine {
     }
     
     stop() {
+        this.clearAllAnimations();
+        this.clearAllSprites();
         this.sketch.emit("core-app_manager-stop_application", {
             "application_name": "sign_game"
         });
@@ -858,7 +860,7 @@ class Character {
             if (this.currentSprite != 0 && this.sprites[this.currentSprite] != null) {
                 this.engine.sketch.imageMode(CENTER)
                 this.sprites[this.currentSprite].resize(this.sprites[this.currentSprite].width * this.engine.ratioX, this.sprites[this.currentSprite].height * this.engine.ratioY)
-                this.engine.sketch.image(this.sprites[this.currentSprite], this.xpos, this.ypos)
+                this.engine.sketch.image(this.sprites[this.currentSprite], this.xpos, this.ypos/2)
             }
         }
     }
@@ -880,8 +882,8 @@ class Character {
                 this.isAnimationPlaying = true;
                 this.currentAnimation.volume(0);
                 this.currentAnimation.size(this.currentAnimation.width * this.engine.ratioX, this.currentAnimation.height * this.engine.ratioY);
-                this.currentAnimation.position(this.xpos, this.ypos);
-                // this.currentAnimation.play();
+                this.currentAnimation.position(this.xpos/2, 0);
+                this.currentAnimation.play();
                 this.engine.lastTimeAnimationWasPlayed = Date.now();
             }
         }

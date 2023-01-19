@@ -1,5 +1,6 @@
 from core.application import BaseApplication
 import os, os.path
+import time
 
 class Application(BaseApplication):
     """SL GAME"""
@@ -35,6 +36,10 @@ class Application(BaseApplication):
                 for video in os.listdir(animations_path):
                     self.characters[character]["animations"].append(video)
 
+        # time.sleep(0.1)
+    
+        # self.server.send_data(f'applications-{self.name}-characters', self.characters)
+        
     def execute_once(self):
         self.server.send_data(f'applications-{self.name}-characters', self.characters)
         self.executed_once = True

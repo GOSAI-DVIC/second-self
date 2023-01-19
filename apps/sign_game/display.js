@@ -5,8 +5,23 @@ export const sign_game = new p5((sketch) => {
     sketch.z_index = 0;
     sketch.activated = false;
 
+    sketch.characters = undefined;
+
     sketch.setup_game = () => {
         sketch.sign_game = new Engine(sketch);
+        
+        (new Promise((resolve, reject) => {
+            setTimeout(() => {
+              resolve(sketch.characters != undefined);
+            }, 100);
+        })).then((areCharactersAvaible) => {
+            if (areCharactersAvaible) 
+            {
+                sketch.sign_game.setup(sketch.characters);
+                sketch.activated = true;
+            }
+            else sketch.setup_game()
+        });
         
     };
 
@@ -17,13 +32,8 @@ export const sign_game = new p5((sketch) => {
             .style("z-index", sketch.z_index);
             
         socket.on("applications-sign_game-characters", (data) => {
-            // sketch.sign_game.update_characters(
-            //     data
-            // );
-            console.log("update_characters")
-
-            sketch.sign_game.setup(data);
-            sketch.activated = true;
+            sketch.characters = data;
+            // console.log("update_characters");
         });
 
         socket.on(`applications-${sketch.name}-new_sign`, (data) => {
