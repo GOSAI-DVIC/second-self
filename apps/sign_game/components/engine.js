@@ -175,12 +175,15 @@ export class Engine {
     }
     
     stop() {
-        this.clearAllAnimations();
-        this.clearAllSprites();
-        this.sketch.emit("core-app_manager-stop_application", {
-            "application_name": "sign_game"
-        });
-        this.gameStarted = false;
+        if (this.gameStarted)
+        {
+            this.clearAllAnimations();
+            this.clearAllSprites();
+            this.sketch.emit("core-app_manager-stop_application", {
+                "application_name": "sign_game"
+            });
+            this.gameStarted = false;
+        }
     }
 
     initCharArray() {
@@ -781,7 +784,6 @@ class Character {
         this.lastAnimation = undefined
 
         this.lastTimeAnimationWasPlayed = -15000;
-        this.isAnimationPlaying = false;
         this.isAnimationPlayable = true;
 
         this.engine = engine
@@ -797,19 +799,18 @@ class Character {
                 })
             }
         }
-        // console.log("loading animations")
         // Chargement des animations
         this.animations = {}
         if (path.length) {
             for (let animationName of filesNamesDict["animations"]) {
                 let video = this.engine.sketch.createVideo([path + "/animations/" + animationName],  () => { 
                     if (video != null) {
-                        video.loop();
                         video.hide();
                         this.animations[animationName.substring(0, animationName.indexOf("."))] = video;
                     }
                 });
             }
+
         }
 
         this.currentSprite = 0
@@ -822,14 +823,6 @@ class Character {
     }
 
     setAnimation(name) {
-        // (new Promise((resolve, reject) => {
-        //     if(name in Object.keys(this.animations)) resolve(this.animations[name]);
-        // })).then((animation) => {
-        //     console.log(animation);
-        //     this.currentAnimation = animation;
-        //     this.currentSprite = 0;
-        // });
-
         (new Promise((resolve, reject) => {
             setTimeout(() => {
               resolve(this.animations[name] != undefined);
@@ -860,30 +853,23 @@ class Character {
             if (this.currentSprite != 0 && this.sprites[this.currentSprite] != null) {
                 this.engine.sketch.imageMode(CENTER)
                 this.sprites[this.currentSprite].resize(this.sprites[this.currentSprite].width * this.engine.ratioX, this.sprites[this.currentSprite].height * this.engine.ratioY)
-                this.engine.sketch.image(this.sprites[this.currentSprite], this.xpos, this.ypos/2)
+                this.engine.sketch.image(this.sprites[this.currentSprite], this.xpos - this.sprites[this.currentSprite].width/8, this.ypos)
             }
         }
     }
 
     playAnimation() {
-        // si la vidéo existe
-        // console.log("play animation")
-        // console.log(this.currentAnimation);
-        // console.log(this.animations["hello"])
         if (this.path.length && this.currentAnimation != undefined) {
-            if (this.currentAnimation.elt.ended)
-                this.isAnimationPlaying = false;
-                
             // si la vidéo n'est pas en train de jouer et qu'elle est jouable
-            if (!this.isVideoPlaying && this.isAnimationPlayable) //|| Date.now() - this.lastTimeAnimationWasPlayed > 15000)    
+            if (!this.currentAnimation.elt.ended && this.isAnimationPlayable)
             {
                 this.currentAnimation.show();
                 this.isAnimationPlayable = false;
-                this.isAnimationPlaying = true;
                 this.currentAnimation.volume(0);
                 this.currentAnimation.size(this.currentAnimation.width * this.engine.ratioX, this.currentAnimation.height * this.engine.ratioY);
-                this.currentAnimation.position(this.xpos/2, 0);
-                this.currentAnimation.play();
+                this.currentAnimation.position(this.xpos - 3*this.currentAnimation.width/5 , 0);
+                this.currentAnimation.loop();
+
                 this.engine.lastTimeAnimationWasPlayed = Date.now();
             }
         }
@@ -934,7 +920,7 @@ class CommandEnd extends ScriptElement {
     }
 
     render() {
-        text(this.engine.endText, 40, 460, 540, height - 40);
+        engine.sketch.text(this.engine.endText, 40, 460, 540, height - 40);
         if (this.engine.gameStarted) {
             this.engine.stop()
         }
@@ -1159,6 +1145,7 @@ class Dialog extends ScriptElement {
         this.dialog = dialog
         this.command = command
         this.engine = engine
+        this.yGap = 300
 
     }
 
@@ -1170,7 +1157,8 @@ class Dialog extends ScriptElement {
             this.engine.sketch.textSize(24* this.engine.ratio)
             var char = this.engine.getCharacterByName(this.characterName)
             this.engine.sketch.fill(char.charColor)
-            this.engine.sketch.text(this.characterName + ":", 20*this.engine.ratioX, 420*this.engine.ratioY, width / 2, 460*this.engine.ratioY)
+            this.engine.sketch.text(this.characterName + ":", width/3, 420*this.engine.ratioY + this.yGap, width / 2, 460*this.engine.ratioY)
+            // this.engine.sketch.text(this.characterName + ":", 40*this.engine.ratioX, 420*this.engine.ratioY + this.yGap, width / 2, 460*this.engine.ratioY)
 
             if (this.command && this.command.length) {
                 if (this.command.includes("LEFT"))
@@ -1183,6 +1171,8 @@ class Dialog extends ScriptElement {
         }
         this.engine.sketch.textSize(20* this.engine.ratioY)
         this.engine.sketch.fill(255)
-        this.engine.sketch.text(this.dialog, 40*this.engine.ratioX, 460*this.engine.ratioY, 740*this.engine.ratioX, height - 40)
+        this.engine.sketch.text(this.dialog, width/3, 460*this.engine.ratioY + this.yGap, 740*this.engine.ratioX, height - 40)
+        // this.engine.sketch.text(this.dialog, 40*this.engine.ratioX, 460*this.engine.ratioY + this.yGap, 740*this.engine.ratioX, height - 40)
+        
     }
 }
