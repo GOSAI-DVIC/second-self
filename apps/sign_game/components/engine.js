@@ -8,7 +8,7 @@ export class Engine {
         this.subSketch = null;
         // this.sign_game = sign_game;
         this.sketch.colorMode(HSL, 360, 1, 1, 1);
-        this.progressBar = new ProgressBar(this, width * 0.25, width * 0.75, height * 0.5, height * 0.5, 3000);
+        this.progressBar = new ProgressBar(this, width * 0.25, width * 0.75, height * 0.5, height * 0.5);
         this.guessed_sign = "";
         this.valid_sign = "";
         this.targeted_signs = {};
@@ -33,6 +33,7 @@ export class Engine {
         this.ratioX = 1;
         this.ratioY = 1;
 
+        this.totalElementsLoaded = 0;
         this.charactersLoadedCount = 0;
 
         // this.scribble = null;
@@ -102,6 +103,11 @@ export class Engine {
     show() {
         if (!this.gameStarted) 
         {
+            this.sketch.noStroke();
+            this.sketch.textSize(40 * this.ratioY)
+            this.sketch.fill(255)
+            this.sketch.text("Loading...", width / 2 - 80, 620 * this.ratioY)
+            this.progressBar.pBar.curr = this.progressBar.pBar.x1 + (this.progressBar.pBar.x2 - this.progressBar.pBar.x1)*this.totalElementsLoaded/this.totalElementsToLoad
             this.progressBar.render();
             return;
         }
@@ -120,7 +126,6 @@ export class Engine {
 
         this.drawAllCharacterSprites()
         this.playAllCharacterAnimations()
-
         
         if (this.enableGUI) {
             this.renderGUI()
@@ -721,6 +726,12 @@ export class Engine {
 
     setup(charactersFiles) {
         this.charactersFiles = charactersFiles
+        this.totalElementsToLoad = 0
+        for (var charName in this.charactersFiles) {
+            this.totalElementsToLoad += this.charactersFiles[charName]["sprites"].length
+            this.totalElementsToLoad += this.charactersFiles[charName]["animations"].length
+        }
+
         this.ratioY = 1;
         this.ratioX = 1;
 
@@ -818,6 +829,7 @@ class Character {
                         this.sprites[spriteName.substring(0, spriteName.indexOf("."))] = img;
                         if (Object.keys(this.sprites).length == filesNamesDict["sprites"].length) this.areSpritesLoaded = true;
                     }
+                    this.engine.totalElementsLoaded++;
                 })
             }
         }
@@ -832,6 +844,7 @@ class Character {
                         this.animations[animationName.substring(0, animationName.indexOf("."))] = video;
                         if (Object.keys(this.animations).length == filesNamesDict["animations"].length) this.areAnimationsLoaded = true;
                     }
+                    this.engine.totalElementsLoaded++;
                 });
             }
         }
@@ -1205,25 +1218,19 @@ class Dialog extends ScriptElement {
 }
 
 class ProgressBar {
-    constructor(engine, _x1, _x2, _y1, _y2, _spd) {
+    constructor(engine, _x1, _x2, _y1, _y2) {
+        // _x1, _x2, _y1, _y2 ne changent pas
+
         this.engine = engine;
         this.pBar = {
-            curr: this.engine.sketch.millis(),
+            curr: _x1,
             newCurr: 0,
             x1: _x1,
             x2: _x2,
             y1: _y1,
             y2: _y2,
-            spd: _spd,
             col: 280
         }
-    }
-  
-    update() {
-        this.pBar.curr >= this.pBar.x2 ?
-        this.pBar.curr = this.pBar.x2 :
-        this.pBar.curr = this.engine.sketch.map(this.engine.sketch.millis(), this.pBar.newCurr, this.pBar.newCurr + this.pBar.spd, this.pBar.x1, this.pBar.x2);
-        return this;
     }
   
     fillBar() {
@@ -1243,6 +1250,6 @@ class ProgressBar {
     }
   
     render() {
-        return this.update().display().fillBar();
+        return this.display().fillBar();
     }
 }
