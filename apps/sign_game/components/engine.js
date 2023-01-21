@@ -1,12 +1,14 @@
-// TODO rajouter des objets à mettre au premier plan
-// TODO modifier les events de tous les display
+//VN ENGINE SCRIPT by SmexGames
+// targeted_signs contient les signes à reproduire sur le moment
+// la value de chacun est son count de validation
 
 export class Engine {
-    constructor(sketch) {
-        //VN ENGINE SCRIPT by SmexGames
-        // this.sketch.inputFile = [];
-        // targeted_signs contient les signes à reproduire sur le moment
-        // la value de chacun est son count de validation
+    constructor(sketch, sign_game) {
+        this.sketch = sketch;
+        this.subSketch = null;
+        // this.sign_game = sign_game;
+        this.sketch.colorMode(HSL, 360, 1, 1, 1);
+        this.progressBar = new ProgressBar(this, width * 0.25, width * 0.75, height * 0.5, height * 0.5, 3000);
         this.guessed_sign = "";
         this.valid_sign = "";
         this.targeted_signs = {};
@@ -24,13 +26,16 @@ export class Engine {
         this.enableGUI = true;
         this.enableText = true;
         this.state = 0;
-        this.currentBackground;
+        this.currentBackground = null;
         this.variables = new Object;
+        this.gameStarted = false;
         this.ratio;
-        this.ratioX;
-        this.ratioY;
+        this.ratioX = 1;
+        this.ratioY = 1;
 
-        this.sketch = sketch;
+        this.charactersLoadedCount = 0;
+
+        // this.scribble = null;
 
         this.lastInterraction = Date.now();
 
@@ -41,7 +46,7 @@ export class Engine {
             MENU: 4,
         }
         Object.freeze(this.ElementTypes)
-    
+
         this.CommandTypes = {
             END: 1,
             SHOW: 2,
@@ -65,7 +70,7 @@ export class Engine {
             TrueOrFalse: 9,
         }
         Object.freeze(this.TokenTypes)
-        
+
         this.Keywords = {
             Color: "color",
             Left: "LEFT",
@@ -79,37 +84,44 @@ export class Engine {
         // this.setup()
 
         sketch.mouseReleased = () => {
+            this.lastInterraction = Date.now();
             if (this.canAdvance) {
                 if (this.currentIndex + 1 >= this.processedScript.length) {
                     this.currentIndex = 0
                     this.gameStarted = false
                     this.reset()
-    
+
                 } else {
                     this.currentIndex++;
                 }
-    
+
             }
         }
     }
 
     show() {
-        if (!this.gameStarted) return;
+        if (!this.gameStarted) 
+        {
+            this.progressBar.render();
+            return;
+        }
+        
+        // todo vérifier si tout s'est chargé correctement avant d'afficher le GUI et le texte
 
         if (this.currentBackground != null) {
             this.sketch.imageMode(CORNER);
-            console.log(this.currentBackground.name);
             this.sketch.image(this.currentBackground, 0, 0, width, height);
-        }
-        else {
+        } else {
             this.sketch.background(0)
         }
 
-        this.sketch.stroke(150, 150, 255)
+        this.subSketch.stroke(150, 150, 255)
+        // this.sketch.stroke(150, 150, 255)
 
         this.drawAllCharacterSprites()
         this.playAllCharacterAnimations()
 
+        
         if (this.enableGUI) {
             this.renderGUI()
         }
@@ -121,14 +133,13 @@ export class Engine {
     update() {
         if (Date.now() - this.lastInterraction > 60000) this.stop();
 
-        if (Object.keys(this.targeted_signs).includes(this.guessed_sign) ) {
+        if (Object.keys(this.targeted_signs).includes(this.guessed_sign)) {
             this.targeted_signs[this.guessed_sign] += 1;
-        }
-        else {
+        } else {
             this.targeted_signs[this.guessed_sign] = 0;
         }
 
-        if (this.targeted_signs[this.guessed_sign] >= 6)  { 
+        if (this.targeted_signs[this.guessed_sign] >= 6) {
             this.valid_sign = this.guessed_sign;
         }
     }
@@ -146,6 +157,10 @@ export class Engine {
     }
 
     reset() {
+
+        // this.scribble = null;
+        this.subSketch = null;
+
         this.count_valid = 0;
         this.targeted_signs = [];
 
@@ -154,6 +169,8 @@ export class Engine {
         this.characters = []
         this.tags = []
         this.menus = []
+
+        this.charactersLoadedCount = 0;
 
         this.cl_mouseWasPressed = false;
         this.cl_lastHovered = null;
@@ -166,19 +183,20 @@ export class Engine {
         this.enableGUI = true
         this.enableText = true
         this.state = 0;
-        this.currentBackground
+        this.currentBackground = null;
         this.variables = new Object
-        this.gameStarted = true
+        this.gameStarted = false
+
         this.initCharArray()
         this.processInputFile()
         this.loadAllCharacters()
     }
-    
+
     stop() {
-        if (this.gameStarted)
-        {
+        if (this.gameStarted) {
             this.clearAllAnimations();
             this.clearAllSprites();
+            
             this.sketch.emit("core-app_manager-stop_application", {
                 "application_name": "sign_game"
             });
@@ -206,33 +224,33 @@ export class Engine {
     isCharacterDefined(name) {
         for (let char of this.characters) {
             if (char.name === name) {
-                return true
+                return true;
             }
         }
-        return false
+        return false;
     }
 
     jump(tagName) {
-        var jmpTag = this.getTagByName(tagName)
-        this.currentIndex = jmpTag[1]
+        var jmpTag = this.getTagByName(tagName);
+        this.currentIndex = jmpTag[1];
     }
 
     handleMenuClick(menuName, item) { //TODO: à appeler quand on réalise un signe
-        var menu = this.getMenuByName(menuName)
-        menu.handleClick(item)
+        var menu = this.getMenuByName(menuName);
+        menu.handleClick(item);
     }
-    
+
     handleMenuHover(menuName, item) {
-        var menu = this.getMenuByName(menuName)
-        menu.handleHover(item)
-    
+        var menu = this.getMenuByName(menuName);
+        menu.handleHover(item);
+
     }
-    
+
     handleMenuOutside(menuName, item) {
-        var menu = this.getMenuByName(menuName)
-        menu.handleOutside(item)
+        var menu = this.getMenuByName(menuName);
+        menu.handleOutside(item);
     }
-    
+
     // modified from https://stackoverflow.com/questions/4434076/best-way-to-alphanumeric-check-in-javascript
     isAlphaAt(str, i) {
         var code = str.charCodeAt(i);
@@ -274,8 +292,7 @@ export class Engine {
             var num3 = res[1]
             i += this.requireToken(this.TokenTypes.CloseParen, line, i)
             return [this.TokenTypes.ColorDefinition, prefixLen + i - start, this.sketch.color(num1, num2, num3)]
-        }
-        else if (keyword == "LEFT" || keyword == "RIGHT" || keyword == "CENTER")
+        } else if (keyword == "LEFT" || keyword == "RIGHT" || keyword == "CENTER")
             return [this.TokenTypes.LCR, prefixLen + i - start, keyword]
         else if (keyword == "true" || keyword == "false")
             return [this.TokenTypes.TrueOrFalse, prefixLen + i - start, keyword]
@@ -359,6 +376,7 @@ export class Engine {
 
 
     parseCharacter(line) {
+        var c;
         for (var i = 0; i < line.length; i++) {
             i += this.requireToken(this.TokenTypes.OpenParen, line, i)
             var res = this.requireTokenAndValue(this.TokenTypes.QuotedString, line, i)
@@ -378,11 +396,38 @@ export class Engine {
             i += this.requireToken(this.TokenTypes.CloseParen, line, i)
 
             // the contructor actually places these in an array, as a convenience
-            var c = new Character(this, id, color, path, this.charactersFiles[id])
+            c = new Character(this, id, color, path, this.charactersFiles[id])
             this.characters.push(c)
 
         }
+        this.checkCharactersLoaded(c)
     }
+
+    checkCharactersLoaded(char) {
+        (new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(char.areAnimationsLoaded && char.areSpritesLoaded);
+            }, 100);
+        })).then((loaded) => {
+            if (loaded) {
+                this.charactersLoadedCount++;
+                if (this.charactersLoadedCount == Object.keys(this.charactersFiles).length) {
+                    this.gameStarted = true;
+
+                    this.subEngine = new p5((subSketch) => {
+                        this.subSketch = subSketch;
+                        this.subSketch.setup = () => {
+                            this.subSketch.selfCanvas = this.subSketch
+                                .createCanvas(width, height)
+                                .position(0, 0)
+                                .style("z-index", this.sketch.z_index+1);
+                        }
+                    });
+                }
+            } else this.checkCharactersLoaded(char);
+        });
+    }
+
 
     parseImage(line) {
         for (var i = 0; i < line.length; i++) {
@@ -573,70 +618,49 @@ export class Engine {
         for (var line in this.sketch.inputFile) {
             if (this.sketch.inputFile[line].startsWith("#") || this.sketch.inputFile[line].trim().length == 0) {
                 // do nothing with comments and empty lines
-            }
-            else if (this.sketch.inputFile[line].startsWith("$")) {
+            } else if (this.sketch.inputFile[line].startsWith("$")) {
                 if (this.sketch.inputFile[line].startsWith("$defineC")) {
                     this.parseCharacter(this.sketch.inputFile[line].substring(8))
-                }
-                else if (this.sketch.inputFile[line].startsWith("$defineImg")) {
+                } else if (this.sketch.inputFile[line].startsWith("$defineImg")) {
                     this.parseImage(this.sketch.inputFile[line].substring(10))
-                }
-                else if (this.sketch.inputFile[line].startsWith("$bg")) {
+                } else if (this.sketch.inputFile[line].startsWith("$bg")) {
                     this.parseBG(this.sketch.inputFile[line].substring(3))
-                }
-                else if (this.sketch.inputFile[line].startsWith("$show")) {
+                } else if (this.sketch.inputFile[line].startsWith("$show")) {
                     this.parseShow(this.sketch.inputFile[line].substring(5))
-                }
-                else if (this.sketch.inputFile[line].startsWith("$hide")) {
+                } else if (this.sketch.inputFile[line].startsWith("$hide")) {
                     this.parseHide(this.sketch.inputFile[line].substring(5))
-                }
-                else if (this.sketch.inputFile[line].startsWith("$tag")) {
+                } else if (this.sketch.inputFile[line].startsWith("$tag")) {
                     this.parseTag(this.sketch.inputFile[line].substring(4))
-                }
-                else if (this.sketch.inputFile[line].startsWith("$jump")) {
+                } else if (this.sketch.inputFile[line].startsWith("$jump")) {
                     this.parseJump(this.sketch.inputFile[line].substring(5))
-                }
-                else if (this.sketch.inputFile[line].startsWith("$menu")) {
+                } else if (this.sketch.inputFile[line].startsWith("$menu")) {
                     this.parseMenu(this.sketch.inputFile[line].substring(5))
-                }
-                else if (this.sketch.inputFile[line].startsWith("$setVar")) {
+                } else if (this.sketch.inputFile[line].startsWith("$setVar")) {
                     this.parseVariable(this.sketch.inputFile[line].substring(7))
-                }
-
-                else if (this.sketch.inputFile[line].startsWith("$if")) {
+                } else if (this.sketch.inputFile[line].startsWith("$if")) {
                     this.parseConditional(this.sketch.inputFile[line].substring(3))
-                }
-
-                else if (this.sketch.inputFile[line].startsWith("$setSprite")) {
+                } else if (this.sketch.inputFile[line].startsWith("$setSprite")) {
                     this.parseSetSprite(this.sketch.inputFile[line].substring(10))
-                }
-
-                else if (this.sketch.inputFile[line].startsWith("$setAnimation")) {
+                } else if (this.sketch.inputFile[line].startsWith("$setAnimation")) {
                     this.parseSetAnimation(this.sketch.inputFile[line].substring(13));
                 }
 
-            }
-            else {
+            } else {
                 // anything left is either an empty line, or a character name followed by dialog
                 if (this.sketch.inputFile[line].trim() == "END") {
                     this.processedScript.push(new CommandEnd(this))
-                    
-                }
-                else {
+
+                } else {
 
                     let splitRes = split(this.sketch.inputFile[line], ": ")
 
                     if (splitRes[1]) {
                         var cmd = split(splitRes[1], "&")
-                        if (!cmd[1])
-                        {
+                        if (!cmd[1]) {
                             this.processedScript.push(new Dialog(this, splitRes[0], splitRes[1], ))
-                        }
-                        else
+                        } else
                             this.processedScript.push(new Dialog(this, splitRes[0], cmd[0], cmd[1]))
-                    }
-                    else if (this.sketch.inputFile[line][0] == "&") {
-                    }
+                    } else if (this.sketch.inputFile[line][0] == "&") {}
                 }
             }
         }
@@ -674,7 +698,7 @@ export class Engine {
     getTagByName(nameString) {
 
         for (var i = 0; i < this.tags.length; i++) {
-                if (this.tags[i][0] === nameString) {
+            if (this.tags[i][0] === nameString) {
                 return this.tags[i]
             }
         }
@@ -690,26 +714,21 @@ export class Engine {
                 return this.images[i]
             }
         }
+        console.log("returning null for image "+ nameString)
         return null
     }
 
 
     setup(charactersFiles) {
-        // this.sketch.createCanvas(this.sketch.min(this.sketch.windowWidth,800), this.sketch.min(this.sketch.windowHeight,600));
-        // this.ratioY = this.sketch.min(this.sketch.windowHeight)/height;
-        // this.ratioX = this.sketch.min(this.sketch.windowWidth)/width;
-        // this.ratioY = height/600
-        // this.ratioX = width/800
         this.charactersFiles = charactersFiles
         this.ratioY = 1;
         this.ratioX = 1;
-    
+
         this.ratio = this.ratioY;
-        
+
         this.reset();
-        // song.playMode('restart')
-        // song.play()
-        this.scribble = new Scribble();
+
+        this.scribble = new Scribble(this.subSketch);
         this.scribble.bowing = 0;
         this.scribble.maxOffset = .1;
         this.scribble.roughness = 10;
@@ -718,16 +737,16 @@ export class Engine {
 
 
     renderGUI() {
-        this.sketch.strokeWeight(4*this.ratio)
-        this.scribble.scribbleFilling([20*this.ratioX, 20*this.ratioX, 780*this.ratioX, 780*this.ratioX], [450*this.ratioY, 590*this.ratioY, 590*this.ratioY, 450*this.ratioY], 2, -20)
+        this.subSketch.strokeWeight(4 * this.ratio)
+        this.scribble.scribbleFilling([600 * this.ratioX, 600 * this.ratioX, 1400 * this.ratioX, 1400 * this.ratioX], [710 * this.ratioY, 860 * this.ratioY, 860 * this.ratioY, 710 * this.ratioY], 2, -20)
     }
 
     renderText() {
-        this.sketch.fill(255)
-        this.sketch.stroke(0)
-        this.sketch.strokeWeight(8*this.ratio)
-        this.sketch.textFont(this.sketch.font)
-        this.sketch.textAlign(LEFT)
+        this.subSketch.fill(255)
+        this.subSketch.stroke(0)
+        this.subSketch.strokeWeight(8 * this.ratio)
+        this.subSketch.textFont(this.sketch.font)
+        this.subSketch.textAlign(LEFT)
 
         this.processedScript[this.currentIndex].render()
 
@@ -738,7 +757,7 @@ export class Engine {
 
     drawAllCharacterSprites() {
         for (var i = 0; i < this.characters.length; i++) {
-            this.characters[i].drawSprite() 
+            this.characters[i].drawSprite()
         }
 
     }
@@ -752,7 +771,7 @@ export class Engine {
 
     playAllCharacterAnimations() {
         for (var i = 0; i < this.characters.length; i++) {
-            this.characters[i].playAnimation() 
+            this.characters[i].playAnimation()
         }
 
     }
@@ -763,7 +782,7 @@ export class Engine {
             this.characters[i].lastAnimation = undefined
         }
     }
-    
+
 }
 
 class ScriptElement {
@@ -775,42 +794,46 @@ class ScriptElement {
 
 class Character {
     constructor(engine, name, charColor = 255, path = [], filesNamesDict = {}, xpos = width / 2, ypos = height / 2) {
-        this.name = name
-        this.charColor = charColor
-        this.path = path
-        this.xpos = xpos
-        this.ypos = ypos
-        this.lastSprite = 0
-        this.lastAnimation = undefined
+        this.name = name;
+        this.charColor = charColor;
+        this.path = path;
+        this.xpos = xpos;
+        this.ypos = ypos;
+        this.lastSprite = 0;
+        this.lastAnimation = undefined;
 
         this.lastTimeAnimationWasPlayed = -15000;
         this.isAnimationPlayable = true;
+        this.areSpritesLoaded = false;
+        this.areAnimationsLoaded = false;
 
-        this.engine = engine
+        this.engine = engine;
 
         // Chargement des sprites
-        this.sprites = {}
+        this.sprites = {};
         if (path.length) {
             for (let spriteName of filesNamesDict["sprites"]) {
-                this.engine.sketch.loadImage(path + "/sprites/" + spriteName, img => { 
+                this.engine.sketch.loadImage(path + "/sprites/" + spriteName, img => {
                     if (img != null) {
                         this.sprites[spriteName.substring(0, spriteName.indexOf("."))] = img;
+                        if (Object.keys(this.sprites).length == filesNamesDict["sprites"].length) this.areSpritesLoaded = true;
                     }
                 })
             }
         }
         // Chargement des animations
-        this.animations = {}
+        this.animations = {};
+        if (filesNamesDict["animations"].length == 0) this.areAnimationsLoaded = true;
         if (path.length) {
             for (let animationName of filesNamesDict["animations"]) {
-                let video = this.engine.sketch.createVideo([path + "/animations/" + animationName],  () => { 
+                let video = this.engine.sketch.createVideo([path + "/animations/" + animationName], () => {
                     if (video != null) {
                         video.hide();
                         this.animations[animationName.substring(0, animationName.indexOf("."))] = video;
+                        if (Object.keys(this.animations).length == filesNamesDict["animations"].length) this.areAnimationsLoaded = true;
                     }
                 });
             }
-
         }
 
         this.currentSprite = 0
@@ -825,17 +848,14 @@ class Character {
     setAnimation(name) {
         (new Promise((resolve, reject) => {
             setTimeout(() => {
-              resolve(this.animations[name] != undefined);
+                resolve(this.animations[name] != undefined);
             }, 100);
         })).then((isAnimAvaible) => {
-            if (isAnimAvaible) 
-            {
+            if (isAnimAvaible) {
                 this.currentAnimation = this.animations[name];
                 this.currentSprite = 0;
-            }
-            else this.setAnimation(name)
+            } else this.setAnimation(name)
         });
-          
     }
 
     setPos(pos) {
@@ -853,7 +873,7 @@ class Character {
             if (this.currentSprite != 0 && this.sprites[this.currentSprite] != null) {
                 this.engine.sketch.imageMode(CENTER)
                 this.sprites[this.currentSprite].resize(this.sprites[this.currentSprite].width * this.engine.ratioX, this.sprites[this.currentSprite].height * this.engine.ratioY)
-                this.engine.sketch.image(this.sprites[this.currentSprite], this.xpos - this.sprites[this.currentSprite].width/8, this.ypos)
+                this.engine.sketch.image(this.sprites[this.currentSprite], this.xpos - this.sprites[this.currentSprite].width / 8, this.ypos)
             }
         }
     }
@@ -861,13 +881,12 @@ class Character {
     playAnimation() {
         if (this.path.length && this.currentAnimation != undefined) {
             // si la vidéo n'est pas en train de jouer et qu'elle est jouable
-            if (!this.currentAnimation.elt.ended && this.isAnimationPlayable)
-            {
+            if (!this.currentAnimation.elt.ended && this.isAnimationPlayable) {
                 this.currentAnimation.show();
                 this.isAnimationPlayable = false;
                 this.currentAnimation.volume(0);
                 this.currentAnimation.size(this.currentAnimation.width * this.engine.ratioX, this.currentAnimation.height * this.engine.ratioY);
-                this.currentAnimation.position(this.xpos - 3*this.currentAnimation.width/5 , 0);
+                this.currentAnimation.position(this.xpos - 3 * this.currentAnimation.width / 5, 0);
                 this.currentAnimation.loop();
 
                 this.engine.lastTimeAnimationWasPlayed = Date.now();
@@ -890,7 +909,9 @@ class MyImage {
     constructor(name, path, engine) {
         this.name = name
         this.path = path
-        engine.sketch.loadImage(path, img => { this.p5Image = img })
+        engine.sketch.loadImage(path, img => {
+            this.p5Image = img
+        })
         engine.images.push(this)
 
         this.currentSprite = 0
@@ -920,7 +941,7 @@ class CommandEnd extends ScriptElement {
     }
 
     render() {
-        engine.sketch.text(this.engine.endText, 40, 460, 540, height - 40);
+        this.engine.subSketch.text(this.engine.endText, 40, 460, 540, height - 40);
         if (this.engine.gameStarted) {
             this.engine.stop()
         }
@@ -941,7 +962,15 @@ class CommandBG extends ScriptElement {
         if (this.name == "none") {
             this.engine.currentBackground = null
         } else {
-            this.engine.currentBackground = this.myImage.p5Image
+            (new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve(this.myImage.p5Image != undefined);
+                }, 100);
+            })).then((loaded) => {
+                if (loaded) this.engine.currentBackground = this.myImage.p5Image;
+                else this.render();
+            });
+
         }
     }
 }
@@ -1094,14 +1123,14 @@ class CommandMenu extends ScriptElement {
                 this.buttons.push(new Clickable())
                 this.buttons[i].locate(width / 2, height / 2)
 
-                this.buttons[i].cornerRadius = 10;       //Corner radius of the clickable (float)
-                this.buttons[i].strokeWeight = 2;        //Stroke width of the clickable (float)
-                this.buttons[i].stroke = "#000000";      //Border color of the clickable (hex number as a string)
-                this.buttons[i].text = "";       //Text of the clickable (string)
-                this.buttons[i].textColor = "#000000";   //Color of the text (hex number as a string)
-                this.buttons[i].textSize = 12;           //Size of the text (integer)
+                this.buttons[i].cornerRadius = 10; //Corner radius of the clickable (float)
+                this.buttons[i].strokeWeight = 2; //Stroke width of the clickable (float)
+                this.buttons[i].stroke = "#000000"; //Border color of the clickable (hex number as a string)
+                this.buttons[i].text = ""; //Text of the clickable (string)
+                this.buttons[i].textColor = "#000000"; //Color of the text (hex number as a string)
+                this.buttons[i].textSize = 12; //Size of the text (integer)
                 this.buttons[i].textFont = "sans-serif"; //Font of the text (string)
-                this.buttons[i].textScaled = false;       //Whether to scale the text with the clickable (boolean)
+                this.buttons[i].textScaled = false; //Whether to scale the text with the clickable (boolean)
                 this.buttons[i].locate(width / 4, 50 + (((height - 50) / this.menuItems.length) * i))
                 this.buttons[i].width = (width / 2)
                 this.buttons[i].height = ((height - 50) / this.menuItems.length) * .50
@@ -1111,12 +1140,12 @@ class CommandMenu extends ScriptElement {
                 this.buttons[i].onHover = function () {
                     return engine.handleMenuHover(menuName, i);
                 }
-                
+
                 this.buttons[i].onOutside = function () {
                     return engine.handleMenuOutside(menuName, i);
                 }
 
-                
+
                 this.buttons[i].onRelease = function () { //* A appeler lors d'un signe
                     return engine.handleMenuClick(menuName, i)
                 }
@@ -1124,15 +1153,15 @@ class CommandMenu extends ScriptElement {
             this.everdrawn = true
         }
         for (let i = 0; i < this.menuItems.length; i++) {
-            this.engine.sketch.push()
+            this.engine.subSketch.push()
             this.buttons[i].draw()
-            this.engine.sketch.pop()
+            this.engine.subSketch.pop()
 
-            this.engine.sketch.push()
-            this.engine.sketch.textAlign(CENTER, CENTER)
-            this.engine.sketch.textSize(24*this.engine.ratio)
-            this.engine.sketch.text(this.menuItems[i][0], width / 2 + 100, 50 + (((height - 50) / this.menuItems.length) * i) + (this.buttons[i].height / 2))
-            this.engine.sketch.pop()
+            this.engine.subSketch.push()
+            this.engine.subSketch.textAlign(CENTER, CENTER)
+            this.engine.subSketch.textSize(24 * this.engine.ratio)
+            this.engine.subSketch.text(this.menuItems[i][0], width / 2 + 100, 50 + (((height - 50) / this.menuItems.length) * i) + (this.buttons[i].height / 2))
+            this.engine.subSketch.pop()
         }
     }
 }
@@ -1150,15 +1179,14 @@ class Dialog extends ScriptElement {
     }
 
     render() {
-        this.engine.sketch.textAlign(LEFT)
-
+        console.log("Rendering dialog")
+        this.engine.subSketch.textAlign(LEFT)
         if (this.characterName != "N") {
 
-            this.engine.sketch.textSize(24* this.engine.ratio)
+            this.engine.subSketch.textSize(24 * this.engine.ratio)
             var char = this.engine.getCharacterByName(this.characterName)
-            this.engine.sketch.fill(char.charColor)
-            this.engine.sketch.text(this.characterName + ":", width/3, 420*this.engine.ratioY + this.yGap, width / 2, 460*this.engine.ratioY)
-            // this.engine.sketch.text(this.characterName + ":", 40*this.engine.ratioX, 420*this.engine.ratioY + this.yGap, width / 2, 460*this.engine.ratioY)
+            this.engine.subSketch.fill(char.charColor)
+            this.engine.subSketch.text(this.characterName + ":", width / 3, 420 * this.engine.ratioY + this.yGap, width / 2, 460 * this.engine.ratioY)
 
             if (this.command && this.command.length) {
                 if (this.command.includes("LEFT"))
@@ -1169,10 +1197,52 @@ class Dialog extends ScriptElement {
                     char.setPos("CENTER")
             }
         }
-        this.engine.sketch.textSize(20* this.engine.ratioY)
-        this.engine.sketch.fill(255)
-        this.engine.sketch.text(this.dialog, width/3, 460*this.engine.ratioY + this.yGap, 740*this.engine.ratioX, height - 40)
-        // this.engine.sketch.text(this.dialog, 40*this.engine.ratioX, 460*this.engine.ratioY + this.yGap, 740*this.engine.ratioX, height - 40)
-        
+        this.engine.subSketch.textSize(20 * this.engine.ratioY)
+        this.engine.subSketch.fill(255)
+        this.engine.subSketch.text(this.dialog, width / 3, 460 * this.engine.ratioY + this.yGap, 740 * this.engine.ratioX, height - 40)
+
+    }
+}
+
+class ProgressBar {
+    constructor(engine, _x1, _x2, _y1, _y2, _spd) {
+        this.engine = engine;
+        this.pBar = {
+            curr: this.engine.sketch.millis(),
+            newCurr: 0,
+            x1: _x1,
+            x2: _x2,
+            y1: _y1,
+            y2: _y2,
+            spd: _spd,
+            col: 280
+        }
+    }
+  
+    update() {
+        this.pBar.curr >= this.pBar.x2 ?
+        this.pBar.curr = this.pBar.x2 :
+        this.pBar.curr = this.engine.sketch.map(this.engine.sketch.millis(), this.pBar.newCurr, this.pBar.newCurr + this.pBar.spd, this.pBar.x1, this.pBar.x2);
+        return this;
+    }
+  
+    fillBar() {
+        this.engine.sketch.stroke(this.pBar.col, 1, 0.8, 1);
+        this.engine.sketch.strokeWeight(30);
+        this.engine.sketch.line(this.pBar.x1, this.pBar.y1, this.pBar.curr, this.pBar.y2);
+  
+        return this;
+    }
+  
+    display() {
+        this.engine.sketch.stroke(this.pBar.col, 1, 0.75, 0.3);
+        this.engine.sketch.strokeWeight(30);
+        this.engine.sketch.line(this.pBar.x1, this.pBar.y1, this.pBar.x2, this.pBar.y2);
+    
+        return this;
+    }
+  
+    render() {
+        return this.update().display().fillBar();
     }
 }
