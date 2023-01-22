@@ -33,15 +33,13 @@ $setSprite("Lina", "Lina02")
 
 Lina: You will be able to make choices during the game according to your desires. All in sign language of course!
 
-$setSprite("Lina", "Lina04")
+$setAnimation("Lina", "ok")
 
 Lina: I'm a little hungry, how about a bite to eat?
 
 $menu("YesMenu", 1, "Yes", afterYesMenu)
 
 $tag(afterYesMenu)
-
-
 
 
 END

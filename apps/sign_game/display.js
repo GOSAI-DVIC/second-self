@@ -8,7 +8,7 @@ export const sign_game = new p5((sketch) => {
     sketch.characters = undefined;
 
     sketch.setup_game = () => {
-        sketch.sign_game = new Engine(sketch, sign_game);
+        sketch.sign_game = new Engine(sketch);
         
         (new Promise((resolve, reject) => {
             setTimeout(() => {
@@ -85,7 +85,7 @@ export const sign_game = new p5((sketch) => {
 
     sketch.show = () => {
         if (!sketch.activated) return;
-        sketch.clear();
+        
         sketch.sign_game.show();
     };
 });

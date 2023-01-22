@@ -3,10 +3,9 @@
 // la value de chacun est son count de validation
 
 export class Engine {
-    constructor(sketch, sign_game) {
+    constructor(sketch) {
         this.sketch = sketch;
         this.subSketch = null;
-        // this.sign_game = sign_game;
         this.sketch.colorMode(HSL, 360, 1, 1, 1);
         this.progressBar = new ProgressBar(this, width * 0.25, width * 0.75, height * 0.5, height * 0.5);
         this.guessed_sign = "";
@@ -35,8 +34,6 @@ export class Engine {
 
         this.totalElementsLoaded = 0;
         this.charactersLoadedCount = 0;
-
-        // this.scribble = null;
 
         this.lastInterraction = Date.now();
 
@@ -81,9 +78,6 @@ export class Engine {
             False: "false",
         }
         Object.freeze(this.Keywords)
-        // this.preload();
-        // this.setup()
-
         
     }
 
@@ -116,8 +110,6 @@ export class Engine {
     }
 
     reset() {
-
-        // this.scribble = null;
         this.subSketch = null;
 
         this.count_valid = 0;
@@ -402,6 +394,11 @@ export class Engine {
                             }
                         }
                     });
+
+                    this.scribble = new Scribble(this.subEngine);
+                    this.scribble.bowing = 0;
+                    this.scribble.maxOffset = .1;
+                    this.scribble.roughness = 10;
                 }
             } else this.checkCharactersLoaded(char);
         });
@@ -711,14 +708,10 @@ export class Engine {
         this.ratio = this.ratioY;
 
         this.reset();
-
-        this.scribble = new Scribble(this.subSketch);
-        this.scribble.bowing = 0;
-        this.scribble.maxOffset = .1;
-        this.scribble.roughness = 10;
     }
 
     show() {
+        this.sketch.clear();
         if (!this.gameStarted) 
         {
             this.sketch.noStroke();
@@ -729,6 +722,8 @@ export class Engine {
             this.progressBar.render();
             return;
         }
+
+        this.subSketch.clear();
         
         // todo vérifier si tout s'est chargé correctement avant d'afficher le GUI et le texte
 
@@ -738,9 +733,9 @@ export class Engine {
         } else {
             this.sketch.background(0)
         }
-
-        this.subSketch.stroke(150, 150, 255)
-        this.sketch.stroke(150, 150, 255)
+// 
+        this.subSketch.stroke(150, 150, 255, 80)
+        // this.sketch.stroke(150, 150, 255)
 
         this.drawAllCharacterSprites()
         this.playAllCharacterAnimations()
@@ -756,7 +751,7 @@ export class Engine {
 
     renderGUI() {
         this.subSketch.strokeWeight(4 * this.ratio)
-        this.scribble.scribbleFilling([600 * this.ratioX, 600 * this.ratioX, 1400 * this.ratioX, 1400 * this.ratioX], [710 * this.ratioY, 860 * this.ratioY, 860 * this.ratioY, 710 * this.ratioY], 2, -20)
+        this.scribble.scribbleFilling([600 * this.ratioX, 600 * this.ratioX, 1400 * this.ratioX, 1400 * this.ratioX], [710 * this.ratioY, 900 * this.ratioY, 900 * this.ratioY, 710 * this.ratioY], 2, -20)
     }
 
     renderText() {
@@ -880,6 +875,7 @@ class Character {
             if (isAnimAvaible) {
                 this.currentAnimation = this.animations[name];
                 this.currentSprite = 0;
+                this.isAnimationPlayable = true;
             } else this.setAnimation(name)
         });
     }
@@ -912,7 +908,7 @@ class Character {
                 this.isAnimationPlayable = false;
                 this.currentAnimation.volume(0);
                 this.currentAnimation.size(this.currentAnimation.width * this.engine.ratioX, this.currentAnimation.height * this.engine.ratioY);
-                this.currentAnimation.position(this.xpos - 3 * this.currentAnimation.width / 5, 0);
+                this.currentAnimation.position(this.xpos - 13 * this.currentAnimation.width / 20, 25);
                 this.currentAnimation.loop();
 
                 this.engine.lastTimeAnimationWasPlayed = Date.now();
@@ -925,7 +921,7 @@ class Character {
             if (this.currentAnimation != undefined) {
                 this.currentAnimation.pause();
                 this.currentAnimation.hide();
-                this.currentAnimation != undefined
+                this.currentAnimation = undefined
             }
         }
     }
@@ -1131,7 +1127,7 @@ class CommandMenu extends ScriptElement {
     handleHover(item) { //* Plus utile
         this.engine.subSketch.push()
         this.buttons[item].color = "#FFFFFFC0"
-        this.engine.sketch.pop()
+        this.engine.subSketch.pop()
     }
 
     handleOutside(item) { //* Plus utile
@@ -1170,7 +1166,6 @@ class CommandMenu extends ScriptElement {
                 this.buttons[i].onOutside = function () {
                     return engine.handleMenuOutside(menuName, i);
                 }
-
 
                 this.buttons[i].onRelease = function () { //* A appeler lors d'un signe
                     return engine.handleMenuClick(menuName, i)
@@ -1224,7 +1219,6 @@ class Dialog extends ScriptElement {
         }
         this.engine.subSketch.textSize(20 * this.engine.ratioY)
         this.engine.subSketch.fill(255)
-        console.log(this.dialog)
         this.engine.subSketch.text(this.dialog, width / 3, 460 * this.engine.ratioY + this.yGap, 740 * this.engine.ratioX, height - 40)
 
     }
