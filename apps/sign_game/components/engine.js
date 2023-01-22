@@ -84,56 +84,10 @@ export class Engine {
         // this.preload();
         // this.setup()
 
-        sketch.mouseReleased = () => {
-            this.lastInterraction = Date.now();
-            if (this.canAdvance) {
-                if (this.currentIndex + 1 >= this.processedScript.length) {
-                    this.currentIndex = 0
-                    this.gameStarted = false
-                    this.reset()
-
-                } else {
-                    this.currentIndex++;
-                }
-
-            }
-        }
+        
     }
 
-    show() {
-        if (!this.gameStarted) 
-        {
-            this.sketch.noStroke();
-            this.sketch.textSize(40 * this.ratioY)
-            this.sketch.fill(255)
-            this.sketch.text("Loading...", width / 2 - 80, 620 * this.ratioY)
-            this.progressBar.pBar.curr = this.progressBar.pBar.x1 + (this.progressBar.pBar.x2 - this.progressBar.pBar.x1)*this.totalElementsLoaded/this.totalElementsToLoad
-            this.progressBar.render();
-            return;
-        }
-        
-        // todo vérifier si tout s'est chargé correctement avant d'afficher le GUI et le texte
 
-        if (this.currentBackground != null) {
-            this.sketch.imageMode(CORNER);
-            this.sketch.image(this.currentBackground, 0, 0, width, height);
-        } else {
-            this.sketch.background(0)
-        }
-
-        this.subSketch.stroke(150, 150, 255)
-        // this.sketch.stroke(150, 150, 255)
-
-        this.drawAllCharacterSprites()
-        this.playAllCharacterAnimations()
-        
-        if (this.enableGUI) {
-            this.renderGUI()
-        }
-        if (this.enableText) {
-            this.renderText()
-        }
-    }
 
     update() {
         if (Date.now() - this.lastInterraction > 60000) this.stop();
@@ -201,6 +155,11 @@ export class Engine {
         if (this.gameStarted) {
             this.clearAllAnimations();
             this.clearAllSprites();
+            this.subSketch.remove();
+
+            for(let char of this.characters) {
+                char.clear();
+            }
             
             this.sketch.emit("core-app_manager-stop_application", {
                 "application_name": "sign_game"
@@ -426,6 +385,21 @@ export class Engine {
                                 .createCanvas(width, height)
                                 .position(0, 0)
                                 .style("z-index", this.sketch.z_index+1);
+                        }
+
+                        this.subSketch.mouseReleased = () => {
+                            this.lastInterraction = Date.now();
+                            if (this.canAdvance) {
+                                if (this.currentIndex + 1 >= this.processedScript.length) {
+                                    this.currentIndex = 0
+                                    this.gameStarted = false
+                                    this.reset()
+                
+                                } else {
+                                    this.currentIndex++;
+                                }
+                
+                            }
                         }
                     });
                 }
@@ -719,7 +693,6 @@ export class Engine {
                 return this.images[i]
             }
         }
-        console.log("returning null for image "+ nameString)
         return null
     }
 
@@ -745,6 +718,40 @@ export class Engine {
         this.scribble.roughness = 10;
     }
 
+    show() {
+        if (!this.gameStarted) 
+        {
+            this.sketch.noStroke();
+            this.sketch.textSize(40 * this.ratioY)
+            this.sketch.fill(255)
+            this.sketch.text("Loading...", width / 2 - 80, 620 * this.ratioY)
+            this.progressBar.pBar.curr = this.progressBar.pBar.x1 + (this.progressBar.pBar.x2 - this.progressBar.pBar.x1)*this.totalElementsLoaded/this.totalElementsToLoad
+            this.progressBar.render();
+            return;
+        }
+        
+        // todo vérifier si tout s'est chargé correctement avant d'afficher le GUI et le texte
+
+        if (this.currentBackground != null) {
+            this.sketch.imageMode(CORNER);
+            this.sketch.image(this.currentBackground, 0, 0, width, height);
+        } else {
+            this.sketch.background(0)
+        }
+
+        this.subSketch.stroke(150, 150, 255)
+        this.sketch.stroke(150, 150, 255)
+
+        this.drawAllCharacterSprites()
+        this.playAllCharacterAnimations()
+        
+        if (this.enableGUI) {
+            this.renderGUI()
+        }
+        if (this.enableText) {
+            this.renderText()
+        }
+    }
 
 
     renderGUI() {
@@ -762,7 +769,7 @@ export class Engine {
         this.processedScript[this.currentIndex].render()
 
         if (this.processedScript[this.currentIndex].type == this.ElementTypes.COMMAND && this.processedScript[this.currentIndex].commandType != this.CommandTypes.END) {
-            this.sketch.mouseReleased()
+            this.subSketch.mouseReleased()
         }
     }
 
@@ -851,6 +858,12 @@ class Character {
 
         this.currentSprite = 0
         this.currentAnimation = undefined
+    }
+
+    clear() {
+        for (let video of Object.values(this.animations)) {
+            this.engine.sketch.remove(video);
+        }
     }
 
     setSprite(spriteName) {
@@ -1116,16 +1129,16 @@ class CommandMenu extends ScriptElement {
     }
 
     handleHover(item) { //* Plus utile
-        this.engine.sketch.push()
+        this.engine.subSketch.push()
         this.buttons[item].color = "#FFFFFFC0"
         this.engine.sketch.pop()
     }
 
     handleOutside(item) { //* Plus utile
         if (this.buttons.length == 0) return;
-        this.engine.sketch.push()
+        this.engine.subSketch.push()
         this.buttons[item].color = "#FFFFFF80"
-        this.engine.sketch.pop()
+        this.engine.subSketch.pop()
     }
 
     render() {
@@ -1192,7 +1205,6 @@ class Dialog extends ScriptElement {
     }
 
     render() {
-        console.log("Rendering dialog")
         this.engine.subSketch.textAlign(LEFT)
         if (this.characterName != "N") {
 
@@ -1212,6 +1224,7 @@ class Dialog extends ScriptElement {
         }
         this.engine.subSketch.textSize(20 * this.engine.ratioY)
         this.engine.subSketch.fill(255)
+        console.log(this.dialog)
         this.engine.subSketch.text(this.dialog, width / 3, 460 * this.engine.ratioY + this.yGap, 740 * this.engine.ratioX, height - 40)
 
     }
