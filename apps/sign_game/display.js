@@ -6,18 +6,19 @@ export const sign_game = new p5((sketch) => {
     sketch.activated = false;
 
     sketch.characters = undefined;
+    sketch.actions = undefined;
 
     sketch.setup_game = () => {
         sketch.sign_game = new Engine(sketch);
         
         (new Promise((resolve, reject) => {
             setTimeout(() => {
-              resolve(sketch.characters != undefined);
+              resolve(sketch.characters != undefined && sketch.actions != undefined);
             }, 100);
-        })).then((areCharactersAvaible) => {
-            if (areCharactersAvaible) 
+        })).then((areCharActionsAvaible) => {
+            if (areCharActionsAvaible) 
             {
-                sketch.sign_game.setup(sketch.characters);
+                sketch.sign_game.setup(sketch.characters, sketch.actions);
                 sketch.activated = true;
             }
             else sketch.setup_game()
@@ -32,8 +33,13 @@ export const sign_game = new p5((sketch) => {
             .style("z-index", sketch.z_index);
             
         socket.on("applications-sign_game-characters", (data) => {
+            console.log("receiving characters");
             sketch.characters = data;
-            // console.log("update_characters");
+        });
+
+        socket.on(`applications-${sketch.name}-set_actions`, (data) => {
+            console.log("receiving actions");
+            sketch.actions = data["actions"];
         });
 
         socket.on(`applications-${sketch.name}-new_sign`, (data) => {
@@ -42,6 +48,7 @@ export const sign_game = new p5((sketch) => {
                 data["probability"],
                 data["actions"]
             );
+            sketch.actions = data["actions"];
         });
 
         socket.on(`applications-${sketch.name}-mirrored_data`, (data) => {

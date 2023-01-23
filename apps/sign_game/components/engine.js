@@ -8,23 +8,13 @@ export class Engine {
         this.subSketch = null;
         this.sketch.colorMode(HSL, 360, 1, 1, 1);
         this.progressBar = new ProgressBar(this, width * 0.25, width * 0.75, height * 0.5, height * 0.5);
-        this.guessed_sign = "";
-        this.valid_sign = "";
-        this.targeted_signs = {};
 
-        this.processedScript = [];
-        this.currentIndex = 0;
+        this.sign_count_threshold = 6;
+
         this.endText = "-End of Script-";
-        this.characters = [];
-        this.charactersFiles = {};
+        // this.charactersFiles = {};
         this.images = [];
-        this.tags = [];
-        this.menus = [];
-        this.canAdvance = false;
         this.DEBUG = false;
-        this.enableGUI = true;
-        this.enableText = true;
-        this.state = 0;
         this.currentBackground = null;
         this.variables = new Object;
         this.gameStarted = false;
@@ -33,7 +23,6 @@ export class Engine {
         this.ratioY = 1;
 
         this.totalElementsLoaded = 0;
-        this.charactersLoadedCount = 0;
 
         this.lastInterraction = Date.now();
 
@@ -82,19 +71,29 @@ export class Engine {
     }
 
 
-
     update() {
         if (Date.now() - this.lastInterraction > 60000) this.stop();
+        if (!this.gameStarted) return;
 
-        if (Object.keys(this.targeted_signs).includes(this.guessed_sign)) {
-            this.targeted_signs[this.guessed_sign] += 1;
-        } else {
-            this.targeted_signs[this.guessed_sign] = 0;
-        }
+        if (this.guessed_sign != undefined)
+        {
+            if (Object.keys(this.targetedSignsScores).includes(this.guessed_sign)) {
 
-        if (this.targeted_signs[this.guessed_sign] >= 6) {
-            this.valid_sign = this.guessed_sign;
+                for (let sign of Object.keys(this.targetedSignsScores)) {
+                    if (sign != this.guessed_sign) {
+                        this.targetedSignsScores[sign] = 0;
+                    }
+                }
+                this.targetedSignsScores[this.guessed_sign] += 1;
+            } 
+    
+            if (this.targetedSignsScores["ok"] >= this.sign_count_threshold && Date.now() - this.lastInterraction > 3000) {
+                this.subSketch.mouseReleased();
+                this.guessed_sign = "empty";
+                this.targetedSignsScores = {};
+            }
         }
+        
     }
 
     update_sign_data(results) {
@@ -112,14 +111,15 @@ export class Engine {
     reset() {
         this.subSketch = null;
 
-        this.count_valid = 0;
-        this.targeted_signs = [];
-
         this.processedScript = []
         this.currentIndex = 0
         this.characters = []
         this.tags = []
         this.menus = []
+
+        this.guessed_sign = "empty";
+        this.sign_prob = 0;
+        this.targetedSignsScores = {};
 
         this.charactersLoadedCount = 0;
 
@@ -324,10 +324,6 @@ export class Engine {
         }
 
         throw "Expected token " + type + " but saw " + tokenResult[0] + " at position " + index + " of line " + line;
-    }
-
-    update_characters(charactersFiles) {
-        this.charactersFiles = charactersFiles
     }
 
 
@@ -651,11 +647,11 @@ export class Engine {
     getCharacterByName(nameString) {
         for (var i = 0; i < this.characters.length; i++) {
             if (this.characters[i].name === nameString) {
-                return this.characters[i]
+                return this.characters[i];
             }
         }
         // this should never happen since we preprocess and create all named characters
-        return null
+        return null;
     }
 
 
@@ -663,11 +659,11 @@ export class Engine {
 
         for (var i = 0; i < this.menus.length; i++) {
             if (this.menus[i].menuName === nameString) {
-                return this.menus[i]
+                return this.menus[i];
             }
         }
         // this should never happen since we preprocess and create all named characters
-        return null
+        return null;
     }
 
 
@@ -675,11 +671,11 @@ export class Engine {
 
         for (var i = 0; i < this.tags.length; i++) {
             if (this.tags[i][0] === nameString) {
-                return this.tags[i]
+                return this.tags[i];
             }
         }
         // this should never happen since we preprocess and create all named characters
-        return null
+        return null;
     }
 
 
@@ -687,19 +683,20 @@ export class Engine {
         // if (this.images == undefined) return null
         for (var i = 0; i < this.images.length; i++) {
             if (this.images[i].name === nameString) {
-                return this.images[i]
+                return this.images[i];
             }
         }
-        return null
+        return null;
     }
 
 
-    setup(charactersFiles) {
-        this.charactersFiles = charactersFiles
-        this.totalElementsToLoad = 0
+    setup(charactersFiles, actions) {
+        this.charactersFiles = charactersFiles;
+        this.actions = actions;
+        this.totalElementsToLoad = 0;
         for (var charName in this.charactersFiles) {
-            this.totalElementsToLoad += this.charactersFiles[charName]["sprites"].length
-            this.totalElementsToLoad += this.charactersFiles[charName]["animations"].length
+            this.totalElementsToLoad += this.charactersFiles[charName]["sprites"].length;
+            this.totalElementsToLoad += this.charactersFiles[charName]["animations"].length;
         }
 
         this.ratioY = 1;
@@ -715,10 +712,10 @@ export class Engine {
         if (!this.gameStarted) 
         {
             this.sketch.noStroke();
-            this.sketch.textSize(40 * this.ratioY)
-            this.sketch.fill(255)
-            this.sketch.text("Loading...", width / 2 - 80, 620 * this.ratioY)
-            this.progressBar.pBar.curr = this.progressBar.pBar.x1 + (this.progressBar.pBar.x2 - this.progressBar.pBar.x1)*this.totalElementsLoaded/this.totalElementsToLoad
+            this.sketch.textSize(40 * this.ratioY);
+            this.sketch.fill(255);
+            this.sketch.text("Loading...", width / 2 - 80, 620 * this.ratioY);
+            this.progressBar.pBar.curr = this.progressBar.pBar.x1 + (this.progressBar.pBar.x2 - this.progressBar.pBar.x1)*this.totalElementsLoaded/this.totalElementsToLoad;
             this.progressBar.render();
             return;
         }
@@ -1116,6 +1113,13 @@ class CommandMenu extends ScriptElement {
         this.buttons = [];
         this.engine = engine;
         if (engine.getMenuByName(menuName) == null) this.engine.menus.push(this);
+        this.engine.targetedSignsScores = {};
+
+        for (let item of menuItems) {
+            if (!this.engine.actions.includes(item[0]))
+                throw "Element " + item[0] + " in menu is not a valid action";
+            this.engine.targetedSignsScores[item[0]] = 0;
+        }
     }
 
     handleClick(item) { //* A appeler lors d'un signe
@@ -1183,6 +1187,15 @@ class CommandMenu extends ScriptElement {
             this.engine.subSketch.textSize(24 * this.engine.ratio)
             this.engine.subSketch.text(this.menuItems[i][0], width / 2 + 100, 50 + (((height - 50) / this.menuItems.length) * i) + (this.buttons[i].height / 2))
             this.engine.subSketch.pop()
+        }
+
+        if (this.engine.guessed_sign != undefined)
+        {    
+            if (this.engine.targetedSignsScores[this.engine.guessed_sign] >= this.engine.sign_count_threshold && Date.now() - this.engine.lastInterraction > 3000) {
+                this.engine.handleMenuClick(this.name, Object.keys(this.engine.targetedSignsScores).indexOf(this.engine.guessed_sign))
+                this.engine.guessed_sign = "empty";
+                this.engine.targetedSignsScores = {};
+            }
         }
     }
 }

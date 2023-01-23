@@ -9,14 +9,14 @@ class Application(BaseApplication):
 
     def __init__(self, name, hal, server, manager):
         super().__init__(name, hal, server, manager)
-        # self.requires["slr"] = ["new_sign"]
+        self.requires["slr"] = ["new_sign"]
         # self.requires["pose_to_mirror"] = ["mirrored_data"]
 
         self.is_exclusive = True
         self.applications_allowed = ["menu", "hands"]
         self.applications_required = ["menu", "hands"]
 
-        self.executed_once = False
+        self.sent_actions_once = False
 
         self.characters = {}
         characters_path = os.path.join(os.path.dirname(__file__), "components/characters")
@@ -38,31 +38,28 @@ class Application(BaseApplication):
                 for video in os.listdir(animations_path):
                     self.characters[character]["animations"].append(video)
 
-        # threading.Thread(target=self.send_data, args ="characters").start()
         threading.Thread(target=self.send_data).start()
         
     def send_data(self):
-        time.sleep(0.2)
-        # self.server.send_data(f'applications-{self.name}-{event}', self.characters)
+        time.sleep(0.3)
         self.server.send_data(f'applications-{self.name}-characters', self.characters)
-        # self.executed_once = True
 
     def listener(self, source, event, data):
         super().listener(source, event, data)
-        # if not self.executed_once: self.execute_once()
-        # self.server.send_data(f'applications-{self.name}-characters', self.characters)
-        # if self.characters is not None: 
-        #     self.server.send_data("applications-sign_game-characters", self.characters)
 
-        # if self.started and source == "slr" and event == "new_sign":
-        #     self.data = data
-        #     if self.data is not None:
-        #         self.data = {
-        #             "guessed_sign": self.data["guessed_sign"], 
-        #             "probability": self.data["probability"], 
-        #             "actions": self.data["actions"] 
-        #         }
-        #         self.server.send_data(f'applications-{self.name}-{event}', self.data)
+        if self.started and source == "slr" and event == "new_sign":
+            self.data = data
+            if self.data is not None:
+                self.data = {
+                    "guessed_sign": self.data["guessed_sign"], 
+                    "probability": self.data["probability"], 
+                    "actions": self.data["actions"] 
+                }
+                self.server.send_data(f'applications-{self.name}-{event}', self.data)
+
+                if (self.sent_actions_once == False):
+                    self.server.send_data(f'applications-{self.name}-actions', self.data["actions"] )
+                    self.sent_actions_once = True
 
         # if source == "pose_to_mirror" and event == "mirrored_data":
         #     self.data = {
