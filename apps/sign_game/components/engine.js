@@ -733,7 +733,7 @@ export class Engine {
         } else {
             this.sketch.background(0)
         }
-// 
+
         this.subSketch.stroke(150, 150, 255, 80)
         // this.sketch.stroke(150, 150, 255)
 
@@ -751,7 +751,7 @@ export class Engine {
 
     renderGUI() {
         this.subSketch.strokeWeight(4 * this.ratio)
-        this.scribble.scribbleFilling([600 * this.ratioX, 600 * this.ratioX, 1400 * this.ratioX, 1400 * this.ratioX], [710 * this.ratioY, 900 * this.ratioY, 900 * this.ratioY, 710 * this.ratioY], 2, -20)
+        this.scribble.scribbleFilling([13*width/40 * this.ratioX, 13*width/40* this.ratioX, 31*width/40 * this.ratioX, 31*width/40 * this.ratioX], [27*height/40 * this.ratioY, 34*height/40 * this.ratioY, 34*height/40 * this.ratioY, 27*height/40 * this.ratioY], 2, -20)
     }
 
     renderText() {
