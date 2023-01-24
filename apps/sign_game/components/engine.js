@@ -485,6 +485,12 @@ export class Engine {
     parseMenu(line) {
         for (var i = 0; i < line.length; i++) {
             i += this.requireToken(this.TokenTypes.OpenParen, line, i)
+
+            var res = this.requireTokenAndValue(this.TokenTypes.QuotedString, line, i)
+            i += res[0]
+            var charName = res[1]
+            i += this.requireToken(this.TokenTypes.Comma, line, i)
+
             var res = this.requireTokenAndValue(this.TokenTypes.QuotedString, line, i)
             i += res[0]
             var menuName = res[1]
@@ -514,7 +520,7 @@ export class Engine {
             }
             i += this.requireToken(this.TokenTypes.CloseParen, line, i)
 
-            this.processedScript.push(new CommandMenu(menuName, menuItems, this))
+            this.processedScript.push(new CommandMenu(charName, menuName, menuItems, this))
         }
     }
 
@@ -748,7 +754,7 @@ export class Engine {
 
     renderGUI() {
         this.subSketch.strokeWeight(4 * this.ratio)
-        this.scribble.scribbleFilling([13*width/40 * this.ratioX, 13*width/40* this.ratioX, 31*width/40 * this.ratioX, 31*width/40 * this.ratioX], [27*height/40 * this.ratioY, 34*height/40 * this.ratioY, 34*height/40 * this.ratioY, 27*height/40 * this.ratioY], 2, -20)
+        this.scribble.scribbleFilling([13*width/40 * this.ratioX, 13*width/40* this.ratioX, 31*width/40 * this.ratioX, 31*width/40 * this.ratioX], [26*height/40 * this.ratioY, 33*height/40 * this.ratioY, 33*height/40 * this.ratioY, 26*height/40 * this.ratioY], 2, -20)
     }
 
     renderText() {
@@ -1105,8 +1111,9 @@ class CommandSetAnimation extends ScriptElement {
 }
 
 class CommandMenu extends ScriptElement {
-    constructor(menuName, menuItems, engine) {
+    constructor(charName, menuName, menuItems, engine) {
         super(engine.ElementTypes.MENU);
+        this.charName = charName;
         this.menuName = menuName;
         this.menuItems = menuItems;
         this.everdrawn = false;
@@ -1114,7 +1121,7 @@ class CommandMenu extends ScriptElement {
         this.engine = engine;
         if (engine.getMenuByName(menuName) == null) this.engine.menus.push(this);
         this.engine.targetedSignsScores = {};
-
+        
         for (let item of menuItems) {
             if (!this.engine.actions.includes(item[0]))
                 throw "Element " + item[0] + " in menu is not a valid action";

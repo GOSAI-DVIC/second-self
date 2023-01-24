@@ -16,7 +16,7 @@ class Application(BaseApplication):
         self.applications_allowed = ["menu", "hands"]
         self.applications_required = ["menu", "hands"]
 
-        self.sent_actions_once = False
+        # self.sent_actions_once = False
 
         self.characters = {}
         characters_path = os.path.join(os.path.dirname(__file__), "components/characters")
@@ -39,7 +39,33 @@ class Application(BaseApplication):
                     self.characters[character]["animations"].append(video)
 
         threading.Thread(target=self.send_data).start()
+
+        self.SLR_ACTIONS = [
+            "nothing",
+            "empty",
+            "ok",
+            "yes",
+            "no",
+            "left",
+            "right",
+            "house",
+            "store",
+            "hello",
+            "goodbye",
+            "television",
+            "leave",
+            "eat",
+            "apple",
+            "peach"
+        ]
         
+        threading.Thread(target=self.set_slr_actions).start()
+        threading.Thread(target=self.send_data).start()
+
+    def set_slr_actions(self):
+        time.sleep(0.1)
+        self.execute("slr", "set_actions", self.SLR_ACTIONS)
+
     def send_data(self):
         time.sleep(0.3)
         self.server.send_data(f'applications-{self.name}-characters', self.characters)
@@ -52,14 +78,14 @@ class Application(BaseApplication):
             if self.data is not None:
                 self.data = {
                     "guessed_sign": self.data["guessed_sign"], 
-                    "probability": self.data["probability"], 
-                    "actions": self.data["actions"] 
+                    "probability": self.data["probability"],
+                    "actions": self.SLR_ACTIONS,
                 }
                 self.server.send_data(f'applications-{self.name}-{event}', self.data)
 
-                if (self.sent_actions_once == False):
-                    self.server.send_data(f'applications-{self.name}-actions', self.data["actions"] )
-                    self.sent_actions_once = True
+                # if (self.sent_actions_once == False):
+                #     self.server.send_data(f'applications-{self.name}-actions', self.SLR_ACTIONS )
+                #     self.sent_actions_once = True
 
         # if source == "pose_to_mirror" and event == "mirrored_data":
         #     self.data = {
