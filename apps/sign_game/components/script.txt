@@ -14,7 +14,7 @@ $defineImg(Street,"./platform/home/apps/sign_game/components/backgrounds/Street.
 
 $bg(Market) 
 
-$show("Lina", RIGHT)
+$show("Lina", CENTER)
 
 $setAnimation("Lina", "ok")
 
@@ -28,9 +28,9 @@ $setSprite("Lina", "Lina01")
 
 Lina: Each time you make a sign, you will have a visual correction to verify that you understood the sign correctly.
 
-$setSprite("Lina", "Lina02")
-
 $tag(beforeYesMenu)
+
+$setSprite("Lina", "Lina02")
 
 Lina: You will be able to make choices during the game according to your desires. All in sign language of course!
 

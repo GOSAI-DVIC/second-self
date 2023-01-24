@@ -33,13 +33,7 @@ export const sign_game = new p5((sketch) => {
             .style("z-index", sketch.z_index);
             
         socket.on("applications-sign_game-characters", (data) => {
-            console.log("receiving characters");
             sketch.characters = data;
-        });
-
-        socket.on(`applications-${sketch.name}-set_actions`, (data) => {
-            console.log("receiving actions");
-            sketch.actions = data["actions"];
         });
 
         socket.on(`applications-${sketch.name}-new_sign`, (data) => {

@@ -789,13 +789,13 @@ export class Engine {
         for (var i = 0; i < this.characters.length; i++) {
             this.characters[i].playAnimation()
         }
-
     }
 
     clearAllAnimations() {
         for (var i = 0; i < this.characters.length; i++) {
-            this.characters[i].setAnimation(undefined)
-            this.characters[i].lastAnimation = undefined
+            this.characters[i].setAnimation(undefined);
+            this.characters[i].lastAnimation = undefined;
+            this.characters[i].currentAnimationsToPlay = [];
         }
     }
 
@@ -819,7 +819,6 @@ class Character {
         this.lastAnimation = undefined;
 
         this.lastTimeAnimationWasPlayed = -15000;
-        this.isAnimationPlayable = true;
         this.areSpritesLoaded = false;
         this.areAnimationsLoaded = false;
 
@@ -845,8 +844,14 @@ class Character {
             for (let animationName of filesNamesDict["animations"]) {
                 let video = this.engine.sketch.createVideo([path + "/animations/" + animationName], () => {
                     if (video != null) {
+                        let videoName = animationName.substring(0, animationName.indexOf("."));
                         video.hide();
-                        this.animations[animationName.substring(0, animationName.indexOf("."))] = video;
+                        video.name = videoName;
+                        video.isPlayable = true;
+                        video.onended(() => {
+                            this.animations[videoName].isPlayable = true;
+                        });
+                        this.animations[videoName] = video;
                         if (Object.keys(this.animations).length == filesNamesDict["animations"].length) this.areAnimationsLoaded = true;
                     }
                     this.engine.totalElementsLoaded++;
@@ -856,6 +861,7 @@ class Character {
 
         this.currentSprite = 0
         this.currentAnimation = undefined
+        this.currentAnimationsToPlay = []
     }
 
     clear() {
@@ -866,7 +872,7 @@ class Character {
 
     setSprite(spriteName) {
         this.currentSprite = spriteName
-        this.stopAnimation();
+        this.stopAnimations();
     }
 
     setAnimation(name) {
@@ -878,7 +884,7 @@ class Character {
             if (isAnimAvaible) {
                 this.currentAnimation = this.animations[name];
                 this.currentSprite = 0;
-                this.isAnimationPlayable = true;
+                this.animations[name].isPlayable = true;
             } else this.setAnimation(name)
         });
     }
@@ -886,11 +892,11 @@ class Character {
     setPos(pos) {
         var quarter = width / 4
         if (pos == "LEFT")
-            this.xpos = quarter
+            this.xpos = 4*quarter - this.sprites[Object.keys(this.sprites)[0]].width
         else if (pos == "CENTER")
-            this.xpos = quarter * 2
+            this.xpos = quarter * 2 + this.sprites[Object.keys(this.sprites)[0]].width / 8
         else
-            this.xpos = quarter * 3
+            this.xpos = 4*quarter * 3 - this.sprites[Object.keys(this.sprites)[0]].width
     }
 
     drawSprite() {
@@ -898,7 +904,8 @@ class Character {
             if (this.currentSprite != 0 && this.sprites[this.currentSprite] != null) {
                 this.engine.sketch.imageMode(CENTER)
                 this.sprites[this.currentSprite].resize(this.sprites[this.currentSprite].width * this.engine.ratioX, this.sprites[this.currentSprite].height * this.engine.ratioY)
-                this.engine.sketch.image(this.sprites[this.currentSprite], this.xpos - this.sprites[this.currentSprite].width / 8, this.ypos)
+                this.engine.sketch.image(this.sprites[this.currentSprite], this.xpos, this.ypos)
+                // this.engine.sketch.image(this.sprites[this.currentSprite], this.xpos - this.sprites[this.currentSprite].width / 8, this.ypos)
             }
         }
     }
@@ -906,22 +913,37 @@ class Character {
     playAnimation() {
         if (this.path.length && this.currentAnimation != undefined) {
             // si la vidéo n'est pas en train de jouer et qu'elle est jouable
-            if (!this.currentAnimation.elt.ended && this.isAnimationPlayable) {
+            if (this.currentAnimation.isPlayable) {
+                //si le menu est affiché, on change l'animation actuelle à celle d'après
                 this.currentAnimation.show();
-                this.isAnimationPlayable = false;
+                this.currentAnimation.isPlayable = false;
                 this.currentAnimation.volume(0);
                 this.currentAnimation.size(this.currentAnimation.width * this.engine.ratioX, this.currentAnimation.height * this.engine.ratioY);
-                this.currentAnimation.position(this.xpos - 13 * this.currentAnimation.width / 20, 25);
-                this.currentAnimation.loop();
+                
+                if (this.currentAnimationsToPlay.length != 0)
+                {
+                    let actualAnimIndex = this.currentAnimationsToPlay.indexOf(this.currentAnimation.name);
 
+                    if (actualAnimIndex == 0) {
+                        this.setAnimation(this.currentAnimationsToPlay[1]);
+                        this.setPos("LEFT")
+                    } else {
+                        this.setAnimation(this.currentAnimationsToPlay[0]);
+                        this.setPos("RIGHT")
+                    }
+                }
+                this.currentAnimation.position(this.xpos/8, 25);
+
+                this.currentAnimation.loop();
                 this.engine.lastTimeAnimationWasPlayed = Date.now();
             }
         }
     }
 
-    stopAnimation() {
+    stopAnimations() {
         if (this.path.length) {
             if (this.currentAnimation != undefined) {
+                this.currentAnimationsToPlay = [];
                 this.currentAnimation.pause();
                 this.currentAnimation.hide();
                 this.currentAnimation = undefined
@@ -1033,7 +1055,7 @@ class CommandHide extends ScriptElement {
         var char = this.engine.getCharacterByName(this.characterName)
         char.setSprite(0)
         char.setAnimation(undefined)
-        // Hide 
+        char.currentAnimationsToPlay = [];
     }
 }
 
@@ -1105,8 +1127,9 @@ class CommandSetAnimation extends ScriptElement {
     }
 
     render() {
-        this.character.setAnimation(this.animationName)
-        this.character.lastAnimation = this.character.animations[this.animationName]
+        this.character.setAnimation(this.animationName);
+        this.character.currentAnimationsToPlay = [];
+        this.character.lastAnimation = this.character.animations[this.animationName];
     }
 }
 
@@ -1119,13 +1142,16 @@ class CommandMenu extends ScriptElement {
         this.everdrawn = false;
         this.buttons = [];
         this.engine = engine;
+
         if (engine.getMenuByName(menuName) == null) this.engine.menus.push(this);
+
         this.engine.targetedSignsScores = {};
         
         for (let item of menuItems) {
             if (!this.engine.actions.includes(item[0]))
                 throw "Element " + item[0] + " in menu is not a valid action";
             this.engine.targetedSignsScores[item[0]] = 0;
+
         }
     }
 
@@ -1161,10 +1187,12 @@ class CommandMenu extends ScriptElement {
                 this.buttons[i].stroke = "#000000"; //Border color of the clickable (hex number as a string)
                 this.buttons[i].text = ""; //Text of the clickable (string)
                 this.buttons[i].textColor = "#000000"; //Color of the text (hex number as a string)
-                this.buttons[i].textSize = 12; //Size of the text (integer)
+                this.buttons[i].textSize = 24; //Size of the text (integer)
                 this.buttons[i].textFont = "sans-serif"; //Font of the text (string)
                 this.buttons[i].textScaled = false; //Whether to scale the text with the clickable (boolean)
-                this.buttons[i].locate(width / 4, 50 + (((height - 50) / this.menuItems.length) * i))
+                // 4*quarter - this.sprites[Object.keys(this.sprites)[0]].width
+                this.buttons[i].locate((i + 1/2) * width / (2*this.menuItems.length) + this.buttons[i].width / 2, height / 2 + this.buttons[i].height / 2)
+                // this.buttons[i].locate(width / 4, 50 + (((height - 50) / this.menuItems.length) * i))
                 this.buttons[i].width = (width / 2)
                 this.buttons[i].height = ((height - 50) / this.menuItems.length) * .50
                 let menuName = this.menuName
@@ -1181,7 +1209,9 @@ class CommandMenu extends ScriptElement {
                 this.buttons[i].onRelease = function () { //* A appeler lors d'un signe
                     return engine.handleMenuClick(menuName, i)
                 }
+                this.engine.getCharacterByName(this.charName).currentAnimationsToPlay.push(this.menuItems[i][0])
             }
+            this.engine.getCharacterByName(this.charName).setAnimation(this.menuItems[0][0])
             this.everdrawn = true
         }
         for (let i = 0; i < this.menuItems.length; i++) {
@@ -1192,7 +1222,7 @@ class CommandMenu extends ScriptElement {
             this.engine.subSketch.push()
             this.engine.subSketch.textAlign(CENTER, CENTER)
             this.engine.subSketch.textSize(24 * this.engine.ratio)
-            this.engine.subSketch.text(this.menuItems[i][0], width / 2 + 100, 50 + (((height - 50) / this.menuItems.length) * i) + (this.buttons[i].height / 2))
+            this.engine.subSketch.text(this.menuItems[i][0],  (i + 3/2) * width / (2*this.menuItems.length) + this.menuItems[i][0].length / 2, 3*height / 4)
             this.engine.subSketch.pop()
         }
 
@@ -1204,6 +1234,7 @@ class CommandMenu extends ScriptElement {
                 this.engine.targetedSignsScores = {};
             }
         }
+        // this.engine.getCharacterByName(this.charName).currentAnimationsToPlay = [];
     }
 }
 
