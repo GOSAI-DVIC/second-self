@@ -893,18 +893,13 @@ class Character {
         });
     }
 
-    setAvaibleAnimation() {
-        
-    }
-
     setPos(pos) {
-        var quarter = width / 4
         if (pos == "LEFT")
-            this.xpos = 4*quarter - this.sprites[Object.keys(this.sprites)[0]].width
+            this.xpos = width - this.sprites[Object.keys(this.sprites)[0]].width
         else if (pos == "CENTER")
-            this.xpos = quarter * 2 + this.sprites[Object.keys(this.sprites)[0]].width / 8
+            this.xpos = width * 2 - this.sprites[Object.keys(this.sprites)[0]].width
         else
-            this.xpos = 4*quarter * 3 - this.sprites[Object.keys(this.sprites)[0]].width
+            this.xpos = width * 3 - this.sprites[Object.keys(this.sprites)[0]].width
     }
 
     drawSprite() {
@@ -914,7 +909,7 @@ class Character {
                 this.engine.sketch.imageMode(CENTER)
                 this.sprites[this.currentSprite].resize(this.sprites[this.currentSprite].width * this.engine.ratioX, this.sprites[this.currentSprite].height * this.engine.ratioY)
                 if (this.name == "Lina") console.log("drawing sprite at : " + this.currentSprite)
-                this.engine.sketch.image(this.sprites[this.currentSprite], this.xpos, this.ypos)
+                this.engine.sketch.image(this.sprites[this.currentSprite], this.xpos/1.5, this.ypos)
             }
         }
     }
@@ -931,24 +926,32 @@ class Character {
                 this.currentAnimation.volume(0);
                 this.currentAnimation.size(this.currentAnimation.width * this.engine.ratioX, this.currentAnimation.height * this.engine.ratioY);
                 this.currentAnimation.position(this.xpos/8, 25);
+                // this.currentAnimation.position(this.xpos/8, 25);
+                // width/2 + (this.menuItems.length-1) * (2*i -1) * width / (3.5*this.menuItems.length) - this.menuItems[i][0].length / 2
+                // width/2 + (2*i -1) * width / (2.5*this.menuItems.length) - this.menuItems[i][0].length / 2
                 this.currentAnimation.loop();
                 console.log("playing animation : " + this.currentAnimation.name)
                 this.engine.lastTimeAnimationWasPlayed = Date.now();
                 
                 if (this.currentAnimationsToPlay.length != 0)
                 {
-                    console.log("calling next animation")
                     let actualAnimIndex = this.currentAnimationsToPlay.indexOf(this.currentAnimation.name);
-
-                    if (actualAnimIndex == 0) {
-                        this.setAnimation(this.currentAnimationsToPlay[1])
-                        this.setPos("LEFT")
-                        this.currentAnimation.position(this.xpos/8, 25);
-                    } else {
+                    if(this.currentAnimationsToPlay.length == 1) {
                         this.setAnimation(this.currentAnimationsToPlay[0])
-                        this.setPos("RIGHT")
-                        this.currentAnimation.position(this.xpos/8, 25);
+                        this.setPos("CENTER")
                     }
+                    else
+                    {
+                        if (actualAnimIndex == 0) {
+                            this.setAnimation(this.currentAnimationsToPlay[1])
+                            this.setPos("LEFT")
+                            
+                        } else {
+                            this.setAnimation(this.currentAnimationsToPlay[0])
+                            this.setPos("RIGHT")
+                        }
+                    }
+                    this.currentAnimation.position(this.xpos/8, 25);
                 }
             }
         }
@@ -1216,9 +1219,9 @@ class CommandMenu extends ScriptElement {
                 this.buttons[i].textSize = 24; //Size of the text (integer)
                 this.buttons[i].textFont = "sans-serif"; //Font of the text (string)
                 this.buttons[i].textScaled = false; //Whether to scale the text with the clickable (boolean)
-                // 4*quarter - this.sprites[Object.keys(this.sprites)[0]].width
-                this.buttons[i].locate((i) * width / (2*this.menuItems.length) + this.buttons[i].width / 2, height / 2 + this.buttons[i].height / 2)
-                // this.buttons[i].locate(width / 4, 50 + (((height - 50) / this.menuItems.length) * i))
+
+                this.buttons[i].locate(width/2 + (this.menuItems.length-1) * (2*i -1) * width / (3.5*this.menuItems.length) - this.buttons[i].width / 2, height / 2 + this.buttons[i].height / 2)
+                
                 this.buttons[i].width = (width / 2)
                 this.buttons[i].height = ((height - 50) / this.menuItems.length) * .50
                 let menuName = this.menuName
@@ -1246,12 +1249,9 @@ class CommandMenu extends ScriptElement {
             this.engine.subSketch.push()
             this.engine.subSketch.textAlign(CENTER, CENTER)
             this.engine.subSketch.textSize(24 * this.engine.ratio)
-            this.engine.subSketch.text(this.menuItems[i][0],  (i + 3/2) * width / (2*this.menuItems.length) + this.menuItems[i][0].length / 2, 3*height / 4)
+            this.engine.subSketch.text(this.menuItems[i][0],  width/2 + (this.menuItems.length-1) * (2*i -1) * width / (3.5*this.menuItems.length) - this.menuItems[i][0].length / 2, 3*height / 4)
             this.engine.subSketch.pop()
         }
-
-        
-
         if (this.engine.guessed_sign != undefined)
         {    
             if (this.engine.targetedSignsScores[this.engine.guessed_sign] >= this.engine.sign_count_threshold && Date.now() - this.engine.lastInterraction > 3000) {
@@ -1260,7 +1260,6 @@ class CommandMenu extends ScriptElement {
                 this.engine.targetedSignsScores = {};
             }
         }
-        // this.engine.getCharacterByName(this.charName).currentAnimationsToPlay = [];
     }
 }
 

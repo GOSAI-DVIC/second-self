@@ -40,7 +40,7 @@ $setSprite("Lina", "Lina03")
 
 Lina: I'm a little hungry, how about a bite to eat?
 
-$menu("Lina", "YesMenu", 2, "yes", afterYesMenu, "no", beforeYesMenu)
+$menu("Lina", "YesMenu", 1, "yes", afterYesMenu)
 
 $tag(afterYesMenu)
 
