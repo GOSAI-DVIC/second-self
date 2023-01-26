@@ -5,6 +5,7 @@ $tag(start)
 $defineC("Lina", "./platform/home/apps/sign_game/components/characters/Lina", color(84, 28, 137))
 $defineC("Grandmother", "./platform/home/apps/sign_game/components/characters/Grandmother", color ( 255 , 225 , 100))
 $defineC("Seller", "./platform/home/apps/sign_game/components/characters/Seller", color ( 255 , 100, 225))
+
 $defineImg(Empty,"./platform/home/apps/sign_game/components/backgrounds/Empty.png")
 $defineImg(Market,"./platform/home/apps/sign_game/components/backgrounds/Market.jpeg")
 $defineImg(Path,"./platform/home/apps/sign_game/components/backgrounds/Path.jpeg")
@@ -14,7 +15,7 @@ $defineImg(Street,"./platform/home/apps/sign_game/components/backgrounds/Street.
 
 $bg(Market) 
 
-$show("Lina", CENTER)c
+$show("Lina", CENTER)
 
 $setAnimation("Lina", "ok")
 
@@ -27,8 +28,6 @@ Lina: In this game you will be able to interact with the mirror by making gestur
 $setSprite("Lina", "Lina01")
 
 Lina: Each time you make a sign, you will have a visual correction to verify that you understood the sign correctly.
-
-$tag(beforeYesMenu)
 
 $show("Lina", CENTER)
 
@@ -44,5 +43,179 @@ $menu("Lina", "YesMenu", 1, "yes", afterYesMenu)
 
 $tag(afterYesMenu)
 
+$bg(Market) 
+
+Lina: Would you rather go the left or right way?
+
+$menu("Lina", "leftRightMenu", 2, "left", leftChoice, "right", rightChoice)
+
+$tag(leftChoice)
+
+$tag(rightChoice)
+
+$bg(City)
+
+Lina: We arrived in the city, we can either go to buy something or go directly to the house.
+
+Lina: What do you like best ?
+
+$menu("Lina", "houseStoreMenu", 2, "house", houseChoice, "store", storeChoice)
+
+$tag(houseChoice)
+
+$bg(Home)
+
+$hide("Lina")
+
+$Show("Grandmother", LEFT)
+
+$setSprite("Grandmother", "Grandmother01")
+
+Grandmother: Hello ! Welcome, make yourself at home.
+
+$setSprite("Grandmother", "Grandmother02")
+
+$Show("Lina", RIGHT)
+
+$setSprite("Lina", "Lina07")
+
+Lina: My grandmother said hello to you, you have to say hello to her at last!
+
+$menu("Lina", "helloMenu", 1, "hello", helloChoice)
+
+$tag(helloChoice)
+
+$setSprite("Grandmother", "Grandmother03")
+
+Grandmother : You can watch TV if you feel like it, or you can have a bite to eat. Don't bother.
+
+$tag(houseMenu)
+
+$menu("Lina", "homeMenu", 3, "television", televisionChoice, "leave", leaveChoice, "eat", eatChoice)
+
+$tag(television)
+
+*You watch television*
+
+$jump(houseMenu)
+
+$tag(Manger)
+
+$hide("Lina")
+
+$hide("Grandmother")
+
+*You eat a piece*
+
+$show("Lina",  RIGHT)
+
+$setSprite("Lina", "Lina14")
+
+Lina: It is really very good
+
+$show("Grandmother", LEFT)
+
+$setSprite("Grandmother", "Grandmother02")
+
+Grandmother: ...
+
+$setSprite("Lina", "Lina09")
+
+Lina: Finish your plate or she'll get mad
+
+*You finish your plate*
+
+$jump(houseMenu)
+
+$tag(leaveChoice)
+
+Grandmother: Come back whenever you want it was a pleasure !
+
+$hide("Lina")
+
+$hide("Grandmother")
+
+$jump(endGame)
+
+$tag(storeChoice)
+
+$bg(Market)
+
+$show("Seller", LEFT)
+
+Seller: Hello ! Welcome, have you made your choice ?
+
+$tag(fruitsChoice)
+
+show("Lina", RIGHT)
+
+$setSprite("Lina", "Lina13")
+
+Lina:  I hesitate between apples and bananas, which do you prefer ?
+
+$hide("Seller")
+
+$menu("Lina", "fruitsChoice", 2, "peach", peachChoice , "apple", appleChoice)
+
+$tag(appleChoice)
+
+$setVar(chooseApple, true)
+
+Lina: Great idea! I would like a bag of apples please
+
+$jump(afterFruitChoice)
+
+$tag(peachChoice)
+
+$setVar(chooseApple, false)
+
+Lina: Great idea, I love peaches! I would like a bag of peaches please
+
+$jump(afterFruitChoice)
+
+$tag(afterFruitChoice)
+
+Lina: Do you want to eat one now?
+
+$menu("Lina", "eatMenu", 2, "yes", eatMenuYes, "no", eatMenuNo)
+
+$tag(eatMenuYes)
+
+$if(chooseApple, appleResponse, peachResponse)
+
+$tag(appleResponse)
+
+*you eat an apple*
+
+$jump(eatMenuNo)
+
+$tag(peachResponse)
+
+*you eat a peach*
+
+$tag(eatMenuNo)
+
+$show("Seller", LEFT)
+
+Seller: See you next time !
+
+$hide("Seller")
+
+$tag(endGame)
+
+$bg(Street)
+
+$show("Lina", CENTER)
+$setSprite("Lina", "Lina07")
+
+Lina: Well, it's time to part ways.
+
+$setSprite("Lina", "Lina03")
+
+Lina: Thank you for having accompanied me. See you next time !
+
+$menu("Lina", "goodbyeMenu", 1, "goodbye", goodbyeMenuGoodbye)
+
+$tag(goodbyeMenuGoodbye)
 
 END

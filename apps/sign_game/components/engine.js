@@ -140,7 +140,7 @@ export class Engine {
 
         this.initCharArray()
         this.processInputFile()
-        this.loadAllCharacters()
+        // this.loadAllCharacters()
     }
 
     stop() {
@@ -170,6 +170,7 @@ export class Engine {
         for (var i = 0; i < this.processedScript.length - 1; i++) {
             if (this.processedScript[i].type == this.ElementTypes.DIALOG) {
                 if (!this.isCharacterDefined(this.processedScript[i].characterName)) {
+                    console.log("Loading character " + this.processedScript[i].characterName)
                     var c = new Character(this, this.processedScript[i].characterName);
                     this.characters.push(c)
                 }
@@ -300,13 +301,15 @@ export class Engine {
 
             return [this.TokenTypes.Identifier, index - start + count, id]
         }
+
+        throw "Unknown token at index " + index + " of line " + line
     }
 
     requireToken(type, line, index) {
         var tokenResult = this.consumeToken(line, index)
         if (tokenResult[0] == type)
             return tokenResult[1]
-        throw "Expected token " + type + " but saw " + tokenResult[0] + " at position " + index + " of line " + line
+        throw "Expected token " + type + " but saw " + tokenResult[0] + " at position " + index + " of line " + line + " at index " + this.currentIndex
     }
 
     requireTokenAndValue(type, line, index) {
@@ -348,6 +351,7 @@ export class Engine {
             i += this.requireToken(this.TokenTypes.CloseParen, line, i)
 
             // the contructor actually places these in an array, as a convenience
+            console.log("Parsing character " + id)
             c = new Character(this, id, color, path, this.charactersFiles[id])
             this.characters.push(c)
 
@@ -922,14 +926,11 @@ class Character {
             if (this.currentAnimation.isPlayable) {
                 //si le menu est affiché, on change l'animation actuelle à celle d'après
                 this.currentAnimation.show();
-                this.currentAnimation.isPlayable = false;
                 this.currentAnimation.volume(0);
                 this.currentAnimation.size(this.currentAnimation.width * this.engine.ratioX, this.currentAnimation.height * this.engine.ratioY);
                 this.currentAnimation.position(this.xpos/8, 25);
-                // this.currentAnimation.position(this.xpos/8, 25);
-                // width/2 + (this.menuItems.length-1) * (2*i -1) * width / (3.5*this.menuItems.length) - this.menuItems[i][0].length / 2
-                // width/2 + (2*i -1) * width / (2.5*this.menuItems.length) - this.menuItems[i][0].length / 2
                 this.currentAnimation.loop();
+                this.currentAnimation.isPlayable = false;
                 console.log("playing animation : " + this.currentAnimation.name)
                 this.engine.lastTimeAnimationWasPlayed = Date.now();
                 
@@ -940,7 +941,7 @@ class Character {
                         this.setAnimation(this.currentAnimationsToPlay[0])
                         this.setPos("CENTER")
                     }
-                    else
+                    else if (this.currentAnimationsToPlay.length == 2)
                     {
                         if (actualAnimIndex == 0) {
                             this.setAnimation(this.currentAnimationsToPlay[1])
@@ -950,6 +951,22 @@ class Character {
                             this.setAnimation(this.currentAnimationsToPlay[0])
                             this.setPos("RIGHT")
                         }
+                    }
+                    else if (this.currentAnimationsToPlay.length == 3)
+                    {
+                        if (actualAnimIndex == 0) {
+                            this.setAnimation(this.currentAnimationsToPlay[1])
+                            this.setPos("LEFT")
+                            
+                        } else if (actualAnimIndex == 1){
+                            this.setAnimation(this.currentAnimationsToPlay[2])
+                            this.setPos("CENTER")
+                        }
+                        else {
+                            this.setAnimation(this.currentAnimationsToPlay[0])
+                            this.setPos("RIGHT")
+                        }
+
                     }
                     this.currentAnimation.position(this.xpos/8, 25);
                 }
@@ -1073,8 +1090,7 @@ class CommandHide extends ScriptElement {
     render() {
         var char = this.engine.getCharacterByName(this.characterName)
         char.setSprite(0)
-        char.setAnimation(undefined)
-        char.currentAnimationsToPlay = [];
+        char.stopAnimations();
     }
 }
 
