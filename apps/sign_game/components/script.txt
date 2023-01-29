@@ -13,23 +13,21 @@ $defineImg(City,"./platform/home/apps/sign_game/components/backgrounds/City.jpeg
 $defineImg(Home,"./platform/home/apps/sign_game/components/backgrounds/Home.jpeg")
 $defineImg(Street,"./platform/home/apps/sign_game/components/backgrounds/Street.jpeg")
 
-$bg(Market) 
+$bg(Empty) 
 
 $show("Lina", CENTER)
 
-$setAnimation("Lina", "ok")
+$addAnimation("Lina", "ok")
 
 Lina: Hello, welcome to the mirror sign language learning game. My name is Lina. Make the sign "ok" to skip the text.
 
-$setAnimation("Lina", "ok")
+$addAnimation("Lina", "ok")
 
 Lina: In this game you will be able to interact with the mirror by making gestures in sign language to live an adventure. Make the sign "ok" to skip the text.
 
 $setSprite("Lina", "Lina01")
 
 Lina: Each time you make a sign, you will have a visual correction to verify that you understood the sign correctly.
-
-$show("Lina", CENTER)
 
 $setSprite("Lina", "Lina02")
 
@@ -43,7 +41,9 @@ $menu("Lina", "YesMenu", 1, "yes", afterYesMenu)
 
 $tag(afterYesMenu)
 
-$bg(Market) 
+$bg(Path) 
+
+$setSprite("Lina", "Lina13")
 
 Lina: Would you rather go the left or right way?
 
@@ -54,6 +54,10 @@ $tag(leftChoice)
 $tag(rightChoice)
 
 $bg(City)
+
+$show("Lina", CENTER)
+
+$setSprite("Lina", "Lina01")
 
 Lina: We arrived in the city, we can either go to buy something or go directly to the house.
 
@@ -141,14 +145,18 @@ $tag(storeChoice)
 
 $bg(Market)
 
+$hide("Lina")
+
+$setSprite("Seller", "Seller03")
+
 $show("Seller", LEFT)
 
 Seller: Hello ! Welcome, have you made your choice ?
 
 $tag(fruitsChoice)
 
-show("Lina", RIGHT)
 
+$show("Lina", RIGHT)
 $setSprite("Lina", "Lina13")
 
 Lina:  I hesitate between apples and bananas, which do you prefer ?
@@ -161,6 +169,8 @@ $tag(appleChoice)
 
 $setVar(chooseApple, true)
 
+$setSprite("Lina", "Lina10")
+
 Lina: Great idea! I would like a bag of apples please
 
 $jump(afterFruitChoice)
@@ -169,17 +179,23 @@ $tag(peachChoice)
 
 $setVar(chooseApple, false)
 
+$setSprite("Lina", "Lina10")
+
 Lina: Great idea, I love peaches! I would like a bag of peaches please
 
 $jump(afterFruitChoice)
 
 $tag(afterFruitChoice)
 
+$setSprite("Lina", "Lina05")
+
 Lina: Do you want to eat one now?
 
 $menu("Lina", "eatMenu", 2, "yes", eatMenuYes, "no", eatMenuNo)
 
 $tag(eatMenuYes)
+
+$hide("Lina")
 
 $if(chooseApple, appleResponse, peachResponse)
 
@@ -191,9 +207,15 @@ $jump(eatMenuNo)
 
 $tag(peachResponse)
 
+$hide("Lina")
+
 *you eat a peach*
 
 $tag(eatMenuNo)
+
+$hide("Lina")
+
+$setSprite("Seller", "Seller02")
 
 $show("Seller", LEFT)
 
@@ -205,8 +227,9 @@ $tag(endGame)
 
 $bg(Street)
 
-$show("Lina", CENTER)
 $setSprite("Lina", "Lina07")
+
+$show("Lina", CENTER)
 
 Lina: Well, it's time to part ways.
 
