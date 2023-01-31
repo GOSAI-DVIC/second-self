@@ -221,7 +221,7 @@ export class MusicTraining{
             {
                 var key = this.freqToKey(this.frequency)
                 this.cursorXPos = this.keyToPxl(key);
-                sketch.fill(this.particlesColor);
+                sketch.fill(blueColor);
                 sketch.ellipse(this.cursorXPos, this.cursorYPos, this.cursorDiameter);
 
                 if (Math.floor(Math.random() * this.maxParticles) == 0) {
