@@ -1,5 +1,8 @@
 from core.application import BaseApplication
 import os, os.path
+import time
+import threading
+
 
 class Application(BaseApplication):
     """SL TRAINING"""
@@ -13,6 +16,48 @@ class Application(BaseApplication):
         self.applications_allowed = ["menu", "face", "body", "hands"]
         self.applications_required = ["menu", "face", "body", "hands"]
 
+        # self.SLR_ACTIONS = [
+        #     "nothing",
+        #     "empty",
+        #     "hello",
+        #     "thanks",
+        #     "iloveyou",
+        #     "what's up",
+        #     "hey",
+        #     "my",
+        #     "name",
+        #     "nice",
+        #     "to meet you",
+        #     "ok", 
+        #     "left", 
+        #     "right"
+        # ]
+
+        self.SLR_ACTIONS = [
+            "nothing",
+            "empty",
+            "ok",
+            "yes",
+            "no",
+            "left",
+            "right",
+            "house",
+            "store",
+            "hello",
+            "goodbye",
+            "television",
+            "leave",
+            "eat",
+            "apple",
+            "peach"
+        ]
+
+        threading.Thread(target=self.set_slr_actions).start()
+
+    def set_slr_actions(self):
+        time.sleep(0.1)
+        self.execute("slr", "set_actions", self.SLR_ACTIONS)
+
     def listener(self, source, event, data):
         super().listener(source, event, data)
         
@@ -22,7 +67,7 @@ class Application(BaseApplication):
                 self.data = {
                     "guessed_sign": self.data["guessed_sign"], 
                     "probability": self.data["probability"], 
-                    "actions": self.data["actions"] 
+                    "actions": self.SLR_ACTIONS 
                 }
                 self.server.send_data(f'applications-{self.name}-{event}', self.data)
 

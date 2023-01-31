@@ -51,7 +51,7 @@ export class Guessing {
 
     update_sign_data(guessed_sign, probability, actions) {
         if (actions != undefined) {
-            this.actions = actions
+            this.actions = actions;
         }
 
         // if (Date.now() - this.last_interract < 3000) this.guessed_sign = "empty";
@@ -120,7 +120,8 @@ export class Guessing {
 
             if (!this.running) {
                 if(!this.isStopped) {
-                    this.video.hide();
+                    sketch.remove(this.video);
+                    // this.video.hide();
                     sketch.emit("core-app_manager-stop_application", {
                         application_name: "sign_training"
                     });
@@ -203,10 +204,11 @@ export class Guessing {
                 this.count_valid = 0;
             }
             
-            if (this.count_valid >= 6 && Date.now() - this.last_interract > 3000)  { 
+            if (this.count_valid >= 10 && Date.now())  { 
                 this.correction = new Correction(sketch, this.targeted_sign);
                 this.is_correction_running = true;
                 this.video.hide();
+                sketch.remove(this.video);
 
                 this.targeted_sign_idx++;
 
