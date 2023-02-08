@@ -36,6 +36,7 @@ export class Correction {
 
         this.body_diff = 0; // The lower, the closer the moves are
         this.right_hand_diff = 0; // The lower, the closer the moves are
+        this.left_hand_diff = 0; // The lower, the closer the moves are
         this.body_precision = 60; // if this.body_diff < this.body_precision, it goes on
         this.hand_precision = 40;
         this.sample_pose_frames = {};
@@ -103,9 +104,23 @@ export class Correction {
             return;
         }
         if (this.body_pose == undefined || this.body_pose.length <= 0) return;
-        if (this.right_hand_pose == undefined || this.right_hand_pose.length <= 0) return;
         if (!this.isDataLoaded) return;
         if (this.sample_pose_frames == undefined || this.sample_pose_frames.length <= 0) return;
+
+        //affichage du targeted_sign
+        sketch.fill(color(240, 0, 0));
+        sketch.noStroke();
+        sketch.rect(0, 120, 150, 40);
+
+        sketch.textSize(32);
+        sketch.fill(color(255, 255, 255));
+        if (this.action != undefined) sketch.text(this.action, 0, 145);
+
+        sketch.fill(155);
+        sketch.strokeWeight(2);
+        sketch.textSize(60);
+        sketch.text(`Follow the model`, width/2 - 25, height-100);
+        sketch.text(`with your hands and body`, width/2 - 25, height-50);
 
         if (Object.keys(this.sample_pose_frames).length != this.files_length) return
 
@@ -148,6 +163,8 @@ export class Correction {
             if (this.frameIdx in Object.keys(this.sample_pose_frames)) {
                 let body_distances = [];
                 let right_hand_distances = [];
+                let left_hand_distances = [];
+
                 for (let i = 0; i < this.body_indexes_to_study.length; i++) {
                     body_distances.push(
                         sketch.dist(
@@ -159,23 +176,48 @@ export class Correction {
                     );
                 }
                 this.body_diff = body_distances.reduce((partial_sum, a) => partial_sum + a, 0) / (body_distances.length* this.ratio); //Mean of kpts differences
-                if (this.sample_pose_frames[this.frameIdx]["right_hand"][0][0] == this.sample_pose_frames[this.frameIdx]["right_hand"][0][1] == 0) {
-                    for (let i = 0; i < this.hand_indexes_to_study.length; i++) {
-                        right_hand_distances.push(
-                            sketch.dist(
-                                this.offset[0] + this.sample_pose_frames[this.frameIdx]["right_hand"][this.hand_indexes_to_study[i]][0] * this.ratio, //Video x
-                                this.offset[1] + this.sample_pose_frames[this.frameIdx]["right_hand"][this.hand_indexes_to_study[i]][1] * this.ratio, //Video y
-                                this.right_hand_pose[this.hand_indexes_to_study[i]][0], //Mirror x
-                                this.right_hand_pose[this.hand_indexes_to_study[i]][1], //Mirror y
-                            )
-                        );
+                
+                if (this.sample_pose_frames[this.frameIdx]["right_hand"][0][0] == this.sample_pose_frames[this.frameIdx]["right_hand"][0][1] == 0) 
+                {
+                    if (this.right_hand_pose != undefined && this.right_hand_pose.length > 0) {
+                        for (let i = 0; i < this.hand_indexes_to_study.length; i++) {
+                            right_hand_distances.push(
+                                sketch.dist(
+                                    this.offset[0] + this.sample_pose_frames[this.frameIdx]["right_hand"][this.hand_indexes_to_study[i]][0] * this.ratio, //Video x
+                                    this.offset[1] + this.sample_pose_frames[this.frameIdx]["right_hand"][this.hand_indexes_to_study[i]][1] * this.ratio, //Video y
+                                    this.right_hand_pose[this.hand_indexes_to_study[i]][0], //Mirror x
+                                    this.right_hand_pose[this.hand_indexes_to_study[i]][1], //Mirror y
+                                )
+                            );
+                        }
+                        this.right_hand_diff = right_hand_distances.reduce((partial_sum, a) => partial_sum + a, 0) / (right_hand_distances.length* this.ratio); //Mean of kpts differences
                     }
-                    this.right_hand_diff = right_hand_distances.reduce((partial_sum, a) => partial_sum + a, 0) / (right_hand_distances.length* this.ratio); //Mean of kpts differences
                 }
                 else this.right_hand_diff = 0;
+
+                if (this.sample_pose_frames[this.frameIdx]["left_hand"][0][0] == this.sample_pose_frames[this.frameIdx]["left_hand"][0][1] == 0)
+                {
+                    if (this.left_hand_pose != undefined && this.left_hand_pose.length > 0) {
+
+                        for (let i = 0; i < this.hand_indexes_to_study.length; i++) {
+                            left_hand_distances.push(
+                                sketch.dist(
+                                    this.offset[0] + this.sample_pose_frames[this.frameIdx]["left_hand"][this.hand_indexes_to_study[i]][0] * this.ratio, //Video x
+                                    this.offset[1] + this.sample_pose_frames[this.frameIdx]["left_hand"][this.hand_indexes_to_study[i]][1] * this.ratio, //Video y
+                                    this.left_hand_pose[this.hand_indexes_to_study[i]][0], //Mirror x
+                                    this.left_hand_pose[this.hand_indexes_to_study[i]][1], //Mirror y
+                                )
+                            );
+                        }
+                        this.left_hand_diff = left_hand_distances.reduce((partial_sum, a) => partial_sum + a, 0) / (left_hand_distances.length* this.ratio); //Mean of kpts differences
+                    }       
+                }
+                else this.left_hand_diff = 0;
+
+
                 // console.log(this.body_diff, this.right_hand_diff)
 
-                if (this.body_diff < this.body_precision && this.right_hand_diff < this.hand_precision) {
+                if (this.body_diff < this.body_precision && this.right_hand_diff < this.hand_precision && this.left_hand_diff < this.hand_precision) {
                     this.frameIdx++;
                     this.time = max(0, this.time - 5);
                     // console.log("Frame " + this.frameIdx + " " + this.action);

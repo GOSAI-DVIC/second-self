@@ -10,7 +10,7 @@ export class Guessing {
 
         this.actions;
         this.guessed_sign = "empty";
-        this.targeted_sign_idx = 2;
+        this.targeted_sign_idx = 16;
 
         this.probability;
         this.sentence = [];
@@ -113,16 +113,9 @@ export class Guessing {
             sketch.fill(this.white);
             sketch.text(this.sentence, 3, 30);
 
-            // sketch.text(this.playable, 0, 185);
-
-            // sketch.text(this.playing, 0, 225);
-
-            // sketch.text(this.count_valid, 0, 265);
-
             if (!this.running) {
                 if(!this.isStopped) {
-                    // if(video) sketch.remove(video);
-                    // this.video.hide();
+                    if(this.video != undefined) sketch.remove(this.video);
                     sketch.emit("core-app_manager-stop_application", {
                         application_name: "sign_training"
                     });
@@ -225,7 +218,7 @@ export class Guessing {
             }
 
             if (this.targeted_sign_idx >= this.actions.length) {
-                sketch.remove(video);
+                sketch.remove(this.video);
                 this.running = false;
             }
         }
