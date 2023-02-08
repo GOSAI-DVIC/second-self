@@ -49,7 +49,7 @@ export const theremine = new p5(( sketch ) => {
     };
 
     sketch.update = () => {
-        sketch.emit("application_theremine_synthesize", {
+        sketch.emit("applications-theremine-synthesize", {
             "frequency": sketch.theremine.frequency, 
             "amplitude": sketch.theremine.amplitude,
             "note_duration": sketch.theremine.note_duration, 
