@@ -9,7 +9,7 @@ export class Engine {
         this.sketch.colorMode(HSL, 360, 1, 1, 1);
         this.progressBar = new ProgressBar(this, width * 0.25, width * 0.75, height * 0.5, height * 0.5);
 
-        this.sign_count_threshold = 6;
+        this.sign_count_threshold = 5;
 
         this.endText = "-End of Script-";
         // this.charactersFiles = {};
@@ -67,39 +67,34 @@ export class Engine {
             False: "false",
         }
         Object.freeze(this.Keywords)
-        
     }
 
 
     update() {
         if (Date.now() - this.lastInterraction > 600000) this.stop(); //TODO à remettre à 60000 dans la version finale
         if (!this.gameStarted) return;
-
+        // faire fonctionner le count valid à check si le guessed_sign est le meme que le previous on incrémente le count valid
         if (this.guessed_sign != undefined)
         {
-            if (Object.keys(this.targetedSignsScores).includes(this.guessed_sign)) {
-
-                for (let sign of Object.keys(this.targetedSignsScores)) {
-                    if (sign != this.guessed_sign) {
-                        this.targetedSignsScores[sign] = 0;
-                    }
-                }
-                this.targetedSignsScores[this.guessed_sign] += 1;
-            } 
-    
-            if (this.targetedSignsScores["ok"] >= this.sign_count_threshold && Date.now() - this.lastInterraction > 3000) {
+            if (this.guessed_sign == "ok" && this.count_valid >= this.sign_count_threshold && Date.now() - this.lastInterraction > 1000) {
                 this.subSketch.mouseReleased();
                 this.guessed_sign = "empty";
-                this.targetedSignsScores = {};
             }
         }
         
     }
 
-    update_sign_data(results) {
-        this.guessed_sign = results.guessed_sign;
-        this.probability = results.probability;
-        this.actions = results.actions;
+    update_sign_data(guessed_sign, probability, actions) {
+        this.guessed_sign = guessed_sign;
+        if (this.guessed_sign == this.previous_guessed_sign) {
+            this.count_valid += 1;
+        } else {
+            this.count_valid = 0;
+        }
+        this.previous_guessed_sign = this.guessed_sign;
+        this.sign_prob = probability;
+        this.actions = actions;
+
     }
 
     update_pose_data(results) {
@@ -119,8 +114,9 @@ export class Engine {
         this.menus = []
 
         this.guessed_sign = "empty";
+        this.previous_guessed_sign = null;
+        this.count_valid = 0;
         this.sign_prob = 0;
-        this.targetedSignsScores = {};
 
         this.charactersLoadedCount = 0;
 
@@ -169,7 +165,6 @@ export class Engine {
         for (var i = 0; i < this.processedScript.length - 1; i++) {
             if (this.processedScript[i].type == this.ElementTypes.DIALOG) {
                 if (!this.isCharacterDefined(this.processedScript[i].characterName)) {
-                    console.log("Loading character " + this.processedScript[i].characterName)
                     var c = new Character(this, this.processedScript[i].characterName);
                     this.characters.push(c)
                 }
@@ -192,7 +187,9 @@ export class Engine {
     }
 
     handleMenuClick(menuName, item) { //TODO: à appeler quand on réalise un signe
+        console.log("clicked on " + item + " in menu " + menuName)
         var menu = this.getMenuByName(menuName);
+        console.log(menu)
         menu.handleClick(item);
     }
 
@@ -350,7 +347,6 @@ export class Engine {
             i += this.requireToken(this.TokenTypes.CloseParen, line, i)
 
             // the contructor actually places these in an array, as a convenience
-            console.log("Parsing character " + id)
             c = new Character(this, id, color, path, this.charactersFiles[id])
             this.characters.push(c)
 
@@ -380,6 +376,7 @@ export class Engine {
                         }
 
                         this.subSketch.mouseReleased = () => {
+                            console.log("clicked")
                             this.lastInterraction = Date.now();
                             if (this.canAdvance) {
                                 if (this.currentIndex + 1 >= this.processedScript.length) {
@@ -887,7 +884,6 @@ class Character {
     }
 
     setSprite(spriteName) {
-        if (this.name == "Lina") console.log("setting " + this.name + "'s sprite to " + spriteName)
         this.currentSprite = spriteName
         if (spriteName != 0) this.stopAnimations();
     }
@@ -897,7 +893,6 @@ class Character {
             resolve(this.animations[name] != undefined);
         })).then((isAnimAvaible) => {
             if (isAnimAvaible) {
-                if (this.name == "Lina") console.log("setting animation to " + name)
                 this.animations[name].isPlayable = true;
                 this.currentAnimations.push(this.animations[name]);
                 this.currentSprite = 0;
@@ -910,7 +905,6 @@ class Character {
     }
 
     setSpritePos(pos) {
-        console.log("setting " + this.name + "'s sprite position to " + pos)
         if (pos == "LEFT")
             this.spriteXpos = width/2 //- this.sprites[Object.keys(this.sprites)[0]].width/16
         else if (pos == "CENTER")
@@ -920,7 +914,6 @@ class Character {
     }
 
     setAnimationPos(pos) {
-        console.log("setting " + this.name + "'s animation position to " + pos)
         if (pos == "LEFT")
             if (this.currentAnimations.length < 3)
                 this.animationXpos = width/2 - 11*this.animations[Object.keys(this.animations)[0]].width/20
@@ -941,11 +934,9 @@ class Character {
 
     drawSprite() {
         if (this.path.length) {
-            // console.log("current sprite : " + this.sprites[this.currentSprite])
             if (this.currentSprite != 0 && this.sprites[this.currentSprite] != null) {
                 this.engine.sketch.imageMode(CENTER)
                 this.sprites[this.currentSprite].resize(this.sprites[this.currentSprite].width * this.engine.ratioX, this.sprites[this.currentSprite].height * this.engine.ratioY)
-                // if (this.name == "Lina") console.log("drawing sprite at : " + this.currentSprite)
                 this.engine.sketch.image(this.sprites[this.currentSprite], this.spriteXpos, this.spriteYpos)
             }
         }
@@ -953,7 +944,6 @@ class Character {
 
     playAnimations() {
         for ( let animIndex = 0; animIndex < this.currentAnimations.length; animIndex++) {
-            // console.log("current animation : ", this.currentAnimations[animIndex])
             if (this.path.length && this.currentAnimations[animIndex] != undefined && this.currentSprite == 0) {
                 // si la vidéo n'est pas en train de jouer et qu'elle est jouable
                 if (this.currentAnimations[animIndex].isPlayable) {
@@ -993,7 +983,6 @@ class Character {
     }
 
     stopAnimations() {
-        // console.log("stopping animations")
         if (this.path.length) {
             this.currentAnimations = [];
             for(let anim in this.animations) {
@@ -1001,8 +990,6 @@ class Character {
                 this.animations[anim].hide();
                 this.animations[anim].isPlayable = true;
             }
-            // this.currentAnimation = undefined
-            // if (this.name == "Lina") console.log("stopping animations")
         }
     }
 }
@@ -1061,7 +1048,6 @@ class CommandBG extends ScriptElement {
     }
 
     render() {
-        console.log("setting background to " + this.name)
         if (this.name == "none") {
             this.engine.currentBackground = null
         } else {
@@ -1144,7 +1130,6 @@ class CommandVariable extends ScriptElement {
 
     render() {
         this.engine.variables[this.name] = this.value
-        console.log(this.name + " is now " + this.value)
     }
 }
 
@@ -1208,17 +1193,16 @@ class CommandMenu extends ScriptElement {
 
         if (engine.getMenuByName(menuName) == null) this.engine.menus.push(this);
 
-        this.engine.targetedSignsScores = {};
         
         for (let item of menuItems) {
             if (!this.engine.actions.includes(item[0]))
                 throw "Element " + item[0] + " in menu is not a valid action";
-            this.engine.targetedSignsScores[item[0]] = 0;
 
         }
     }
 
     handleClick(item) { //* A appeler lors d'un signe
+        this.engine.lastInterraction = Date.now();
         this.engine.canAdvance = true
         this.engine.enableGUI = true
         this.char.stopAnimations();
@@ -1251,8 +1235,6 @@ class CommandMenu extends ScriptElement {
             }
             if (this.menuItems.length == 1)
                 this.char.setAnimationPos("CENTER");
-
-            // console.log("in commandmenu adding animation " + this.menuItems[0][0]);
         }
 
         this.engine.canAdvance = false;
@@ -1272,8 +1254,6 @@ class CommandMenu extends ScriptElement {
                 this.buttons[i].textScaled = false; //Whether to scale the text with the clickable (boolean)
 
                 this.buttons[i].locate(width/(2*this.menuItems.length) + i*width/this.menuItems.length - this.buttons[i].width/2, height / 2 + this.buttons[i].height / 2)
-                // this.buttons[i].locate(width/2 + (this.menuItems.length-1) * (2*i -1) * width / (3*this.menuItems.length) - this.buttons[i].width / 2, height / 2 + this.buttons[i].height / 2)
-                // width/(2*this.menuItems.length) + i*width/this.menuItems.length - this.menuItems[i][0].length/2
 
                 this.buttons[i].width = (width / 2);
                 this.buttons[i].height = ((height - 50) / this.menuItems.length) * .50;
@@ -1304,15 +1284,21 @@ class CommandMenu extends ScriptElement {
             this.engine.subSketch.textSize(24 * this.engine.ratio);
             // on set à x la moitié de l'écran la position de l'avatar
             this.engine.subSketch.text(this.menuItems[i][0],  width/(2*this.menuItems.length) + i*width/this.menuItems.length - this.menuItems[i][0].length/2, 3*height / 4);
-            // this.engine.subSketch.text(this.menuItems[i][0],  width/2 + (this.menuItems.length-1) * (2*i -1) * width / (3*this.menuItems.length) - this.menuItems[i][0].length / 2, 3*height / 4)
             this.engine.subSketch.pop();
         }
+
         if (this.engine.guessed_sign != undefined)
         {    
-            if (this.engine.targetedSignsScores[this.engine.guessed_sign] >= this.engine.sign_count_threshold && Date.now() - this.engine.lastInterraction > 3000) {
-                this.engine.handleMenuClick(this.name, Object.keys(this.engine.targetedSignsScores).indexOf(this.engine.guessed_sign));
-                this.engine.guessed_sign = "empty";
-                this.engine.targetedSignsScores = {};
+            console.log(this.engine.guessed_sign, this.engine.count_valid)
+            for (let i = 0; i < this.menuItems.length; i++)
+            {
+                if (this.menuItems[i][0] == this.engine.guessed_sign)
+                {
+                    if (this.engine.count_valid >= this.engine.sign_count_threshold && Date.now() - this.engine.lastInterraction > 1000) {
+                        this.engine.handleMenuClick(this.menuName, this.engine.guessed_sign);
+                        this.engine.guessed_sign = "empty";
+                    }
+                }
             }
         }
     }
