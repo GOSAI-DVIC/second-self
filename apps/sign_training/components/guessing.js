@@ -77,6 +77,7 @@ export class Guessing {
     }
 
     show(sketch) {
+        // console.log(this.targeted_sign_idx)
         if(this.is_correction_running){
             // console.log("correction")
             this.correction.show(sketch);
@@ -120,7 +121,7 @@ export class Guessing {
 
             if (!this.running) {
                 if(!this.isStopped) {
-                    sketch.remove(this.video);
+                    // if(video) sketch.remove(video);
                     // this.video.hide();
                     sketch.emit("core-app_manager-stop_application", {
                         application_name: "sign_training"
@@ -208,7 +209,7 @@ export class Guessing {
                 this.correction = new Correction(sketch, this.targeted_sign);
                 this.is_correction_running = true;
                 this.video.hide();
-                sketch.remove(this.video);
+                // sketch.remove(this.video);
 
                 this.targeted_sign_idx++;
 
@@ -224,6 +225,7 @@ export class Guessing {
             }
 
             if (this.targeted_sign_idx >= this.actions.length) {
+                sketch.remove(video);
                 this.running = false;
             }
         }

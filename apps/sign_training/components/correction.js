@@ -107,20 +107,17 @@ export class Correction {
         if (!this.isDataLoaded) return;
         if (this.sample_pose_frames == undefined || this.sample_pose_frames.length <= 0) return;
 
-        console.log(this.sample_pose_frames)
         if (Object.keys(this.sample_pose_frames).length != this.files_length) return
-        
 
         if (!this.init) {
             this.init = true;
 
             let mirror_nose_reference = this.body_pose[0].slice(0, 2); // Current nose postion of the user
             let mirror_left_hip_reference = this.body_pose[24].slice(0, 2); // Current left hip postion of the user
-            console.log(this.sample_pose_frames[0])
-            console.log(this.sample_pose_frames[0]["body"])
             let sample_nose_reference = this.sample_pose_frames[0]["body"][0].slice(0, 2); // Position in pixels of the first nose of this.sample_pose_frames
             let sample_left_hip_reference = this.sample_pose_frames[0]["body"][24].slice(0, 2); // Position in pixels of the first left_hip of this.sample_pose_frames
-
+            // console.log(this.body_pose[0].slice(0, 2));
+            // console.log(this.sample_pose_frames[0]["body"][0].slice(0, 2));
             let mirror_distance = sketch.dist( //Nose Hip in the mirror
                 mirror_nose_reference[0],
                 mirror_nose_reference[1],
@@ -162,7 +159,6 @@ export class Correction {
                     );
                 }
                 this.body_diff = body_distances.reduce((partial_sum, a) => partial_sum + a, 0) / (body_distances.length* this.ratio); //Mean of kpts differences
-
                 if (this.sample_pose_frames[this.frameIdx]["right_hand"][0][0] == this.sample_pose_frames[this.frameIdx]["right_hand"][0][1] == 0) {
                     for (let i = 0; i < this.hand_indexes_to_study.length; i++) {
                         right_hand_distances.push(
@@ -177,6 +173,7 @@ export class Correction {
                     this.right_hand_diff = right_hand_distances.reduce((partial_sum, a) => partial_sum + a, 0) / (right_hand_distances.length* this.ratio); //Mean of kpts differences
                 }
                 else this.right_hand_diff = 0;
+                // console.log(this.body_diff, this.right_hand_diff)
 
                 if (this.body_diff < this.body_precision && this.right_hand_diff < this.hand_precision) {
                     this.frameIdx++;

@@ -70,6 +70,7 @@ export class Body {
         if (data != undefined) {
             this.body_pose = data
         }
+
         if (!this.showing) return;
         sketch.push();
 
@@ -91,13 +92,12 @@ export class Body {
 
         sketch.stroke(43, 250, 250);
         sketch.strokeWeight(4);
-        if (
-            this.show_body_lines &&
-            this.body_pose.length > 0
+        if (this.show_body_lines && this.body_pose.length > 0)   
+        {
+            this.junctions.forEach(parts => {
+                parts.forEach(pair => { 
+                    
 
-        ) {
-                this.junctions.forEach(parts => {
-                parts.forEach(pair => {
                     if (
                         // this.body_pose[pair[0]][3] >= 0.6 &&
                         this.body_pose[pair[0]][1] > 0 &&
