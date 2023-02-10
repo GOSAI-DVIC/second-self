@@ -10,7 +10,7 @@ export class Guessing {
 
         this.actions;
         this.guessed_sign = "empty";
-        this.targeted_sign_idx = 16;
+        this.targeted_sign_idx = 2;
 
         this.probability;
         this.sentence = [];
