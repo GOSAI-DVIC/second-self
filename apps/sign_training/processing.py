@@ -49,8 +49,7 @@ class Application(BaseApplication):
             "leave",
             "eat",
             "apple",
-            "peach",
-            "skip"
+            "peach"
         ]
 
         threading.Thread(target=self.set_slr_actions).start()

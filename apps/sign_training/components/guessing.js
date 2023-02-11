@@ -10,7 +10,7 @@ export class Guessing {
 
         this.actions;
         this.guessed_sign = "empty";
-        this.targeted_sign_idx = 16;
+        this.targeted_sign_idx = 2;
 
         this.probability;
         this.sentence = [];
@@ -135,7 +135,8 @@ export class Guessing {
     }
 
     update(sketch) {
-        if (Date.now() - this.last_interract > 60000) this.running = false;
+        if (Date.now() - this.last_interract > 600000) this.running = false;
+        //TODO remettre à 60000 après
         // if (Date.now() - this.last_interract < 3000) this.guessed_sign = "empty";
 
         if (this.actions == undefined) return;

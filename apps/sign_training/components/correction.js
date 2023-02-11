@@ -21,8 +21,7 @@ export class Correction {
         this.files_length = 30;
 
         this.frameIdx = 0;
-        this.time = 0;
-        this.timelimit = 10000;
+        this.last_detected = Date.now();
 
         this.right_hand_pose;
         this.left_hand_pose;
@@ -37,8 +36,8 @@ export class Correction {
         this.body_diff = 0; // The lower, the closer the moves are
         this.right_hand_diff = 0; // The lower, the closer the moves are
         this.left_hand_diff = 0; // The lower, the closer the moves are
-        this.body_precision = 60; // if this.body_diff < this.body_precision, it goes on
-        this.hand_precision = 40;
+        this.body_precision = 40; // if this.body_diff < this.body_precision, it goes on
+        this.hand_precision = 30;
         this.sample_pose_frames = {};
 
         this.is_running = true;
@@ -154,8 +153,7 @@ export class Correction {
             ];
 
         } else {
-            this.time++;
-            if (this.time > this.timelimit) {
+            if (Date.now() - this.last_detected > 15000) {
                 sketch.selfCanvas.clear();
                 this.is_running = false;
                 return;
@@ -219,8 +217,7 @@ export class Correction {
 
                 if (this.body_diff < this.body_precision && this.right_hand_diff < this.hand_precision && this.left_hand_diff < this.hand_precision) {
                     this.frameIdx++;
-                    this.time = max(0, this.time - 5);
-                    // console.log("Frame " + this.frameIdx + " " + this.action);
+                    this.last_detected = Date.now();
                 }
             } else {
                 this.frameIdx++;
