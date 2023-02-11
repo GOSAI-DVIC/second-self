@@ -1,7 +1,8 @@
 {
     "name": "Second Self",
     "camera": {
-        "type": "intel",
+        "type": "standard",
+        "flip": true,
         "width": 640,
         "height": 480,
         "orientation": "horizontal",
