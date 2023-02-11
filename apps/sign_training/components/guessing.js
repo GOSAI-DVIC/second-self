@@ -77,13 +77,10 @@ export class Guessing {
     }
 
     show(sketch) {
-        // console.log(this.targeted_sign_idx)
         if(this.is_correction_running){
-            // console.log("correction")
             this.correction.show(sketch);
         }
         else {
-            // console.log("guessing")
             //Affichage de l'action détectée
             sketch.fill(this.dark_blue);
             sketch.noStroke();
@@ -137,7 +134,6 @@ export class Guessing {
     update(sketch) {
         if (Date.now() - this.last_interract > 600000) this.running = false;
         //TODO remettre à 60000 après
-        // if (Date.now() - this.last_interract < 3000) this.guessed_sign = "empty";
 
         if (this.actions == undefined) return;
 
@@ -199,7 +195,7 @@ export class Guessing {
                 this.count_valid = 0;
             }
             
-            if (this.count_valid >= 10 && Date.now())  { 
+            if (this.count_valid >= 10 && Date.now() - this.last_interract > 2000)  { 
                 this.correction = new Correction(sketch, this.targeted_sign);
                 this.is_correction_running = true;
                 this.video.hide();

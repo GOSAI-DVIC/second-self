@@ -68,14 +68,14 @@ export class Correction {
                 pose_landmarks.push([Math.floor(frame[i]*this.ratio + this.offset[0]), Math.floor(frame[i+1]*this.ratio + this.offset[1])]) 
         }
 
-        let right_hands_landmarks = []
-        for (let i = 33*2; i< 33*2+21*2; i++) {
+        let right_hands_landmarks = [] 
+        for (let i = 33*2; i< 33*2+21*2; i++) { //! Si l'on remplace les samples actuels par ceux avec 4 points du visage, ajouter 4*2 au calcul
             if (i % 2 == 0)
             right_hands_landmarks.push([Math.floor(frame[i]*this.ratio + this.offset[0]), Math.floor(frame[i+1]*this.ratio + this.offset[1])]) 
         } 
 
         let left_hands_landmarks = []
-        for (let i = 33*2+21*2; i< frame.length; i++) {
+        for (let i = 33*2+21*2; i< frame.length; i++) { //! Si l'on remplace les samples actuels par ceux avec 4 points du visage, ajouter 4*2 au calcul
             if (i % 2 == 0)
             left_hands_landmarks.push([Math.floor(frame[i]*this.ratio + this.offset[0]), Math.floor(frame[i+1]*this.ratio + this.offset[1])]) 
         } 
@@ -100,6 +100,7 @@ export class Correction {
         if (this.frameIdx > this.files_length - 1) {
             sketch.selfCanvas.clear();
             this.is_running = false;
+            sketch.slr_training.last_interract = Date.now();
             return;
         }
         if (this.body_pose == undefined || this.body_pose.length <= 0) return;
@@ -156,6 +157,7 @@ export class Correction {
             if (Date.now() - this.last_detected > 15000) {
                 sketch.selfCanvas.clear();
                 this.is_running = false;
+                sketch.slr_training.last_interract = Date.now();
                 return;
             }
             if (this.frameIdx in Object.keys(this.sample_pose_frames)) {
