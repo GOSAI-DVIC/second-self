@@ -187,9 +187,7 @@ export class Engine {
     }
 
     handleMenuClick(menuName, item) { //TODO: à appeler quand on réalise un signe
-        console.log("clicked on " + item + " in menu " + menuName)
         var menu = this.getMenuByName(menuName);
-        console.log(menu)
         menu.handleClick(item);
     }
 
@@ -376,7 +374,6 @@ export class Engine {
                         }
 
                         this.subSketch.mouseReleased = () => {
-                            console.log("clicked")
                             this.lastInterraction = Date.now();
                             if (this.canAdvance) {
                                 if (this.currentIndex + 1 >= this.processedScript.length) {
@@ -1208,7 +1205,6 @@ class CommandMenu extends ScriptElement {
         this.char.stopAnimations();
         this.engine.jump(this.menuItems[item][1])
         this.erverRendered = false;
-        console.log("MENU CLICK")
     }
 
     handleHover(item) { //* Plus utile
@@ -1289,13 +1285,12 @@ class CommandMenu extends ScriptElement {
 
         if (this.engine.guessed_sign != undefined)
         {    
-            console.log(this.engine.guessed_sign, this.engine.count_valid)
             for (let i = 0; i < this.menuItems.length; i++)
             {
                 if (this.menuItems[i][0] == this.engine.guessed_sign)
                 {
                     if (this.engine.count_valid >= this.engine.sign_count_threshold && Date.now() - this.engine.lastInterraction > 1000) {
-                        this.engine.handleMenuClick(this.menuName, this.engine.guessed_sign);
+                        this.engine.handleMenuClick(this.menuName, i);
                         this.engine.guessed_sign = "empty";
                     }
                 }
