@@ -76,7 +76,7 @@ export class Engine {
         // faire fonctionner le count valid à check si le guessed_sign est le meme que le previous on incrémente le count valid
         if (this.guessed_sign != undefined)
         {
-            if (this.guessed_sign == "ok" && this.count_valid >= this.sign_count_threshold && Date.now() - this.lastInterraction > 1000) {
+            if (this.guessed_sign == "ok" && this.count_valid >= this.sign_count_threshold && Date.now() - this.lastInterraction > 2000) {
                 this.subSketch.mouseReleased();
                 this.guessed_sign = "empty";
             }
@@ -1289,7 +1289,7 @@ class CommandMenu extends ScriptElement {
             {
                 if (this.menuItems[i][0] == this.engine.guessed_sign)
                 {
-                    if (this.engine.count_valid >= this.engine.sign_count_threshold && Date.now() - this.engine.lastInterraction > 1000) {
+                    if (this.engine.count_valid >= this.engine.sign_count_threshold && Date.now() - this.engine.lastInterraction > 2000) {
                         this.engine.handleMenuClick(this.menuName, i);
                         this.engine.guessed_sign = "empty";
                     }
