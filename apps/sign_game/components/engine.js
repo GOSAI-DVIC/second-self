@@ -78,6 +78,7 @@ export class Engine {
         {
             if (this.guessed_sign == "ok" && this.count_valid >= this.sign_count_threshold && Date.now() - this.lastInterraction > 2000) {
                 this.subSketch.mouseReleased();
+                console.log("click")
                 this.guessed_sign = "empty";
             }
         }
@@ -135,7 +136,6 @@ export class Engine {
 
         this.initCharArray()
         this.processInputFile()
-        // this.loadAllCharacters()
     }
 
     stop() {
@@ -184,6 +184,7 @@ export class Engine {
     jump(tagName) {
         var jmpTag = this.getTagByName(tagName);
         this.currentIndex = jmpTag[1];
+        console.log("Jumping to tag " + tagName + " at index " + jmpTag[1]);
     }
 
     handleMenuClick(menuName, item) { //TODO: à appeler quand on réalise un signe
@@ -382,6 +383,7 @@ export class Engine {
                                     this.reset()
                 
                                 } else {
+                                    console.log("advancing")
                                     this.currentIndex++;
                                 }
                 
@@ -732,8 +734,6 @@ export class Engine {
             return;
         }
 
-        
-
         this.subSketch.clear();
         
         // todo vérifier si tout s'est chargé correctement avant d'afficher le GUI et le texte
@@ -745,11 +745,12 @@ export class Engine {
             this.sketch.background(0)
         }
 
-        this.subSketch.stroke(150, 150, 255, 80)
-        // this.sketch.stroke(150, 150, 255)
+        this.subSketch.stroke(150, 150, 255, 80) 
 
         this.drawAllCharacterSprites()
         this.playAllCharacterAnimations()
+
+        console.log(this.currentIndex)
         
         if (this.enableGUI) {
             this.renderGUI()
@@ -771,11 +772,13 @@ export class Engine {
         this.subSketch.strokeWeight(8 * this.ratio)
         this.subSketch.textFont(this.sketch.font)
         this.subSketch.textAlign(LEFT)
+        console.log(this.processedScript[this.currentIndex])
 
         this.processedScript[this.currentIndex].render()
-
+        
         if (this.processedScript[this.currentIndex].type == this.ElementTypes.COMMAND && this.processedScript[this.currentIndex].commandType != this.CommandTypes.END) {
-            this.subSketch.mouseReleased()
+            console.log("Click")
+            this.subSketch.mouseReleased() //* pourquoi celle là avant 754
         }
     }
 
@@ -1042,9 +1045,11 @@ class CommandBG extends ScriptElement {
         if (this.name != "none") {
             this.myImage = this.engine.getImageByName(this.name)
         }
+        console.log("creating background " + this.name)
     }
 
     render() {
+        console.log("rendering background " + this.name)
         if (this.name == "none") {
             this.engine.currentBackground = null
         } else {
@@ -1199,6 +1204,7 @@ class CommandMenu extends ScriptElement {
     }
 
     handleClick(item) { //* A appeler lors d'un signe
+        console.log("clicking on " + this.menuItems[item][0])
         this.engine.lastInterraction = Date.now();
         this.engine.canAdvance = true
         this.engine.enableGUI = true
@@ -1290,8 +1296,10 @@ class CommandMenu extends ScriptElement {
                 if (this.menuItems[i][0] == this.engine.guessed_sign)
                 {
                     if (this.engine.count_valid >= this.engine.sign_count_threshold && Date.now() - this.engine.lastInterraction > 2000) {
+                        // this.engine.subSketch.mouseReleased();
                         this.engine.handleMenuClick(this.menuName, i);
                         this.engine.guessed_sign = "empty";
+                        this.engine.show();
                     }
                 }
             }
