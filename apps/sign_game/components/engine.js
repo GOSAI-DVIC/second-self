@@ -750,8 +750,6 @@ export class Engine {
         this.drawAllCharacterSprites()
         this.playAllCharacterAnimations()
 
-        console.log(this.currentIndex)
-        
         if (this.enableGUI) {
             this.renderGUI()
         }
@@ -763,7 +761,7 @@ export class Engine {
 
     renderGUI() {
         this.subSketch.strokeWeight(4 * this.ratio)
-        this.scribble.scribbleFilling([13*width/40 * this.ratioX, 13*width/40* this.ratioX, 31*width/40 * this.ratioX, 31*width/40 * this.ratioX], [26*height/40 * this.ratioY, 33*height/40 * this.ratioY, 33*height/40 * this.ratioY, 26*height/40 * this.ratioY], 2, -20)
+        this.scribble.scribbleFilling([8*width/40 * this.ratioX, 8*width/40* this.ratioX, 35*width/40 * this.ratioX, 35*width/40 * this.ratioX], [26*height/40 * this.ratioY, 33*height/40 * this.ratioY, 33*height/40 * this.ratioY, 26*height/40 * this.ratioY], 2, -20)
     }
 
     renderText() {
@@ -772,7 +770,6 @@ export class Engine {
         this.subSketch.strokeWeight(8 * this.ratio)
         this.subSketch.textFont(this.sketch.font)
         this.subSketch.textAlign(LEFT)
-        console.log(this.processedScript[this.currentIndex])
 
         this.processedScript[this.currentIndex].render()
         
@@ -1326,7 +1323,7 @@ class Dialog extends ScriptElement {
             this.engine.subSketch.textSize(24 * this.engine.ratio)
             var char = this.engine.getCharacterByName(this.characterName);
             this.engine.subSketch.fill(char.charColor);
-            this.engine.subSketch.text(this.characterName + ":", width / 3, height / 2.625 * this.engine.ratioY + this.yGap, width / 2, height/2.3 * this.engine.ratioY);
+            this.engine.subSketch.text(this.characterName + ":", 18*width/40 * this.ratioX, 2*height/40 * this.ratioY, width / 2, height/2.3 * this.engine.ratioY);
 
             if (this.command && this.command.length) {
                 if (this.command.includes("LEFT")) {
@@ -1345,7 +1342,7 @@ class Dialog extends ScriptElement {
         }
         this.engine.subSketch.textSize(20 * this.engine.ratioY);
         this.engine.subSketch.fill(255);
-        this.engine.subSketch.text(this.dialog, width / 3, height/2.4 * this.engine.ratioY + this.yGap, height/1.4 * this.engine.ratioX, height - 40);
+        this.engine.subSketch.text(this.dialog, 9*width/40 * this.engine.ratioX, 53*height/80 * this.engine.ratioY, 50*width/80 * this.engine.ratioX, height - 40);
 
     }
 }
