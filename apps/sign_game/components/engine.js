@@ -718,9 +718,9 @@ export class Engine {
         if (!this.gameStarted) 
         {
             this.sketch.noStroke();
-            this.sketch.textSize(40 * this.ratioY);
+            this.sketch.textSize(48 * this.ratioY);
             this.sketch.fill(255);
-            this.sketch.text("Loading...", width / 2 - 80, 620 * this.ratioY);
+            this.sketch.text("Loading...", 18 * width/40 * this.ratioX, 18*height/40 * this.ratioY);
             this.progressBar.pBar.curr = this.progressBar.pBar.x1 + (this.progressBar.pBar.x2 - this.progressBar.pBar.x1)*this.totalElementsLoaded/this.totalElementsToLoad;
             this.progressBar.render();
             return;
@@ -753,7 +753,7 @@ export class Engine {
 
     renderGUI() {
         this.subSketch.strokeWeight(4 * this.ratio)
-        this.scribble.scribbleFilling([8*width/40 * this.ratioX, 8*width/40* this.ratioX, 35*width/40 * this.ratioX, 35*width/40 * this.ratioX], [26*height/40 * this.ratioY, 33*height/40 * this.ratioY, 33*height/40 * this.ratioY, 26*height/40 * this.ratioY], 2, -20)
+        this.scribble.scribbleFilling([2*width/40 * this.ratioX, 2*width/40* this.ratioX, 36*width/40 * this.ratioX, 36*width/40 * this.ratioX], [29*height/40 * this.ratioY, 38*height/40 * this.ratioY, 38*height/40 * this.ratioY, 29*height/40 * this.ratioY], 2, -20)
     }
 
     renderText() {
@@ -808,7 +808,7 @@ class ScriptElement {
 }
 
 class Character {
-    constructor(engine, name, charColor = 255, path = [], filesNamesDict = {}, spriteXpos = width / 2, spriteYpos = height / 2, animationXpos  = width / 2, animationYpos = height / 2) {
+    constructor(engine, name, charColor = 255, path = [], filesNamesDict = {}, spriteXpos = width / 2, spriteYpos = height / 4, animationXpos  = width / 2, animationYpos = height / 2) {
         this.name = name;
         this.charColor = charColor;
         this.path = path;
@@ -1244,7 +1244,7 @@ class CommandMenu extends ScriptElement {
                 this.buttons[i].stroke = "#000000"; //Border color of the clickable (hex number as a string)
                 this.buttons[i].text = ""; //Text of the clickable (string)
                 this.buttons[i].textColor = "#000000"; //Color of the text (hex number as a string)
-                this.buttons[i].textSize = 24; //Size of the text (integer)
+                this.buttons[i].textSize = 34; //Size of the text (integer)
                 this.buttons[i].textFont = "sans-serif"; //Font of the text (string)
                 this.buttons[i].textScaled = false; //Whether to scale the text with the clickable (boolean)
 
@@ -1276,7 +1276,7 @@ class CommandMenu extends ScriptElement {
 
             this.engine.subSketch.push();
             this.engine.subSketch.textAlign(CENTER, CENTER);
-            this.engine.subSketch.textSize(24 * this.engine.ratio);
+            this.engine.subSketch.textSize(34 * this.engine.ratio);
             // on set à x la moitié de l'écran la position de l'avatar
             this.engine.subSketch.text(this.menuItems[i][0],  width/(2*this.menuItems.length) + i*width/this.menuItems.length - this.menuItems[i][0].length/2, 3*height / 4);
             this.engine.subSketch.pop();
@@ -1316,10 +1316,10 @@ class Dialog extends ScriptElement {
         this.engine.subSketch.textAlign(LEFT);
         if (this.characterName != "N") {
 
-            this.engine.subSketch.textSize(24 * this.engine.ratio)
+            this.engine.subSketch.textSize(38 * this.engine.ratio)
             var char = this.engine.getCharacterByName(this.characterName);
             this.engine.subSketch.fill(char.charColor);
-            this.engine.subSketch.text(this.characterName + ":", 9*width/40 * this.engine.ratioX, 54*height/80 * this.engine.ratioY, 50*width/80 * this.engine.ratioX, height/2.3 * this.engine.ratioY);
+            this.engine.subSketch.text(this.characterName + ":", 3*width/40 * this.engine.ratioX, 60*height/80 * this.engine.ratioY, 65*width/80 * this.engine.ratioX, height/2.3 * this.engine.ratioY);
 
             if (this.command && this.command.length) {
                 if (this.command.includes("LEFT")) {
@@ -1336,9 +1336,9 @@ class Dialog extends ScriptElement {
                 }
             }
         }
-        this.engine.subSketch.textSize(20 * this.engine.ratioY);
+        this.engine.subSketch.textSize(32 * this.engine.ratioY);
         this.engine.subSketch.fill(255);
-        this.engine.subSketch.text(this.dialog, 9*width/40 * this.engine.ratioX, 57*height/80 * this.engine.ratioY, 50*width/80 * this.engine.ratioX, height - 40);
+        this.engine.subSketch.text(this.dialog, 3*width/40 * this.engine.ratioX, 63*height/80 * this.engine.ratioY, 65*width/80 * this.engine.ratioX, height - 40);
 
     }
 }
