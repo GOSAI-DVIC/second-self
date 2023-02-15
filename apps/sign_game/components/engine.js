@@ -808,7 +808,7 @@ class ScriptElement {
 }
 
 class Character {
-    constructor(engine, name, charColor = 255, path = [], filesNamesDict = {}, spriteXpos = width / 2, spriteYpos = height / 4, animationXpos  = width / 2, animationYpos = height / 2) {
+    constructor(engine, name, charColor = 255, path = [], filesNamesDict = {}, spriteXpos = width / 2, spriteYpos = 30 * width / 40, animationXpos  = width / 2, animationYpos = height / 2) {
         this.name = name;
         this.charColor = charColor;
         this.path = path;
@@ -817,6 +817,8 @@ class Character {
         this.animationXpos = animationXpos;
         this.animationYpos = animationYpos;
         this.lastSprite = 0;
+        this.originalSpriteWidth = 0;
+        this.originalSpriteHeight= 0;
         this.lastAnimation = undefined;
 
         this.lastTimeAnimationWasPlayed = -15000;
@@ -833,6 +835,8 @@ class Character {
                     if (img != null) {
                         this.sprites[spriteName.substring(0, spriteName.indexOf("."))] = img;
                         if (Object.keys(this.sprites).length == filesNamesDict["sprites"].length) this.areSpritesLoaded = true;
+                        this.originalSpriteWidth = img.width;
+                        this.originalSpriteHeight = img.height;
                     }
                     this.engine.totalElementsLoaded++;
                 })
@@ -901,27 +905,27 @@ class Character {
 
     setSpritePos(pos) {
         if (pos == "LEFT")
-            this.spriteXpos = width/2 //- this.sprites[Object.keys(this.sprites)[0]].width/16
+            this.spriteXpos = width/2 + 24*this.sprites[Object.keys(this.sprites)[0]].width/40
         else if (pos == "CENTER")
-            this.spriteXpos = width/2  + this.sprites[Object.keys(this.sprites)[0]].width/8
+            this.spriteXpos = width/2  + 8*this.sprites[Object.keys(this.sprites)[0]].width/40
         else
-            this.spriteXpos = width/2  + this.sprites[Object.keys(this.sprites)[0]].width/4
+            this.spriteXpos = width/2  + 14*this.sprites[Object.keys(this.sprites)[0]].width/40
     }
 
     setAnimationPos(pos) {
         if (pos == "LEFT")
             if (this.currentAnimations.length < 3)
-                this.animationXpos = width/2 - 11*this.animations[Object.keys(this.animations)[0]].width/20
+                this.animationXpos = width/2 - 14*this.animations[Object.keys(this.animations)[0]].width/20
             else
                 this.animationXpos = 2*width/6 - this.animations[Object.keys(this.animations)[0]].width/2
         else if (pos == "CENTER")
             if (this.currentAnimations.length < 3)
-                this.animationXpos = width/2 - 15*this.animations[Object.keys(this.animations)[0]].width/40
+                this.animationXpos = width/2 - 22*this.animations[Object.keys(this.animations)[0]].width/40
             else
                 this.animationXpos = width/2 + width/6 - this.animations[Object.keys(this.animations)[0]].width/2
         else {
             if (this.currentAnimations.length < 3)
-                this.animationXpos = width/2 - 3*this.animations[Object.keys(this.animations)[0]].width/16
+                this.animationXpos = width/2 - 6*this.animations[Object.keys(this.animations)[0]].width/16
             else
                 this.animationXpos = width - this.animations[Object.keys(this.animations)[0]].width/2
         }
@@ -931,7 +935,7 @@ class Character {
         if (this.path.length) {
             if (this.currentSprite != 0 && this.sprites[this.currentSprite] != null) {
                 this.engine.sketch.imageMode(CENTER)
-                this.sprites[this.currentSprite].resize(this.sprites[this.currentSprite].width * this.engine.ratioX, this.sprites[this.currentSprite].height * this.engine.ratioY)
+                this.sprites[this.currentSprite].resize(this.originalSpriteWidth * this.engine.ratioX*1.5, this.originalSpriteHeight * this.engine.ratioY*1.5)
                 this.engine.sketch.image(this.sprites[this.currentSprite], this.spriteXpos, this.spriteYpos)
             }
         }
@@ -946,7 +950,7 @@ class Character {
                     this.currentAnimations[animIndex].isPlayable = false;
                     this.currentAnimations[animIndex].show();
                     this.currentAnimations[animIndex].volume(0);
-                    this.currentAnimations[animIndex].size(this.currentAnimations[animIndex].width * this.engine.ratioX, this.currentAnimations[animIndex].height * this.engine.ratioY);
+                    this.currentAnimations[animIndex].size(this.currentAnimations[animIndex].width * this.engine.ratioX*1.5, this.currentAnimations[animIndex].height * this.engine.ratioY*1.5);
                     if (this.currentAnimations.length == 2)
                     {
                         if (animIndex == 0) {
