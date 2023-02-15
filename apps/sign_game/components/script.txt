@@ -2,7 +2,7 @@
 
 $tag(start)
 #./platform/home/apps/sign_game/components/
-$defineC("Lina", "./platform/home/apps/sign_game/components/characters/Lina", color(84, 28, 137))
+$defineC("Aria", "./platform/home/apps/sign_game/components/characters/Aria", color(84, 28, 137))
 $defineC("Grandmother", "./platform/home/apps/sign_game/components/characters/Grandmother", color ( 255 , 225 , 100))
 $defineC("Seller", "./platform/home/apps/sign_game/components/characters/Seller", color ( 255 , 100, 225))
 
@@ -15,39 +15,39 @@ $defineImg(Street,"./platform/home/apps/sign_game/components/backgrounds/Street.
 
 $bg(Empty) 
 
-$show("Lina", CENTER)
+$show("Aria", CENTER)
 
-$addAnimation("Lina", "ok")
+$addAnimation("Aria", "ok")
 
-Lina: Hello, welcome to the mirror sign language learning game. My name is Lina. Make the sign "ok" to skip the text.
+Aria: Hello, welcome to the mirror sign language learning game. My name is Aria. Make the sign "ok" to skip the text.
 
-$addAnimation("Lina", "ok")
+$addAnimation("Aria", "ok")
 
-Lina: In this game you will be able to interact with the mirror by making gestures in sign language to live an adventure. Make the sign "ok" to skip the text.
+Aria: In this game you will be able to interact with the mirror by making gestures in sign language to live an adventure. Make the sign "ok" to skip the text.
 
-$setSprite("Lina", "Lina01")
+$setSprite("Aria", "Lina01")
 
-Lina: Each time you make a sign, you will have a visual correction to verify that you understood the sign correctly.
+Aria: Each time you make a sign, you will have a visual correction to verify that you understood the sign correctly.
 
-$setSprite("Lina", "Lina02")
+$setSprite("Aria", "Lina02")
 
-Lina: You will be able to make choices during the game according to your desires. All in sign language of course!
+Aria: You will be able to make choices during the game according to your desires. All in sign language of course!
 
-$setSprite("Lina", "Lina03")
+$setSprite("Aria", "Lina03")
 
-Lina: I'm a little hungry, how about a bite to eat?
+Aria: I'm a little hungry, how about a bite to eat?
 
-$menu("Lina", "YesMenu", 1, "yes", afterYesMenu)
+$menu("Aria", "YesMenu", 1, "yes", afterYesMenu)
 
 $tag(afterYesMenu)
 
 $bg(Path) 
 
-$setSprite("Lina", "Lina13")
+$setSprite("Aria", "Lina13")
 
-Lina: Would you rather go the left or right way?
+Aria: Would you rather go the left or right way?
 
-$menu("Lina", "leftRightMenu", 2, "left", leftChoice, "right", rightChoice)
+$menu("Aria", "leftRightMenu", 2, "left", leftChoice, "right", rightChoice)
 
 $tag(leftChoice)
 
@@ -55,21 +55,21 @@ $tag(rightChoice)
 
 $bg(City)
 
-$show("Lina", CENTER)
+$show("Aria", CENTER)
 
-$setSprite("Lina", "Lina01")
+$setSprite("Aria", "Lina01")
 
-Lina: We arrived in the city, we can either go to buy something or go directly to the house.
+Aria: We arrived in the city, we can either go to buy something or go directly to the house.
 
-Lina: What do you like best ?
+Aria: What do you like best ?
 
-$menu("Lina", "houseStoreMenu", 2, "house", houseChoice, "store", storeChoice)
+$menu("Aria", "houseStoreMenu", 2, "house", houseChoice, "store", storeChoice)
 
 $tag(houseChoice)
 
 $bg(Home)
 
-$hide("Lina")
+$hide("Aria")
 
 $Show("Grandmother", LEFT)
 
@@ -79,15 +79,15 @@ Grandmother: Hello ! Welcome, make yourself at home.
 
 $setSprite("Grandmother", "Grandmother02")
 
-$show("Lina", RIGHT)
+$show("Aria", RIGHT)
 
-$setSprite("Lina", "Lina07")
+$setSprite("Aria", "Lina07")
 
-Lina: My grandmother said hello to you, you have to say hello to her at last!
+Aria: My grandmother said hello to you, you have to say hello to her at last!
 
 $hide("Grandmother")
 
-$menu("Lina", "helloMenu", 1, "hello", helloChoice)
+$menu("Aria", "helloMenu", 1, "hello", helloChoice)
 
 $tag(helloChoice)
 
@@ -99,7 +99,7 @@ $setVar(countWatchingTV, 0)
 
 $tag(houseMenu)
 
-$menu("Lina", "homeMenu", 3, "television", televisionChoice, "leave", leaveChoice, "eat", eatChoice)
+$menu("Aria", "homeMenu", 3, "television", televisionChoice, "leave", leaveChoice, "eat", eatChoice)
 
 $tag(televisionChoice)
 
@@ -261,17 +261,17 @@ $jump(houseMenu)
 
 $tag(eatChoice)
 
-$hide("Lina")
+$hide("Aria")
 
 $hide("Grandmother")
 
 N: *You eat a piece*
 
-$show("Lina",  RIGHT)
+$show("Aria",  RIGHT)
 
-$setSprite("Lina", "Lina14")
+$setSprite("Aria", "Lina14")
 
-Lina: It is really very good
+Aria: It is really very good
 
 $show("Grandmother", LEFT)
 
@@ -279,9 +279,9 @@ $setSprite("Grandmother", "Grandmother02")
 
 Grandmother: ...
 
-$setSprite("Lina", "Lina09")
+$setSprite("Aria", "Lina09")
 
-Lina: Finish your plate or she'll get mad
+Aria: Finish your plate or she'll get mad
 
 N: *You finish your plate*
 
@@ -291,7 +291,7 @@ $tag(leaveChoice)
 
 Grandmother: Come back whenever you want it was a pleasure !
 
-$hide("Lina")
+$hide("Aria")
 
 $hide("Grandmother")
 
@@ -301,7 +301,7 @@ $tag(storeChoice)
 
 $bg(Market)
 
-$hide("Lina")
+$hide("Aria")
 
 $setSprite("Seller", "Seller03")
 
@@ -311,23 +311,23 @@ Seller: Hello ! Welcome, have you made your choice ?
 
 $tag(fruitsChoice)
 
-$show("Lina", RIGHT)
+$show("Aria", RIGHT)
 
-$setSprite("Lina", "Lina13")
+$setSprite("Aria", "Lina13")
 
-Lina: I hesitate between apples and peaches, which do you prefer ?
+Aria: I hesitate between apples and peaches, which do you prefer ?
 
 $hide("Seller")
 
-$menu("Lina", "fruitsChoice", 2, "peach", peachChoice , "apple", appleChoice)
+$menu("Aria", "fruitsChoice", 2, "peach", peachChoice , "apple", appleChoice)
 
 $tag(appleChoice)
 
 $setVar(chooseApple, true)
 
-$setSprite("Lina", "Lina10")
+$setSprite("Aria", "Lina10")
 
-Lina: Great idea! I would like a bag of apples please
+Aria: Great idea! I would like a bag of apples please
 
 $jump(afterFruitChoice)
 
@@ -335,23 +335,23 @@ $tag(peachChoice)
 
 $setVar(chooseApple, false)
 
-$setSprite("Lina", "Lina10")
+$setSprite("Aria", "Lina10")
 
-Lina: Great idea, I love peaches! I would like a bag of peaches please
+Aria: Great idea, I love peaches! I would like a bag of peaches please
 
 $jump(afterFruitChoice)
 
 $tag(afterFruitChoice)
 
-$setSprite("Lina", "Lina05")
+$setSprite("Aria", "Lina05")
 
-Lina: Do you want to eat one now?
+Aria: Do you want to eat one now?
 
-$menu("Lina", "eatMenu", 2, "yes", eatMenuYes, "no", eatMenuNo)
+$menu("Aria", "eatMenu", 2, "yes", eatMenuYes, "no", eatMenuNo)
 
 $tag(eatMenuYes)
 
-$hide("Lina")
+$hide("Aria")
 
 $if(chooseApple, true, appleResponse, peachResponse)
 
@@ -363,13 +363,13 @@ $jump(eatMenuNo)
 
 $tag(peachResponse)
 
-$hide("Lina")
+$hide("Aria")
 
 N: *you eat a peach*
 
 $tag(eatMenuNo)
 
-$hide("Lina")
+$hide("Aria")
 
 $setSprite("Seller", "Seller02")
 
@@ -381,23 +381,23 @@ $hide("Seller")
 
 $tag(endGame)
 
-$setSprite("Lina", "Lina07")
+$setSprite("Aria", "Lina07")
 
 $bg(Street)
 
-$show("Lina", CENTER)
+$show("Aria", CENTER)
 
-Lina: Well, it's time to part ways.
+Aria: Well, it's time to part ways.
 
-$setSprite("Lina", "Lina14")
+$setSprite("Aria", "Lina14")
 
-Lina: Don't hesitate to start the game again to make other choices.
+Aria: Don't hesitate to start the game again to make other choices.
 
-$setSprite("Lina", "Lina03")
+$setSprite("Aria", "Lina03")
 
-Lina: Thank you for having accompanied me. See you next time !
+Aria: Thank you for having accompanied me. See you next time !
 
-$menu("Lina", "goodbyeMenu", 1, "goodbye", goodbyeMenuGoodbye)
+$menu("Aria", "goodbyeMenu", 1, "goodbye", goodbyeMenuGoodbye)
 
 $tag(goodbyeMenuGoodbye)
 

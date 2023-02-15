@@ -77,6 +77,7 @@ export const sign_game = new p5((sketch) => {
     };
 
     sketch.pause = () => {
+        sketch.sign_game.stop();
         sketch.clear();
     };
 
@@ -87,7 +88,7 @@ export const sign_game = new p5((sketch) => {
 
     sketch.show = () => {
         if (!sketch.activated) return;
-        
         sketch.sign_game.show();
     };
+
 });

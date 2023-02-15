@@ -5,7 +5,6 @@
 export class Engine {
     constructor(sketch) {
         this.sketch = sketch;
-        this.subSketch = null;
         this.sketch.colorMode(HSL, 360, 1, 1, 1);
         this.progressBar = new ProgressBar(this, width * 0.25, width * 0.75, height * 0.5, height * 0.5);
 
@@ -73,12 +72,10 @@ export class Engine {
     update() {
         if (Date.now() - this.lastInterraction > 600000) this.stop(); //TODO à remettre à 60000 dans la version finale
         if (!this.gameStarted) return;
-        // faire fonctionner le count valid à check si le guessed_sign est le meme que le previous on incrémente le count valid
         if (this.guessed_sign != undefined)
         {
             if (this.guessed_sign == "ok" && this.count_valid >= this.sign_count_threshold && Date.now() - this.lastInterraction > 2000) {
                 this.subSketch.mouseReleased();
-                console.log("click")
                 this.guessed_sign = "empty";
             }
         }
@@ -108,7 +105,6 @@ export class Engine {
         this.subSketch = null;
 
         this.processedScript = []
-        // this.currentIndex = 36
         this.currentIndex = 0
         this.characters = []
         this.tags = []
@@ -144,9 +140,7 @@ export class Engine {
             this.clearAllSprites();
             this.subSketch.remove();
 
-            for(let char of this.characters) {
-                char.clear();
-            }
+            document.querySelectorAll('video').forEach(e => e.remove());
             
             this.sketch.emit("core-app_manager-stop_application", {
                 "application_name": "sign_game"
@@ -184,7 +178,6 @@ export class Engine {
     jump(tagName) {
         var jmpTag = this.getTagByName(tagName);
         this.currentIndex = jmpTag[1];
-        console.log("Jumping to tag " + tagName + " at index " + jmpTag[1]);
     }
 
     handleMenuClick(menuName, item) { //TODO: à appeler quand on réalise un signe
@@ -383,7 +376,6 @@ export class Engine {
                                     this.reset()
                 
                                 } else {
-                                    console.log("advancing")
                                     this.currentIndex++;
                                 }
                 
@@ -774,7 +766,6 @@ export class Engine {
         this.processedScript[this.currentIndex].render()
         
         if (this.processedScript[this.currentIndex].type == this.ElementTypes.COMMAND && this.processedScript[this.currentIndex].commandType != this.CommandTypes.END) {
-            console.log("Click")
             this.subSketch.mouseReleased() //* pourquoi celle là avant 754
         }
     }
@@ -856,6 +847,7 @@ class Character {
                     if (video != null) {
                         let videoName = animationName.substring(0, animationName.indexOf("."));
                         video.hide();
+                        // video.id(videoName);
                         video.name = videoName;
                         video.isPlayable = true;
                         video.onended(() => {
@@ -875,9 +867,15 @@ class Character {
     }
 
     clear() {
-        for (let video of Object.values(this.animations)) {
-            this.engine.sketch.remove(video);
-        }
+        // for (let video of Object.values(this.animations)) {
+        //     // supprime la vidéo de la page
+
+        //     // video.remove();
+        //     document.getElementById(video.name).remove();
+        // }
+        // this.sketch.clear
+        // delete all videos from the page
+        
     }
 
     setSprite(spriteName) {
@@ -1042,11 +1040,9 @@ class CommandBG extends ScriptElement {
         if (this.name != "none") {
             this.myImage = this.engine.getImageByName(this.name)
         }
-        console.log("creating background " + this.name)
     }
 
     render() {
-        console.log("rendering background " + this.name)
         if (this.name == "none") {
             this.engine.currentBackground = null
         } else {
@@ -1323,7 +1319,7 @@ class Dialog extends ScriptElement {
             this.engine.subSketch.textSize(24 * this.engine.ratio)
             var char = this.engine.getCharacterByName(this.characterName);
             this.engine.subSketch.fill(char.charColor);
-            this.engine.subSketch.text(this.characterName + ":", 18*width/40 * this.ratioX, 2*height/40 * this.ratioY, width / 2, height/2.3 * this.engine.ratioY);
+            this.engine.subSketch.text(this.characterName + ":", 9*width/40 * this.engine.ratioX, 54*height/80 * this.engine.ratioY, 50*width/80 * this.engine.ratioX, height/2.3 * this.engine.ratioY);
 
             if (this.command && this.command.length) {
                 if (this.command.includes("LEFT")) {
@@ -1342,7 +1338,7 @@ class Dialog extends ScriptElement {
         }
         this.engine.subSketch.textSize(20 * this.engine.ratioY);
         this.engine.subSketch.fill(255);
-        this.engine.subSketch.text(this.dialog, 9*width/40 * this.engine.ratioX, 53*height/80 * this.engine.ratioY, 50*width/80 * this.engine.ratioX, height - 40);
+        this.engine.subSketch.text(this.dialog, 9*width/40 * this.engine.ratioX, 57*height/80 * this.engine.ratioY, 50*width/80 * this.engine.ratioX, height - 40);
 
     }
 }
