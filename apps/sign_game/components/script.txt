@@ -71,7 +71,7 @@ $bg(Home)
 
 $hide("Aria")
 
-$Show("Grandmother", LEFT)
+$show("Grandmother", LEFT)
 
 $setSprite("Grandmother", "Grandmother01")
 
