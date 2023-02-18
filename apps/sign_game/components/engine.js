@@ -905,27 +905,27 @@ class Character {
 
     setSpritePos(pos) {
         if (pos == "LEFT")
-            this.spriteXpos = width/2 + 4*this.sprites[Object.keys(this.sprites)[0]].width/40
+            this.spriteXpos = width/2 + 2*this.sprites[Object.keys(this.sprites)[0]].width/40
         else if (pos == "CENTER")
             this.spriteXpos = width/2  + 8*this.sprites[Object.keys(this.sprites)[0]].width/40
         else
-            this.spriteXpos = width/2  + 14*this.sprites[Object.keys(this.sprites)[0]].width/40
+            this.spriteXpos = width/2  + 12*this.sprites[Object.keys(this.sprites)[0]].width/40
     }
 
     setAnimationPos(pos) {
         if (pos == "LEFT")
             if (this.currentAnimations.length < 3)
-                this.animationXpos = width/2 - 14*this.animations[Object.keys(this.animations)[0]].width/20
+                this.animationXpos = width/2 - 11*this.animations[Object.keys(this.animations)[0]].width/20
             else
-                this.animationXpos = width/2 - 15*this.animations[Object.keys(this.animations)[0]].width/20
+                this.animationXpos = width/2 - 12*this.animations[Object.keys(this.animations)[0]].width/20
         else if (pos == "CENTER")
             if (this.currentAnimations.length < 3)
-                this.animationXpos = width/2 - 22*this.animations[Object.keys(this.animations)[0]].width/40
+                this.animationXpos = width/2 - 17*this.animations[Object.keys(this.animations)[0]].width/40
             else
-                this.animationXpos = width/2 -10*this.animations[Object.keys(this.animations)[0]].width/20
+                this.animationXpos = width/2 -17*this.animations[Object.keys(this.animations)[0]].width/40
         else {
             if (this.currentAnimations.length < 3)
-                this.animationXpos = width/2 - 6*this.animations[Object.keys(this.animations)[0]].width/16
+                this.animationXpos = width/2 - 5*this.animations[Object.keys(this.animations)[0]].width/16
             else
                 this.animationXpos = width/2 - 5*this.animations[Object.keys(this.animations)[0]].width/20
         }
@@ -935,7 +935,7 @@ class Character {
         if (this.path.length) {
             if (this.currentSprite != 0 && this.sprites[this.currentSprite] != null) {
                 this.engine.sketch.imageMode(CENTER)
-                this.sprites[this.currentSprite].resize(this.originalSpriteWidth * this.engine.ratioX*1.5, this.originalSpriteHeight * this.engine.ratioY*1.5)
+                this.sprites[this.currentSprite].resize(this.originalSpriteWidth * this.engine.ratioX*1.2, this.originalSpriteHeight * this.engine.ratioY*1.2)
                 this.engine.sketch.image(this.sprites[this.currentSprite], this.spriteXpos, this.spriteYpos)
             }
         }
@@ -950,7 +950,7 @@ class Character {
                     this.currentAnimations[animIndex].isPlayable = false;
                     this.currentAnimations[animIndex].show();
                     this.currentAnimations[animIndex].volume(0);
-                    this.currentAnimations[animIndex].size(this.currentAnimations[animIndex].width * this.engine.ratioX*1.5, this.currentAnimations[animIndex].height * this.engine.ratioY*1.5);
+                    this.currentAnimations[animIndex].size(this.currentAnimations[animIndex].width * this.engine.ratioX*1.2, this.currentAnimations[animIndex].height * this.engine.ratioY*1.2);
                     if (this.currentAnimations.length == 2)
                     {
                         if (animIndex == 0) {
