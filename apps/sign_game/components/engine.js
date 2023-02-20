@@ -819,6 +819,8 @@ class Character {
         this.lastSprite = 0;
         this.originalSpriteWidth = 0;
         this.originalSpriteHeight= 0;
+        this.originalAnimationWidth = 0;
+        this.originalAnimationHeight = 0;
         this.lastAnimation = undefined;
 
         this.lastTimeAnimationWasPlayed = -15000;
@@ -851,13 +853,14 @@ class Character {
                     if (video != null) {
                         let videoName = animationName.substring(0, animationName.indexOf("."));
                         video.hide();
-                        // video.id(videoName);
                         video.name = videoName;
                         video.isPlayable = true;
                         video.onended(() => {
                             this.animations[videoName].isPlayable = true;
                         });
                         this.animations[videoName] = video;
+                        this.originalAnimationWidth = video.width;
+                        this.originalAnimationHeight = video.height;
                         if (Object.keys(this.animations).length == filesNamesDict["animations"].length) this.areAnimationsLoaded = true;
                     }
                     this.engine.totalElementsLoaded++;
@@ -868,18 +871,6 @@ class Character {
         this.currentSprite = 0
         // this.currentAnimation = undefined
         this.currentAnimations = []
-    }
-
-    clear() {
-        // for (let video of Object.values(this.animations)) {
-        //     // supprime la vidéo de la page
-
-        //     // video.remove();
-        //     document.getElementById(video.name).remove();
-        // }
-        // this.sketch.clear
-        // delete all videos from the page
-        
     }
 
     setSprite(spriteName) {
@@ -905,29 +896,29 @@ class Character {
 
     setSpritePos(pos) {
         if (pos == "LEFT")
-            this.spriteXpos = width/2 + 2*this.sprites[Object.keys(this.sprites)[0]].width/40
+            this.spriteXpos = width/2 + 2*this.originalSpriteWidth/40
         else if (pos == "CENTER")
-            this.spriteXpos = width/2  + 8*this.sprites[Object.keys(this.sprites)[0]].width/40
+            this.spriteXpos = width/2  + 8*this.originalSpriteWidth/40
         else
-            this.spriteXpos = width/2  + 12*this.sprites[Object.keys(this.sprites)[0]].width/40
+            this.spriteXpos = width/2  + 12*this.originalSpriteWidth/40
     }
 
     setAnimationPos(pos) {
         if (pos == "LEFT")
             if (this.currentAnimations.length < 3)
-                this.animationXpos = width/2 - 11*this.animations[Object.keys(this.animations)[0]].width/20
+                this.animationXpos = width/2 - 11*this.originalAnimationWidth/20
             else
-                this.animationXpos = width/2 - 12*this.animations[Object.keys(this.animations)[0]].width/20
+                this.animationXpos = width/2 - 12*this.originalAnimationWidth/20
         else if (pos == "CENTER")
             if (this.currentAnimations.length < 3)
-                this.animationXpos = width/2 - 17*this.animations[Object.keys(this.animations)[0]].width/40
+                this.animationXpos = width/2 - 17*this.originalAnimationWidth/40
             else
-                this.animationXpos = width/2 -17*this.animations[Object.keys(this.animations)[0]].width/40
+                this.animationXpos = width/2 -17*this.originalAnimationWidth/40
         else {
             if (this.currentAnimations.length < 3)
-                this.animationXpos = width/2 - 5*this.animations[Object.keys(this.animations)[0]].width/16
+                this.animationXpos = width/2 - 5*this.originalAnimationWidth/16
             else
-                this.animationXpos = width/2 - 5*this.animations[Object.keys(this.animations)[0]].width/20
+                this.animationXpos = width/2 - 5*this.originalAnimationWidth/20
         }
     }
 
