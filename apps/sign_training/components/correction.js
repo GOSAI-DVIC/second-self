@@ -1,5 +1,5 @@
-import { Hand } from "./hand.js"
-import { Body } from "./body.js"
+import { Hand } from "./hand.js.js"
+import { Body } from "./body.js.js"
 // import sampleJson from './slr_samples' assert { type: "json" };
 
 
