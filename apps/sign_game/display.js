@@ -42,7 +42,6 @@ export const sign_game = new p5((sketch) => {
                 data["probability"],
                 data["actions"]
             );
-            // console.log(data["guessed_sign"], data["probability"], data["actions"])
             sketch.actions = data["actions"];
         });
 

@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { Guessing } from "./components/guessing.js"
-=======
-import { Guessing } from "./components/guessing.js.js"
->>>>>>> master
 
 export const sign_training = new  p5(( sketch ) => {
     sketch.name = "sign_training"
@@ -14,7 +10,6 @@ export const sign_training = new  p5(( sketch ) => {
 
         sketch.slr_training = new Guessing()
         socket.on(`applications-${sketch.name}-new_sign`, (data) => {
-            // console.log("new sign", data)
             sketch.slr_training.update_sign_data(
                 data["guessed_sign"],
                 data["probability"],

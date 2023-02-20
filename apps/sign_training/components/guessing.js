@@ -9,28 +9,16 @@ export class Guessing {
         this.dark_blue = (30, 70, 160);
 
         this.actions;
-        this.guessed_sign = "empty";
-        this.targeted_sign_idx = 2;
 
         this.probability;
-        this.sentence = [];
         this.threshold = 0.9;
 
-        this.playing = false;
-        this.playable = true;
-        this.last_played = Date.now();
-        this.last_interract = Date.now();
-
-        this.running = true;
-        this.count_valid = 0;
-        this.isStopped = false;
-
         this.correction;
-        this.is_correction_running = false;
-
         this.right_hand_pose;
         this.left_hand_pose;
         this.body_pose;
+
+        this.reset();
     }
 
     playTuto() {
@@ -128,7 +116,20 @@ export class Guessing {
         this.last_played = Date.now();
         this.running = true;
         this.count_valid = 0;
-        this.targeted_sign_idx = 0;
+        
+        this.guessed_sign = "empty";
+        this.targeted_sign_idx = 2;
+
+        this.sentence = [];
+        this.last_played = Date.now();
+        this.last_interract = Date.now();
+
+        this.running = true;
+        this.count_valid = 0;
+        this.isStopped = false;
+
+        this.is_correction_running = false;
+        
     }
 
     update(sketch) {
