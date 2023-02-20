@@ -37,7 +37,7 @@ export class Correction {
         this.right_hand_diff = 0; // The lower, the closer the moves are
         this.left_hand_diff = 0; // The lower, the closer the moves are
         this.body_precision = 40; // if this.body_diff < this.body_precision, it goes on
-        this.hand_precision = 30;
+        this.hand_precision = 40;
         this.sample_pose_frames = {};
 
         this.is_running = true;
