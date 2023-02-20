@@ -18,12 +18,13 @@ $bg(Empty)
 $show("Aria", CENTER)
 
 $addAnimation("Aria", "ok")
+#$menu("Aria", "OkMenu1", 1, "ok", afterOkMenu1)
 
-Aria: Hello, welcome to the mirror sign language learning game. My name is Aria. Make the sign "ok" to skip the text.
+Aria: Hello, welcome to the mirror sign language learning game. My name is Aria.
 
 $addAnimation("Aria", "ok")
 
-Aria: In this game you will be able to interact with the mirror by making gestures in sign language to live an adventure. Make the sign "ok" to skip the text.
+Aria: In this game you will be able to interact with the mirror by making gestures in sign language to live an adventure.
 
 $setSprite("Aria", "Lina01")
 

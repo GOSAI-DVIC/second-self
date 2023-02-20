@@ -70,11 +70,11 @@ export class Engine {
 
 
     update() {
-        if (Date.now() - this.lastInterraction > 600000) this.stop(); //TODO à remettre à 60000 dans la version finale
+        if (Date.now() - this.lastInterraction > 60000) this.stop(); //TODO à remettre à 60000 dans la version finale
         if (!this.gameStarted) return;
         if (this.guessed_sign != undefined)
         {
-            if (this.guessed_sign == "ok" && this.count_valid >= this.sign_count_threshold && Date.now() - this.lastInterraction > 2000) {
+            if (this.guessed_sign == "ok" && this.count_valid >= this.sign_count_threshold && Date.now() - this.lastInterraction > 4000) {
                 this.subSketch.mouseReleased();
                 this.guessed_sign = "empty";
             }
@@ -146,6 +146,9 @@ export class Engine {
                 "application_name": "sign_game"
             });
             this.gameStarted = false;
+            this.sketch.emit("core-app_manager-start_application", {
+                "application_name": "clock"
+            });
         }
     }
 
@@ -1125,19 +1128,21 @@ class CommandVariable extends ScriptElement {
 
 class CommandConditional extends ScriptElement {
     constructor(variableName, value, trueTag, falseTag, engine) {
-        super(engine.ElementTypes.COMMAND)
-        this.variableName = variableName
-        this.value = value
-        this.trueTag = trueTag
-        this.falseTag = falseTag
-        this.engine = engine
+        super(engine.ElementTypes.COMMAND);
+        this.variableName = variableName;
+        this.value = value;
+        this.trueTag = trueTag;
+        this.falseTag = falseTag;
+        this.engine = engine;
     }
 
     render() {
         if (this.engine.variables[this.variableName] === "true" || this.engine.variables[this.variableName] == this.value) {
-            this.engine.jump(this.trueTag)
+            this.engine.jump(this.trueTag);
+            console.log("jumping to true tag");
         } else {
             this.engine.jump(this.falseTag)
+            console.log("jumping to false tag");
         }
 
     }
@@ -1335,6 +1340,14 @@ class Dialog extends ScriptElement {
         this.engine.subSketch.fill(255);
         this.engine.subSketch.text(this.dialog, 3*width/40 * this.engine.ratioX, 63*height/80 * this.engine.ratioY, 65*width/80 * this.engine.ratioX, height - 40);
 
+        if (Date.now() - this.engine.lastInterraction > 4000)
+        {
+            this.engine.subSketch.textSize(20 * this.engine.ratioY);
+            this.engine.subSketch.fill(235, 52, 198);
+            this.engine.subSketch.text("(Make the sign \"ok\" to skip the dialogs.)", 3*width/40 * this.engine.ratioX, 75*height/80 * this.engine.ratioY);
+        }
+
+        
     }
 }
 
