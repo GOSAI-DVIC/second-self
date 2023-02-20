@@ -808,7 +808,7 @@ class ScriptElement {
 }
 
 class Character {
-    constructor(engine, name, charColor = 255, path = [], filesNamesDict = {}, spriteXpos = width / 2, spriteYpos = 30 * width / 40, animationXpos  = width / 2, animationYpos = height / 2) {
+    constructor(engine, name, charColor = 255, path = [], filesNamesDict = {}, spriteXpos = width / 2, spriteYpos = 15 * height / 40, animationXpos  = width / 2, animationYpos = 2*height/40) {
         this.name = name;
         this.charColor = charColor;
         this.path = path;
@@ -941,7 +941,7 @@ class Character {
                     this.currentAnimations[animIndex].isPlayable = false;
                     this.currentAnimations[animIndex].show();
                     this.currentAnimations[animIndex].volume(0);
-                    this.currentAnimations[animIndex].size(this.currentAnimations[animIndex].width * this.engine.ratioX*1.2, this.currentAnimations[animIndex].height * this.engine.ratioY*1.2);
+                    this.currentAnimations[animIndex].size(this.originalAnimationWidth * this.engine.ratioX*1.2, this.originalAnimationHeight * this.engine.ratioY*1.2);
                     if (this.currentAnimations.length == 2)
                     {
                         if (animIndex == 0) {
@@ -962,7 +962,7 @@ class Character {
                             this.setAnimationPos("RIGHT")
                         }
                     }
-                    this.currentAnimations[animIndex].position(this.animationXpos, 25);
+                    this.currentAnimations[animIndex].position(this.animationXpos, this.animationYpos);
 
                     this.currentAnimations[animIndex].loop();
                     this.engine.lastTimeAnimationWasPlayed = Date.now();
