@@ -11,7 +11,7 @@
     },
     "applications": {
         "startup": ["menu", "hands", "body", "face"],
-        "disabled": ["sign_game", "bounce", "raw_hands", "show_ping", "score_player", "show_frequency", "sign_language"]
+        "disabled": ["bounce", "raw_hands", "show_ping", "score_player", "show_frequency", "sign_language"]
     },
     "microphone": {
         "number": 13,
