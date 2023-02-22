@@ -5,6 +5,8 @@
 export class Engine {
     constructor(sketch) {
         this.sketch = sketch;
+
+        this.subSketch = null;
         this.sketch.colorMode(HSL, 360, 1, 1, 1);
         this.progressBar = new ProgressBar(this, width * 0.25, width * 0.75, height * 0.5, height * 0.5);
 
@@ -70,7 +72,7 @@ export class Engine {
 
 
     update() {
-        if (Date.now() - this.lastInterraction > 600000) this.stop(); //TODO à remettre à 60000 dans la version finale
+        if (Date.now() - this.lastInterraction > 60000) this.reset(); //TODO à remettre à 60000 dans la version finale
         if (!this.gameStarted) return;
         if (this.guessed_sign != undefined)
         {
@@ -102,7 +104,6 @@ export class Engine {
     }
 
     reset() {
-        this.subSketch = null;
 
         this.processedScript = []
         this.currentIndex = 0
@@ -138,7 +139,7 @@ export class Engine {
         if (this.gameStarted) {
             this.clearAllAnimations();
             this.clearAllSprites();
-            this.subSketch.remove();
+            // this.subSketch.remove();
 
             document.querySelectorAll('video').forEach(e => e.remove());
             
@@ -1020,9 +1021,8 @@ class CommandEnd extends ScriptElement {
     }
 
     render() {
-        this.engine.subSketch.text(this.engine.endText, 40, 460, 540, height - 40);
         if (this.engine.gameStarted) {
-            this.engine.stop()
+            this.engine.reset()
         }
     }
 }
