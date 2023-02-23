@@ -5,10 +5,13 @@
 export class Engine {
     constructor(sketch) {
         this.sketch = sketch;
+
+        this.subSketch = null;
         this.sketch.colorMode(HSL, 360, 1, 1, 1);
         this.progressBar = new ProgressBar(this, width * 0.25, width * 0.75, height * 0.5, height * 0.5);
 
         this.sign_count_threshold = 5;
+        this.currentBackground = null;
 
         this.endText = "-End of Script-";
         // this.charactersFiles = {};
@@ -20,8 +23,6 @@ export class Engine {
         this.ratio;
         this.ratioX = 1;
         this.ratioY = 1;
-
-        this.totalElementsLoaded = 0;
 
         this.lastInterraction = Date.now();
 
@@ -70,7 +71,8 @@ export class Engine {
 
 
     update() {
-        if (Date.now() - this.lastInterraction > 600000) this.stop(); //TODO à remettre à 60000 dans la version finale
+        if (Date.now() - this.lastInterraction > 60000) 
+        this.reset(); //TODO à remettre à 60000 dans la version finale
         if (!this.gameStarted) return;
         if (this.guessed_sign != undefined)
         {
@@ -102,7 +104,10 @@ export class Engine {
     }
 
     reset() {
-        this.subSketch = null;
+        this.totalElementsLoaded = 0;
+
+        this.progressBar.reset();
+        document.querySelectorAll('video').forEach(e => e.remove());
 
         this.processedScript = []
         this.currentIndex = 0
@@ -126,7 +131,6 @@ export class Engine {
         this.enableGUI = true
         this.enableText = true
         this.state = 0;
-        this.currentBackground = null;
         this.variables = new Object
         this.gameStarted = false
 
@@ -373,6 +377,7 @@ export class Engine {
                                 if (this.currentIndex + 1 >= this.processedScript.length) {
                                     this.currentIndex = 0
                                     this.gameStarted = false
+                                    this.subEngine.remove();
                                     this.reset()
                 
                                 } else {
@@ -865,6 +870,7 @@ class Character {
                     }
                     this.engine.totalElementsLoaded++;
                 });
+
             }
         }
 
@@ -1020,9 +1026,9 @@ class CommandEnd extends ScriptElement {
     }
 
     render() {
-        this.engine.subSketch.text(this.engine.endText, 40, 460, 540, height - 40);
         if (this.engine.gameStarted) {
-            this.engine.stop()
+            this.engine.subEngine.remove();
+            this.engine.reset()
         }
     }
 }
@@ -1038,6 +1044,7 @@ class CommandBG extends ScriptElement {
     }
 
     render() {
+        console.log("setting background to "+ this.engine.currentBackground)
         if (this.name == "none") {
             this.engine.currentBackground = null
         } else {
@@ -1046,7 +1053,10 @@ class CommandBG extends ScriptElement {
                     resolve(this.myImage.p5Image != undefined);
                 }, 100);
             })).then((loaded) => {
-                if (loaded) this.engine.currentBackground = this.myImage.p5Image;
+                if (loaded) {
+                    console.log("background set to " + this.myImage.p5Image)
+                    this.engine.currentBackground = this.myImage.p5Image;
+                }
                 else this.render();
             });
 
@@ -1340,20 +1350,28 @@ class Dialog extends ScriptElement {
 
 class ProgressBar {
     constructor(engine, _x1, _x2, _y1, _y2) {
-        // _x1, _x2, _y1, _y2 ne changent pas
+        this.x1 = _x1;
+        this.x2 = _x2;
+        this.y1 = _y1;
+        this.y2 = _y2;
 
         this.engine = engine;
+        this.reset();
+        
+    }
+    
+    reset() {
         this.pBar = {
-            curr: _x1,
+            curr: this.x1,
             newCurr: 0,
-            x1: _x1,
-            x2: _x2,
-            y1: _y1,
-            y2: _y2,
+            x1: this.x1,
+            x2: this.x2,
+            y1: this.y1,
+            y2: this.y2,
             col: 280
         };
     }
-  
+
     fillBar() {
         this.engine.sketch.stroke(this.pBar.col, 1, 0.8, 1);
         this.engine.sketch.strokeWeight(30);
