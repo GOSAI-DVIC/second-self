@@ -74,7 +74,7 @@ export class Engine {
         if (Date.now() - this.lastInterraction > 60000) 
         {
             this.subEngine.remove();
-            this.reset(); //TODO à remettre à 60000 dans la version finale
+            this.stop(); //TODO à remettre à 60000 dans la version finale
         }
         if (!this.gameStarted) return;
         if (this.guessed_sign != undefined)

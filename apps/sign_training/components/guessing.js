@@ -101,6 +101,8 @@ export class Guessing {
             if (!this.running) {
                 if(!this.isStopped) {
                     if(this.video != undefined) sketch.remove(this.video);
+                    document.querySelectorAll('video').forEach(e => e.remove());
+
                     sketch.emit("core-app_manager-stop_application", {
                         application_name: "sign_training"
                     });
@@ -111,6 +113,8 @@ export class Guessing {
     }
 
     reset() {
+        document.querySelectorAll('video').forEach(e => e.remove());
+
         this.playing = false;
         this.playable = true;
         this.last_played = Date.now();
