@@ -75,6 +75,7 @@ export class Engine {
         {
             this.subEngine.remove();
             this.stop(); //TODO à remettre à 60000 dans la version finale
+            this.emit_stop_app();
         }
         if (!this.gameStarted) return;
         if (this.guessed_sign != undefined)
@@ -142,21 +143,31 @@ export class Engine {
     }
 
     stop() {
-        if (this.gameStarted) {
-            this.clearAllAnimations();
-            this.clearAllSprites();
-            this.subSketch.remove();
+        this.clearAllAnimations();
+        this.clearAllSprites();
+        this.subSketch.remove();
 
-            document.querySelectorAll('video').forEach(e => e.remove());
-            
-            this.sketch.emit("core-app_manager-stop_application", {
-                "application_name": "sign_game"
-            });
-            this.gameStarted = false;
-            this.sketch.emit("core-app_manager-start_application", {
-                "application_name": "clock"
-            });
+        document.querySelectorAll('video').forEach(e => e.remove());
+        //document.querySelector('#defaultCanvas5').forEach(e => e.remove())
+        //document.querySelector('#defaultCanvas6').forEach(e => e.remove())
+        try {
+            document.getElementById('defaultCanvas5').remove();
+            document.getElementById('defaultCanvas6').remove();           
         }
+        catch(e) {}
+        this.sketch.emit("core-app_manager-stop_application", {
+            "application_name": "sign_game"
+        });
+        this.gameStarted = false;
+        
+    }
+
+    emit_stop_app()
+    {
+        
+        this.sketch.emit("core-app_manager-start_application", {
+            "application_name": "clock"
+        });
     }
 
     initCharArray() {
@@ -1050,7 +1061,6 @@ class CommandBG extends ScriptElement {
     }
 
     render() {
-        console.log("setting background to "+ this.engine.currentBackground)
         if (this.name == "none") {
             this.engine.currentBackground = null
         } else {
@@ -1060,7 +1070,6 @@ class CommandBG extends ScriptElement {
                 }, 100);
             })).then((loaded) => {
                 if (loaded) {
-                    console.log("background set to " + this.myImage.p5Image)
                     this.engine.currentBackground = this.myImage.p5Image;
                 }
                 else this.render();
@@ -1210,7 +1219,6 @@ class CommandMenu extends ScriptElement {
     }
 
     handleClick(item) { //* A appeler lors d'un signe
-        console.log("clicking on " + this.menuItems[item][0])
         this.engine.lastInterraction = Date.now();
         this.engine.canAdvance = true
         this.engine.enableGUI = true
