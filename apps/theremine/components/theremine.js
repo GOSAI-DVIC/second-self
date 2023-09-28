@@ -1,5 +1,5 @@
 import musicalElementsJson from './musical_elements.json' assert { type: "json" };
-import laVieEnRoseJson from './scores/la_vie_en_rose.json' assert { type: "json" };
+import laVieEnRoseJson from './scores/la_vie_en_rose_short.json' assert { type: "json" };
 import noTimeToDie from './scores/no_time_to_die.json' assert { type: "json" };
 
 
@@ -364,6 +364,7 @@ class FallingNote {
     }
 
     isValidating(cursorXPos) {
-        return this.xCoor - 5 < cursorXPos && this.xCoor + 5 > cursorXPos;
+        const validation_distance = 10;
+        return this.xCoor - validation_distance < cursorXPos && this.xCoor + validation_distance > cursorXPos;
     }
 }

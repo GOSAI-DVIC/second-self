@@ -1,5 +1,5 @@
 import musicalElementsJson from './musical_elements.json' assert { type: "json" };
-import laVieEnRoseJson from './scores/la_vie_en_rose.json' assert { type: "json" };
+import laVieEnRoseJson from './scores/la_vie_en_rose_short.json' assert { type: "json" };
 import noTimeToDie from './scores/no_time_to_die.json' assert { type: "json" };
 import scoreTestJson from './scores/score_test.json' assert { type: "json" };
 
@@ -137,6 +137,7 @@ export class MusicTraining{
         }
 
     playTutorial() {
+        console.log("playing tutorial")
         const score = JSON.parse(JSON.stringify(this.scores["laVieEnRoseJson"]));
         this.tempo = score.rythm.tempo;
 
@@ -145,6 +146,10 @@ export class MusicTraining{
             const pasMesure = 1/this.musicalElements.notes_durations_denom[score.notes[i][1]]
             let noteDuration =  noteNum * pasMesure * 60/this.tempo;
             let noteCoorX = this.keyToPxl(this.musicalElements.notes_key[score.notes[i][0]] - this.keyFreqGap);
+
+            console.log(this.musicalElements.notes_key[score.notes[i][0]] - this.keyFreqGap)
+            console.log(noteCoorX)
+
             var lineY = i>0 ? this.fallingNotes[i-1].lineY + this.fallingNotes[i-1].distance: height;
 
             var newFallingNote = new FallingNote(lineY, noteDuration, noteCoorX);
@@ -173,7 +178,7 @@ export class MusicTraining{
             sketch.text(sungNote, 200, 100);
         }
         const score = JSON.parse(JSON.stringify(this.scores["laVieEnRoseJson"]));
-        this.keyFreqGap = Math.floor((this.musicalElements.notes_key[score.principalHigh] - sungKey)/12 + 1)*12;
+        this.keyFreqGap = Math.floor((this.musicalElements.notes_key[score.notes[0][0]] - sungKey)/12)*12;
     }
 
     reset() {}
