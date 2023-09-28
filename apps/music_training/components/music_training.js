@@ -365,7 +365,7 @@ class FallingNote {
     
     update(sketch, cursorXPos, cursorYPos, tempo)
     {
-        if(!this.barColor) this.barColor = sketch.color(255,255,255);
+        if(!this.barColor) this.barColor = sketch.color(170,170,170);
 
         this.lineY = this.lineY - this.speed;
 
