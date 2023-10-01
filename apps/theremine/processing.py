@@ -7,15 +7,18 @@ class Application(BaseApplication):
     def __init__(self, name, hal, server, manager):
         super().__init__(name, hal, server, manager)
         self.requires["pose_to_mirror"] = ["mirrored_data"]
-        # self.requires["pose"] = ["raw_data"]
         self.requires["synthesizer"] = ["synthesizing"]
         self.is_exclusive = True
         self.applications_allowed = ["menu", "hands"]
         self.applications_required = ["menu", "hands"]
 
-        @self.server.sio.on("applications-theremine-synthesize")
+        @self.server.sio.on("score_player_synthesize")
         def synthesize(data):
-            self.execute("synthesizer", "play", data)  
+            self.execute("synthesizer", "add_to_queue", data)
+
+        @self.server.sio.on("score_player_stop_music")
+        def synthesize(data):
+            self.execute("synthesizer", "empty_queue", data)
 
     def listener(self, source, event, data):
         super().listener(source, event, data)

@@ -12,6 +12,7 @@ export const music_training = new p5(( sketch ) => {
                 data["max_frequency"], data["amplitude"]
             )
         });
+        
         socket.on("application-music_training-bars_activation", (isSelected) => {
             sketch.music_training.toggleShowBars(isSelected)
         });

@@ -1,6 +1,6 @@
 {
     "rythm":{
-        "tempo": 83,
+        "tempo": 40,
         "timeSignatureNum": 4,
         "timeSignatureDenom": 4
     },
@@ -22,8 +22,8 @@
         ["A4", "dotted_quarter"],
         ["G4", "eighth"],
         ["E4", "eighth"],
-        ["B3", "eighth"],
         ["C4", "eighth"],
+        ["D4", "eighth"],
         ["B4", "eighth"],
 
         ["A4","half"],

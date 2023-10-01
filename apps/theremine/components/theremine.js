@@ -318,12 +318,63 @@ export class Theremine{
     update(sketch) {
 
     }
+
+    triggerMusic(sketch, scoreName) {
+        this.stopTutorial();
+        // if the music is not already playing and a new one is selected
+        if (this.playingMusic && this.playedScore != scoreName) 
+        {
+            this.stopMusic(sketch);
+            this.playMusic(sketch, scoreName);
+        }
+        else {
+            this.playingMusic = !this.playingMusic;
+            if(this.playingMusic && !this.playingTutorial) {
+                this.playMusic(sketch, scoreName);
+            }
+            else {
+                this.stopMusic(sketch)
+                this.playedScore = NaN;
+            }
+        }
+    }
+
+    playMusic(sketch, scoreName) {
+        this.playedScore = scoreName;
+        var amplitude = 0.5;
+        
+        const score = JSON.parse(JSON.stringify(this.scores[scoreName + "Json"]));
+
+        for(var note of score.notes)
+        {
+            const noteNum = score.rythm.timeSignatureNum
+            const pasMesure = 1/this.musicalElements.notes_durations_denom[note[1]]
+            let noteDuration =  noteNum * pasMesure * 60/score.rythm.tempo - 0.1;
+            if(this.playingMusic) { 
+                console.log("playing music", {
+                    "frequency": this.keyToFreq(this.musicalElements.notes_key[note[0]]), 
+                    "amplitude": amplitude,
+                    "duration": noteDuration,
+                })
+                sketch.emit("score_player_synthesize", {
+                    "frequency": this.keyToFreq(this.musicalElements.notes_key[note[0]]), 
+                    "amplitude": amplitude,
+                    "duration": noteDuration,
+                });
+            }
+            else break;
+        }
+    }
+
+    stopMusic(sketch) {
+        sketch.emit("score_player_stop_music", {});
+    }
 }
 
 class FallingNote {
     constructor(lineY, duration, xCoor) {
         this.speed = 5;
-        this.distance = duration * this.speed* 120;
+        this.distance = duration * this.speed* 60;
         this.xCoor = xCoor;
         this.lineY = lineY;
         this.barColor;

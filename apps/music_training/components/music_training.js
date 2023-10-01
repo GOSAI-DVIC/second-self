@@ -356,7 +356,7 @@ export class MusicTraining{
 class FallingNote {
     constructor(lineY, duration, xCoor) {
         this.speed = 5;
-        this.distance = duration * this.speed* 120;
+        this.distance = duration * this.speed* 60;
         this.xCoor = xCoor;
         this.lineY = lineY;
         this.barColor;

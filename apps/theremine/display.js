@@ -9,8 +9,7 @@ export const theremine = new p5(( sketch ) => {
         sketch.theremine = new Theremine()
         socket.on(sketch.name, (data) => {
             sketch.theremine.update_data(
-                data["right_hand_pose"], 
-                data["left_hand_pose"]
+                data["right_hand_pose"], data["left_hand_pose"]
             )
         });
 
@@ -20,6 +19,10 @@ export const theremine = new p5(( sketch ) => {
 
         socket.on("application-music_training-tutorial_start", () => {
             sketch.theremine.triggerTutorial()
+        });
+
+        socket.on("application-music_training-trigger_la_vie_en_rose", () => {
+            sketch.theremine.triggerMusic(sketch, "laVieEnRose")
         });
 
         socket.on("application-theremine-sound_activation", (is_selected) => {
