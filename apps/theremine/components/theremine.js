@@ -7,8 +7,8 @@ export class Theremine{
     constructor() {
         this.frequency = 0;
         this.particlesSystem;
-        this.gapBetweenBars = 20;
-        this.shiftBars = 340;
+        this.gapBetweenBars = 14;
+        this.shiftBars = 50;
         this.showBars = true;
         this.initParticles();
 

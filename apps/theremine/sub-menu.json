@@ -1,4 +1,4 @@
-{  
+    {  
     "Activate bars": {"event_name": "application-music_training-bars_activation", "trigger_type":"toggle", "defaultly_activated": "true"},
     "Start tutorial": {"event_name": "application-music_training-tutorial_start", "trigger_type":"button", "defaultly_activated": "false" },
     "Activate sound": {"event_name":"application-theremine-sound_activation", "trigger_type":"toggle", "defaultly_activated": "true"},
