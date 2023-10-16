@@ -10,11 +10,11 @@
         "y_offset": 100
     },
     "applications": {
-        "startup": ["menu", "hands", "body", "face"],
+        "startup": ["theatre_learning"],
         "disabled": ["bounce", "raw_hands", "show_ping", "score_player", "show_frequency", "sign_language"]
     },
     "microphone": {
-        "number": 13,
+        "number": 0,
         "channels_nb": 1
     },
     "screen": {

@@ -1,6 +1,6 @@
 
-export const show_transcript = new p5((sketch) => {
-    sketch.name = "show_transcript";
+export const theatre_learning = new p5((sketch) => {
+    sketch.name = "theatre_learning";
     sketch.z_index = 5;
     sketch.activated = false;
     let frequency = 0;
