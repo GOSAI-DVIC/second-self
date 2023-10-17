@@ -20,7 +20,7 @@ class Application(BaseApplication):
         self.target_sr = 16000
 
         #Activity config
-        self.activity_treshold = 0.3
+        self.activity_treshold = 0.6
         self.activity_duration = 1
         self.activity_blocks = []
         
@@ -55,9 +55,9 @@ class Application(BaseApplication):
         if not self.listening_init_spk :
             if self.char_numb < len(self.characters):
                 self.char = self.characters[self.char_numb]
-                print(f"\n\n\nThe User who is playing for {self.char} needs to read this sentence :\n 'I am living near the best town in France'\n\n\n")
+                self.log(f"\nThe User who is playing for {self.char} needs to read this sentence :\n 'I am living near the best town in France'\n",3)
                 self.listening_init_spk = True
-                self.char_numb += 1
+                
             else :
                 return
 
@@ -76,11 +76,15 @@ class Application(BaseApplication):
                                 "new_user" : True,
                                 "speaker_name" : self.char
                                         }
-                            self.execute("speech_verification_extraction", "speaker_verification", self.data)
-                            self.log('\n\n\nUser added with success \n\n\n',3)
+                            self.execute("speech_speaker_extraction", "speaker_verification", self.data)
+                            #print('\n\n\nUser added with success \n\n\n')
                             self.listening_init_spk = False
                             if self.char == self.characters[-1]:
                                 self.init_bool = True 
+                                self.activity_blocks = []
+                                self.activity_detected = False
+                            self.char_numb += 1
+                            self.blocks = []
                             return
                             print("SHOULD NOT BE PRINTED")
                 
@@ -98,7 +102,7 @@ class Application(BaseApplication):
                     self.data = {
                     "onesec_audio": self.onesec,
                     "full_audio" : self.blocks
-                }
+                                }
                     self.execute("speech_activity_detection", "predict", self.data)
                     #print(f"The User who is playing for {self.char} needs to read this sentence :\n 'I am living near the best town in France'")
 
@@ -123,8 +127,9 @@ class Application(BaseApplication):
             self.init(source, event, data)
 
         if self.script_init_bool and self.init_bool : 
-            if source == "microphone" and event == "audio_stream" and data is not None:
 
+
+            if source == "microphone" and event == "audio_stream" and data is not None:
                 frame = data["block"][:, 0]
                 sample_rate = data["samplerate"]
                 frame = samplerate.resample(frame, self.target_sr * 1.0 / sample_rate, 'sinc_best')  
@@ -138,8 +143,9 @@ class Application(BaseApplication):
                                 "new_user" : False,
                                 "speaker_name" : None
                                         }
+                            self.execute("speech_speaker_extraction", "speaker_verification", self.data)
                             self.execute("speech_to_text", "transcribe", self.data)
-                            self.execute("speech_verification_extraction", "speaker_verification", self.data)
+                            
                     # else : 
                     #     print("audio not long enough")
                     self.blocks = []
@@ -173,4 +179,6 @@ class Application(BaseApplication):
                 else :    
                     self.activity_detected = False
 
-            #if source == "speech_speaker_extraction" and event == "speaker_verification" and data is not None :
+            if source == "speech_speaker_extraction" and event == "speaker_emb" and data is not None :
+
+                print(f'Results : {data["comparaison"]}')
