@@ -1,7 +1,6 @@
 from core.application import BaseApplication
 import numpy as np 
 import samplerate
-from home.apps.theatre_learning.utils import listen_for_one_sentence
 
 class Application(BaseApplication):
     """Theatre play"""
@@ -38,10 +37,15 @@ class Application(BaseApplication):
         "activity_buffer": [],
         "audio_buffer" : [],
         "char_name" : None,
+        "new_user" : True,
         "activity_detected" : False
             }
 
-
+        self.predictions_received ={
+            "speech_to_text" : False,
+            "speech_speaker_extraction" : False,
+            "speech_emo_extraction" : False
+        }
     def script_init(self):
         #ASK TO THE USER WHICH THEATRE PLAY TO USE 
         #AND ALSO WHICH SCENE 
@@ -64,11 +68,13 @@ class Application(BaseApplication):
                 
         else :
 
-            if source == "microphone" and event == "audio_stream" and data is not None:
-                self.listen_for_one_sentence(data, new_users=True)
+            if source == "microphone" and event == "audio_stream" and data is not None :
+                self.listen_for_one_sentence(data, new_users=self.audio["new_user"])
 
                 if self.audio["char_name"] == self.characters[-1] :
                     self.init_bool = True
+                    self.audio["char_name"] = None
+                    self.audio["new_user"] = False
                     return 
             
             if source == "speech_activity_detection" and event == "activity" and data is not None:
@@ -90,20 +96,32 @@ class Application(BaseApplication):
             self.init(source, event, data)
 
         else : 
+            if self.predictions_received["speech_to_text"] and self.predictions_received["speech_speaker_extraction"] and self.predictions_received["speech_emo_extraction"] :
+                self.listening_spk = True
+                self.predictions_received["speech_to_text"] = False
+                self.predictions_received["speech_speaker_extraction"] = False
+                self.predictions_received["speech_emo_extraction"] = False
 
-            if source == "microphone" and event == "audio_stream" and data is not None:
+            if source == "microphone" and event == "audio_stream" and data is not None and self.listening_spk:
                 self.listen_for_one_sentence(data)
             
             if source == "speech_activity_detection" and event == "activity" and data is not None:
     
-                print(f'Activity confidence : {data["confidence"]}')
+                self.log(f'Activity confidence : {data["confidence"]}',3)
                 if data["confidence"] > self.activity_treshold :
                     self.activity_detected = True
                 else :    
                     self.activity_detected = False
+                
 
             if source == "speech_speaker_extraction" and event == "speaker_emb" and data is not None :
-                print(f'Results : {data["comparaison"]}')
+                self.log(f'Results : {data["comparaison"]}',3)
+                self.predictions_received["speech_speaker_extraction"] = True
+
+            if source == "speech_emo_extraction" and event == "emotion" and data is not None :
+                self.log(f'Emotion : {data["emotion"]}',3)
+                self.predictions_received["speech_emo_extraction"] = True
+
 
 
     def listen_for_one_sentence(self,
@@ -122,24 +140,21 @@ class Application(BaseApplication):
 
             if not self.audio["activity_detected"] :
                 if len(self.audio["audio_buffer"])/target_sr > sentence_duration_treshold :
-                        
-                        # data = {
-                        #     "activity_buffer": self.onesec,
-                        #     "audio_buffer" : self.blocks,
-                        #     "new_user" : False,
-                        #     "speaker_name" : None
-                        #     "activity_detected" : False
-                        #             }
+
 
                         self.execute("speech_speaker_extraction", "speaker_verification", self.audio)
-                        
+                        self.listening_spk = False
+
                         if new_users : 
+                            
                             self.char_numb += 1
-                            self.listening_spk = False
                             return 
                         
-                        self.execute("speech_to_text", "transcribe", self.audio)
-                       #self.execute("speech_to_text", "transcribe", self.data)
+                        else :
+                            self.execute("speech_to_text", "transcribe", self.audio)
+                            #self.execute("speech_to_text", "transcribe", self.audio)
+                            return
+
 
                 self.audio["audio_buffer"] = []
 
