@@ -117,6 +117,13 @@ class Application(BaseApplication):
             if source == "speech_speaker_extraction" and event == "speaker_emb" and data is not None :
                 self.log(f'Results : {data["comparaison"]}',3)
                 self.predictions_received["speech_speaker_extraction"] = True
+            
+            if source == "speech_to_text" and event == "transcription" and data is not None :
+                compt = 0 
+                for segment in data["transcription_segments"]:
+                    compt += 1
+                    self.log(f'Results ({compt}/{len(data["transcription_segments"])}) : {segment.text}',3) 
+                self.predictions_received["speech_speaker_extraction"] = True
 
             if source == "speech_emo_extraction" and event == "emotion" and data is not None :
                 self.log(f'Emotion : {data["emotion"]}',3)
