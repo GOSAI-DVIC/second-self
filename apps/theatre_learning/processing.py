@@ -16,11 +16,15 @@ class Application(BaseApplication):
         #self.requires["speech_speaker_extraction"] = ["speaker_verification"]
 
         self.target_sr = 16000
+        self.is_listening_for_sentence = False
 
         #Activity config
         self.activity_treshold = 0.6
         self.activity_duration = 1
         self.activity_detected = False
+        self.previous_activity_detecter = False
+        self.processed_activity_buffer = []
+        self.activity_buffer = []
     
 
         #INITIALIZATION SCRIPT
@@ -28,17 +32,18 @@ class Application(BaseApplication):
         
 
         #INITIALIZATION OF THE USERS 
-        self.init_bool = False
-        self.char_numb = 0
-        self.listening_spk = False
+        self.character_embedding_stored = False 
+        self.character_registered_index = 0
+        
 
 
         self.audio = {
-        "activity_buffer": [],
+        #"activity_buffer": [],
         "audio_buffer" : [],
         "char_name" : None,
         "new_user" : True,
-        "activity_detected" : False
+        "activity_detected" : False,
+       "previous_activity_detected" : False
             }
 
         self.predictions_received ={
@@ -58,21 +63,24 @@ class Application(BaseApplication):
 
 
 
-    def init(self, source, event, data):
 
-        if not self.listening_spk :
-            if self.char_numb < len(self.characters):
-                self.audio["char_name"] = self.characters[self.char_numb]
+
+
+    def store_character_embedding(self, source, event, data):
+
+        if not self.is_listening_for_sentence:
+            if self.character_registered_index < len(self.characters):
+                self.audio["char_name"] = self.characters[self.character_registered_index]
                 self.log(f"\nThe User who is playing for {self.char} needs to read this sentence :\n 'I am living near the best town in France'\n",3)
-                self.listening_spk = True
+                self.is_listening_for_sentence = True
                 
         else :
 
             if source == "microphone" and event == "audio_stream" and data is not None :
-                self.listen_for_one_sentence(data, new_users=self.audio["new_user"])
+                self.listen_for_one_sentence(data, new_users=True)
 
                 if self.audio["char_name"] == self.characters[-1] :
-                    self.init_bool = True
+                    self.character_embedding_stored = True
                     self.audio["char_name"] = None
                     self.audio["new_user"] = False
                     return 
@@ -92,17 +100,17 @@ class Application(BaseApplication):
     def listener(self, source, event, data):
         super().listener(source, event, data)
 
-        if not self.init_bool : 
-            self.init(source, event, data)
+        if not self.character_embedding_stored : 
+            self.store_character_embedding(source, event, data)
 
         else : 
             if self.predictions_received["speech_to_text"] and self.predictions_received["speech_speaker_extraction"] and self.predictions_received["speech_emo_extraction"] :
-                self.listening_spk = True
+                self.is_listening_for_sentence = True
                 self.predictions_received["speech_to_text"] = False
                 self.predictions_received["speech_speaker_extraction"] = False
                 self.predictions_received["speech_emo_extraction"] = False
 
-            if source == "microphone" and event == "audio_stream" and data is not None and self.listening_spk:
+            if source == "microphone" and event == "audio_stream" and data is not None and self.is_listening_for_sentence:
                 self.listen_for_one_sentence(data)
             
             if source == "speech_activity_detection" and event == "activity" and data is not None:
@@ -131,143 +139,85 @@ class Application(BaseApplication):
 
 
 
-    def listen_for_one_sentence(self,
-                            data,
-                            new_users : bool = False,
-                            sentence_duration_treshold : float = 2, 
-                            activity_duration : float = 2, 
-                            target_sr : int = 16000, ):
+
+
+    def listen_for_one_sentence(self, 
+                                data,
+                                target_sr : int = 16000,
+                                activity_duration : float = 1.0):
+        
+        mic_chunk = data["block"][:, 0]
+        sample_rate = self.audio["samplerate"]
+        mic_chunk = samplerate.resample(mic_chunk, target_sr * 1.0 / sample_rate, 'sinc_best')  
+        
+        if not self.audio['previous_activity_detected'] and not self.audio['activity_detected']:
+            pass
+
+        elif self.audio['previous_activity_detected'] and not self.audio['activity_detected']:
             
-            frame = data["block"][:, 0]
-            sample_rate = self.audio["samplerate"]
-            frame = samplerate.resample(frame, target_sr * 1.0 / sample_rate, 'sinc_best')  
+            self.execute("speech_speaker_extraction", "speaker_verification", self.audio)
+            if self.audio['new_user']==False : 
+                self.character_registered_index += 1
+            else : 
+                self.execute("speech_to_text", "transcribe", self.audio)
+                #self.execute("speech_to_text", "transcribe", self.audio) 
+
+        self.activity_buffer.extend(mic_chunk)
+
+
+        if len(self.activity_buffer)> target_sr * activity_duration :
+            self.processed_activity_buffer = self.activity_buffer[:target_sr * activity_duration]
+            self.execute("speech_activity_detection", "predict", self.processed_activity_buffer)
+            self.activity_buffer = self.activity_buffer[target_sr * activity_duration:] 
+    #                         data,
+    #                         new_users : bool = False,
+    #                         sentence_duration_treshold : float = 2, 
+    #                         activity_duration : float = 2, 
+    #                         target_sr : int = 16000, ):
             
-            self.audio["audio_buffer"].extend(frame) 
-            self.audio["activity_buffer"].extend(frame)
+    #         frame = data["block"][:, 0]
+    #         sample_rate = self.audio["samplerate"]
+    #         frame = samplerate.resample(frame, target_sr * 1.0 / sample_rate, 'sinc_best')  
+            
+    #         self.audio["audio_buffer"].extend(frame) 
+    #         self.audio["activity_buffer"].extend(frame)
 
-            if not self.audio["activity_detected"] :
-                if len(self.audio["audio_buffer"])/target_sr > sentence_duration_treshold :
+    #         if not self.audio["activity_detected"] :
+    #             if len(self.audio["audio_buffer"])/target_sr > sentence_duration_treshold :
 
 
-                        self.execute("speech_speaker_extraction", "speaker_verification", self.audio)
-                        self.listening_spk = False
+    #                     self.execute("speech_speaker_extraction", "speaker_verification", self.audio)
+    #                     self.listening_spk = False
 
-                        if new_users : 
+    #                     if new_users : 
                             
-                            self.char_numb += 1
-                            return 
+    #                         self.character_registered_index += 1
+    #                         #return 
                         
-                        else :
-                            self.execute("speech_to_text", "transcribe", self.audio)
-                            #self.execute("speech_to_text", "transcribe", self.audio)
-                            return
+    #                     else :
+    #                         self.execute("speech_to_text", "transcribe", self.audio)
+    #                         #self.execute("speech_to_text", "transcribe", self.audio)
+    #                         return
 
 
-                self.audio["audio_buffer"] = []
+    #             self.audio["audio_buffer"] = []
 
-            elif len(self.audio["audio_buffer"]) == 0 :
-                self.audio["audio_buffer"].extend(self.audio["activity_buffer"])
-
-
+    #         elif len(self.audio["audio_buffer"]) == 0 :
+    #             self.audio["audio_buffer"].extend(self.audio["activity_buffer"])
 
 
 
-            if len(self.audio["activity_buffer"]) >= target_sr*activity_duration:
-                onesec_activity = self.audio["activity_buffer"][:target_sr*activity_duration]
-                self.audio["activity_buffer"] = self.audio["activity_buffer"][target_sr*activity_duration:]
+
+
+    #         if len(self.audio["activity_buffer"]) >= target_sr*activity_duration:
+    #             onesec_activity = self.audio["activity_buffer"][:target_sr*activity_duration]
+    #             self.audio["activity_buffer"] = self.audio["activity_buffer"][target_sr*activity_duration:]
 
                 
-                self.execute("speech_activity_detection", "predict", onesec_activity) 
+    #             self.execute("speech_activity_detection", "predict", onesec_activity) 
 
 
 
 
 
 
-
-        # if self.listening_init_spk :
-        #     if source == "microphone" and event == "audio_stream" and data is not None:
-        #         frame = data["block"][:, 0]
-        #         sample_rate = data["samplerate"]
-        #         frame = samplerate.resample(frame, self.target_sr * 1.0 / sample_rate, 'sinc_best')  
-
-        #         if not self.activity_detected :
-
-        #             if len(self.blocks)/self.target_sr >self.duration_treshold :
-        #                     self.data = {
-        #                         "onesec_audio": self.onesec,
-        #                         "full_audio" : self.blocks,
-        #                         "new_user" : True,
-        #                         "speaker_name" : self.char
-        #                                 }
-        #                     self.execute("speech_speaker_extraction", "speaker_verification", self.data)
-        #                     #print('\n\n\nUser added with success \n\n\n')
-        #                     self.listening_init_spk = False
-        #                     if self.char == self.characters[-1]:
-        #                         self.init_bool = True 
-        #                         self.activity_blocks = []
-        #                         self.activity_detected = False
-        #                     self.char_numb += 1
-        #                     self.blocks = []
-        #                     return
-        #                     print("SHOULD NOT BE PRINTED")
-                
-        #             #     print("audio not long enough")
-        #             self.blocks = []
-
-
-        #         self.blocks.extend(frame) 
-        #         self.activity_blocks.extend(frame)
-                
-        #         if len(self.activity_blocks) >= self.target_sr*self.activity_duration:
-        #             self.onesec = self.activity_blocks[:self.target_sr*self.activity_duration]
-        #             self.activity_blocks = self.activity_blocks[self.target_sr*self.activity_duration:]
-
-        #             self.data = {
-        #             "onesec_audio": self.onesec,
-        #             "full_audio" : self.blocks
-        #                         }
-        #             self.execute("speech_activity_detection", "predict", self.data)
-        #             #print(f"The User who is playing for {self.char} needs to read this sentence :\n 'I am living near the best town in France'")
-
-
-
-
-
-
-
-# frame = data["block"][:, 0]
-#                 sample_rate = data["samplerate"]
-#                 frame = samplerate.resample(frame, self.target_sr * 1.0 / sample_rate, 'sinc_best')  
-                
-    
-#                 if not self.activity_detected :
-#                     if len(self.blocks)/self.target_sr >self.duration_treshold :
-#                             self.data = {
-#                                 "onesec_audio": self.onesec,
-#                                 "full_audio" : self.blocks,
-#                                 "new_user" : False,
-#                                 "speaker_name" : None
-#                                         }
-#                             self.execute("speech_speaker_extraction", "speaker_verification", self.data)
-#                             self.execute("speech_to_text", "transcribe", self.data)
-                            
-#                     # else : 
-#                     #     print("audio not long enough")
-#                     self.blocks = []
-
-#                 self.blocks.extend(frame) 
-#                 self.activity_blocks.extend(frame)
-
-
-
-#                 if len(self.activity_blocks) >= self.target_sr*self.activity_duration:
-#                     self.onesec = self.activity_blocks[:self.target_sr*self.activity_duration]
-#                     self.activity_blocks = self.activity_blocks[self.target_sr*self.activity_duration:]
-
-#                     self.data = {
-#                     "onesec_audio": self.onesec,
-#                     "full_audio" : self.blocks
-#                 }
-#                     self.execute("speech_activity_detection", "predict", self.data) 
-                
