@@ -21,8 +21,7 @@ class Application(BaseApplication):
         #Activity config
         self.activity_treshold = 0.6
         self.activity_duration = 1
-        self.activity_detected = False
-        self.previous_activity_detecter = False
+        self.previous_processed_activity_buffer = []
         self.processed_activity_buffer = []
         self.activity_buffer = []
     
@@ -46,11 +45,16 @@ class Application(BaseApplication):
        "previous_activity_detected" : False
             }
 
-        self.predictions_received ={
-            "speech_to_text" : False,
-            "speech_speaker_extraction" : False,
-            "speech_emo_extraction" : False
+        self.activity_detection_reception = False
+
+        #module results
+        self.module_results = {
+            "speech_to_text_reception" : False,
+            "speech_speaker_extraction_reception" : False,
+            "speech_emo_extraction_reception" : True
         }
+        
+
     def script_init(self):
         #ASK TO THE USER WHICH THEATRE PLAY TO USE 
         #AND ALSO WHICH SCENE 
@@ -60,7 +64,11 @@ class Application(BaseApplication):
         self.characters = ["Romeo", "Juliette"]
 
 
-
+    def clear_audio_buffer(self):
+        self.audio['audio_buffer'] = []
+        self.activity_buffer = []
+        self.processed_activity_buffer = []
+        self.previous_processed_activity_buffer = []
 
 
 
@@ -71,29 +79,38 @@ class Application(BaseApplication):
         if not self.is_listening_for_sentence:
             if self.character_registered_index < len(self.characters):
                 self.audio["char_name"] = self.characters[self.character_registered_index]
-                self.log(f"\nThe User who is playing for {self.char} needs to read this sentence :\n 'I am living near the best town in France'\n",3)
-                self.is_listening_for_sentence = True
+                self.log(f"\nThe User who is playing for {self.characters[self.character_registered_index]} needs to read this sentence :\n 'I am living near the best town in France'\n",3)
+            else : 
+                self.character_embedding_stored = True
+                self.audio["char_name"] = None
+                self.audio["new_user"] = False
+                self.clear_audio_buffer()
+            self.is_listening_for_sentence = True
+            
+
                 
         else :
 
             if source == "microphone" and event == "audio_stream" and data is not None :
-                self.listen_for_one_sentence(data, new_users=True)
+                self.listen_for_one_sentence(data)#, new_users=True)
 
-                if self.audio["char_name"] == self.characters[-1] :
-                    self.character_embedding_stored = True
-                    self.audio["char_name"] = None
-                    self.audio["new_user"] = False
-                    return 
+                # if self.audio["char_name"] == self.characters[-1] and not self.is_listening_for_sentence :
+                #     self.character_embedding_stored = True
+                #     self.audio["char_name"] = None
+                #     self.audio["new_user"] = False
+                #     self.clear_audio_buffer()
+                #     return 
             
             if source == "speech_activity_detection" and event == "activity" and data is not None:
                 
+                self.activity_detection_reception = True  
+                self.audio['previous_activity_detected'] = self.audio['activity_detected']
                 if data["confidence"] > self.activity_treshold :
-                    if not self.activity_detected :
-                        print('Activity detected : starting recording')
-                    self.activity_detected = True
+                    
+                    self.audio['activity_detected'] = True
                 else :    
-                    self.activity_detected = False
-
+                    self.audio['activity_detected'] = False
+                print(self.audio['previous_activity_detected'] ,self.audio['activity_detected'] )
 
 
 
@@ -104,38 +121,52 @@ class Application(BaseApplication):
             self.store_character_embedding(source, event, data)
 
         else : 
-            if self.predictions_received["speech_to_text"] and self.predictions_received["speech_speaker_extraction"] and self.predictions_received["speech_emo_extraction"] :
+            if self.module_results['speech_to_text_reception'] and self.module_results['speech_speaker_extraction_reception'] and self.module_results['speech_emo_extraction_reception'] :
+                self.log(f'Results [EMB]: {self.module_results["speech_speaker_extraction"]}',3)
+                compt = 0
+                for segment in self.module_results['speech_to_text'] :
+                    compt += 1
+                    self.log(f"""Results [STT]:({compt}/{len(self.module_results['speech_to_text'])}) : {segment.text}""",3)  
+            
+            
                 self.is_listening_for_sentence = True
-                self.predictions_received["speech_to_text"] = False
-                self.predictions_received["speech_speaker_extraction"] = False
-                self.predictions_received["speech_emo_extraction"] = False
+                self.module_results['speech_to_text_reception'] = False
+                self.module_results['speech_speaker_extraction_reception'] = False
+                #self.module_results['speech_emo_extraction_reception'] = False
 
             if source == "microphone" and event == "audio_stream" and data is not None and self.is_listening_for_sentence:
                 self.listen_for_one_sentence(data)
             
             if source == "speech_activity_detection" and event == "activity" and data is not None:
-    
-                self.log(f'Activity confidence : {data["confidence"]}',3)
-                if data["confidence"] > self.activity_treshold :
-                    self.activity_detected = True
-                else :    
-                    self.activity_detected = False
                 
+                self.activity_detection_reception = True
+                self.log(f'Activity confidence : {data["confidence"]}',3)
+                self.audio['previous_activity_detected'] = self.audio['activity_detected']
+                if data["confidence"] > self.activity_treshold :
+                    
+                    self.audio['activity_detected'] = True
+                else :    
+                    self.audio['activity_detected'] = False
+                
+                print(self.audio['previous_activity_detected'] ,self.audio['activity_detected'] )
+
 
             if source == "speech_speaker_extraction" and event == "speaker_emb" and data is not None :
-                self.log(f'Results : {data["comparaison"]}',3)
-                self.predictions_received["speech_speaker_extraction"] = True
+                #self.log(f'Results : {data["comparaison"]}',3)
+                self.module_results[source] = data["comparaison"]
+                self.module_results['speech_speaker_extraction_reception'] = True
             
             if source == "speech_to_text" and event == "transcription" and data is not None :
-                compt = 0 
-                for segment in data["transcription_segments"]:
-                    compt += 1
-                    self.log(f'Results ({compt}/{len(data["transcription_segments"])}) : {segment.text}',3) 
-                self.predictions_received["speech_speaker_extraction"] = True
+                # compt = 0 
+                # for segment in data["transcription_segments"]:
+                #     compt += 1
+                #     self.log(f'Results ({compt}/{len(data["transcription_segments"])}) : {segment.text}',3) 
+                self.module_results[source] = data['transcription_segments']
+                self.module_results['speech_to_text_reception'] = True
 
             if source == "speech_emo_extraction" and event == "emotion" and data is not None :
                 self.log(f'Emotion : {data["emotion"]}',3)
-                self.predictions_received["speech_emo_extraction"] = True
+                self.module_results['speech_emo_extraction_reception'] = True
 
 
 
@@ -144,31 +175,49 @@ class Application(BaseApplication):
     def listen_for_one_sentence(self, 
                                 data,
                                 target_sr : int = 16000,
-                                activity_duration : float = 1.0):
+                                activity_duration : int = 1):
         
         mic_chunk = data["block"][:, 0]
-        sample_rate = self.audio["samplerate"]
+        sample_rate = data["samplerate"]
         mic_chunk = samplerate.resample(mic_chunk, target_sr * 1.0 / sample_rate, 'sinc_best')  
         
-        if not self.audio['previous_activity_detected'] and not self.audio['activity_detected']:
-            pass
+        if self.activity_detection_reception == True :
 
-        elif self.audio['previous_activity_detected'] and not self.audio['activity_detected']:
-            
-            self.execute("speech_speaker_extraction", "speaker_verification", self.audio)
-            if self.audio['new_user']==False : 
-                self.character_registered_index += 1
-            else : 
-                self.execute("speech_to_text", "transcribe", self.audio)
-                #self.execute("speech_to_text", "transcribe", self.audio) 
+            self.activity_detection_reception = False
+            if not self.audio['previous_activity_detected'] and not self.audio['activity_detected']:
+                pass
+
+            elif self.audio['previous_activity_detected'] and not self.audio['activity_detected']:
+                print(self.audio['new_user'], self.audio['char_name'])
+                self.execute("speech_speaker_extraction", "speaker_verification", self.audio)
+                if self.audio['new_user']==True : 
+                    self.character_registered_index += 1
+                else : 
+                    self.execute("speech_to_text", "transcribe", self.audio)
+                    #self.execute("speech_to_text", "transcribe", self.audio) 
+                self.is_listening_for_sentence = False
+
+            elif not self.audio['previous_activity_detected'] and self.audio['activity_detected']:
+                self.audio['audio_buffer'] = self.previous_processed_activity_buffer # Adding the false activity buffer (to be sure not too loose any audio information)
+                self.audio['audio_buffer'].extend(self.processed_activity_buffer) # Then adding the true one -> the last one 
+
+            elif self.audio['previous_activity_detected'] and self.audio['activity_detected']:
+                self.audio['audio_buffer'].extend(self.processed_activity_buffer) # Adding the true one -> last one 
+
+        
 
         self.activity_buffer.extend(mic_chunk)
+        #print('activity buffer duration : ', len(self.activity_buffer)/16000)
 
 
         if len(self.activity_buffer)> target_sr * activity_duration :
+
+            self.previous_processed_activity_buffer = self.processed_activity_buffer
             self.processed_activity_buffer = self.activity_buffer[:target_sr * activity_duration]
             self.execute("speech_activity_detection", "predict", self.processed_activity_buffer)
             self.activity_buffer = self.activity_buffer[target_sr * activity_duration:] 
+
+
     #                         data,
     #                         new_users : bool = False,
     #                         sentence_duration_treshold : float = 2, 
