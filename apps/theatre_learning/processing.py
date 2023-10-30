@@ -51,7 +51,7 @@ class Application(BaseApplication):
         self.module_results = {
             "speech_to_text_reception" : False,
             "speech_speaker_extraction_reception" : False,
-            "speech_emo_extraction_reception" : True
+            "speech_emo_extraction_reception" : False
         }
         
 
@@ -132,7 +132,7 @@ class Application(BaseApplication):
                 self.is_listening_for_sentence = True
                 self.module_results['speech_to_text_reception'] = False
                 self.module_results['speech_speaker_extraction_reception'] = False
-                #self.module_results['speech_emo_extraction_reception'] = False
+                self.module_results['speech_emo_extraction_reception'] = False
 
             if source == "microphone" and event == "audio_stream" and data is not None and self.is_listening_for_sentence:
                 self.listen_for_one_sentence(data)
@@ -165,7 +165,8 @@ class Application(BaseApplication):
                 self.module_results['speech_to_text_reception'] = True
 
             if source == "speech_emo_extraction" and event == "emotion" and data is not None :
-                self.log(f'Emotion : {data["emotion"]}',3)
+                for emo in data['results']:
+                    self.log(f'Emotion : {emo["Emotion"]} with {emo["Score"]}%')
                 self.module_results['speech_emo_extraction_reception'] = True
 
 
