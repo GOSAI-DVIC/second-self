@@ -13,6 +13,7 @@ class Application(BaseApplication):
         self.requires["speech_activity_detection"] = ["activity"]
         self.requires["speech_to_text"] = ["transcription"]
         self.requires["speech_speaker_extraction"] = ["speaker_emb"]
+        self.requires["speech_emo_extraction"] = ["speech_emotion"]
         #self.requires["speech_speaker_extraction"] = ["speaker_verification"]
 
         self.target_sr = 16000
@@ -164,9 +165,9 @@ class Application(BaseApplication):
                 self.module_results[source] = data['transcription_segments']
                 self.module_results['speech_to_text_reception'] = True
 
-            if source == "speech_emo_extraction" and event == "emotion" and data is not None :
+            if source == "speech_emo_extraction" and event == "speech_emotion" and data is not None :
                 for emo in data['results']:
-                    self.log(f'Emotion : {emo["Emotion"]} with {emo["Score"]}%')
+                    self.log(f'Results [SEE]: Emotion : {emo["label"]} with {emo["score"]*100}%', 3)
                 self.module_results['speech_emo_extraction_reception'] = True
 
 
@@ -195,7 +196,7 @@ class Application(BaseApplication):
                     self.character_registered_index += 1
                 else : 
                     self.execute("speech_to_text", "transcribe", self.audio)
-                    #self.execute("speech_to_text", "transcribe", self.audio) 
+                    self.execute("speech_emo_extraction", "predict", self.audio) 
                 self.is_listening_for_sentence = False
 
             elif not self.audio['previous_activity_detected'] and self.audio['activity_detected']:
