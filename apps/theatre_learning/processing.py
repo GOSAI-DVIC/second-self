@@ -271,12 +271,12 @@ class Application(BaseApplication):
 
                 self.script_iter()
                 self.data = {
-                    "next_char": self.script_info["next_char"], 
-                    "next_emo": self.script_info["next_emo"], 
-                    "next_sentence": self.script_info["next_sentence"],  
+                    "next_char": self.script_info["character"], 
+                    "next_emo": self.script_info["emo"], 
+                    "next_sentence": self.script_info["sentence"],  
                 }
                 self.server.send_data(self.name, self.data)
-
+                
 
 
             self.is_listening_for_sentence = True
