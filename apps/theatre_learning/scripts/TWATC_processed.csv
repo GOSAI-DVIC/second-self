@@ -1,5 +1,4 @@
 idx,type,character,sentence,j-hartmann/emotion-english-distilroberta-base,SamLowe/roberta-base-go_emotion,michellejieli/emotion_text_classifier
-,speech,Madison,No!,anger,disapproval,anger
 ,consigne,,"Surprised, Alexandre jumps up and points his gun at Madison.",,,
 ,speech,Alexandre,One move and you're dead!,anger,neutral,anger
 ,speech,Madison,Please don't shoot!,fear,neutral,fear

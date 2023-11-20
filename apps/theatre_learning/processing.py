@@ -134,7 +134,7 @@ class Application(BaseApplication):
                 new_scene.at[idx, "character"] = row["character"]
                 new_scene.at[idx, "type"] = row["character"]
                 new_scene.at[idx, "sentence"] = row["sentence"]
-                new_scene.at[idx, "emo"] = row["j-hartmann/emotion-english-distilroberta-base"]
+                new_scene.at[idx, "emo"] = row["michellejieli/emotion_text_classifier"]
                 idx += 1
             
             self.scene_script = new_scene
@@ -229,7 +229,7 @@ class Application(BaseApplication):
                     "emb" : best_emb + " Score : "+str(best_emb_score)+"%",
                     "stt" : sentence,
                     "emo_correction_bool":self.corrector.emo_correction(self.script_info["emo"],best_emo),
-                    "emb_correction_bool":self.corrector.txt_correction(self.script_info["character"],best_emb),
+                    "emb_correction_bool":best_emb==self.script_info["character"],
                     "stt_correction_bool":self.corrector.txt_correction(self.script_info["sentence"],sentence),
 
                 }
@@ -244,7 +244,7 @@ class Application(BaseApplication):
         if not self.is_listening_for_sentence:
             if self.character_registered_index < len(self.characters):
                 self.audio["char_name"] = self.characters[self.character_registered_index]
-                txt = "\nThe User who is playing for "+str(self.characters[self.character_registered_index])+" needs to read this sentence :\n 'I am living near the best town in France'\n"
+                txt = "\nThe User who is playing for "+str(self.characters[self.character_registered_index])+" needs to read this sentence :\n 'Today is a beautiful sunny day'\n"
                 
                 
 
