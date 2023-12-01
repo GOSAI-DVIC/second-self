@@ -10,14 +10,12 @@ export const theatre_learning = new p5((sketch) => {
 
     let state_received = false
     let instruct_received = false
+    let available_theatre_plays_received = false
 
     let hands_position = []
     let starting_correction = false 
     let users_initialized = false
-    let index_x_a = 0
-    let index_x_b = 0
-    let index_y_a = 0
-    let index_y_b = 0
+    let i = 0
 
     sketch.set = (width, height, socket) => {
         sketch.selfCanvas = sketch
@@ -33,6 +31,27 @@ export const theatre_learning = new p5((sketch) => {
             // if (data == undefined || data[0].length == 0) return;
             // hands_position = data["hands_landmarks"];
             // }
+            if (Object.keys(data)[0] == "command_recognized_bool"){
+                console.log('command_recognized_bool');
+                console.log(data);
+                transcription = data["transcription"]
+        
+            }
+
+            if (Object.keys(data)[0] == "available_theatre_plays"){
+                console.log('available_theatre_plays');
+                console.log(data);
+                available_theatre_plays = data["available_theatre_plays"]
+                available_theatre_plays_received = true 
+            }
+            
+            if (Object.keys(data)[0] == "scenes_info"){
+                console.log('scenes_info');
+                console.log(data);
+                scenes_info = data["scenes_info"]
+                scenes_info_received = true 
+                theatre_play_title_init = false
+            }
 
             if (Object.keys(data)[0] == "state"){
                 console.log('state');
@@ -45,6 +64,7 @@ export const theatre_learning = new p5((sketch) => {
                 console.log(data);
                 instruct = data["instruction"]
                 instruct_received = true
+                theatre_play_title_init = false
             }
             if (Object.keys(data)[0] == "next_char"){
                 console.log(data);
@@ -103,6 +123,29 @@ export const theatre_learning = new p5((sketch) => {
         //     }
         // }
 
+        if ((theatre_play_title_init)&&(available_theatre_plays_received)){
+            let i = 0 
+            sketch.text("************** AVAILABLE THEATRE PLAYS **************", sketch.width / 2, sketch.height / (available_theatre_plays.length+3))
+            while (i < available_theatre_plays.length) {
+                sketch.text(available_theatre_plays[i], sketch.width / 2,(i+2)*sketch.height / (available_theatre_plays.length+3))
+                i += 1
+            }
+            sketch.text("COMMAND RECEIVED : "+transcription, sketch.width / 2, sketch.height*(available_theatre_plays.length+1) / (available_theatre_plays.length+3))
+
+        }
+
+        if ((scenes_info_received)&&(theatre_ay_scene_init)){
+            let i = 0 
+            sketch.text("************** AVAILABLE SCENES **************", sketch.width / 2, 1 / (available_theatre_plays.length+3))
+            while (i < available_theatre_plays.length) {
+                sketch.text(available_theatre_plays[i], sketch.width / 2,(i+2) / (available_theatre_plays.length+3))
+                i += 1
+            }
+            sketch.text("COMMAND RECEIVED : "+transcription, sketch.width / 2, sketch.height*(available_theatre_plays.length+1) / (available_theatre_plays.length+3))
+
+        
+
+        }
         if ((!starting_correction)&&(instruct_received)){
 
             sketch.text(instruct, sketch.width / 2,sketch.height / 2);
@@ -114,6 +157,8 @@ export const theatre_learning = new p5((sketch) => {
         
         
         
+
+
         if (starting_correction){ 
             console.log(results)
 

@@ -1,7 +1,7 @@
 {
     "name": "Second Self",
     "camera": {
-        "type": "intel",
+        "flip" : false,
         "width": 640,
         "height": 480,
         "orientation": "horizontal",
@@ -14,7 +14,7 @@
         "disabled": ["bounce", "raw_hands", "show_ping", "score_player", "show_frequency", "sign_language"]
     },
     "microphone": {
-        "number": 4,
+        "number": 0,
         "channels_nb": 1
     },
     "screen": {
