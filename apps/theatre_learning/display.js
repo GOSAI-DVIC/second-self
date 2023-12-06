@@ -7,15 +7,25 @@ export const theatre_learning = new p5((sketch) => {
     let results = ''
     let instruct = ''
     let state = ''
+    let available_theatre_plays = ''
+    let transcription = ''
+    let scenes_info = ''
+    let characters = ''
 
     let state_received = false
     let instruct_received = false
     let available_theatre_plays_received = false
+    let theatre_play_title_init = true
+    let theatre_plays_scene_init = false
+    let scenes_info_received = false
+    let choosing_characters_bool = false
 
     let hands_position = []
+    let characterColors = {};
     let starting_correction = false 
     let users_initialized = false
-    let i = 0
+    let longest = 0
+    
 
     sketch.set = (width, height, socket) => {
         sketch.selfCanvas = sketch
@@ -41,7 +51,7 @@ export const theatre_learning = new p5((sketch) => {
             if (Object.keys(data)[0] == "available_theatre_plays"){
                 console.log('available_theatre_plays');
                 console.log(data);
-                available_theatre_plays = data["available_theatre_plays"]
+                available_theatre_plays = data.available_theatre_plays
                 available_theatre_plays_received = true 
             }
             
@@ -51,6 +61,30 @@ export const theatre_learning = new p5((sketch) => {
                 scenes_info = data["scenes_info"]
                 scenes_info_received = true 
                 theatre_play_title_init = false
+                theatre_plays_scene_init = true
+            }
+
+            if (Object.keys(data)[0] == "characters"){
+                console.log('characters');
+                console.log(data);
+                characters = data["characters"]
+
+                if (characterColors=={}){
+                    for (let i = 0; i < characters.length; i++){
+                        characterColors[characters[i]]= "blue"
+
+                    }
+                }
+                if (data['changing_mode_character']!="NO") {
+                    if (characterColors[data['changing_mode_character']]==="blue"){
+                        characterColors[data['changing_mode_character']] = "orange"  
+                    }
+                    else {
+                        characterColors[data['changing_mode_character']] = "blue"  
+                    }
+                }
+                theatre_plays_scene_init = false
+                choosing_characters_bool = true
             }
 
             if (Object.keys(data)[0] == "state"){
@@ -64,7 +98,8 @@ export const theatre_learning = new p5((sketch) => {
                 console.log(data);
                 instruct = data["instruction"]
                 instruct_received = true
-                theatre_play_title_init = false
+                
+               
             }
             if (Object.keys(data)[0] == "next_char"){
                 console.log(data);
@@ -124,28 +159,124 @@ export const theatre_learning = new p5((sketch) => {
         // }
 
         if ((theatre_play_title_init)&&(available_theatre_plays_received)){
-            let i = 0 
-            sketch.text("************** AVAILABLE THEATRE PLAYS **************", sketch.width / 2, sketch.height / (available_theatre_plays.length+3))
-            while (i < available_theatre_plays.length) {
-                sketch.text(available_theatre_plays[i], sketch.width / 2,(i+2)*sketch.height / (available_theatre_plays.length+3))
-                i += 1
+            // console.log('display')
+            sketch.fill("green")
+            sketch.rectMode(sketch.CENTER);
+            let titleBgWidth = sketch.textWidth("************** AVAILABLE THEATRE PLAYS **************") + 20;
+            sketch.rect( sketch.width / 2, sketch.height * 2 / (20) , titleBgWidth, 50 ,20); // Rounded rectangle background
+
+            sketch.fill("white")
+            sketch.text(" AVAILABLE THEATRE PLAYS ", sketch.width / 2, sketch.height * 2 / (20));
+            console.log(available_theatre_plays.length)
+
+            var lgth = 0
+            for (var i = 0; i < available_theatre_plays.length; i++) {
+                if (available_theatre_plays[i].length > lgth) {
+                  lgth = available_theatre_plays[i].length;
+                  longest = available_theatre_plays[i];
+                }
+              }
+            for (let i = 0; i < available_theatre_plays.length; i++) {
+                sketch.fill(50)
+                let titleBgWidth = sketch.textWidth(longest) +40;
+                sketch.rect( sketch.width / 2, ((i*2)*sketch.height / (20))+250, titleBgWidth, 45 ,20); // Rounded rectangle background
+                sketch.fill("white")
+                sketch.text(available_theatre_plays[i], sketch.width / 2, ((i*2)*sketch.height / (20))+250)
+                console.log(available_theatre_plays[i])
             }
-            sketch.text("COMMAND RECEIVED : "+transcription, sketch.width / 2, sketch.height*(available_theatre_plays.length+1) / (available_theatre_plays.length+3))
+            sketch.text("COMMAND RECEIVED : "+transcription, sketch.width / 2, sketch.height*(available_theatre_plays.length+4) / (available_theatre_plays.length+5))
+            
+        }
+
+        if ((scenes_info_received)&&(theatre_plays_scene_init)){
+            
+            sketch.fill("green")
+            let titleBgWidth = sketch.textWidth("************** AVAILABLE SCENES **************") + 20;
+            sketch.rect( sketch.width / 2, sketch.height * 2 / (20) , titleBgWidth, 50 ,20); // Rounded rectangle background
+
+            sketch.fill("white")
+            sketch.text(" AVAILABLE SCENES ", sketch.width / 2, sketch.height*2 / (20))
+         
+
+            var lgth = 0
+            for (const [key, value] of Object.entries(scenes_info)) {
+                if (str(value).length > lgth){
+                  lgth = str(value).length;
+                  longest = str(value);
+                }
+              }
+            
+            let j = 0 
+            for (const [key, value] of Object.entries(scenes_info)) {
+       
+                
+                let titleBgWidth = sketch.textWidth(longest) +40;
+
+                sketch.fill(50)
+                
+                sketch.rect( sketch.width / 2, ((j*3 + 0.5)*sketch.height / (20))+250, titleBgWidth, 100 ,20); // Rounded rectangle background
+                sketch.fill("white")
+                sketch.text(key, sketch.width / 2, ((j*3)*sketch.height / (20))+250)
+                sketch.text(value, sketch.width / 2, ((j*3 + 1)*sketch.height / (20))+250)
+                console.log(j)
+                j = j + 1
+              }
+              
+            sketch.text("COMMAND RECEIVED : "+transcription, sketch.width / 2, sketch.height*(available_theatre_plays.length+4) / (available_theatre_plays.length+5))
+
+            
 
         }
 
-        if ((scenes_info_received)&&(theatre_ay_scene_init)){
-            let i = 0 
-            sketch.text("************** AVAILABLE SCENES **************", sketch.width / 2, 1 / (available_theatre_plays.length+3))
-            while (i < available_theatre_plays.length) {
-                sketch.text(available_theatre_plays[i], sketch.width / 2,(i+2) / (available_theatre_plays.length+3))
-                i += 1
+
+        if (choosing_characters_bool){
+           
+            sketch.fill(0, 255, 0);  // Green color for section title
+            let chooseCharactersBgWidth = sketch.textWidth("CHOOSE THE CHARACTERS") + 20;
+            sketch.rect(sketch.width / 2, sketch.height / 20, chooseCharactersBgWidth, 50, 20); // Rounded rectangle background
+            sketch.fill(0);  // Black text color
+            sketch.text("CHOOSE THE CHARACTERS", sketch.width / 2, sketch.height / 20);
+
+            // Display rectangles for each character
+            sketch.fill(0, 0, 255);  // Blue color for character rectangles
+
+            var lgth = 0
+            for (var i = 0; i < characters.length; i++) {
+                if (characters[i].length > lgth) {
+                  lgth = characters[i].length;
+                  longest = characters[i];
+                }
+              }
+            let characterName = ""
+            let characterColor = ""
+            let k = 0
+            for (const [key, value] of Object.entries(characterColors)) {
+                characterName = key;
+                characterColor = value;
+               
+                
+
+                let titleBgWidth = sketch.textWidth(longest) +40;
+
+                sketch.fill(value)
+                console.log(key)
+                console.log(value)
+                sketch.rect( sketch.width / 2, ((k*3)*sketch.height / (20))+250, titleBgWidth, 100 ,20); // Rounded rectangle background
+                sketch.fill("white")
+                sketch.text(key, sketch.width / 2, ((k*3)*sketch.height / (20))+250)
+                
+                console.log(j)
+                k = k + 1
             }
-            sketch.text("COMMAND RECEIVED : "+transcription, sketch.width / 2, sketch.height*(available_theatre_plays.length+1) / (available_theatre_plays.length+3))
+           
+            // ... (remaining code)
+        }
+
+
+
 
         
 
-        }
         if ((!starting_correction)&&(instruct_received)){
 
             sketch.text(instruct, sketch.width / 2,sketch.height / 2);

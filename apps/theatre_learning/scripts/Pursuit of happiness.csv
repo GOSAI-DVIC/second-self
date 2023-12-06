@@ -1,0 +1,2297 @@
+idx,type,character,sentence,j-hartmann/emotion-english-distilroberta-base,SamLowe/roberta-base-go_emotion,michellejieli/emotion_text_classifier
+0,consigne,,ACT I SCENE I,,,
+1,consigne,,"Scene: A hotel lobby. There are large comfortable chairs set out and a bar to the right. There are two sofas in the room, one on either side of the stage. It is raining outside. BARMAN is behind the bar whistling whilst he dries a glass.",,,
+2,consigne,,Enter JESSICA shaking off her umbrella.,,,
+3,speech,JESSICA,Goodness me.,joy,gratitude,joy
+4,speech,JESSICA,What weather!,surprise,neutral,surprise
+5,speech,BARMAN,"Good evening madam, are you with the Cleethorpes party?
+",neutral,curiosity,neutral
+6,speech,JESSICA,Well yes I am.,neutral,approval,neutral
+7,speech,JESSICA,"How could you possibly know that?
+",surprise,curiosity,surprise
+8,speech,BARMAN,You're the hotel's only guests madam.,neutral,neutral,neutral
+9,speech,BARMAN,It seems Mr Cleethorpes rented the entire hotel just for your party.,neutral,neutral,neutral
+10,consigne,,laughs,,,
+11,speech,JESSICA,"Yes that sounds like Edwin alright, more money then sense.",neutral,approval,neutral
+12,speech,BARMAN,Shall I have your bags taken up madam?,anger,neutral,neutral
+13,speech,JESSICA,"No, no don't bother with any of that.",anger,disapproval,neutral
+14,consigne,,slumps in one of the chairs,,,
+15,speech,JESSICA,"But you can pour me a nice glass of sherry if you don't mind.
+",neutral,neutral,neutral
+16,speech,BARMAN,"Jerez alright madam?
+",neutral,neutral,neutral
+17,speech,JESSICA,"Perfect.
+",neutral,admiration,neutral
+18,consigne,,He pours,,,
+19,consigne,,and brings the drink over to her then returns to the bar,,,
+20,speech,JESSICA,"Did you know Edwin?
+",surprise,curiosity,surprise
+21,speech,BARMAN,"Everybody knew Mr Cleethorpes Madam, even people who had only spoken to him once or twice knew him.",neutral,neutral,neutral
+22,speech,BARMAN,I'm not at all sure he knew me ' though he did always remember my name.,neutral,confusion,neutral
+23,speech,BARMAN,"I always got the feeling that he regarded me with friendliness, but only in the way he regarded everyone he ever met as a friend.",disgust,neutral,disgust
+24,consigne,,JESSICA lights a cigarette,,,
+25,speech,JESSICA,Yes that's quite true.,neutral,approval,neutral
+26,speech,JESSICA,He really did find something in everybody to like.,neutral,neutral,neutral
+27,speech,JESSICA,It's a trait that's annoying in most people.,disgust,annoyance,neutral
+28,speech,JESSICA,That sort of stubborn unwillingness to dislike anybody is usually the substitute for a proper personality.,neutral,neutral,neutral
+29,speech,JESSICA,It's the weapon which the obsessively chirpy use to make us feel bad that we can't stand most of our friends.,disgust,disappointment,neutral
+30,speech,JESSICA,"Not in Edwin though, he really was something special.",surprise,admiration,neutral
+31,speech,JESSICA,He actually did see every bit of brightness and goodness in everyone.,neutral,neutral,neutral
+32,speech,JESSICA,"He didn't even try and look for it, he just saw it.",neutral,neutral,neutral
+33,speech,BARMAN,Indeed he was the most generous of men.,neutral,admiration,neutral
+34,speech,BARMAN,He took great joy in giving all the staff here extremely large tips.,joy,joy,joy
+35,speech,BARMAN,"One day he came here for Christmas Dinner, drank a half bottle of wine and left two hundred pounds.
+",disgust,neutral,disgust
+36,speech,JESSICA,"I say that must have been a very happy Christmas for you and your family.
+",joy,joy,joy
+37,speech,BARMAN,"Not really madam, I wasn't working.",sadness,neutral,neutral
+38,speech,BARMAN,"However, that does not alter Mr Cleethorpes generosity.",neutral,neutral,neutral
+39,speech,JESSICA,Yes.,neutral,approval,neutral
+40,speech,JESSICA,"He was so generous, especially for a Jew.",disgust,admiration,joy
+41,consigne,,BARMAN appears taken aback,,,
+42,speech,JESSICA,"I'm so sorry, please don't think me an awful bigot, but one can't fight one's genes.",sadness,remorse,sadness
+43,speech,BARMAN,"That's quite alright madam, in this profession it's prudent to treat everyone with equal respect, so please be as candid as you wish.",neutral,approval,neutral
+44,speech,BARMAN,There aren't many things that can be said to a barman he hasn't already heard.,neutral,neutral,neutral
+45,speech,BARMAN,"After all, we live in a modern society and must be tolerant of everyone's views.",neutral,approval,neutral
+46,speech,BARMAN,"A good barman has no preference if you are black, Jewish, homosexual or even racist.",disgust,neutral,neutral
+47,speech,BARMAN,As a matter of fact some of my best friends are racists.,disgust,annoyance,neutral
+48,speech,BARMAN,"But if you'll pardon me for saying so madam, I was under the impression that Mr Cleethorpes was a Roman Catholic.",neutral,neutral,neutral
+49,speech,JESSICA,His mother married out.,sadness,neutral,neutral
+50,speech,JESSICA,His father is the Papist.,disgust,neutral,neutral
+51,speech,JESSICA,"Edwin was hardly the most devout person one has ever met.
+",neutral,neutral,neutral
+52,speech,BARMAN,"If my memory serves me madam, he did attend mass regularly.",neutral,neutral,neutral
+53,speech,JESSICA,"Yes he did enjoy mass 
+",neutral,joy,neutral
+54,consigne,,"JESSICA pronounces mass to rhyme with farce,",,,
+55,speech,JESSICA,he said only the Catholics gave one a chance to have a glass of wine and then brag about your conquests in confession whilst still being able to worship the Lord.,neutral,neutral,neutral
+56,speech,BARMAN,I'm sure the good Lord appreciates Mr Cleethorpes rye wit.,joy,admiration,joy
+57,speech,JESSICA,Yes I'm sure he does.,neutral,approval,neutral
+58,speech,JESSICA,I suppose our loss is his gain.,neutral,neutral,neutral
+59,speech,JESSICA,I do miss him terribly.,sadness,sadness,sadness
+60,consigne,,She walks over and sits on a bar stool,,,
+61,speech,JESSICA,"That's silly to say really, I haven't even tried to make any contact in years, yet as soon as he's gone I miss him so badly.",sadness,sadness,sadness
+62,speech,BARMAN,"You were old friends then madam?
+",neutral,curiosity,neutral
+63,speech,JESSICA,We were at university together.,joy,neutral,neutral
+64,speech,JESSICA,We were the Famous Five.,neutral,neutral,neutral
+65,speech,JESSICA,Everyone knew us and everyone envied us.,joy,neutral,joy
+66,speech,JESSICA,It was so rare not to see the five of us all together.,surprise,neutral,neutral
+67,speech,JESSICA,"Lectures, library, cafes, bars, parks, shops, clubs.",neutral,neutral,neutral
+68,speech,JESSICA,Everywhere.,neutral,neutral,neutral
+69,speech,JESSICA,If one of us was ever ill and there were only four of us wandering round campus people would come up and ask what had happened.,neutral,neutral,neutral
+70,speech,JESSICA,I think they were hoping that someone had lost favour.,neutral,neutral,neutral
+71,speech,JESSICA,"Everyone wanted to join our group, but it was a select circle.",neutral,neutral,neutral
+72,speech,JESSICA,The envy of the university.,disgust,neutral,neutral
+73,speech,JESSICA,Of course we never allowed anyone to join.,neutral,neutral,neutral
+74,speech,JESSICA,"It wasn't a rule we had, not even an unspoken law.",neutral,disapproval,neutral
+75,speech,JESSICA,It was just the way things were.,neutral,neutral,neutral
+76,speech,JESSICA,It almost felt like we were following someone else's rules rather then creating our own.,neutral,neutral,neutral
+77,speech,JESSICA,That's not to say we didn't have other friends.,neutral,neutral,neutral
+78,speech,JESSICA,Being in that group meant we all had friends aplenty.,neutral,approval,neutral
+79,speech,JESSICA,We were invited to every party and asked out first at every ball.,neutral,neutral,neutral
+80,speech,JESSICA,Everyone wanted to either be us or be with us.,neutral,neutral,neutral
+81,consigne,,Leans in and whispers,,,
+82,speech,JESSICA,"I was once seeing a boy who used to cry when we made love, he said he couldn't believe how lucky he was to be with one of us.",surprise,love,joy
+83,speech,JESSICA,"He didn't last long 
+",neutral,neutral,neutral
+84,consigne,,laughs and,,,
+85,consigne,,lights a cigarette,,,
+86,speech,JESSICA,"not that it mattered, there were dozens more where he came from.",neutral,neutral,neutral
+87,speech,JESSICA,An endless supply of worshippers.,joy,neutral,neutral
+88,speech,JESSICA,"Even for Margaret and Trevor.
+",disgust,neutral,neutral
+89,speech,BARMAN,Miss Harley and Mr Mcleish?,neutral,neutral,neutral
+90,speech,JESSICA,Yes.,neutral,approval,neutral
+91,speech,JESSICA,"Are they here yet?
+",neutral,neutral,neutral
+92,speech,BARMAN,"You're the first of the party to arrive madam.
+",neutral,neutral,neutral
+93,speech,JESSICA,Good Lord how embarrassing.,disgust,embarrassment,disgust
+94,speech,JESSICA,"I have broken my New Year's resolution already, and I really thought I would keep this one.",neutral,disappointment,sadness
+95,speech,JESSICA,Anyway where was I?,neutral,curiosity,neutral
+96,speech,BARMAN,"Miss Harley and Mr Mcleish.
+",neutral,neutral,neutral
+97,speech,JESSICA,Oh yes!,surprise,excitement,joy
+98,speech,JESSICA,Well even they managed to ensnare a host of admirers.,neutral,neutral,neutral
+99,speech,JESSICA,"I feel awful saying this, but you'll be surprised when you meet them.",surprise,disgust,neutral
+100,speech,JESSICA,"I know it's easy enough to imagine Edwin and I being in the most popular group of our peers, but Trevor is so very dour, so serious.",sadness,admiration,neutral
+101,speech,JESSICA,"Brilliant mind of course, he's one of the most promising young lawyers in Scotland, and so very gentlemanly.",joy,admiration,neutral
+102,speech,JESSICA,"Margaret's similar in a way, she's means so well, she's so kind.",neutral,admiration,neutral
+103,speech,JESSICA,Earnest is the best way to describe her.,neutral,neutral,neutral
+104,speech,JESSICA,I'd never had friends like either of them before.,surprise,realization,neutral
+105,speech,JESSICA,"It was Edwin who chose us all, who brought us all together.",neutral,neutral,joy
+106,speech,JESSICA,To this day I can't work out what he saw in the four of us that would make a dynamic group.,neutral,neutral,neutral
+107,speech,JESSICA,"But there we were, The Famous Five!
+",surprise,neutral,surprise
+108,speech,BARMAN,"They sound like most joyous days madam.
+",joy,joy,joy
+109,speech,JESSICA,Oh they were.,surprise,neutral,neutral
+110,speech,JESSICA,"Marriage and motherhood is all well and good, but I wouldn't swap those memories for anything in the world.",neutral,approval,neutral
+111,consigne,,TREVOR enters shaking off his umbrella,,,
+112,speech,JESSICA,Trevor!,surprise,neutral,joy
+113,consigne,,She runs over and embraces him,,,
+114,speech,JESSICA,"My goodness, you look so handsome.",surprise,admiration,surprise
+115,speech,JESSICA,"What happened to the glasses and the belly?
+",neutral,curiosity,neutral
+116,speech,TREVOR,It's amazing the effect a good woman can have.,surprise,admiration,joy
+117,speech,TREVOR,It's probably why I was such state the whole time we were friends.,neutral,neutral,neutral
+118,consigne,,she slaps his chest and smiles,,,
+119,speech,JESSICA,Don't be such a rotter.,neutral,neutral,neutral
+120,speech,JESSICA,Well whatever that wife of yours has done to you it's all for the better.,neutral,optimism,neutral
+121,speech,TREVOR,Best thing I ever did.,joy,admiration,joy
+122,speech,TREVOR,"It looks like it agrees with you too Jess, you look every bit as stunning as you always did.",neutral,admiration,joy
+123,consigne,,They are constantly making eyes at each other and periodically touch one another's arm. JESSICA ushers him over to the bar stools. TREVOR removes his overcoat and gives it to BARMAN who hangs it. They both sit.,,,
+124,speech,BARMAN,"Can I get you a drink sir?
+",neutral,neutral,neutral
+125,speech,TREVOR,"Yes.
+",neutral,neutral,neutral
+126,consigne,,Interrupting,,,
+127,speech,JESSICA,"He will have a glass of Oban, no ice.",neutral,neutral,neutral
+128,speech,TREVOR,"And she will have sherry and it won't be her first I'll wager, unless some He-Man has actually made an honest woman of her.",neutral,neutral,neutral
+129,consigne,,BARMAN busies himself with the drinks.,,,
+130,speech,JESSICA,You know full well how honest I am!,anger,approval,anger
+131,speech,JESSICA,"I just lack restraint, remorse, piety or loyalty.",neutral,remorse,neutral
+132,speech,JESSICA,"Honesty however is one of my very few virtues.
+",neutral,neutral,neutral
+133,speech,TREVOR,"Beauty, intelligence, mystery, lust for life, lust for lust.",neutral,admiration,joy
+134,speech,TREVOR,I think you're selling yourself a wee bit short at just honesty.,neutral,neutral,neutral
+135,consigne,,She flicks her hair,,,
+136,speech,TREVOR,But that's the last time I let you fish for compliments this week.,neutral,neutral,neutral
+137,speech,JESSICA,"Oh don't be awful to me.
+",disgust,caring,disgust
+138,speech,TREVOR,Men only have a limited number of compliments to give out; especially Scotsmen.,neutral,neutral,neutral
+139,speech,TREVOR,And especially Scots lawyers!,neutral,neutral,joy
+140,speech,TREVOR,"You've just used up more compliments then my wife gets in a month.
+",neutral,neutral,anger
+141,speech,JESSICA,"I'm sure she gets more then that.
+",neutral,approval,neutral
+142,speech,TREVOR,"Yes you're probably right, but not from me she doesn't.",neutral,approval,neutral
+143,speech,JESSICA,You're being awful again.,disgust,disgust,disgust
+144,speech,TREVOR,I'm really not.,surprise,disapproval,neutral
+145,speech,TREVOR,She knew what I was like when she married me.,disgust,neutral,joy
+146,speech,TREVOR,If I suddenly started to compliment her willy nilly then she'd probably suspect me of having an affair.,fear,neutral,neutral
+147,speech,TREVOR,"Thus for the sake of my marriage and future generations of Mcleishes its best just to spot when she's had her hair cut, tell her she looks good if she asks, and say I love you on our anniversary.",neutral,love,joy
+148,speech,TREVOR,Anything more would be an admission of guilt.,disgust,remorse,neutral
+149,speech,JESSICA,Well I still say you're being awful.,disgust,disgust,disgust
+150,speech,JESSICA,Thomas is always fawning over me telling me how gorgeous I am.,neutral,admiration,joy
+151,speech,TREVOR,"And does that keep you faithful and loving?
+",neutral,curiosity,neutral
+152,consigne,,Long Pause. She smiles then turns to the BARMAN,,,
+153,speech,JESSICA,.,neutral,neutral,neutral
+154,speech,JESSICA,Let's have another drink.,neutral,neutral,neutral
+155,consigne,,BARMAN pours.,,,
+156,speech,TREVOR,"Are you happy?
+",joy,curiosity,neutral
+157,speech,JESSICA,I've got three beautiful daughters and a husband who loves me.,joy,love,joy
+158,speech,TREVOR,Don't you find that when people are truly happy they can't stop talking about what makes them so.,joy,neutral,neutral
+159,speech,TREVOR,And when people aren't happy they will talk about anything but the reason why they aren't.,sadness,neutral,neutral
+160,speech,JESSICA,I'm not sure I like what you're getting at.,neutral,confusion,neutral
+161,speech,JESSICA,You don't know anything about my life.,disgust,neutral,anger
+162,speech,TREVOR,"True maybe, but I know you.",neutral,approval,neutral
+163,speech,TREVOR,It may have been eight long years.,neutral,neutral,sadness
+164,speech,TREVOR,"Eight long hard years away from you, but I can read you in a way your husband obviously cannot.",neutral,neutral,neutral
+165,speech,JESSICA,"Stop it.
+",anger,anger,neutral
+166,speech,TREVOR,And I know you so well that I know you don't really want me to stop it.,neutral,neutral,sadness
+167,speech,TREVOR,When you want someone to stop what they're saying you target them.,anger,neutral,neutral
+168,speech,TREVOR,You pray on their insecurities and weaknesses; I've seen you do it a thousand times.,neutral,neutral,neutral
+169,consigne,,No more convincingly,,,
+170,speech,JESSICA,"I said stop it.
+",anger,anger,neutral
+171,speech,TREVOR,"There's one thing that I never dreamed you would ever be Jess, and that's unhappy.",sadness,disappointment,sadness
+172,speech,TREVOR,And to anyone who knows you it's practically tattooed on your forehead.,disgust,neutral,neutral
+173,speech,JESSICA,I can't do this now Trevor.,sadness,disapproval,sadness
+174,consigne,,Leaning very close,,,
+175,speech,TREVOR,I could make you happy.,joy,caring,joy
+176,consigne,,Touches her hand,,,
+177,speech,TREVOR,Come to my room later.,neutral,neutral,neutral
+178,consigne,,MARGARET enters. She's soaked through. TREVOR quickly jumps up from his stool and awkwardly and obviously repositions himself so that he's feigning nonchalance propped with is elbow against the bar.,,,
+179,speech,JESSICA,"Goodness me, Margaret!",joy,gratitude,joy
+180,consigne,,She goes over and kisses her on both cheeks,,,
+181,speech,JESSICA,You are absolutely drenched woman.,disgust,admiration,disgust
+182,consigne,,laughs,,,
+183,speech,MARGARET,"Yes I know, such a big div forgetting my brolly.",sadness,realization,sadness
+184,speech,MARGARET,Look at you!,anger,neutral,surprise
+185,speech,MARGARET,"I don't believe you've had three children for a second, you look absolutely ravishing.",disgust,admiration,disgust
+186,speech,MARGARET,"I've been dreading having to stand next to you all week, people are going to think I'm your mother.",fear,fear,fear
+187,speech,MARGARET,"And who is this Adonis who's stolen my old friends face?
+",surprise,curiosity,surprise
+188,speech,TREVOR,"Hello Margaret 
+",neutral,neutral,neutral
+189,consigne,,He,,,
+190,consigne,,walks towards her and holds out his hand. She totally ignores it and instead hugs him tightly for several seconds totally soaking his suit through.,,,
+191,speech,MARGERET,"Oh Trevor, it's so wonderful to see you.",joy,admiration,joy
+192,consigne,,She releases him. He holds his arms out wide in front of him and shakes off the wet.,,,
+193,speech,MARGARET,"Goodness you both look so well.
+",joy,admiration,joy
+194,consigne,,BARMAN comes over and takes her coat.,,,
+195,consigne,,to BARMAN,,,
+196,speech,MARGARET,"Gin and tonic please.
+",neutral,neutral,neutral
+197,consigne,,BARMAN goes to fix her drink and hang up the coat. MARGARET takes a seat in one of the large chairs. JESSICA and TREVOR do the same.,,,
+198,speech,MARGARET,"So how late am I then?
+",neutral,curiosity,neutral
+199,speech,JESSICA,"Not too bad actually, not for you anyway.
+",disgust,neutral,neutral
+200,speech,MARGARET,"No I suppose not, I've beaten Alan at least though that's hardly anything to write home about.",neutral,disapproval,neutral
+201,speech,TREVOR,"Death, taxes and Alan being late.",sadness,neutral,sadness
+202,speech,TREVOR,The three certainties of life.,neutral,neutral,neutral
+203,speech,MARGARET,"How long has it been since we laid eyes on each other?
+",neutral,curiosity,neutral
+204,consigne,,BARMAN brings over drink then returns to the bar.,,,
+205,speech,MARGARET,Thank you.,neutral,gratitude,neutral
+206,speech,JESSICA,"Well the last time I laid eyes on you was during the Commonwealth Games.
+",neutral,neutral,neutral
+207,speech,TREVOR,"Yes I had no idea I'd be drinking with a celebrity.
+",surprise,surprise,surprise
+208,speech,MARGARET,Hardly.,neutral,disapproval,neutral
+209,speech,MARGARET,"I've been recognized twice in my whole life, and both times by hockey fans.",neutral,realization,neutral
+210,speech,JESSICA,Well I'm sure Daniel Beckham started somewhere; he wasn't always a household name.,neutral,neutral,neutral
+211,speech,TREVOR,He obviously still isn't in some of the well-to-do households.,neutral,neutral,neutral
+212,speech,MARGARET,"Now now Trevor, when your house covers half of Hampshire it's rather easy to lose things.",neutral,neutral,neutral
+213,speech,MARGARET,Even the name of the world's best known footballer.,disgust,neutral,neutral
+214,speech,JESSICA,I was wondering how long it would take for this to start.,surprise,surprise,neutral
+215,speech,JESSICA,Just because I wasn't dragged up in the gutter like you two.,neutral,neutral,disgust
+216,speech,MARGARET,"And I'm from Enfield.
+",neutral,neutral,neutral
+217,speech,JESSICA,Scotland and London!,fear,neutral,neutral
+218,speech,JESSICA,May as well be Beirut or Baghdad or.,sadness,neutral,neutral
+219,speech,JESSICA,"Liverpool!
+",joy,neutral,joy
+220,speech,TREVOR,"I spent a very pleasant fortnight in Beirut last summer, how dare you suggest it's a dilapidated hellhole.",anger,annoyance,anger
+221,speech,MARGARET,And to be fair Liverpool won the European City of Culture award.,joy,admiration,joy
+222,speech,JESSICA,Whatever next?,neutral,curiosity,neutral
+223,speech,JESSICA,"Atlantis winning an award for irrigation?
+",surprise,curiosity,surprise
+224,speech,MARGARET,"They do have culture in the North you know Jess, it's not all flat caps and whippets.
+",neutral,neutral,neutral
+225,speech,JESSICA,Oh nonsense.,disgust,annoyance,disgust
+226,speech,JESSICA,Anything beyond the Home Counties may as well have '91here be dragons' written on the map.,neutral,neutral,neutral
+227,speech,TREVOR,Except Edinburgh of course.,neutral,neutral,neutral
+228,speech,JESSICA,"Oh yes, except Edinburgh.",neutral,neutral,neutral
+229,speech,JESSICA,A truly remarkable place.,surprise,admiration,joy
+230,speech,JESSICA,A solitary rose amidst the bracken.,disgust,neutral,neutral
+231,speech,JESSICA,"Where would any of us be today without Edinburgh?
+",neutral,curiosity,neutral
+232,speech,TREVOR,I'd probably be a caddy and a drunk back home.,disgust,neutral,neutral
+233,speech,MARGARET,And I never would have been able to do my PhD in Paris.,sadness,disappointment,sadness
+234,speech,JESSICA,Alan certainly wouldn't have been admitted to the Scottish Writers' Guild and had all those poems published.,neutral,neutral,sadness
+235,consigne,,Long pause. They become somber.,,,
+236,speech,MARGARET,Edwin might still be alive though.,neutral,neutral,neutral
+237,consigne,,Pause,,,
+238,speech,MARGARET,"Well come on, you can't attend a man's funeral and ignore the fact that he's dead.",disgust,neutral,neutral
+239,speech,JESSICA,I was having a bloody good go.,anger,joy,neutral
+240,speech,TREVOR,Edinburgh didn't kill Edwin.,neutral,neutral,neutral
+241,speech,TREVOR,He didn't change one bit the whole time he was there.,neutral,neutral,neutral
+242,speech,TREVOR,I think he's the only person I knew never to change in the slightest.,neutral,admiration,neutral
+243,speech,MARGARET,"Exams, presentations, graduation.",neutral,neutral,neutral
+244,speech,MARGARET,He never compromised on anything.,neutral,neutral,neutral
+245,speech,JESSICA,"How many lectures would he get up and argue with someone when he was drunk or drugged up?
+",neutral,curiosity,surprise
+246,speech,TREVOR,"And how many times would he not be there at all because he was in bed with some girl.
+",surprise,neutral,neutral
+247,speech,MARGARET,"Or some boy.
+",neutral,neutral,neutral
+248,speech,JESSICA,Or quite often both.,neutral,neutral,neutral
+249,speech,MARGARET,"Remember his graduation speech?
+",neutral,neutral,neutral
+250,speech,JESSICA,"Good god, he brought the entire ceremony to a complete standstill.
+",surprise,admiration,disgust
+251,speech,MARGARET,"I'm surprised they didn't take his degree away, maybe they just realised a good speech when they heard one.",surprise,surprise,surprise
+252,speech,JESSICA,"Go on Trevor, you do it so well.
+",neutral,admiration,neutral
+253,consigne,,TREVOR gets to his feet clutching one hand to his chest and holding the other out in front of him.,,,
+254,consigne,,adopts and English accent,,,
+255,speech,JESSICA,"As the outstanding achiever among this years alumnus I would like to dedicate this degree to all those grandaunts who worked long, hard hours and diligently gave their lives to their studies.",joy,admiration,joy
+256,speech,JESSICA,"Who resisted the temptations University life presented to them, and who made sure that the academic excellence of this institution is as world renowned as any other.
+",neutral,neutral,neutral
+257,consigne,,"MARGARET and JESSICA give a small, dignified round of applause and look at each other nodding.",,,
+258,speech,TREVOR,"I fully encourage each and every student who toiled so tirelessly to embark upon yet another degree, as you clearly have so much more to offer the great centers of learning across the world.",neutral,admiration,joy
+259,consigne,,Another mini round of applause and approving nodding.,,,
+260,consigne,,"More applause, but this time slower and unsure.",,,
+261,speech,TREVOR,"Whilst I did indeed drink deep from the fount of knowledge during my four-year tenure at this Elysian Lyceum, I was also able to appreciate all those things that can't be taught.",neutral,admiration,neutral
+262,speech,TREVOR,"Whenever I was offered a drink, a drug, or the chance to love I opted to indulge.",joy,neutral,neutral
+263,consigne,,"in voice of an old, well-spoken Englishman",,,
+264,speech,MARGARET,"I say!
+",anger,neutral,surprise
+265,consigne,,in same voice,,,
+266,speech,JESSICA,"Bad form!
+",disgust,annoyance,anger
+267,speech,TREVOR,Thus to all those who missed out I implore you ' do not hesitate a moment longer.,fear,caring,fear
+268,speech,TREVOR,Enroll afresh.,neutral,neutral,neutral
+269,speech,TREVOR,Drain every drop.,neutral,neutral,neutral
+270,speech,TREVOR,Smoke every drug.,disgust,neutral,neutral
+271,speech,TREVOR,Visit every bed.,neutral,neutral,neutral
+272,speech,TREVOR,"And to all those who pour scorn upon your joy like hot oil from a tower of morality I urge you to quote the words of the great John Milton '91Fuck off, I'm happy'!",joy,annoyance,anger
+273,consigne,,MARGARET and JESSICA stand to applaud. MARGARET takes flowers out of a vase on the table and hands them to TREVOR,,,
+274,speech,JESSICA,"Bravo!
+",joy,neutral,joy
+275,speech,MARGARET,"Bellisimo!
+",surprise,neutral,joy
+276,consigne,,back to his Scots accent,,,
+277,speech,TREVOR,"Barman, more drinks!",joy,neutral,joy
+278,speech,TREVOR,Today we celebrate the life of the last truly great Englishman!,joy,excitement,joy
+279,consigne,,BARMAN brings fresh drinks over. All three sink into their chairs with giggles and satisfied sighs.,,,
+280,speech,JESSICA,"He promised me I wouldn't forget his speech, but I never imagined he'd do something like that.",surprise,neutral,surprise
+281,speech,MARGARET,None of us in that hall will ever forget that day.,neutral,neutral,neutral
+282,speech,TREVOR,It was something special there's no denying it.,neutral,admiration,neutral
+283,consigne,,Sips his drink,,,
+284,speech,TREVOR,"It wasn't his original speech though you know.
+",neutral,disapproval,neutral
+285,speech,MARGARET,Really?,surprise,curiosity,surprise
+286,speech,TREVOR,"No, he went over what he intended to say with me.",neutral,neutral,neutral
+287,speech,TREVOR,"It started much the same as that one, but it carried on in the vein one would expect, lauding praise on the University, thanking the lecturers for taking mere children and developing them into society's brightest and best.",neutral,gratitude,neutral
+288,speech,MARGARET,I had no idea.,surprise,confusion,surprise
+289,speech,MARGARET,"When did he write the good one then?
+",neutral,curiosity,neutral
+290,speech,TREVOR,He never did.,neutral,neutral,neutral
+291,speech,TREVOR,It was off the cuff.,neutral,neutral,neutral
+292,speech,TREVOR,The notes he had in front of him were all prompts for his original speech.,neutral,neutral,neutral
+293,speech,JESSICA,"Well why did he change his mind then?
+",surprise,confusion,neutral
+294,speech,TREVOR,"It's hard to say, but my guess would be because Mr.",neutral,confusion,neutral
+295,speech,TREVOR,Cleethorpes turned up five minutes before the ceremony started.,neutral,neutral,neutral
+296,speech,JESSICA,Good Lord I remember.,surprise,realization,neutral
+297,speech,JESSICA,His father wasn't going to attend was he?,sadness,confusion,surprise
+298,speech,JESSICA,I remember him saying he'd be damned if he was going to witness the culmination of four years of excess and buggery.,disgust,neutral,neutral
+299,speech,MARGARET,Yes that's right.,neutral,approval,neutral
+300,speech,MARGARET,"I remember Edwin brushed it off, just like he brushed off everything else.",neutral,neutral,neutral
+301,speech,MARGARET,"His father was totally obsessed with the idea of Edwin being gay.
+",disgust,neutral,neutral
+302,speech,JESSICA,He wasn't even gay though.,neutral,neutral,neutral
+303,speech,JESSICA,"At worst he was bisexual.
+",disgust,neutral,disgust
+304,speech,TREVOR,I think to a man like Mr.,surprise,neutral,neutral
+305,speech,TREVOR,Cleethorpes there was no distinction between the two.,neutral,neutral,neutral
+306,speech,TREVOR,And I have to say I agree with him.,neutral,approval,neutral
+307,speech,TREVOR,"I loved Edwin dearly, but I could never quite become accustomed to his deviance.",sadness,love,sadness
+308,speech,MARGARET,How can you say such a thing?,surprise,curiosity,surprise
+309,speech,MARGARET,"This is a man you broke bread with.
+",disgust,neutral,disgust
+310,speech,JESSICA,"This is a man you cut coke with!
+",disgust,neutral,anger
+311,speech,TREVOR,You can't force a man to be what he's not.,neutral,disapproval,neutral
+312,speech,TREVOR,You can't force me to accept a side to Edwin that I found depraved.,disgust,disapproval,disgust
+313,speech,TREVOR,"It's all very well getting drunk and high when one is a student, but we're not kids anymore.",disgust,neutral,disgust
+314,speech,TREVOR,Maybe if he'd stopped all his excess when the rest of us did then he'd still be here today.,neutral,neutral,neutral
+315,speech,MARGARET,"Like you said, he never changed, and you must have known he never would.",neutral,neutral,neutral
+316,speech,MARGARET,"He died like he lived, with happiness in his heart.
+",sadness,joy,sadness
+317,speech,JESSICA,And a drink in his hand.,disgust,neutral,neutral
+318,speech,TREVOR,"And drugs in his veins.
+",disgust,neutral,neutral
+319,speech,MARGARET,And with three in a bed.,neutral,neutral,neutral
+320,consigne,,They all laugh,,,
+321,speech,MARGARET,If it wasn't for Edwin then I don't think I'd have ever known what happiness is.,surprise,joy,neutral
+322,speech,JESSICA,"Well I think I can speak for all of us when I say we're all going to miss him terribly.
+",sadness,sadness,sadness
+323,speech,TREVOR,"Hear hear.
+",joy,neutral,neutral
+324,speech,MARGARET,"Well you can speak for the three of us at least, but where the bloody hell is Alan?
+",anger,anger,anger
+325,speech,TREVOR,"Goodness knows, but I'm not going to see him tonight.",sadness,neutral,sadness
+326,speech,TREVOR,I think it's time to retire.,sadness,neutral,sadness
+327,speech,MARGARET,"Yes I think you're right 
+",neutral,approval,neutral
+328,consigne,,they all drain their drinks,,,
+329,speech,MARGARET,"It is wonderful to see you both again, even under these circumstances.",joy,admiration,joy
+330,speech,MARGARET,Night night.,fear,neutral,neutral
+331,consigne,,She exits,,,
+332,speech,TREVOR,"I'm so very tired Jess, but I'm never too tired for you.",sadness,sadness,sadness
+333,consigne,,He kisses her forehead and exits,,,
+334,consigne,,JESSICA slowly moves over to the barstools and sits.,,,
+335,speech,BARMAN,Another drink madam?,neutral,neutral,neutral
+336,speech,JESSICA,"He's right you know.
+",neutral,approval,neutral
+337,speech,BARMAN,"Who's that madam?
+",surprise,curiosity,surprise
+338,speech,JESSICA,Trevor.,neutral,neutral,neutral
+339,speech,JESSICA,"I'm not happy with my lot, I know I should be but I'm not.",sadness,disappointment,sadness
+340,speech,BARMAN,Sorry to hear it madam.,sadness,remorse,sadness
+341,speech,JESSICA,It's just that I've never had to fight for anything.,neutral,neutral,neutral
+342,speech,JESSICA,"For a start I'm rich, well Daddy is rich, but he gives me so much that I don't even need to work.",disgust,neutral,sadness
+343,speech,BARMAN,Life presents more struggles then merely the financial madam.,sadness,neutral,neutral
+344,speech,JESSICA,"I'm intelligent, popular, successful, desired.",joy,admiration,neutral
+345,speech,JESSICA,And I know from the reactions men have towards me that I'm beautiful.,joy,admiration,joy
+346,speech,JESSICA,I've got a doting husband and three gorgeous daughters.,joy,admiration,joy
+347,speech,JESSICA,It's just all so easy.,neutral,approval,neutral
+348,speech,JESSICA,All so boring.,sadness,disappointment,sadness
+349,speech,JESSICA,"So very, very boring.
+",sadness,disappointment,sadness
+350,speech,BARMAN,"Perhaps the company of old friends will have an invigorating effect?
+",neutral,curiosity,neutral
+351,speech,JESSICA,Yes.,neutral,approval,neutral
+352,speech,JESSICA,Maybe.,neutral,confusion,neutral
+353,consigne,,She stands up and moves slowly over to BARMAN. She brushes her body against his and kisses him lightly on the lips.,,,
+354,speech,JESSICA,Bring my bags up to my room.,neutral,neutral,neutral
+355,consigne,,"She walks towards the exit, turns her head back just before she leaves and looks at him. BARMAN stands frozen for a second then puts on the radio and begins to clear up the glasses left on the table by the large chairs. He returns to the bar and pours a large glass of whiskey, which he drains immediately. He picks up JESSICA'S bags and follows her turning the light off as he goes.",,,
+356,consigne,,END OF ACT I SCENE I,,,
+357,consigne,,Scene change: The large chairs are removed and replaced by caf'e9 style table and chairs. The sofas remain.,,,
+358,consigne,,"Scene: Still the hotel lobby, but set out for its daytime custom. It is bright and sunny outside. ALAN is sitting at one of the tables cross-legged with a cigarette in one hand and a drink of whiskey in the other. BARMAN is behind the bar busying himself with misc chores e.g. cleaning glasses.",,,
+359,consigne,,BARMAN turns off the radio. ALAN drains his glass then holds it up rattling the ice inside to get the attention of BARMAN. BARMAN brings over a bottle of scotch.,,,
+360,speech,BARMAN,"Single or a double sir?
+",neutral,neutral,neutral
+361,speech,ALAN,"What time is it?
+",neutral,curiosity,neutral
+362,speech,BARMAN,"Just gone half eleven sir.
+",neutral,neutral,neutral
+363,speech,ALAN,Just a single then.,neutral,neutral,neutral
+364,consigne,,Barman pours and ALAN drains the glass instantly,,,
+365,speech,ALAN,And another.,neutral,neutral,neutral
+366,consigne,,BARMAN pours another,,,
+367,speech,ALAN,Bit too early for double measures.,neutral,neutral,neutral
+368,speech,BARMAN,"Very puritan of you sir.
+",neutral,neutral,neutral
+369,speech,ALAN,"Yes I thought so
+",neutral,approval,neutral
+370,consigne,,BARMAN returns to the bar,,,
+371,speech,ALAN,"What did you tell them last night?
+",neutral,curiosity,neutral
+372,speech,BARMAN,"I told them the truth sir, that you were yet to arrive.",neutral,neutral,neutral
+373,speech,ALAN,"And nobody questioned it?
+",anger,neutral,neutral
+374,speech,BARMAN,No Sir.,neutral,neutral,neutral
+375,speech,BARMAN,I gathered from their conversation that you have something of a habit for waiting until all of a party has gathered before joining them.,neutral,neutral,neutral
+376,speech,ALAN,"So they didn't say I was late all the bloody time then?
+",anger,neutral,surprise
+377,speech,BARMAN,"I don't recall what exactly was said sir, but that was certainly the long and the short of it.",neutral,confusion,neutral
+378,speech,ALAN,Hmmm Well I'm sure they had a lot of catching up to do.,neutral,neutral,neutral
+379,speech,BARMAN,"There was certainly a good deal of catching up sir.
+",neutral,neutral,neutral
+380,speech,ALAN,I bet there was.,neutral,neutral,neutral
+381,speech,ALAN,"Were Trevor and Jessica up to their old tricks again?
+",neutral,curiosity,neutral
+382,speech,BARMAN,"sir?
+",surprise,neutral,neutral
+383,speech,ALAN,"Ah, Bartenders!",surprise,neutral,surprise
+384,speech,ALAN,Diplomatic to the last.,neutral,neutral,neutral
+385,speech,BARMAN,We're born that way sir.,neutral,neutral,neutral
+386,speech,ALAN,Trevor and Jessica were lovers at one time.,neutral,neutral,neutral
+387,speech,ALAN,"Well Trevor was the lover, Jess was more the beloved.",neutral,neutral,neutral
+388,speech,ALAN,"As the Ancient Greeks would have said; he was the erastes
+",neutral,neutral,neutral
+389,speech,ALAN,"and she was the eromenos
+",surprise,neutral,neutral
+390,speech,ALAN,"The idea was that the erastes
+",neutral,neutral,neutral
+391,speech,ALAN,"was the aggressor and the eromenos
+",anger,neutral,neutral
+392,speech,ALAN,was merely an object of desire.,neutral,neutral,neutral
+393,speech,ALAN,The erastes had all the power and dictated how the affair went.,neutral,neutral,neutral
+394,speech,ALAN,"All the eromenos
+",neutral,neutral,neutral
+395,speech,ALAN,could do was accept or rebuff the lover's overtures.,neutral,neutral,neutral
+396,speech,BARMAN,"She didn't reciprocate his affections?
+",anger,neutral,surprise
+397,speech,ALAN,"Well she did in a way, or at first at least.",neutral,neutral,neutral
+398,speech,ALAN,"Jess is an exceptional woman you see, she became the erastes
+",neutral,admiration,neutral
+399,speech,ALAN,"and the eromenos
+",neutral,neutral,neutral
+400,speech,ALAN,"She remained the object of all desire, but somehow managed to be the aggressor also.",neutral,neutral,neutral
+401,speech,ALAN,"I've no idea how she did it, and the uc0u8232 Greeks would certainly have found her quite fascinating.",surprise,admiration,neutral
+402,speech,ALAN,They would have likened her to Calypso I imagine.,neutral,neutral,neutral
+403,speech,ALAN,"A woman of unconquerable beauty, but with the power to imprison a great hero like Odysseus for seven long years.",disgust,admiration,neutral
+404,speech,BARMAN,She seemed to be most fond of him when they conversed last night sir.,disgust,neutral,neutral
+405,speech,ALAN,She loves Trevor like we all love Trevor.,neutral,love,neutral
+406,speech,ALAN,And she slept with him of course.,neutral,neutral,neutral
+407,speech,ALAN,But that said he's hardly the first person she met who she took to bed.,neutral,neutral,neutral
+408,consigne,,BARMAN begins to furiously clean a glass and looks away.,,,
+409,speech,ALAN,But Trevor was totally besotted with her.,disgust,love,surprise
+410,speech,ALAN,He loved her in a way that she needed rather then the way that she wanted.,neutral,love,neutral
+411,speech,ALAN,She could never see it though.,surprise,neutral,neutral
+412,speech,ALAN,Or maybe she could.,neutral,neutral,neutral
+413,speech,ALAN,Maybe she decided Trevor would be better off without her.,neutral,neutral,neutral
+414,consigne,,ALAN drains his glass and puts it firmly down on the table. BARMAN comes over and pours another drink,,,
+415,speech,ALAN,"I think it's near enough noon now.
+",neutral,neutral,neutral
+416,consigne,,BARMAN doubles the measure then returns to the bar.,,,
+417,speech,ALAN,"Either way, they're both married now.",neutral,neutral,neutral
+418,speech,BARMAN,"Indeed sir, all's well that ends well.
+",neutral,approval,neutral
+419,speech,ALAN,"What part of '91they're married' made you think all was well?
+",neutral,curiosity,surprise
+420,speech,BARMAN,Very droll sir.,disgust,neutral,neutral
+421,speech,ALAN,Maybe.,neutral,confusion,neutral
+422,speech,ALAN,But I'm not sure either of them have the self-restraint to remain totally faithful.,neutral,confusion,neutral
+423,speech,ALAN,"I'm not suggesting that they'll sleep together, but infidelity doesn't necessarily have to be physical.",neutral,disapproval,neutral
+424,speech,ALAN,I don't think Trevor will be able to resist her.,neutral,disapproval,neutral
+425,speech,ALAN,"The problem is she's a Siren, but she doesn't even know she's singing half the time.",neutral,neutral,neutral
+426,speech,ALAN,It's an instinct rather then an action.,neutral,neutral,neutral
+427,speech,ALAN,I wonder if old Edwin died on purpose just to see what would happen when we all got together again.,surprise,surprise,sadness
+428,speech,BARMAN,"Sir is rather fond of his Classical allusions isn't he?
+",neutral,neutral,neutral
+429,speech,ALAN,"There isn't much that's worth knowing that can't be found in the pages of Homer, Plato, and Sophocles.",neutral,neutral,neutral
+430,speech,ALAN,"Greek society reached its zenith two and a half thousand years ago, unfortunately for them its been in steady decline ever since.",sadness,disappointment,sadness
+431,speech,ALAN,I like to remember them in their pomp.,joy,love,neutral
+432,speech,BARMAN,"A most interesting view sir, if perhaps a little xenophobic.",disgust,admiration,neutral
+433,speech,ALAN,The only thing wrong with xenophobia is it's a bloody Greek word!,anger,disapproval,disgust
+434,speech,ALAN,"I loved learning about their ancient culture dearly, but I was forced to learn their god-awful language too.",fear,love,neutral
+435,speech,ALAN,Xenophobia is what gives a nation its ability to achieve great things.,neutral,admiration,neutral
+436,speech,ALAN,Without xenophobia society as we know it would crumble.,fear,neutral,neutral
+437,speech,BARMAN,"Sir will forgive me for saying so, but he doesn't seem to have one hundred percent conviction in his views.
+",neutral,neutral,neutral
+438,speech,ALAN,"Nonsense, I have perfect conviction in my views, I just happen to talk nonsense sometimes.",neutral,approval,neutral
+439,speech,ALAN,It's what happens when one's mouth becomes too dry.,disgust,neutral,neutral
+440,consigne,,Drains his glass and pushes it an inch towards BARMAN. BARMAN walks over and refills it. The bottle is nearly empty and BARMAN leaves it next to ALAN'S glass.,,,
+441,speech,BARMAN,"If sir will excuse me.
+",neutral,neutral,neutral
+442,speech,ALAN,By all means my good man.,joy,admiration,neutral
+443,consigne,,BARMAN goes to exit stage. MARGARET enters and they pass.,,,
+444,speech,BARMAN,Madam.,neutral,neutral,neutral
+445,consigne,,Exits,,,
+446,speech,MARGARET,Well well well.,neutral,admiration,neutral
+447,consigne,,Catches ALAN'S attention.,,,
+448,speech,ALAN,My goodness.,surprise,surprise,surprise
+449,speech,ALAN,You look wonderful Margaret.,joy,admiration,joy
+450,speech,ALAN,A true vision.,neutral,neutral,neutral
+451,consigne,,He stands and they embrace then both sit. There's a long silence.,,,
+452,speech,ALAN,You look great.,neutral,admiration,joy
+453,consigne,,smiles,,,
+454,speech,MARGARET,"You said.
+",neutral,neutral,neutral
+455,speech,ALAN,Well it's true.,neutral,approval,neutral
+456,speech,ALAN,I can't believe how long it's been.,surprise,surprise,surprise
+457,speech,MARGARET,"I've been dreading this moment ever since I heard.
+",fear,fear,fear
+458,speech,ALAN,Dreading it?,surprise,neutral,neutral
+459,speech,ALAN,It's all I've been looking forward to.,neutral,neutral,joy
+460,speech,ALAN,"Why were you dreading it?
+",fear,curiosity,surprise
+461,speech,MARGARET,I didn't know whether I'd be able to cope or not.,fear,confusion,fear
+462,consigne,,He laughs,,,
+463,speech,MARGARET,I relied on you so much in the old days.,neutral,approval,joy
+464,speech,MARGARET,It took a long time to learn to cope on my own.,fear,realization,sadness
+465,speech,ALAN,What utter rubbish.,disgust,annoyance,disgust
+466,speech,ALAN,You're the only one of us who could ever really cope.,neutral,approval,neutral
+467,speech,ALAN,You're the one that made sure we all coped too.,neutral,approval,neutral
+468,speech,ALAN,But you're also the one who always called my bluff.,neutral,neutral,surprise
+469,speech,ALAN,I was worried about seeing you too.,fear,nervousness,fear
+470,speech,MARGARET,"Really?
+",surprise,curiosity,surprise
+471,speech,ALAN,Yes.,neutral,approval,neutral
+472,speech,ALAN,"I was worried you'd try and seduce me!
+",fear,fear,fear
+473,consigne,,laughs,,,
+474,speech,MARGARET,Oh there you go again.,neutral,neutral,neutral
+475,speech,MARGARET,It's like trying to have a serious conversation with Groucho Marx.,neutral,neutral,neutral
+476,speech,ALAN,"Oh good Groucho Marx story.
+",joy,admiration,joy
+477,speech,MARGARET,"Alan don't.
+",neutral,neutral,neutral
+478,speech,ALAN,Come on indulge me.,neutral,neutral,neutral
+479,speech,ALAN,Groucho asked a woman why she had thirteen children and she said it was because she loved her husband.,disgust,neutral,neutral
+480,speech,ALAN,"Groucho said 
+",fear,neutral,neutral
+481,consigne,,affects poor Groucho Marx accent,,,
+482,speech,ALAN,"'91Well I love my cigar, but I take it out once in a while'.
+",neutral,love,neutral
+483,consigne,,laughs,,,
+484,speech,MARGARET,I have missed you.,sadness,sadness,neutral
+485,speech,ALAN,"It's perfectly understandable, I'm very missable.",sadness,sadness,sadness
+486,speech,ALAN,I've actually had women who miss me so much they often don't realise I'm there.,surprise,sadness,sadness
+487,speech,ALAN,I had a girlfriend who brought a man back one time and didn't realise I was in the house till after she'd made love to him.,surprise,neutral,neutral
+488,speech,ALAN,"I really wouldn't have minded so much, but I was in the bed at the time.",disgust,neutral,neutral
+489,speech,MARGARET,"I think you're more like Edwin then any of us.
+",neutral,neutral,neutral
+490,speech,ALAN,No I don't think so.,neutral,disapproval,neutral
+491,speech,ALAN,He's like all of us.,neutral,neutral,neutral
+492,speech,ALAN,"We've all got a bit of Edwin I think, and we're all lucky to.",neutral,joy,joy
+493,speech,MARGARET,Perhaps you're right.,neutral,approval,neutral
+494,speech,MARGARET,I was thinking that maybe he died on purpose just to get us all back together again.,neutral,neutral,sadness
+495,consigne,,smiles and laughs to himself,,,
+496,speech,ALAN,Yes.,neutral,approval,neutral
+497,speech,ALAN,I think you might be on to something there.,neutral,neutral,neutral
+498,speech,MARGARET,I could almost believe he did you know.,surprise,surprise,surprise
+499,speech,MARGARET,He was so good to all of us; he gave us all so much.,joy,admiration,joy
+500,speech,MARGARET,"Remember his graduation speech?
+",neutral,neutral,neutral
+501,consigne,,laughs,,,
+502,speech,ALAN,"Oh yes!
+",surprise,excitement,joy
+503,speech,MARGARET,Well I think I would have been one of those people who missed out if it weren't for him.,neutral,disappointment,neutral
+504,speech,MARGARET,I never knew what it was to live.,surprise,confusion,joy
+505,speech,MARGARET,I just thought '91play by the rules and work hard' was the way to get by in life.,neutral,approval,neutral
+506,speech,MARGARET,I never realised that's all it was.,surprise,realization,neutral
+507,speech,MARGARET,It was just getting by.,neutral,neutral,neutral
+508,speech,MARGARET,"I never enjoyed life one bit until Edwin adopted me.
+",joy,sadness,joy
+509,speech,ALAN,He taught us all so much.,neutral,admiration,joy
+510,speech,ALAN,He taught me to always be happy.,joy,joy,joy
+511,consigne,,Pause,,,
+512,speech,ALAN,"But I'm not like him Margaret, I can't just be happy.",sadness,disapproval,sadness
+513,speech,ALAN,"Some of us can do it, 
+",neutral,approval,neutral
+514,consigne,,takes a long swig of his drink,,,
+515,speech,ALAN,"and some of us need a little help.
+",sadness,neutral,neutral
+516,speech,MARGARET,"You don't need help Alan, at least not that sort of help.",neutral,disapproval,neutral
+517,speech,ALAN,I need this.,neutral,neutral,neutral
+518,consigne,,Drinks again,,,
+519,speech,MARGARET,"But why?
+",surprise,confusion,neutral
+520,speech,ALAN,"Is it not said that '91in the seed of grape and grain the source of happiness lies'.
+",neutral,neutral,neutral
+521,speech,MARGARET,"And which great man said that?
+",neutral,curiosity,neutral
+522,speech,ALAN,Do you know I'm not at all sure.,neutral,confusion,neutral
+523,speech,ALAN,"I think I'll claim it as my own.
+",neutral,neutral,neutral
+524,speech,MARGARET,"The only saying I know is '91in wine there is truth'.
+",neutral,neutral,neutral
+525,speech,ALAN,"Well I better stick to Scotch then, I can't abide the truth.",disgust,disapproval,disgust
+526,consigne,,Drinks,,,
+527,speech,ALAN,Then again maybe the truth is more palatable when doused in wine.,neutral,confusion,neutral
+528,consigne,,Long Pause while he drains his glass,,,
+529,speech,ALAN,But why take the risk?,fear,curiosity,neutral
+530,consigne,,Empties the rest of the bottle into his glass.,,,
+531,speech,MARGARET,Are all famous poets this maudlin?,surprise,curiosity,surprise
+532,speech,ALAN,"I don't know, you'll have to ask them.",neutral,neutral,neutral
+533,speech,ALAN,But all poets who haven't had anything published in three years probably are.,neutral,neutral,neutral
+534,speech,MARGARET,"Every poet goes through writers' block.
+",neutral,neutral,neutral
+535,speech,ALAN,You need to be a writer to get a block.,neutral,neutral,neutral
+536,speech,ALAN,I'm just a washed up hack.,neutral,neutral,neutral
+537,speech,ALAN,"I've barely even written anything since the accident.
+",neutral,disappointment,neutral
+538,speech,MARGARET,"I was so sorry to read about that, it must have been so devastating.",sadness,sadness,sadness
+539,speech,MARGARET,Charlotte was a wonderful woman.,joy,admiration,joy
+540,speech,ALAN,"Yes, I bet Edwin's up there trying to shag her this very minute.
+",neutral,neutral,neutral
+541,speech,MARGARET,Why is it you make a joke every time someone touches a nerve.,surprise,amusement,neutral
+542,speech,ALAN,Maybe is my way of telling people to mind their own business.,neutral,neutral,neutral
+543,speech,MARGARET,"I'm not going to let this go Al, you've got to talk about it at some point.",neutral,neutral,neutral
+544,speech,MARGARET,Honestly man it's midday and you're tight already.,neutral,neutral,neutral
+545,speech,ALAN,I thought I was hiding it rather well.,neutral,neutral,neutral
+546,speech,MARGARET,"You are, but I know you, you can't hide anything from me.",anger,neutral,neutral
+547,speech,MARGARET,And besides you can't hide that smell.,disgust,neutral,disgust
+548,speech,ALAN,Well if I can fool most people then that'll do for me.,neutral,neutral,anger
+549,speech,MARGARET,Talk to me.,neutral,neutral,neutral
+550,speech,MARGARET,"I want to help.
+",sadness,desire,neutral
+551,consigne,,JESSICA enters.,,,
+552,speech,JESSICA,Is that Alan Hemley!,surprise,neutral,surprise
+553,consigne,,Affects southern USA accent,,,
+554,speech,JESSICA,"Well I do declare that it is!
+",anger,neutral,joy
+555,consigne,,She runs over and kisses him on both cheeks then takes a seat.,,,
+556,speech,JESSICA,"Goodness me, an Olympiad and a famous artist.",joy,admiration,joy
+557,speech,JESSICA,What company I keep these days.,neutral,neutral,neutral
+558,speech,JESSICA,To think; the sort of people I used to associate with at University!,surprise,realization,joy
+559,speech,ALAN,Young Jessica looking as insatiable as ever.,neutral,neutral,neutral
+560,speech,JESSICA,How bloody rude!,anger,anger,anger
+561,speech,JESSICA,You're lucky I've got a forgiving nature you beastly man.,neutral,admiration,neutral
+562,speech,ALAN,"Sorry, old habits and all that.
+",sadness,remorse,sadness
+563,speech,JESSICA,Well I see you've started the party without me.,surprise,neutral,sadness
+564,consigne,,Shouting,,,
+565,speech,JESSICA,"Barkeep!
+",neutral,neutral,neutral
+566,speech,ALAN,I think he went down to the cellar.,neutral,neutral,neutral
+567,speech,JESSICA,What use is a barman if he's deserted his bar?,anger,curiosity,disgust
+568,consigne,,Shouting,,,
+569,speech,JESSICA,Barkeep!,surprise,neutral,surprise
+570,speech,MARGARET,I trust you slept well?,neutral,curiosity,neutral
+571,speech,JESSICA,"Like an angel.
+",fear,neutral,neutral
+572,speech,ALAN,Really?,surprise,curiosity,surprise
+573,speech,ALAN,"I could have sworn I heard you praying last night.
+",neutral,neutral,neutral
+574,speech,JESSICA,"Praying?
+",neutral,neutral,neutral
+575,speech,ALAN,"Well why would somebody be shouting for God if they weren't praying?
+",disgust,curiosity,neutral
+576,consigne,,to MARGARET,,,
+577,speech,JESSICA,He's only been here five minutes and already he's trying to sully my good name.,disgust,annoyance,disgust
+578,speech,ALAN,You need to have a good name for it to become sullied.,neutral,caring,neutral
+579,consigne,,BARMAN arrives with a bottle of Scotch and stands next to JESSICA.,,,
+580,speech,JESSICA,Ah good man.,joy,admiration,neutral
+581,speech,JESSICA,What are we all having then?,neutral,curiosity,neutral
+582,speech,JESSICA,How about a pitcher of G and T?,neutral,curiosity,neutral
+583,speech,BARMAN,"Very good madam.
+",neutral,admiration,neutral
+584,speech,ALAN,I'll have mine with a Whiskey chaser.,neutral,neutral,neutral
+585,speech,JESSICA,I'd forgotten what a cracking good wheeze you are.,joy,realization,joy
+586,speech,JESSICA,"It's what I love about being English, no one seems to mind if we get squiffy in the afternoon.",joy,love,joy
+587,speech,ALAN,Now I'd have to take issue with you there.,anger,neutral,neutral
+588,speech,ALAN,It's not easy being an Englishman.,fear,disapproval,neutral
+589,consigne,,"BARMAN brings over the pitcher, three glasses and a whiskey. He returns to the bar. MARGARET pours.",,,
+590,speech,JESSICA,"What on earth do you mean?
+",surprise,curiosity,neutral
+591,speech,ALAN,"Well every foreigner has a simple aspiration, something they can constantly strive for but never achieve.",neutral,neutral,neutral
+592,speech,ALAN,Thus they remain content because they are always in pursuit of their ultimate goal.,neutral,neutral,neutral
+593,consigne,,Pause,,,
+594,consigne,,laughs,,,
+595,speech,JESSICA,Well come on then.,neutral,neutral,neutral
+596,speech,JESSICA,"I know you poets are awfully fond of suspense, but to me a dramatic pause just feels like a forgotten line.
+",fear,admiration,neutral
+597,speech,ALAN,"A scathing if accurate assessment.
+",anger,neutral,neutral
+598,speech,JESSICA,"So what is this magic goal all foreigners have.
+",neutral,curiosity,neutral
+599,speech,ALAN,Simple.,neutral,neutral,neutral
+600,consigne,,Pause,,,
+601,speech,ALAN,"To be more like an Englishman.
+",disgust,neutral,neutral
+602,consigne,,Claps her hands together,,,
+603,speech,JESSICA,Ah!,surprise,neutral,surprise
+604,speech,JESSICA,Of course.,neutral,approval,neutral
+605,speech,ALAN,"Thus an Englishman, due to the curse of his nationality must constantly strive to achieve great insurmountable feats simply to remain content.
+",neutral,neutral,neutral
+606,speech,JESSICA,Perhaps this is why Englishmen see lovemaking as a chore whilst Europeans see it as a pleasure.,neutral,neutral,neutral
+607,speech,ALAN,Exactly.,neutral,approval,neutral
+608,speech,ALAN,"Rather then taking any real joy from the moment, we've instead terrified that we're doing it wrong.
+",fear,fear,neutral
+609,speech,JESSICA,"It's certainly one explanation.
+",neutral,neutral,neutral
+610,speech,MARGARET,"Yes, though I'm not sure Trevor would agree.",neutral,confusion,neutral
+611,speech,ALAN,Trevor is from St.,neutral,neutral,neutral
+612,speech,ALAN,"Andrews, he's more English then I am!",surprise,neutral,neutral
+613,speech,ALAN,Plus he carries the added burden all Scots do of hating the fact that they are in essence English.,disgust,neutral,neutral
+614,speech,ALAN,"Thus they lack contentment as they have achieved Englishness, but also suffer deep self-loathing for ascending to such a state of disloyal perfection.",neutral,disappointment,neutral
+615,consigne,,Drinks,,,
+616,speech,ALAN,This is why the only man more miserable then an Englishman is a Scot.,sadness,neutral,neutral
+617,consigne,,Enter TREVOR,,,
+618,consigne,,Alan stands and they shake hands. They both sit. BARMAN brings over an extra glass then returns to the bar. MARGARET pours TREVOR a drink.,,,
+619,speech,TREVOR,"What's this English swine saying about me?
+",surprise,curiosity,surprise
+620,speech,ALAN,Ah just the usual.,neutral,neutral,neutral
+621,speech,ALAN,"I was actually commending you on your Englishness.
+",neutral,admiration,neutral
+622,speech,TREVOR,How dare you.,anger,anger,anger
+623,speech,TREVOR,You turn up late and when you finally arrive you barrage me with insults.,anger,neutral,anger
+624,speech,JESSICA,You've obviously forgotten what this chap's like if you think that was a barrage.,neutral,neutral,disgust
+625,speech,TREVOR,What it lacked in quantity it made up for in ferocity.,neutral,neutral,neutral
+626,speech,TREVOR,"It may only have been one comment, but it was a blight the scale of Hiroshima.",disgust,neutral,neutral
+627,speech,MARGARET,"Why is it you make so many allusions to warfare?
+",surprise,curiosity,surprise
+628,speech,TREVOR,Envy I suppose.,neutral,neutral,neutral
+629,speech,TREVOR,I've often wanted to follow in the footsteps of McLeishs before me who fought and died for King and Country.,sadness,desire,neutral
+630,speech,JESSICA,Well what's stopping you?,anger,curiosity,surprise
+631,speech,TREVOR,"It's very dangerous being in the army you know.
+",fear,fear,fear
+632,speech,MARGARET,"So just good old-fashioned cowardice then?
+",anger,curiosity,neutral
+633,speech,TREVOR,"I like to think it's more of a refined cowardice that combines aspects of principle, rebelliousness and good old fashioned greed.",neutral,approval,neutral
+634,speech,JESSICA,"Greed?
+",disgust,neutral,disgust
+635,speech,TREVOR,Absolutely.,neutral,approval,neutral
+636,speech,TREVOR,"I've worked all my life to be in a position where I can accumulate as much money as humanly possible, what's the point in being rich if one is dead.",neutral,neutral,neutral
+637,speech,MARGARET,Yes fair point.,neutral,approval,neutral
+638,speech,MARGARET,"If you work every hour god sends and then can't see the fruits of your labour, then it's a touch well, fruitless.
+",sadness,neutral,disgust
+639,speech,TREVOR,Indeed.,neutral,approval,neutral
+640,speech,TREVOR,"And how on earth will one be able to ask people at parties how much their property is worth if one has heroically perished.
+",surprise,curiosity,neutral
+641,speech,JESSICA,There are no decent wars these days anyway.,neutral,disapproval,neutral
+642,speech,JESSICA,It's all about technology really isn't it?,surprise,curiosity,neutral
+643,speech,JESSICA,And I really feel for those boys out in the Middle East.,sadness,sadness,sadness
+644,speech,JESSICA,Every time they shoot a civilian they're hauled over the coals for it.,anger,neutral,disgust
+645,speech,JESSICA,I mean it's ridiculous!,disgust,annoyance,disgust
+646,speech,JESSICA,"When you go to war, you go to war with a country.",disgust,neutral,neutral
+647,speech,JESSICA,"If you kill the civilians of that country, well yes, it's a shame, but it's still the bloody enemy really isn't it?",disgust,annoyance,anger
+648,speech,JESSICA,My Gramppy didn't have two brothers and a husband killed just so some upstart lefty journo bastard could make our boys look like the badguys every time a poor pathetic wog catches a stray bullet.,disgust,neutral,disgust
+649,speech,MARGARET,"Jessica listen to yourself, can't you understand how outrageous you sound.",anger,neutral,disgust
+650,speech,MARGARET,"The war was illegal anyway.
+",anger,disapproval,neutral
+651,speech,JESSICA,"Oh don't even get me started on that.
+",disgust,neutral,disgust
+652,speech,ALAN,"No please don't get started on that.
+",neutral,disapproval,neutral
+653,speech,JESSICA,Half of bloody Europe denouncing us for deposing a bloody evil tyrant!,anger,anger,anger
+654,speech,JESSICA,There wouldn't even be a Europe if we hadn't have defended the bloody thing twice over.,anger,annoyance,neutral
+655,speech,JESSICA,"And the Germans themselves, the bloody Germans, accuse us of being heavy handed.",anger,neutral,anger
+656,speech,JESSICA,"I mean it's a bit bloody rich isn't it!
+",anger,neutral,anger
+657,consigne,,ALAN has drained both of his drinks already. He holds his glass in the air and shakes the ice in it. BARMAN comes over and refills it with whiskey then returns to the bar.,,,
+658,speech,MARGARET,Oh good Lord!,surprise,admiration,joy
+659,speech,MARGARET,"Have you any idea how'85.
+",surprise,curiosity,neutral
+660,speech,TREVOR,Ladies please.,neutral,neutral,neutral
+661,speech,TREVOR,I'm sure we can find far more interesting and less controversial things to talk about then international affairs.,neutral,approval,neutral
+662,speech,ALAN,"Thank God.
+",joy,gratitude,joy
+663,speech,JESSICA,"You're right, I'm awfully sorry.
+",sadness,remorse,sadness
+664,speech,MARGARET,"Yes, you're quite right Trevor, what shall we talk about then?
+",neutral,approval,neutral
+665,speech,TREVOR,I really don't mind.,disgust,approval,neutral
+666,speech,TREVOR,"Oh, I know; did anybody happen to read the serialisation of Lord McLaughlin's autobiography?
+",surprise,curiosity,neutral
+667,consigne,,ALAN drains his glass and shakes it in the air so this time the ice rattles more loudly. BARMAN comes over to fill it and begins to return to the bar.,,,
+668,speech,MARGARET,"No the last thing I read was Harry Potter.
+",neutral,neutral,neutral
+669,consigne,,ALAN grabs the back of BARMAN'S shirt and pulls him back. He drains his glass and BARMAN refills it. ALAN points to the ground to indicate BARMAN should stand next to him and not leave.,,,
+670,speech,ALAN,Urrrrhhhh'85..,sadness,neutral,fear
+671,consigne,,They all turn to look at ALAN as he is desperately looking for something to say,,,
+672,speech,ALAN,"Wouldanybody like a drink?
+",neutral,curiosity,neutral
+673,speech,JESSICA,"I think we're all still working on ours, bit out of practise I'm afraid.",fear,fear,neutral
+674,speech,ALAN,Very good.,joy,admiration,joy
+675,speech,ALAN,"Thank you Barkeep.
+",neutral,gratitude,neutral
+676,speech,BARMAN,My pleasure sir.,disgust,gratitude,neutral
+677,consigne,,BARMAN returns to bar.,,,
+678,speech,ALAN,"Do you realise this is the first time we've all been alone together?
+",surprise,curiosity,sadness
+679,speech,MARGARET,What do you mean?,surprise,confusion,surprise
+680,speech,MARGARET,"Of course it isn't.
+",neutral,disapproval,neutral
+681,speech,TREVOR,"No, no he's right.",disgust,approval,neutral
+682,speech,TREVOR,Think about it.,neutral,neutral,neutral
+683,speech,TREVOR,The four of us have never been together without Edwin in the room.,neutral,neutral,neutral
+684,speech,JESSICA,"Good Lord that is queer isn't it.
+",surprise,neutral,neutral
+685,speech,MARGARET,Yes you're right.,neutral,approval,neutral
+686,speech,MARGARET,"I can't believe it.
+",surprise,surprise,surprise
+687,speech,ALAN,"Well if you're having trouble adjusting we could go through to the billiard room, his coffin's on the table.",neutral,neutral,neutral
+688,speech,MARGARET,"It would seem undignified if it were anyone else, but I think it's a rather suitable place to rest him considering the amount of nonsense he got up to in his life.",disgust,approval,neutral
+689,speech,TREVOR,Remember when he joined the Dangerous Sports Club.,neutral,neutral,neutral
+690,speech,JESSICA,"Yes, but it wasn't a case of paracending or abseiling was it?",neutral,confusion,neutral
+691,speech,JESSICA,"Didn't he go down a waterfall on a tea tray?
+",surprise,neutral,surprise
+692,speech,TREVOR,"Well yes, but it was only a small one.",neutral,approval,neutral
+693,speech,ALAN,Tea tray or waterfall?,neutral,neutral,neutral
+694,speech,TREVOR,"Both I think.
+",neutral,neutral,neutral
+695,speech,MARGARET,"And he almost became the first man to cross the Channel on an inflatable kangaroo.
+",neutral,neutral,joy
+696,speech,JESSICA,Really?,surprise,curiosity,surprise
+697,speech,JESSICA,"Why only almost?
+",surprise,neutral,surprise
+698,speech,ALAN,"He was arrested as soon as he got into French waters because he didn't have a licence for the kangaroo.
+",anger,neutral,neutral
+699,speech,TREVOR,"He was rather upset as I recall.
+",neutral,sadness,neutral
+700,speech,ALAN,"Yes, he got the idea into his head that they were only arresting him because the French Dangerous Sports Society were planning a cross channel kangaroo record of their own.",neutral,neutral,neutral
+701,speech,ALAN,He rather gave up on the dangerous sports after that.,neutral,neutral,neutral
+702,speech,MARGARET,"Yes that's when he went to Switzerland wasn't it?
+",neutral,neutral,neutral
+703,speech,JESSICA,"I remember that all right, I had to wire the Swiss authorities eleven thousand Francs to get him out of jail.",neutral,neutral,neutral
+704,speech,TREVOR,"I never heard about this, what was he in for?
+",surprise,curiosity,surprise
+705,speech,JESSICA,He was drinking in a hotel bar and bought the guests champagne all night.,disgust,neutral,disgust
+706,speech,JESSICA,Then he left in the morning without paying his bill.,disgust,neutral,neutral
+707,speech,JESSICA,The hotelier wasn't going to take the matter any further.,neutral,neutral,neutral
+708,speech,JESSICA,Edwin had left a brand new Mercedes in the car park so he thought that would cover the cost no problem.,neutral,neutral,neutral
+709,speech,TREVOR,"So why did he end up in jail?
+",surprise,curiosity,surprise
+710,speech,ALAN,It wasn't his Mercedes.,neutral,neutral,neutral
+711,speech,ALAN,"He'd taken it for a test drive from a car show room in Marseilles.
+",neutral,neutral,neutral
+712,speech,MARGARET,Seems like wherever he goes he gets arrested.,neutral,neutral,neutral
+713,speech,ALAN,"It's only twice.
+",neutral,neutral,neutral
+714,speech,TREVOR,No he got arrested in Moscow as well.,sadness,neutral,neutral
+715,speech,TREVOR,He was chatting a girl up in a bar and told her he worked for MI6.,disgust,neutral,neutral
+716,speech,TREVOR,"He'd been doing it all week, unfortunately this girl was an off duty police woman and reported him.
+",surprise,neutral,neutral
+717,consigne,,BARMAN walks over.,,,
+718,speech,MARGARET,"Goodness, I bet he must have loads of new stories that we all missed out on.",neutral,disappointment,neutral
+719,speech,MARGARET,Shame he never kept a diary.,disgust,embarrassment,neutral
+720,speech,BARMAN,Will any of the party be requiring luncheon?,neutral,curiosity,neutral
+721,speech,MARGARET,I will; I'm absolutely famished.,joy,sadness,joy
+722,speech,JESSICA,"I think I'll join you.
+",joy,approval,neutral
+723,speech,ALAN,I think I quite fancy a stroll.,joy,desire,neutral
+724,speech,ALAN,"Trevor be a good chap and keep me company.
+",joy,admiration,neutral
+725,speech,TREVOR,"Yes all right, I guess we'll see you ladies later.
+",neutral,approval,neutral
+726,consigne,,They rise to leave. BARMAN returns to the bar,,,
+727,speech,MARGARET,What's this?,surprise,curiosity,surprise
+728,speech,MARGARET,"The men off to discuss politics over brandy?
+",neutral,neutral,neutral
+729,speech,ALAN,No it's far more complicated than that.,neutral,confusion,neutral
+730,speech,ALAN,"I could explain it to you, but I'm not sure your pretty little head would understand.",neutral,confusion,neutral
+731,consigne,,smiling,,,
+732,speech,MARGARET,"Get out of my sight you absolute terror.
+",fear,fear,fear
+733,consigne,,ALAN and TREVOR leave.,,,
+734,consigne,,sighs,,,
+735,speech,MARGARET,"Goodness me.
+",joy,gratitude,neutral
+736,speech,JESSICA,"Whatever's the matter?
+",neutral,curiosity,neutral
+737,speech,MARGARET,"Well, Alan of course.
+",neutral,neutral,neutral
+738,speech,JESSICA,"What's wrong with Alan?
+",anger,curiosity,surprise
+739,speech,MARGARET,"Don't tell me you didn't notice the drinking.
+",disgust,neutral,neutral
+740,speech,JESSICA,"Oh rubbish, we were all at it.
+",disgust,annoyance,disgust
+741,speech,MARGARET,Not like him.,disgust,disapproval,disgust
+742,speech,MARGARET,He was really putting it away.,disgust,neutral,neutral
+743,speech,MARGARET,And the worst thing is he wasn't even coming across as drunk.,disgust,annoyance,disgust
+744,speech,MARGARET,"He must do it all the time.
+",neutral,neutral,neutral
+745,speech,JESSICA,"Alan has always liked a drink.
+",joy,neutral,neutral
+746,speech,MARGARET,Not in this joyless way.,joy,disapproval,neutral
+747,speech,MARGARET,He looks like he's drowning his sorrows.,sadness,sadness,neutral
+748,speech,JESSICA,We are here for a funeral.,sadness,neutral,neutral
+749,speech,MARGARET,No it's something else.,neutral,neutral,neutral
+750,speech,MARGARET,"I'm gonna have to talk to him.
+",sadness,neutral,neutral
+751,speech,JESSICA,Now don't be frightful towards him; he's having fun.,fear,joy,neutral
+752,speech,JESSICA,He's on holiday if anything.,neutral,neutral,neutral
+753,speech,JESSICA,I'm quite sure you're worrying over nothing.,neutral,caring,neutral
+754,speech,MARGARET,"You're seriously saying you're not worried?
+",surprise,neutral,surprise
+755,consigne,,annoyed,,,
+756,speech,JESSICA,"Oh come on Margaret, why do you always have to be this way.",surprise,neutral,surprise
+757,speech,JESSICA,Just let the man enjoy his drink.,neutral,joy,neutral
+758,speech,JESSICA,You're always finding something to worry about.,fear,caring,neutral
+759,speech,JESSICA,You'll be on at me for something next.,neutral,neutral,neutral
+760,consigne,,Pause in which MARGARET moves uneasily in her chair and looks the other way,,,
+761,speech,JESSICA,What?,surprise,neutral,surprise
+762,speech,JESSICA,"What is it?
+",neutral,neutral,neutral
+763,speech,MARGARET,"Well I wasn't going to say anything, but, well, you're not going to do anything silly are you?
+",anger,neutral,anger
+764,speech,JESSICA,"It's been known to happen, what are you trying to say?
+",neutral,curiosity,neutral
+765,speech,MARGARET,I really don't know how to say this without causing offence.,anger,confusion,anger
+766,speech,MARGARET,"You are going to think of your husband while you're here aren't you?
+",disgust,curiosity,disgust
+767,consigne,,laughs and lights a cigarette,,,
+768,speech,JESSICA,Oh Margaret.,neutral,neutral,neutral
+769,speech,JESSICA,I'll be thinking of my husband alright.,neutral,caring,neutral
+770,speech,MARGARET,"I'm glad, I'm sorry to have mentioned it.
+",joy,remorse,joy
+771,consigne,,ignoring her,,,
+772,speech,JESSICA,I'll be thinking of a dull little man in our dull little home with our dull little perfect children.,sadness,sadness,sadness
+773,speech,JESSICA,I'll be thinking of how boring and repetitive every single dull little day is.,sadness,annoyance,neutral
+774,speech,MARGARET,"Jessica don't.
+",neutral,neutral,neutral
+775,speech,JESSICA,I came down here so I could fuck.,anger,anger,disgust
+776,speech,JESSICA,"And I'm sure you'd rather I fuck Trevor then your darling drunken Alan.
+",anger,neutral,anger
+777,speech,MARGARET,"What do you mean?
+",surprise,confusion,surprise
+778,speech,JESSICA,Oh come off it.,anger,neutral,neutral
+779,speech,JESSICA,You've always been head over heels for him the same way Trevor's been for me.,neutral,neutral,neutral
+780,speech,JESSICA,Tonight I'm going to give him something he's been thinking of for the last eight years.,neutral,neutral,neutral
+781,speech,JESSICA,"Every time he fucked his wife he'll have been thinking of me, and now he can finally enjoy the perfect erotic evening she could never give him.
+",neutral,neutral,disgust
+782,speech,MARGARET,"When did you become so hateful?
+",anger,curiosity,surprise
+783,speech,JESSICA,"Oh Chickpea, I'm not hateful.",disgust,neutral,neutral
+784,speech,JESSICA,I'm happy with my husband and my three girls.,joy,joy,joy
+785,speech,MARGARET,"So why are you doing this?
+",surprise,curiosity,surprise
+786,speech,JESSICA,Because happiness isn't the same as excitement.,joy,neutral,neutral
+787,speech,JESSICA,Fucking a married man is exciting.,joy,excitement,anger
+788,speech,MARGARET,"What if you get caught?
+",fear,curiosity,neutral
+789,speech,JESSICA,Then all the better.,neutral,approval,neutral
+790,speech,JESSICA,"Think how exciting it would be if my husband did find out.
+",surprise,excitement,joy
+791,speech,MARGARET,"And what if Trevor's wife did?
+",neutral,curiosity,neutral
+792,speech,JESSICA,"Look, I can't force a man to sleep with me; he's still got free will
+",anger,neutral,anger
+793,speech,BARMAN,"Pah!
+",disgust,neutral,joy
+794,speech,JESSICA,I'll do what I damn well like.,anger,approval,neutral
+795,speech,JESSICA,"Just because you've got your own little problems, loving Alan, but living with some god awful middle aged beatnik.",disgust,love,disgust
+796,speech,JESSICA,You don't have to be so excessively nice and proper all the time you know.,neutral,neutral,neutral
+797,speech,JESSICA,We all know how much you must be hurting for your life to have turned out the way it has.,sadness,sadness,sadness
+798,speech,JESSICA,"But no, being upset wouldn't be Margaret would it?",anger,disapproval,neutral
+799,speech,JESSICA,It wouldn't be the proper thing to do.,sadness,disapproval,sadness
+800,speech,JESSICA,So instead you bottle it all up inside and only vent it when you see people who want to enjoy themselves in a way that you don't know how to.,neutral,neutral,neutral
+801,speech,JESSICA,Why don't you sort yourself out before you go fucking with other people.,anger,annoyance,disgust
+802,consigne,,Pause,,,
+803,speech,JESSICA,We were having a perfectly jolly time before you started talking such rot.,joy,joy,neutral
+804,speech,JESSICA,I'll be buggered if I'm going to sit through lunch with you now.,neutral,neutral,neutral
+805,speech,JESSICA,"I'm going to see if I can catch the boys up.
+",neutral,neutral,neutral
+806,consigne,,She stands and walks quickly out,,,
+807,consigne,,Margaret sits in silence for a while. She pours a glass of whiskey from Alan's bottle and raises the glass to her lips. She stops just before drinking and puts the glass down on the table. She exits in the opposite direction to the others. BARMAN turns on the radio again and goes to collect the glasses.,,,
+808,consigne,,END OF ACT I SCENE II,,,
+809,consigne,,"Scene change: Three doors are introduced. One on the far left of the stage, one on the far right, and one is placed exactly half way between the two. The tables and chairs are removed. The bar is covered. The two sofas (sofa beds) are extended and placed prominently on each half of the stage. Two dressing tables and chairs are brought in and placed on either side of the stage. Other bedroom paraphernalia e.g. dress mirrors, lamps, TVs etc can be included, but are not vital to the scene.",,,
+810,consigne,,Scene: JESSICA'S hotel room (left half of stage) and ALAN'S hotel room (right half of stage) connected to each other by the central door. ALAN is asleep on his bed. JESSICA is seated at her dressing table.,,,
+811,consigne,,"Music fades out. JESSICA begins to beautify herself e.g. does her make-up, brushes her hair, pushes her boobs up, sprays perfume on her neck and up her skirt. A knock is heard on her outer door. ALAN sits bolt upright in his bed. He checks his watch, yawns and then slumps back asleep. JESSICA walks over to the door and reaches out a hand to open it. She changes her mind and instead lies on the bed in a sultry pose.",,,
+812,speech,JESSICA,"Come in.
+",neutral,neutral,neutral
+813,consigne,,Enter TREVOR visibly agitated,,,
+814,speech,TREVOR,"Hello.
+",neutral,neutral,neutral
+815,speech,JESSICA,Hello there.,neutral,neutral,neutral
+816,speech,JESSICA,"Take a seat won't you.
+",anger,neutral,neutral
+817,consigne,,TREVOR goes to sit on the bed then changes his mind and sits on the chair by the dressing table.,,,
+818,consigne,,pause,,,
+819,speech,TREVOR,It's been lovely to see everyone again.,joy,love,joy
+820,speech,TREVOR,Just like the old days.,neutral,approval,neutral
+821,speech,JESSICA,Except in the old days we knew we'd have to see each other every day.,neutral,neutral,neutral
+822,speech,JESSICA,It's almost like now there are no consequences.,neutral,neutral,neutral
+823,speech,TREVOR,Well I suppose that's true in a manner of speaking.,neutral,approval,neutral
+824,speech,JESSICA,You seem a little nervous.,fear,nervousness,neutral
+825,speech,TREVOR,"No, no.",neutral,disapproval,neutral
+826,speech,TREVOR,I'm fine.,neutral,approval,neutral
+827,speech,JESSICA,"Really?
+",surprise,curiosity,surprise
+828,speech,TREVOR,Oh yes I'm fine.,neutral,approval,neutral
+829,speech,JESSICA,"You're fidgeting.
+",disgust,neutral,disgust
+830,speech,TREVOR,"I had two cups of coffee after dinner, I usually only have one.",neutral,neutral,neutral
+831,speech,TREVOR,It must be that.,neutral,neutral,neutral
+832,consigne,,smiles,,,
+833,speech,JESSICA,It must be.,neutral,neutral,neutral
+834,speech,JESSICA,"I've ordered us some champagne, that should calm your nerv'85 your jitters.
+",neutral,joy,neutral
+835,consigne,,There's a knock on ALAN'S door which TREVOR and JESSICA remain oblivious to. ALAN sits bolt upright. JESSICA walks over to TREVOR and leads him over to the bed by his tie. They both sit on the bed. ALAN slumps asleep again. There's a knock on JESSICA'S door. ALAN sits up again. JESSICA gets up and lets in BARMAN who has a bottle of champagne and an ice bucket with a stand.,,,
+836,speech,JESSICA,"Marvellous, just set it up by the dresser.",joy,admiration,joy
+837,consigne,,"He does so and leaves. JESSICA pours two glasses and returns to sit next to TREVOR on the bed. They drink slowly. There's another, harder knock on ALAN'S door and this time he's fully shaken out of his sleep and goes to open his door.",,,
+838,consigne,,Enter Margaret at great speed.,,,
+839,speech,MARGARET,God I'm so glad you're in.,joy,joy,joy
+840,speech,MARGARET,I'm so awfully worried.,fear,nervousness,fear
+841,speech,MARGARET,I think something ghastly is going to happen.,fear,fear,fear
+842,speech,ALAN,"Please, do come in.",neutral,neutral,neutral
+843,consigne,,ALAN flops on his bed whilst MARGARET paces round the room.,,,
+844,consigne,,she's speaking very fast,,,
+845,speech,MARGARET,"I know what you're thinking, that I'm worrying over nothing, but I really think they might do it and it would be just awful.
+",disgust,fear,sadness
+846,speech,ALAN,"Would it?
+",surprise,neutral,neutral
+847,speech,MARGARET,"Oh yes, terrible.",fear,fear,sadness
+848,speech,MARGARET,Just imagine the possible ramifications.,neutral,neutral,neutral
+849,speech,ALAN,You see I hadn't thought about the ramifications.,neutral,neutral,neutral
+850,speech,ALAN,I wasn't really thinking about anything.,neutral,neutral,neutral
+851,speech,ALAN,I was asleep actually.,surprise,neutral,neutral
+852,speech,MARGARET,And if anybody found out.,neutral,neutral,neutral
+853,speech,MARGARET,"I know what you're going to say, '91who could possibly find out', but someone might.",surprise,neutral,neutral
+854,speech,ALAN,"I was having a rather nice dream.
+",joy,joy,joy
+855,speech,MARGARET,"It's not just them to think about, there are children involved.",neutral,neutral,neutral
+856,speech,ALAN,"I was bicycling through a beautiful garden, but I kept falling off my bike.",fear,disappointment,sadness
+857,speech,MARGARET,I know they'll regret it.,sadness,remorse,sadness
+858,speech,MARGARET,I know he will certainly.,neutral,approval,neutral
+859,speech,ALAN,But it was okay because every time I landed in a big pool of raspberry jelly and bounced straight back up again.,neutral,approval,neutral
+860,speech,MARGARET,"God it's awful!
+",disgust,disgust,disgust
+861,speech,ALAN,"Yes I prefer strawberry myself, but you can't choose what you dream about can you.",neutral,neutral,neutral
+862,consigne,,pause,,,
+863,speech,MARGARET,"Alan, I'm not at all convinced you're taking this seriously.",surprise,confusion,neutral
+864,speech,ALAN,It's difficult to take it seriously when I don't know what the hell you're talking about.,disgust,annoyance,disgust
+865,speech,MARGARET,"Jessica and Trevor are going to have an affair!
+",surprise,neutral,surprise
+866,speech,ALAN,"Oh really?
+",surprise,surprise,surprise
+867,speech,MARGARET,"Yes!
+",anger,neutral,joy
+868,consigne,,Pause,,,
+869,speech,ALAN,"Who with?
+",surprise,neutral,surprise
+870,consigne,,shouting,,,
+871,speech,MARGARET,"Why with each other of course!
+",surprise,neutral,anger
+872,speech,ALAN,Ohhhhhhh.,surprise,neutral,neutral
+873,consigne,,Long pause.,,,
+874,speech,ALAN,"Oh well.
+",neutral,neutral,neutral
+875,consigne,,He lays down and goes back to sleep again. MARGARET sighs and sits on the end of the bed with her head in her hands.,,,
+876,speech,TREVOR,"Did you hear something?
+",surprise,curiosity,neutral
+877,speech,JESSICA,"No I didn't hear a thing.
+",surprise,neutral,neutral
+878,speech,TREVOR,"Nobody knows we're here do they.
+",neutral,neutral,neutral
+879,speech,JESSICA,Well the barman probably figured it out.,neutral,neutral,neutral
+880,speech,JESSICA,"But judging by how much he had to drink today I reckon Alan is probably half comatose.
+",neutral,neutral,neutral
+881,speech,TREVOR,What about Margaret?,neutral,curiosity,neutral
+882,speech,TREVOR,She was asking me some peculiar questions about you earlier.,neutral,neutral,neutral
+883,speech,TREVOR,Like she almost knew we had planned to meet.,surprise,neutral,surprise
+884,speech,JESSICA,Well it's possible she had an inkling.,neutral,neutral,neutral
+885,speech,JESSICA,She did mention something to me too.,neutral,neutral,neutral
+886,consigne,,TREVOR tenses,,,
+887,speech,JESSICA,But don't worry about her.,fear,caring,neutral
+888,speech,JESSICA,What can she do?,fear,neutral,neutral
+889,speech,JESSICA,"She'll never know, and even if she did find out she's hardly going to spill the beans is she?
+",neutral,neutral,neutral
+890,speech,TREVOR,I'd just prefer it if nobody knew there were any beans.,neutral,neutral,neutral
+891,speech,TREVOR,"I shouldn't even be here, I should be on the phone to my wife.",anger,neutral,anger
+892,speech,JESSICA,Well you are here.,neutral,neutral,neutral
+893,speech,JESSICA,I didn't force you to come over.,neutral,neutral,neutral
+894,speech,TREVOR,"I know it's just I can't stop thinking about
+",anger,excitement,neutral
+895,speech,JESSICA,Don't think about anything.,disgust,neutral,neutral
+896,consigne,,She gets the bottle and refills the glasses,,,
+897,speech,JESSICA,Just enjoy the moment.,joy,joy,neutral
+898,speech,JESSICA,Enjoy the moment you've been thinking about for the last eight years.,joy,joy,joy
+899,consigne,,She moves her body into his and begins to kiss him,,,
+900,speech,MARGARET,I can't just sit here and do nothing.,anger,disapproval,neutral
+901,speech,MARGARET,They're probably next door right now about to make one of the biggest mistakes of their lives.,neutral,neutral,sadness
+902,speech,MARGARET,"Come on, you've got to help me.
+",anger,caring,fear
+903,consigne,,She shakes ALAN and drags him up by the hand.,,,
+904,speech,ALAN,"Well what the hell can I do?
+",anger,anger,fear
+905,speech,MARGARET,Well I imagine that if we go into her room then they're probably less likely to do anything.,neutral,neutral,neutral
+906,speech,ALAN,"Are you insane?
+",anger,curiosity,surprise
+907,consigne,,TREVOR pulls out of the kiss.,,,
+908,speech,TREVOR,"I'm sorry, I can't do this.",sadness,remorse,sadness
+909,consigne,,TREVOR gets up and hurries out of the door.,,,
+910,speech,JESSICA,Trevor wait.,neutral,neutral,neutral
+911,consigne,,JESSICA follows him out.,,,
+912,speech,MARGARET,"Come on, let's get in there, before it's too late.
+",neutral,neutral,neutral
+913,speech,ALAN,"Alright then, let's get it over with.",neutral,neutral,neutral
+914,consigne,,ALAN opens the door that adjoins the two rooms and lets MARGARET in first. He then closes it behind her and turns the lock. He slumps on the bed and falls asleep again. MARGARET turns around horrified and bangs on the door,,,
+915,speech,MARGARET,Alan!,surprise,neutral,joy
+916,speech,MARGARET,Alan!,surprise,neutral,joy
+917,consigne,,To herself,,,
+918,speech,MARGARET,"Bastard!
+",anger,anger,anger
+919,consigne,,She nervously moves around the room. She picks up the two champagne glasses and looks at them for a long time.,,,
+920,speech,MARGARET,"Where are they?
+",neutral,neutral,neutral
+921,consigne,,"She places the glasses on the dressing table. She moves over to the door (that leads to the corridor) and is about to open it, but pauses and presses her ear up against it. She quickly runs over to the adjoining door and tries the handle several times hurriedly.",,,
+922,speech,MARGARET,Alan!,surprise,neutral,joy
+923,speech,MARGARET,Alan!,surprise,neutral,joy
+924,speech,MARGARET,"Let me in, there's someone coming.
+",neutral,neutral,neutral
+925,consigne,,She looks around in a panic and just as JESSICA'S and TREVOR'S voices can be heard outside the hallway door she quickly gets into the bed and covers herself in the duvet.,,,
+926,consigne,,"Enter JESSICA and TREVOR, they don't notice the bulge in the bed.",,,
+927,speech,TREVOR,"I'm sorry, I just think I'm a little nervous.",fear,nervousness,fear
+928,speech,TREVOR,I've never done anything like this before.,neutral,surprise,neutral
+929,consigne,,They sit on the end of the bed,,,
+930,consigne,,"She stands and goes to refill the glasses, which she brings over to the bed. She places the champagne bottle on the floor between them. She sits and they begin to kiss. There's a knock on ALAN'S door.",,,
+931,speech,ALAN,Piss off!,anger,anger,anger
+932,consigne,,The knocking continues. ALAN gets out of bed and moves towards his hallway door,,,
+933,consigne,,He opens the door and BARMAN is there.,,,
+934,speech,ALAN,"Oh, I'm sorry.",sadness,remorse,sadness
+935,speech,ALAN,I thought you were somebody else.,surprise,neutral,neutral
+936,speech,BARMAN,I'm glad to hear it sir.,joy,joy,joy
+937,speech,BARMAN,"And I am awfully sorry to disturb you, but you said to bring you up a glass of whiskey about this time.",sadness,remorse,neutral
+938,speech,BARMAN,"You said it would help you sleep sir.
+",neutral,neutral,neutral
+939,consigne,,BARMAN hands over the drink which ALAN downs then hands straight back to him.,,,
+940,speech,ALAN,That's my last one until the wake.,neutral,neutral,neutral
+941,speech,BARMAN,"Sir?
+",neutral,neutral,neutral
+942,speech,ALAN,Can't carry a coffin if I can't walk straight.,sadness,disapproval,neutral
+943,speech,BARMAN,Very true.,neutral,approval,neutral
+944,speech,BARMAN,"Goodnight sir.
+",neutral,gratitude,neutral
+945,consigne,,"ALAN shuts the door then returns to the bed and sleeps. TREVOR begins to move his body so he's about to lay on top of JESSICA, but in doing so he kicks the bottle of champagne over.",,,
+946,speech,TREVOR,Bugger.,neutral,neutral,neutral
+947,speech,TREVOR,I'm so sorry.,sadness,remorse,sadness
+948,speech,JESSICA,Fucking hell!,anger,anger,anger
+949,speech,JESSICA,I'll go and get us another bottle.,neutral,neutral,neutral
+950,speech,JESSICA,Use a towel to clear this up.,disgust,neutral,neutral
+951,consigne,,JESSICA stands and exits. MARGARET suddenly appears from beneath the covers.,,,
+952,speech,MARGARET,"What the hell do you think you're playing at?
+",anger,anger,surprise
+953,consigne,,TREVOR jumps up from the bed letting out a cry of surprise with one hand clutching his heart.,,,
+954,speech,TREVOR,"What the hell do you think you're doing here?
+",anger,anger,surprise
+955,speech,MARGARET,Oh aren't we all going to shag Jessica tonight?,disgust,curiosity,disgust
+956,speech,MARGARET,Alan and the Barman should be here in a second and I wouldn't be surprised if Bill Clinton pops by for a smoke.,surprise,neutral,neutral
+957,speech,TREVOR,"You've got no right to be here.
+",anger,disapproval,anger
+958,speech,MARGARET,I've got no right!,anger,disapproval,anger
+959,speech,MARGARET,"Trevor, you're going to ruin your marriage for one night of sex.",disgust,annoyance,sadness
+960,speech,MARGARET,"You should be in your own bed missing your wife, not in Jessica's betraying her.",anger,neutral,anger
+961,speech,TREVOR,"You don't understand, you don't know how long I've'85
+",surprise,neutral,surprise
+962,speech,MARGARET,Yes I do.,neutral,approval,neutral
+963,speech,MARGARET,We all do Trevor.,neutral,neutral,neutral
+964,speech,MARGARET,"It's never been a secret, not to any of us, and certainly not to Jessica.",neutral,neutral,neutral
+965,speech,TREVOR,So you all knew?,surprise,neutral,surprise
+966,speech,TREVOR,"All these years you all knew?
+",surprise,neutral,surprise
+967,speech,MARGARET,"Well I dare say we didn't know you still felt this way, you are married after all.",neutral,neutral,neutral
+968,speech,TREVOR,I've tried not to think about her.,disgust,neutral,neutral
+969,speech,TREVOR,"I didn't think It'd be a problem, but when I saw her yesterday ' oh God.",surprise,surprise,surprise
+970,speech,MARGARET,"Trevor you can't do this.
+",anger,disapproval,anger
+971,speech,TREVOR,I have to do this.,sadness,neutral,neutral
+972,speech,TREVOR,I need to do this.,neutral,desire,neutral
+973,speech,TREVOR,I've wanted to for so long.,sadness,desire,sadness
+974,speech,TREVOR,I've dreamed about it so many times.,surprise,neutral,joy
+975,speech,MARGARET,"You're risking everything.
+",anger,neutral,neutral
+976,speech,TREVOR,I'm not even sure I am.,surprise,confusion,neutral
+977,speech,TREVOR,The risk might be if I didn't do it.,fear,neutral,neutral
+978,speech,TREVOR,I need to have one night with this woman or for the rest of my life I'll be remembering and regretting that I had a chance and threw it away.,sadness,remorse,sadness
+979,consigne,,pause,,,
+980,speech,MARGARET,"Trevor, you have a wife.",joy,neutral,neutral
+981,speech,MARGARET,You have a wife who loves you and wants you.,joy,love,neutral
+982,speech,MARGARET,She wants you just the way you are.,neutral,neutral,neutral
+983,speech,MARGARET,She's given her heart and her soul to you.,neutral,neutral,joy
+984,speech,MARGARET,All she's asking in return is for you to love her.,neutral,neutral,neutral
+985,speech,MARGARET,Look at you.,disgust,neutral,neutral
+986,speech,MARGARET,You're not the podgy awkward boy I knew.,neutral,disapproval,neutral
+987,speech,MARGARET,You're a man who's made a name for himself.,disgust,admiration,disgust
+988,speech,MARGARET,"You're a man who's earned himself a good life, a happy life.",neutral,admiration,neutral
+989,speech,MARGARET,You've achieved it all yourself.,neutral,admiration,neutral
+990,speech,MARGARET,"Jessica is beautiful, but she's not so out of your reach anymore.",sadness,admiration,neutral
+991,speech,MARGARET,"You're rich, kind, clever and handsome.",neutral,admiration,neutral
+992,speech,MARGARET,You could have any of the Jessica's out there.,neutral,neutral,neutral
+993,speech,MARGARET,"Christ, you've already got one and she's waiting for you at home.",neutral,neutral,neutral
+994,speech,MARGARET,She'll give you children and years of immeasurable happiness.,joy,joy,joy
+995,speech,MARGARET,Do you really want to jeopardise all that because of a teenage fantasy?,anger,curiosity,anger
+996,speech,MARGARET,"And besides, you wouldn't even get away with it.
+",anger,neutral,neutral
+997,speech,TREVOR,"What do you mean?
+",surprise,confusion,surprise
+998,speech,MARGARET,"More then anything else Trevor, you're a good man.",joy,admiration,neutral
+999,speech,MARGARET,You wouldn't be able to live with the guilt.,neutral,remorse,neutral
+1000,speech,MARGARET,You'd have to tell her.,neutral,neutral,neutral
+1001,speech,MARGARET,"You'd tell her knowing it would destroy everything, but you'd still have to do it because it's the right thing to do.",anger,approval,neutral
+1002,speech,MARGARET,"You'll probably even end up telling her about this.
+",neutral,neutral,neutral
+1003,speech,TREVOR,"We five really know each other far too well don't we?
+",neutral,curiosity,neutral
+1004,speech,MARGARET,Frightful isn't it.,disgust,neutral,neutral
+1005,speech,MARGARET,"You won't do it then?
+",anger,neutral,anger
+1006,speech,TREVOR,No.,neutral,neutral,neutral
+1007,speech,TREVOR,You're right.,neutral,approval,neutral
+1008,speech,TREVOR,I don't need this.,disgust,disapproval,disgust
+1009,speech,TREVOR,And it will destroy me.,anger,anger,sadness
+1010,speech,MARGARET,"Promise me something.
+",neutral,neutral,neutral
+1011,speech,TREVOR,"Margaret I meant it, I'm not going to do it.",disgust,disapproval,sadness
+1012,speech,MARGARET,Not that.,neutral,neutral,neutral
+1013,speech,MARGARET,Promise me you won't tell your wife about this.,neutral,neutral,neutral
+1014,speech,MARGARET,You've been tested and you've passed.,neutral,approval,neutral
+1015,speech,MARGARET,Don't destroy that.,anger,anger,neutral
+1016,speech,TREVOR,I've cheated her.,disgust,sadness,sadness
+1017,speech,MARGARET,"Make it up to her by spending the rest of your life making her happy.
+",neutral,neutral,anger
+1018,consigne,,Pause,,,
+1019,speech,TREVOR,Okay.,neutral,approval,neutral
+1020,speech,MARGARET,I'd better get out of here before Jessica comes back.,neutral,neutral,neutral
+1021,speech,TREVOR,I'll wait and explain things to her.,neutral,neutral,neutral
+1022,speech,MARGARET,"Trevor?
+",surprise,neutral,neutral
+1023,speech,TREVOR,"Okay, you're right.",neutral,approval,neutral
+1024,speech,TREVOR,I'll leave her a note though.,neutral,neutral,neutral
+1025,speech,TREVOR,She deserves that at least.,neutral,approval,neutral
+1026,consigne,,MARGARET opens the hallway door a fraction and peeks out. She sees the coast is clear and leaves. Trevor sits at the dressing table and begins to write a message. He goes to sit on the bed and reads the note over and over. There is a knock on ALAN'S outer door. TREVOR looks towards ALAN'S room then leaves the note on the bed and quickly exits through JESSICA'S outer (hallway) door. MARGARET enters through ALAN'S outer (hallway) door and walks over to the adjoining door which she unlocks and opens. She looks around JESSICA'S room then closes the door again. She sits on ALAN'S bed.,,,
+1027,speech,MARGARET,I think it's going to be okay.,joy,approval,neutral
+1028,speech,MARGARET,"I didn't speak to Jessica, but I talked Trevor out of it.",neutral,neutral,neutral
+1029,speech,MARGARET,He'll thank me one day.,neutral,gratitude,joy
+1030,speech,MARGARET,He came so close to destroying everything.,disgust,sadness,disgust
+1031,speech,MARGARET,"I know it's hardly the sort of thing to say about a friend, but I don't think that would have been Jessica's first affair.",neutral,disapproval,neutral
+1032,speech,MARGARET,I think poor Trevor was quite defenceless against her really.,disgust,sadness,sadness
+1033,consigne,,Long pause.,,,
+1034,speech,MARGARET,Alan?,surprise,neutral,neutral
+1035,consigne,,Pause,,,
+1036,speech,MARGARET,Alan I know you're not asleep.,surprise,neutral,neutral
+1037,speech,ALAN,"Yes I am, leave me alone.",fear,neutral,neutral
+1038,speech,MARGARET,"Do you mind if I just lie here for a while?
+",disgust,curiosity,neutral
+1039,speech,ALAN,"You can swing from the ceiling for all I care, as long as you do it quietly.",neutral,caring,neutral
+1040,consigne,,JESSICA and BARMAN enter JESSICA'S room. BARMAN is carrying a bottle of champagne.,,,
+1041,speech,JESSICA,"It's awfully embarrassing, we spilled it all over the'85 
+",disgust,embarrassment,sadness
+1042,consigne,,pauses and looks round the room,,,
+1043,speech,JESSICA,Oh!,surprise,neutral,surprise
+1044,consigne,,She spots the note and goes over to read it. She is clearly fazed by what it says and screws it up in her fist.,,,
+1045,speech,BARMAN,"Not a problem I hope madam?
+",neutral,optimism,neutral
+1046,speech,JESSICA,"Um, yes, no.",neutral,disapproval,neutral
+1047,speech,JESSICA,"No, not at all.",neutral,disapproval,neutral
+1048,consigne,,Regains her composure,,,
+1049,speech,JESSICA,I asked Mr McLeish if he wouldn't mind letting me get some rest.,neutral,neutral,neutral
+1050,speech,BARMAN,"Shall I leave the champagne then?
+",neutral,neutral,neutral
+1051,speech,JESSICA,Of course.,neutral,approval,neutral
+1052,speech,JESSICA,I just wanted a glass before bed.,neutral,desire,neutral
+1053,speech,JESSICA,I find it hard to sleep in hotels.,sadness,disappointment,neutral
+1054,speech,JESSICA,"Edwin's picking up the bill after all isn't he?
+",neutral,neutral,neutral
+1055,speech,BARMAN,The estate is covering all costs Madam.,neutral,neutral,neutral
+1056,speech,JESSICA,Well just clear away these things then and leave me a glass.,neutral,neutral,neutral
+1057,speech,BARMAN,Very good madam.,neutral,admiration,neutral
+1058,consigne,,BARMAN begins to clear away the clutter. JESSICA lights a cigarette and sits on the bed with her legs crossed.,,,
+1059,speech,MARGARET,Alan.,neutral,neutral,neutral
+1060,consigne,,She shakes him,,,
+1061,speech,MARGARET,Alan wake up.,neutral,neutral,neutral
+1062,speech,MARGARET,Wake up won't you.,fear,neutral,neutral
+1063,speech,ALAN,"Of course I will, I've become something of an expert at it.",neutral,approval,neutral
+1064,speech,MARGARET,I heard a voice from next door.,fear,neutral,neutral
+1065,speech,ALAN,"If it's keeping you awake then go to your own bloody room.
+",anger,annoyance,anger
+1066,speech,MARGARET,"It was a man's voice!
+",surprise,neutral,joy
+1067,speech,ALAN,Well go and sleep at a bloody convent then.,anger,neutral,anger
+1068,speech,MARGARET,"It must be Trevor, she must have talked him round.",neutral,neutral,neutral
+1069,consigne,,"MARGARET goes over to the adjoining door, kneels down and puts her ear up against it. BARMAN collects all the accoutrements leaving only the glass of champagne which he has poured.",,,
+1070,speech,BARMAN,"Will there be anything else madam?
+",neutral,curiosity,neutral
+1071,speech,JESSICA,No thank you.,neutral,gratitude,neutral
+1072,consigne,,BARMAN goes over to the door,,,
+1073,speech,JESSICA,Oh there was one thing.,neutral,neutral,neutral
+1074,speech,JESSICA,Mr McLeish requested a 6 A.M.,neutral,neutral,neutral
+1075,speech,JESSICA,"wake up call.
+",neutral,neutral,neutral
+1076,speech,BARMAN,I shall see to it Madam.,neutral,neutral,neutral
+1077,speech,JESSICA,"Thank you so much.
+",joy,gratitude,joy
+1078,consigne,,BARMAN exits,,,
+1079,speech,MARGARET,I'm sure I heard it again.,neutral,approval,neutral
+1080,speech,MARGARET,Clear as day.,neutral,neutral,neutral
+1081,consigne,,Shrilly,,,
+1082,speech,MARGARET,they're both still in there.,neutral,neutral,neutral
+1083,consigne,,JESSICA hears MARGARET and walks over to the adjoining door.,,,
+1084,speech,MARGARET,Alan I need your help on this.,sadness,desire,neutral
+1085,speech,MARGARET,"We need to go in there and'85
+",neutral,neutral,neutral
+1086,consigne,,JESSICA opens the adjoining door and MARGARET comes tumbling through.,,,
+1087,speech,JESSICA,I might have bloody known.,anger,neutral,neutral
+1088,consigne,,MARGARET gets up,,,
+1089,speech,MARGARET,"I'm sorry Jessica, but I had to do something.",sadness,remorse,sadness
+1090,speech,JESSICA,You meddling little bitch.,anger,anger,anger
+1091,speech,JESSICA,How dare you!,anger,anger,anger
+1092,speech,MARGARET,"I didn't want to have to interfere, but you could have broken up two marriages tonight.",neutral,disapproval,anger
+1093,speech,JESSICA,If he's that easily tempted then he's going to do it with someone sooner or later.,neutral,neutral,neutral
+1094,speech,MARGARET,"You know it's not like that, you how he's always fawned after you.",neutral,neutral,disgust
+1095,speech,MARGARET,You were deliberately out to destroy him for a cheap thrill.,anger,neutral,anger
+1096,speech,JESSICA,"How dare you!
+",anger,anger,anger
+1097,speech,MARGARET,I'm just saying it how I see it.,neutral,neutral,neutral
+1098,speech,JESSICA,Oh really!,surprise,surprise,surprise
+1099,speech,JESSICA,Well perhaps I'll do the same.,neutral,neutral,neutral
+1100,consigne,,JESSICA walks through to ALAN'S room and stands at the foot of the bed. MARGARET follows.,,,
+1101,speech,JESSICA,"Alan, I didn't want to be the one to have to say this, but seeing as we're in a new spirit of openness and honestly there's something you need to know.",neutral,neutral,neutral
+1102,speech,MARGARET,"What are you doing?
+",surprise,curiosity,neutral
+1103,speech,JESSICA,Telling the truth.,anger,neutral,neutral
+1104,speech,JESSICA,You wouldn't want me to besmirch my soul with a lie would you!,anger,neutral,anger
+1105,speech,JESSICA,"Alan, there's something Margaret has been keeping from you.
+",neutral,neutral,neutral
+1106,speech,MARGARET,"Stop it!
+",anger,anger,anger
+1107,speech,JESSICA,"The truth is old man, she's not awfully keen on the old bugger she's shagging.
+",disgust,neutral,disgust
+1108,consigne,,shouting,,,
+1109,speech,MARGARET,"Jessica don't!
+",anger,neutral,anger
+1110,speech,JESSICA,The truth is she loves you.,neutral,love,neutral
+1111,speech,JESSICA,She always has and she probably always will.,neutral,neutral,neutral
+1112,speech,JESSICA,"But she's can't even begin to deal with the fact that her life is an entangled web of lies, denial and boredom.",neutral,neutral,neutral
+1113,speech,JESSICA,So for some reason she decides to act like Mary fucking Poppins all the time so she doesn't have to stop and think about it.,neutral,neutral,neutral
+1114,consigne,,crying,,,
+1115,speech,MARGARET,How could you?,surprise,curiosity,surprise
+1116,speech,MARGARET,"How could you!
+",surprise,neutral,surprise
+1117,consigne,,"ALAN slowly stands up and places himself between the two women. He looks from one to the other, yawns, and rubs his eyes. He walks through the adjoining door locking it as he does, leaving the two women in his room. He drains the glass of champagne and exits through JESSICA'S outer (hallway) door.",,,
+1118,speech,MARGARET,"You've destroyed me, just like you were going to destroy Trevor.",anger,anger,anger
+1119,speech,JESSICA,Oh don't be so melodramatic.,sadness,caring,sadness
+1120,speech,JESSICA,If I really wanted to destroy you I'd find a much more interesting way of doing it.,neutral,approval,neutral
+1121,consigne,,JESSICA exits through ALAN'S outer (hallway) door. MARGARET goes over to the adjoining door and knocks on it.,,,
+1122,speech,MARGARET,"It's okay, you can come back through now.",neutral,approval,neutral
+1123,speech,MARGARET,She's gone.,sadness,sadness,neutral
+1124,consigne,,Pause,,,
+1125,speech,MARGARET,Alan.,neutral,neutral,neutral
+1126,speech,MARGARET,Alan are you there?,surprise,curiosity,neutral
+1127,consigne,,Pause,,,
+1128,speech,MARGARET,It's true what she said.,neutral,approval,neutral
+1129,speech,MARGARET,I'm sure you've always known.,neutral,approval,neutral
+1130,speech,MARGARET,"I feel foolish even saying it, especially through a door.",sadness,annoyance,sadness
+1131,speech,MARGARET,"I don't even know why I'm saying it'85
+",surprise,confusion,neutral
+1132,consigne,,JESSICA enters her bedroom. MARGARET stops talking and backs away from the adjoining door. She exits. JESSICA begins to undress until she's only in her underwear. She's goes over to where her glass is and without looking at it raises it to her lips. She realises it's empty and turns it upside down before placing it back on the dressing table. She lies on top of her bed and begins to read. ALAN enters his room with a glass of whiskey in his hand. He undresses until he's in his underwear and then lies on his bed. He falls asleep and the glass falls out of his hand and lands/breaks on the floor. JESSICA closes her book and goes over to the adjoining door. She unlocks it and enters. She moves over to the bed and straddles ALAN. She begins to kiss him. The curtain falls.,,,
+1133,consigne,,END OF ACT I SCENE III,,,
+1134,consigne,,END OF ACT I,,,
+1135,consigne,,INTERVAL,,,
+1136,consigne,,Scene change: The stage is set out as it was in Act I Scene I,,,
+1137,consigne,,"Scene: The hotel lobby. Edwin's wake is taking place offstage in an adjoining room. Laughter, conversation and music can be heard. PRIEST and BARMAN are in conversation in the middle of the room. PRIEST is dressed as a priest and holding a glass of red wine. BARMAN is balancing a tray filled with glasses of red wine on one hand. ",,,
+1138,consigne,,The noise fades.,,,
+1139,speech,PRIEST,Well it was certainly the least conventional service I've ever presided over.,neutral,neutral,neutral
+1140,speech,PRIEST,But I mean it's it's not unheard of.,neutral,neutral,neutral
+1141,speech,PRIEST,Very often people organise their own funerals.,neutral,neutral,neutral
+1142,speech,PRIEST,"My uncle David, who was also a a a clergyman, organised his own funeral.",disgust,neutral,neutral
+1143,speech,PRIEST,"He picked out his favourite hymns, like Mr Cleethorpes he wrote a speech he wished to be read out.",neutral,neutral,neutral
+1144,speech,PRIEST,I suppose I suppose he's just taking it one step further.,neutral,neutral,neutral
+1145,speech,PRIEST,Maybe this is how the younger generation will wish their services to be conducted in the future.,neutral,neutral,neutral
+1146,speech,PRIEST,I mean what do you think?,surprise,curiosity,neutral
+1147,speech,PRIEST,"Is this'85 perfectly legitimate, but but but'85 unorthodox approach something you think will catch on?
+",neutral,neutral,surprise
+1148,speech,BARMAN,"Honestly Father, I don't think it will.",surprise,disapproval,neutral
+1149,speech,BARMAN,Mr Cleethorpes was not quite like your average man.,neutral,neutral,neutral
+1150,speech,PRIEST,Oh!,surprise,neutral,surprise
+1151,speech,PRIEST,Bit of a maverick was he!,surprise,neutral,surprise
+1152,speech,BARMAN,That would certainly be an accurate description Father.,neutral,approval,neutral
+1153,speech,PRIEST,Well I suppose you'd have to be with a service like that.,neutral,neutral,neutral
+1154,speech,PRIEST,Ha!,joy,neutral,joy
+1155,speech,PRIEST,"I mean I know I'm old No no no, it's all right I know I am!",anger,approval,joy
+1156,speech,PRIEST,"I know I'm old, but I'm perfectly happy to play songs from popular music if that is the wish of the deceased.",joy,joy,neutral
+1157,speech,PRIEST,I had a I had a chap who wanted '91What A Wonderful World' by by by um that large black fellow.,neutral,neutral,neutral
+1158,speech,PRIEST,"What's his name?
+",neutral,curiosity,neutral
+1159,speech,BARMAN,"Louis Armstrong?
+",surprise,neutral,neutral
+1160,speech,PRIEST,No no no it was a singer not not not a spaceman.,neutral,disapproval,neutral
+1161,speech,PRIEST,Huge American chap.,joy,admiration,neutral
+1162,speech,PRIEST,Very popular.,joy,approval,neutral
+1163,speech,PRIEST,I'm amazed you haven't heard of him.,surprise,surprise,surprise
+1164,speech,PRIEST,"Anyway, they wanted that played as one of the hymns.",neutral,neutral,neutral
+1165,speech,PRIEST,Well you know.,neutral,neutral,neutral
+1166,speech,PRIEST,"I'm no stickler for the rules, that's what he wanted, so that's what we played.",neutral,neutral,neutral
+1167,speech,PRIEST,And and it was lovely.,joy,admiration,joy
+1168,speech,PRIEST,Really was.,surprise,neutral,neutral
+1169,speech,PRIEST,Almost brought a tear to one's eye.,sadness,sadness,sadness
+1170,speech,BARMAN,Sounds very moving Father.,joy,neutral,neutral
+1171,speech,PRIEST,Oh it really was.,surprise,neutral,neutral
+1172,speech,PRIEST,I'm not sure the one today really had quite the same effect.,neutral,confusion,neutral
+1173,speech,PRIEST,Although I have to say there were a good deal of people crying.,sadness,sadness,neutral
+1174,speech,PRIEST,I mean I mean I mean I have the greatest respect for Sir Paul McCartney.,disgust,admiration,neutral
+1175,speech,PRIEST,Poignant imagery in in in '91Let It Be'.,anger,neutral,neutral
+1176,speech,PRIEST,"'91When I find myself in times of trouble, Mother Mary comes to me'.",fear,neutral,fear
+1177,speech,PRIEST,Just beautiful.,joy,admiration,joy
+1178,speech,PRIEST,Really captures the essence of how the virgin can offer comfort and solace.,neutral,approval,neutral
+1179,speech,PRIEST,"So I've I've I've got nothing against him personally, he's a fine chap.",neutral,admiration,neutral
+1180,speech,PRIEST,I just don't think '91Simply Having A Wonderful Christmastime' is really suitable for a funeral.,surprise,disapproval,neutral
+1181,speech,PRIEST,"Don't get me wrong, it would have been jolly funny if it happened to another priest.",joy,amusement,joy
+1182,speech,PRIEST,But it's not easy to concentrate with that going on.,neutral,disapproval,neutral
+1183,speech,PRIEST,And especially not with all those those those women at the back.,neutral,neutral,neutral
+1184,speech,PRIEST,Twelve widows!,surprise,neutral,surprise
+1185,speech,PRIEST,Goodness me!,joy,admiration,joy
+1186,speech,PRIEST,"I'm not going to judge him, that's that's that's the Lord's job.",neutral,neutral,neutral
+1187,speech,PRIEST,"But I really don't see how a man can have twelve widows!
+",surprise,disapproval,surprise
+1188,speech,BARMAN,Actually Father as I understand it Mr Cleethorpes never took a wife.,neutral,neutral,neutral
+1189,speech,PRIEST,"Well who who who were all those women dressed in black then?
+",surprise,curiosity,surprise
+1190,speech,BARMAN,"Mr Cleethorpes never took a wife himself, but that's not to say he didn't enjoy the company of married women.",disgust,neutral,neutral
+1191,speech,PRIEST,Oh is that right?,surprise,confusion,surprise
+1192,speech,PRIEST,Well yes they do tend to have more to say then single girls.,neutral,approval,neutral
+1193,speech,PRIEST,Find single girls are always too preoccupied trying to be desirable.,neutral,neutral,neutral
+1194,speech,PRIEST,I should like to have met this chap; he must have been quite a conversationalist if twelve married women turned up in black for his funeral.,neutral,desire,neutral
+1195,speech,PRIEST,Shame none of their husbands could make it down though.,disgust,embarrassment,neutral
+1196,speech,PRIEST,Wonder what kept them.,surprise,surprise,neutral
+1197,speech,PRIEST,"Not that we'd have had room for them I I I suppose.
+",neutral,neutral,neutral
+1198,speech,BARMAN,Indeed not Father.,sadness,disapproval,neutral
+1199,speech,PRIEST,As for those '91uniforms' the pallbearers wore!,neutral,neutral,neutral
+1200,speech,PRIEST,Goodness me!,joy,admiration,joy
+1201,speech,PRIEST,"You could have knocked me down with with with a feather!
+",anger,neutral,anger
+1202,speech,BARMAN,Not what one would classify as traditional I suppose Father.,neutral,disapproval,neutral
+1203,consigne,,laughs,,,
+1204,speech,PRIEST,Well no!,anger,disapproval,surprise
+1205,speech,PRIEST,Quite!,surprise,approval,surprise
+1206,speech,PRIEST,They didn't look too thrilled about it either.,joy,neutral,neutral
+1207,speech,PRIEST,"Especially that pretty one, what's her name?",surprise,curiosity,neutral
+1208,speech,PRIEST,Jamima?,surprise,neutral,neutral
+1209,speech,PRIEST,"Julia?
+",surprise,neutral,neutral
+1210,speech,BARMAN,"Jessica Father.
+",neutral,neutral,neutral
+1211,speech,PRIEST,"Yes, she didn't look solemn, or upset.",neutral,approval,neutral
+1212,speech,PRIEST,"She she looked well, annoyed if anything.",anger,annoyance,neutral
+1213,speech,PRIEST,Like she'd rather have been anywhere else.,neutral,neutral,neutral
+1214,speech,BARMAN,"I understand she is rather proud of her appearance.
+",neutral,neutral,neutral
+1215,speech,PRIEST,Ha!,joy,neutral,joy
+1216,speech,PRIEST,Not not not too thrilled about being dressed up then!,surprise,neutral,joy
+1217,speech,PRIEST,I have to say I thought they looked jolly marvellous.,joy,admiration,joy
+1218,speech,PRIEST,Really brightened things up.,joy,joy,joy
+1219,speech,PRIEST,Get a bit sick of black in my job you know.,disgust,annoyance,anger
+1220,speech,PRIEST,Maybe I should suggest it to the Bishop!,anger,neutral,anger
+1221,speech,PRIEST,"Ha!
+",joy,neutral,joy
+1222,speech,BARMAN,"Is the Pope busy then Father?
+",neutral,neutral,neutral
+1223,consigne,,roars with laughter,,,
+1224,speech,PRIEST,Yes yes!,anger,excitement,joy
+1225,speech,PRIEST,Good one!,joy,admiration,joy
+1226,speech,PRIEST,The Pope!,surprise,neutral,surprise
+1227,speech,PRIEST,Ha Ha!,joy,excitement,joy
+1228,speech,PRIEST,Marvellous good wheeze!,joy,admiration,joy
+1229,speech,PRIEST,Oh look here comes one of the chaps I was talking about.,joy,excitement,joy
+1230,consigne,,Alan enters at great speed. He is wearing a bright green and orange suit and a purple curly wig.,,,
+1231,consigne,,aggressively,,,
+1232,speech,ALAN,Where the hell have you been!,anger,anger,anger
+1233,speech,ALAN,I told you to find me the second the wake started!,anger,neutral,anger
+1234,consigne,,"He grabs and drinks three glasses of wine from BARMAN'S tray and slams them back down, he takes a forth glass.",,,
+1235,speech,ALAN,"I've had to navigate my way through a gaggle of fucking widows to get to you!
+",anger,annoyance,anger
+1236,consigne,,He drains the forth glass and takes a fifth. Acknowledges the priest.,,,
+1237,speech,ALAN,"Pardon my language Father.
+",neutral,neutral,neutral
+1238,speech,PRIEST,"Are you Catholic my child?
+",neutral,curiosity,neutral
+1239,speech,ALAN,No.,neutral,neutral,neutral
+1240,speech,ALAN,"C of E if I'm anything.
+",neutral,neutral,neutral
+1241,speech,PRIEST,"You can say what you want then, it's not in my remit.
+",neutral,neutral,neutral
+1242,speech,ALAN,"Suppose the worse I behave the better it makes your lot look.
+",disgust,neutral,neutral
+1243,speech,PRIEST,Ha!,joy,neutral,joy
+1244,speech,PRIEST,"Yes I suppose it does!
+",anger,approval,joy
+1245,consigne,,ALAN drains his glass and takes the last one from BARMAN'S tray. BARMAN exits.,,,
+1246,speech,ALAN,Happy to help!,joy,joy,joy
+1247,speech,PRIEST,"Bless you my child.
+",anger,caring,neutral
+1248,speech,ALAN,"The service was beautiful Father.
+",joy,admiration,joy
+1249,speech,PRIEST,Ha!,joy,neutral,joy
+1250,speech,PRIEST,I would wouldn't say it was beautiful.,joy,disapproval,joy
+1251,speech,PRIEST,Bloody good fun maybe!,joy,joy,joy
+1252,speech,PRIEST,"And hard to to keep a straight face, but not beautiful, good Lord no!
+",sadness,disappointment,disgust
+1253,speech,ALAN,"I've been to Catholic services before, must say I don't know how you get through them without a drink.
+",neutral,confusion,neutral
+1254,speech,PRIEST,We don't!,anger,neutral,anger
+1255,speech,PRIEST,That's the whole point of Eucharist!,disgust,approval,joy
+1256,speech,ALAN,"Yes but a sip of wine is hardly enough.
+",disgust,neutral,neutral
+1257,consigne,,puts his hand to the side of his mouth,,,
+1258,speech,PRIEST,Well between you and me I often slip in a bit of voddy.,neutral,neutral,neutral
+1259,speech,PRIEST,"Makes it more bearable for me and the flock.
+",neutral,approval,neutral
+1260,speech,ALAN,"Sounds more Russian Orthodox than Catholic.
+",neutral,neutral,neutral
+1261,consigne,,roars with laughter,,,
+1262,speech,PRIEST,Yes!,anger,excitement,joy
+1263,speech,PRIEST,Bloody good one!,anger,admiration,anger
+1264,speech,PRIEST,Russian Unorthodox if anything.,disgust,neutral,neutral
+1265,speech,PRIEST,Ha Ha!,joy,excitement,joy
+1266,speech,PRIEST,"Got quite a wit on you there my boy.
+",neutral,neutral,neutral
+1267,speech,ALAN,Thank you Father.,joy,gratitude,neutral
+1268,speech,ALAN,"I don't suppose the Pontiff needs a gag writer does he?
+",neutral,confusion,neutral
+1269,speech,PRIEST,"Maybe, know any suitable gags?
+",neutral,curiosity,neutral
+1270,speech,ALAN,"Why did the Church appoint a German Pope?
+",surprise,curiosity,surprise
+1271,speech,PRIEST,He got his towel over the balcony first!,anger,neutral,anger
+1272,speech,PRIEST,Ha!,joy,neutral,joy
+1273,speech,PRIEST,Oldest one in the book.,neutral,neutral,neutral
+1274,speech,PRIEST,You'll have to do better than that.,neutral,optimism,neutral
+1275,speech,PRIEST,Don't know any Latin puns do you?,neutral,confusion,neutral
+1276,speech,PRIEST,As the late bishop used to say they go down better then a drunk nun.,disgust,neutral,neutral
+1277,speech,ALAN,"My mind's gone blank, must be Divine Intervention.",neutral,neutral,neutral
+1278,speech,ALAN,Though I did write a poem once with a Latin title.,neutral,neutral,neutral
+1279,speech,PRIEST,"Oh yes what was was it called?
+",surprise,curiosity,neutral
+1280,speech,ALAN,"Carpe Mammary.
+",neutral,neutral,neutral
+1281,consigne,,roars with laughter,,,
+1282,speech,PRIEST,"Very good, very good.",joy,admiration,joy
+1283,speech,PRIEST,Cracking good wheeze.,neutral,neutral,neutral
+1284,speech,PRIEST,Ha Ha!,joy,excitement,joy
+1285,speech,PRIEST,I should like to read that very much.,joy,desire,joy
+1286,speech,PRIEST,Not illustrated is it?,surprise,confusion,surprise
+1287,speech,PRIEST,"Been lovely chatting with you I must say, but best scoot off and offer a sympathetic ear to the to the mourners.",sadness,admiration,neutral
+1288,speech,PRIEST,Bloody depressing stuff mind!,sadness,sadness,sadness
+1289,speech,PRIEST,I'll be back later so you can cheer me up again!,joy,joy,joy
+1290,speech,PRIEST,Ha!,joy,neutral,joy
+1291,speech,PRIEST,Carpe Mammary!,surprise,neutral,surprise
+1292,speech,PRIEST,"Goodness me.
+",joy,gratitude,neutral
+1293,consigne,,PRIEST exits. ALAN slumps in a large chair. ALAN drains his glass and holds it over his mouth trying to shake out the last drops. TREVOR enters dressed in a similar manner to ALAN. TREVOR carries two glasses of whiskey.,,,
+1294,speech,TREVOR,Oh here you are!,surprise,neutral,surprise
+1295,consigne,,holds out drink to ALAN,,,
+1296,speech,TREVOR,"May I join you?
+",neutral,curiosity,neutral
+1297,consigne,,ALAN accepts. TREVOR sits in a chair next to him.,,,
+1298,speech,ALAN,Thanks.,neutral,gratitude,neutral
+1299,consigne,,TREVOR takes off his wig and drops it on the floor.,,,
+1300,speech,TREVOR,"Strange day.
+",surprise,neutral,surprise
+1301,speech,ALAN,Yes.,neutral,approval,neutral
+1302,speech,TREVOR,"When they said there were special uniforms for us to wear I really wasn't expecting this.
+",surprise,surprise,surprise
+1303,speech,ALAN,"What were you expecting?
+",surprise,curiosity,surprise
+1304,consigne,,chuckles,,,
+1305,speech,TREVOR,I don't know.,surprise,confusion,neutral
+1306,consigne,,Pause,,,
+1307,speech,TREVOR,"Not this anyway.
+",neutral,neutral,neutral
+1308,speech,ALAN,"Has it occurred to you that this funeral was very well planned?
+",surprise,curiosity,neutral
+1309,speech,TREVOR,Well that's Edwin.,neutral,neutral,neutral
+1310,speech,TREVOR,"He was a joker all right, but he knew how to prepare a gag.",disgust,neutral,neutral
+1311,speech,ALAN,"I haven't even made a will.
+",anger,neutral,neutral
+1312,speech,TREVOR,Many people our age haven't.,neutral,neutral,neutral
+1313,speech,TREVOR,I could recommend a good lawyer.,fear,approval,neutral
+1314,speech,ALAN,That's not what I meant.,neutral,disapproval,neutral
+1315,speech,ALAN,Doesn't it strike you as odd that Edwin had prepared everything in such detail?,surprise,neutral,surprise
+1316,speech,ALAN,"Almost like he knew he was about to die.
+",fear,neutral,neutral
+1317,speech,TREVOR,You're not suggesting Edwin killed himself surely?,surprise,curiosity,surprise
+1318,speech,TREVOR,"Edwin was far too strong for that.
+",neutral,neutral,neutral
+1319,speech,ALAN,"I don't know what I'm suggesting, just struck me as odd that's all.",disgust,confusion,neutral
+1320,speech,ALAN,I remember talking to Edwin once about the difference between the Greeks and the Romans.,neutral,neutral,neutral
+1321,speech,ALAN,He was reading Polybius at the time.,disgust,neutral,neutral
+1322,speech,TREVOR,"The Roman historian?
+",neutral,neutral,neutral
+1323,speech,ALAN,Polybius was a Greek held captive in Rome.,disgust,neutral,neutral
+1324,speech,ALAN,One of the things he most frequently chronicled was the difference between the cultures.,neutral,neutral,neutral
+1325,speech,ALAN,It was the first time the two civilisations had really been held up side by side.,neutral,neutral,neutral
+1326,speech,TREVOR,"What's this got to do with suicide?
+",neutral,curiosity,surprise
+1327,speech,ALAN,The Greeks thought suicide was the height of cowardice.,disgust,neutral,neutral
+1328,speech,ALAN,"They considered it the option of a man who was too pathetic to deserve any honour 
+",disgust,neutral,neutral
+1329,speech,TREVOR,"I'd have to agree with them.
+",neutral,approval,neutral
+1330,speech,ALAN,"Whilst the Romans, much to Polybius' disdain, thought it was the height of honour to gallantly take one's own life before an enemy could emasculate you through defeat, especially if it meant protecting your comrades.",disgust,neutral,disgust
+1331,speech,ALAN,Nero's advisor Petronius invited his friends round for a lavish banquet.,joy,neutral,neutral
+1332,speech,ALAN,Instead of offering desert he slit his wrists and dictated an insulting letter to the Emperor whilst he slowly bled to death.,disgust,neutral,disgust
+1333,consigne,,Pause,,,
+1334,speech,ALAN,I remember Edwin liked that idea.,neutral,neutral,neutral
+1335,speech,ALAN,He said he'd rather die then be a shadow of the man he was now.,neutral,neutral,neutral
+1336,speech,ALAN,We even joked about running a bath and bleeding ourselves dry because we'd had such a good evening.,joy,amusement,joy
+1337,speech,TREVOR,It was idle banter.,neutral,neutral,neutral
+1338,speech,TREVOR,Edwin wasn't like that.,disgust,neutral,neutral
+1339,speech,TREVOR,Some people just prepare for the future.,neutral,neutral,neutral
+1340,speech,ALAN,"Yes but Edwin never thought beyond his next drink, or next meal, or next girl.
+",neutral,neutral,neutral
+1341,speech,TREVOR,People are different behind closed doors.,neutral,neutral,neutral
+1342,speech,TREVOR,I'm actually full of joie de vivre in private.,neutral,neutral,neutral
+1343,speech,ALAN,And I'm actually teetotal.,neutral,neutral,neutral
+1344,speech,ALAN,"I just don't travel well, need half a shandy to steady the nerves.",neutral,sadness,neutral
+1345,consigne,,Long pause. Both drink.,,,
+1346,speech,TREVOR,I nearly slept with Jessica last night.,joy,neutral,neutral
+1347,speech,ALAN,"I had no idea.
+",surprise,confusion,surprise
+1348,speech,TREVOR,Yes you did you bloody liar.,anger,anger,anger
+1349,speech,TREVOR,There are no secrets with us four.,neutral,neutral,neutral
+1350,speech,TREVOR,Not for long anyway.,neutral,neutral,neutral
+1351,speech,ALAN,"Maybe you're right.
+",neutral,approval,neutral
+1352,speech,TREVOR,It's just like I'd know if you'd gotten lucky last night.,neutral,neutral,joy
+1353,consigne,,ALAN drains his glass.,,,
+1354,speech,TREVOR,"We can't hide anything from each other, the truth always comes out.",neutral,approval,neutral
+1355,consigne,,Pause,,,
+1356,speech,ALAN,Trevor I should really tell you something.,neutral,neutral,neutral
+1357,speech,TREVOR,"No please, let me finish.",fear,neutral,neutral
+1358,speech,TREVOR,"I nearly slept with Jessica, and I would have done if it weren't for Margaret intervening.",fear,neutral,neutral
+1359,speech,ALAN,"So?
+",surprise,neutral,neutral
+1360,speech,TREVOR,So!,surprise,neutral,joy
+1361,speech,TREVOR,"I didn't stop because I wanted to stop; I stopped because I got caught.
+",fear,neutral,neutral
+1362,speech,ALAN,You were lucky.,neutral,neutral,neutral
+1363,speech,ALAN,You should never underestimate the importance of luck It's often the difference between despair and elation.,sadness,neutral,neutral
+1364,speech,TREVOR,What about justice?,neutral,curiosity,neutral
+1365,speech,ALAN,"What about it?
+",anger,curiosity,neutral
+1366,speech,TREVOR,Justice is the only thing I've ever believed in.,neutral,approval,sadness
+1367,speech,TREVOR,It's what's governed my life.,neutral,approval,neutral
+1368,speech,ALAN,"Justice is the law, this is different.",neutral,neutral,neutral
+1369,speech,TREVOR,"Call it what you want, maybe it's justice maybe it's karma; I don't know.",neutral,confusion,neutral
+1370,speech,TREVOR,"But I do know that I've wronged, and I know there's only one way to put that right.",anger,realization,anger
+1371,speech,ALAN,"You know what you're risking don't you.
+",neutral,curiosity,neutral
+1372,speech,TREVOR,I have to do it.,sadness,approval,neutral
+1373,speech,TREVOR,"I promised Margaret I wouldn't, but I just have to.",neutral,neutral,neutral
+1374,speech,TREVOR,I'm going to tell her everything.,neutral,neutral,neutral
+1375,speech,TREVOR,Tell her I love Jessica.,joy,love,neutral
+1376,speech,TREVOR,Tell her I love them both.,joy,love,joy
+1377,speech,TREVOR,If Edwin has taught us anything it's that we need to live our lives true to our nature.,neutral,approval,neutral
+1378,speech,TREVOR,I can't afford to die with this hanging over me.,sadness,disapproval,neutral
+1379,speech,ALAN,Wait until tomorrow.,neutral,neutral,neutral
+1380,speech,ALAN,"It's because of the funeral you're thinking this way.
+",neutral,neutral,neutral
+1381,speech,TREVOR,I have to do this Alan.,neutral,neutral,neutral
+1382,speech,TREVOR,"I don't know if I'm being cowardly or being brave, but I have to do it.",fear,confusion,neutral
+1383,speech,TREVOR,Thanks you for your counsel though.,neutral,gratitude,neutral
+1384,speech,TREVOR,"You're a good friend.
+",joy,admiration,neutral
+1385,consigne,,TREVOR leaves his drink and exits. ALAN picks up TREVOR'S glass and drains the contents. JESSICA enters dressed in normal funeral attire. She is carrying two glasses of whiskey.,,,
+1386,speech,JESSICA,"There you are, 
+",neutral,neutral,neutral
+1387,consigne,,holds out drink to ALAN,,,
+1388,speech,JESSICA,"may I join you?
+",neutral,curiosity,neutral
+1389,consigne,,ALAN accepts. JESSICA sits in a chair next to him.,,,
+1390,speech,ALAN,Thanks.,neutral,gratitude,neutral
+1391,speech,ALAN,"You changed.
+",neutral,neutral,neutral
+1392,speech,JESSICA,"It was bad enough having to carry the coffin in that abomination, I wasn't going to spend a second longer in it than necessary.",disgust,disgust,disgust
+1393,speech,ALAN,I think you looked rather fetching; the wig went with your eyes.,neutral,admiration,neutral
+1394,speech,JESSICA,Oh shut up you awful man.,disgust,anger,disgust
+1395,speech,JESSICA,"I looked totally ridiculous.
+",disgust,amusement,disgust
+1396,speech,ALAN,"All right then you looked bloody awful, is that what you wanted to hear?
+",disgust,disgust,disgust
+1397,consigne,,laughs,,,
+1398,speech,JESSICA,"Finally, a bit of honesty.",neutral,approval,neutral
+1399,speech,ALAN,"It seems very in vogue at the moment, I thought I'd give it a whirl.",neutral,approval,neutral
+1400,speech,JESSICA,"Did I see you talking to Trevor?
+",surprise,curiosity,surprise
+1401,speech,ALAN,"I don't know did you?
+",surprise,confusion,surprise
+1402,speech,JESSICA,You do your best to make conversation difficult don't you?,anger,curiosity,neutral
+1403,speech,ALAN,"If I think it's going in a direction I don't like yes.
+",disgust,disapproval,disgust
+1404,speech,JESSICA,"Good old Alan, never one for addressing the difficult issues are you?
+",disgust,curiosity,disgust
+1405,speech,ALAN,Well there's no point in taxing oneself unnecessarily.,neutral,disapproval,neutral
+1406,speech,JESSICA,I knew I could rely on you.,joy,approval,neutral
+1407,consigne,,MARGARET enters dressed similarly to ALAN. She is carrying two glasses of whiskey.,,,
+1408,speech,JESSICA,I should really go and thank the priest for the service.,neutral,gratitude,joy
+1409,consigne,,JESSICA walks past MARGARET without looking at her and exits. ALAN drains his glass.,,,
+1410,speech,ALAN,Yes here I am and yes you may join me.,neutral,neutral,neutral
+1411,consigne,,ALAN holds out his hand into which MARGARET places the drink. She sits next to him.,,,
+1412,speech,MARGARET,How you feeling?,sadness,curiosity,neutral
+1413,consigne,,Alan nods,,,
+1414,speech,MARGARET,You seemed rather anxious earlier.,fear,nervousness,neutral
+1415,speech,ALAN,"Just tired I suppose, I didn't get much sleep.
+",neutral,disappointment,neutral
+1416,speech,MARGARET,"Yes, I'm sorry about that.",sadness,remorse,sadness
+1417,speech,MARGARET,"You realise why I had to do it though?
+",surprise,realization,surprise
+1418,speech,ALAN,Yes.,neutral,approval,neutral
+1419,speech,MARGARET,"And you don't
+",anger,neutral,neutral
+1420,consigne,,interrupts,,,
+1421,speech,ALAN,Yes Margaret.,neutral,neutral,neutral
+1422,speech,ALAN,I do think you were sticking your nose in.,disgust,neutral,surprise
+1423,consigne,,she bites her lip,,,
+1424,speech,ALAN,But I also think you were right to.,neutral,approval,neutral
+1425,speech,ALAN,Who knows where we'd all be if it wasn't for you sticking your nose in where it wasn't wanted.,neutral,neutral,disgust
+1426,speech,ALAN,You should be pleased with yourself.,joy,neutral,neutral
+1427,speech,ALAN,"You've done what was right, not what was popular.",anger,approval,neutral
+1428,speech,MARGARET,Thanks.,neutral,gratitude,neutral
+1429,speech,MARGARET,I'm glad my nose stopped them.,joy,joy,joy
+1430,speech,MARGARET,"I know I'm hard on Jessica, but it would have been awful if she'd been unfaithful last night.",disgust,disgust,sadness
+1431,consigne,,Long pause while ALAN drains his glass,,,
+1432,speech,ALAN,I'm glad your nose was there to get in the way.,joy,joy,joy
+1433,speech,ALAN,Such a pretty little nose too.,disgust,admiration,joy
+1434,consigne,,ALAN pushes the end of MARGARET'S nose with his index finger,,,
+1435,speech,ALAN,Honk!,anger,neutral,anger
+1436,consigne,,laughs,,,
+1437,speech,MARGARET,"Are you tight?
+",surprise,curiosity,neutral
+1438,speech,ALAN,Tight as a drum.,disgust,neutral,neutral
+1439,speech,MARGARET,Well I suppose so are half the people through the next room.,neutral,neutral,neutral
+1440,speech,MARGARET,I'll let you off this time.,neutral,neutral,neutral
+1441,speech,MARGARET,"I can understand people getting tight at weddings, but always seemed odd to me to do it at a funeral.",disgust,neutral,neutral
+1442,speech,ALAN,"You're the only person I've ever met who calls it getting tight.
+",neutral,neutral,neutral
+1443,consigne,,laughs,,,
+1444,speech,MARGARET,I've got to have something to make me stand out.,neutral,desire,neutral
+1445,speech,MARGARET,"I suppose people drink anywhere it's free don't they.
+",neutral,neutral,neutral
+1446,speech,ALAN,"Probably why Mr Cleethorpes doesn't look too happy, he must be picking up the tab.",sadness,neutral,neutral
+1447,speech,MARGARET,No he's unhappy for a thousand other reasons.,sadness,sadness,neutral
+1448,speech,MARGARET,"Didn't you see Gerald earlier?
+",surprise,neutral,neutral
+1449,speech,ALAN,Edwin's brother?,surprise,neutral,neutral
+1450,speech,ALAN,"No I presumed he wasn't coming.
+",neutral,neutral,neutral
+1451,speech,MARGARET,He barely did.,surprise,neutral,neutral
+1452,speech,MARGARET,"He arrived after the service had started and left before the coffin.
+",disgust,neutral,neutral
+1453,speech,ALAN,No wonder the old duffer looks so grim.,sadness,neutral,sadness
+1454,speech,ALAN,"How long's it been since they've spoken?
+",neutral,curiosity,neutral
+1455,speech,MARGARET,"Since before we met Edwin, well over ten years.",neutral,neutral,neutral
+1456,speech,ALAN,"It's a beastly situation.
+",disgust,neutral,neutral
+1457,speech,MARGARET,It's a bloody disgrace.,disgust,disappointment,disgust
+1458,speech,MARGARET,Fancy disowning the lad just because he's queer.,disgust,neutral,disgust
+1459,speech,ALAN,"It's a different generation, it's hard for us to understand.",neutral,realization,sadness
+1460,speech,MARGARET,It's no excuse.,anger,disapproval,neutral
+1461,speech,MARGARET,"What difference does it make, it's just about who you fancy at the end of the day.",neutral,neutral,neutral
+1462,speech,ALAN,It's more than that for men like Mr Cleethorpes.,neutral,neutral,neutral
+1463,speech,ALAN,"It's a betrayal of the family name.
+",disgust,disappointment,disgust
+1464,speech,MARGARET,What rot!,disgust,neutral,disgust
+1465,speech,MARGARET,There's nothing a child of mine could do that'd make me treat them like that.,neutral,neutral,joy
+1466,speech,MARGARET,"Well, except vote Tory maybe.",neutral,neutral,neutral
+1467,speech,ALAN,"Edwin was a Tory.
+",neutral,neutral,neutral
+1468,speech,MARGARET,"Well anyway, it's a bit much disowning the poor lad.",disgust,sadness,neutral
+1469,speech,ALAN,Yes of course you're right.,neutral,approval,neutral
+1470,speech,ALAN,Though by all accounts he had a better time of it than Edwin.,neutral,neutral,neutral
+1471,speech,MARGARET,Yes.,neutral,approval,neutral
+1472,consigne,,Pause,,,
+1473,speech,MARGARET,Hard to imagine anything bad happening to someone so full of life.,disgust,sadness,sadness
+1474,speech,MARGARET,"Certainly can't imagine him being beaten like he was.
+",sadness,neutral,neutral
+1475,speech,ALAN,Or being locked in the coal cellar for days on end.,disgust,neutral,neutral
+1476,speech,MARGARET,He really did his best to destroy that boy didn't he.,anger,neutral,neutral
+1477,speech,MARGARET,Tried to suck every shred of life out of him.,disgust,neutral,neutral
+1478,speech,MARGARET,"And as for packing him off to boarding school
+",neutral,neutral,neutral
+1479,speech,ALAN,Best place for him considering.,neutral,neutral,neutral
+1480,speech,MARGARET,I suppose so.,neutral,neutral,neutral
+1481,speech,ALAN,"There's no point in hating him Margaret, Edwin overcame it, there's no reason why we shouldn't.",neutral,neutral,neutral
+1482,speech,MARGARET,Edwin had to love the bastard.,disgust,love,disgust
+1483,speech,MARGARET,We're not handicapped that way.,neutral,neutral,neutral
+1484,speech,ALAN,"Still, it serves no purpose.",disgust,disapproval,neutral
+1485,speech,MARGARET,It doesn't mean I have to be nice to him.,neutral,neutral,neutral
+1486,consigne,,"Enter PRIEST. His dog collar is hanging out on one side, his hair is ruffled and there are lipstick marks on both his cheek and collar.",,,
+1487,speech,PRIEST,Good Lord!,joy,admiration,joy
+1488,speech,PRIEST,That that that Jessica is a most charming girl!,joy,admiration,joy
+1489,speech,PRIEST,Goodness me!,joy,admiration,joy
+1490,speech,PRIEST,Very very very affectionate indeed!,joy,love,joy
+1491,speech,PRIEST,Having rather a better time than I thought I would to be honest!,joy,approval,joy
+1492,consigne,,To MARGARET,,,
+1493,speech,PRIEST,"Though I don't think I've had the pleasure young lady.
+",neutral,disapproval,neutral
+1494,speech,ALAN,It looks like you've had plenty of pleasure.,neutral,joy,joy
+1495,consigne,,laughs,,,
+1496,speech,PRIEST,Yes!,anger,excitement,joy
+1497,speech,PRIEST,Ha!,joy,neutral,joy
+1498,speech,PRIEST,"Bloody right I have.
+",anger,approval,anger
+1499,speech,MARGARET,I'm Margaret Harley Father.,neutral,neutral,neutral
+1500,speech,MARGARET,"I was one of the pallbearers.
+",joy,neutral,neutral
+1501,consigne,,roars with laughter,,,
+1502,speech,PRIEST,You you you don't bloody say!,anger,neutral,anger
+1503,speech,PRIEST,Ha!,joy,neutral,joy
+1504,speech,PRIEST,"I'm glad you are, would hate to think you dressed like that off your own bat.",joy,joy,disgust
+1505,speech,PRIEST,"What are we drinking anyway?
+",neutral,curiosity,neutral
+1506,speech,ALAN,"Scotch if you're offering.
+",neutral,neutral,neutral
+1507,speech,PRIEST,Top idea that man!,surprise,admiration,joy
+1508,consigne,,Turns his head and shouts,,,
+1509,speech,PRIEST,Barkeep!,surprise,neutral,surprise
+1510,consigne,,Turns his head back to ALAN and MARGARET.,,,
+1511,consigne,,BARMAN enters and stands very close to PRIEST.,,,
+1512,speech,MARGARET,It was a very interesting service.,joy,admiration,joy
+1513,speech,PRIEST,Interesting's the word.,surprise,curiosity,neutral
+1514,consigne,,Turns head again so comes nose to nose with BARMAN,,,
+1515,speech,PRIEST,Barkeep!,surprise,neutral,surprise
+1516,consigne,,PRIEST jumps back alarmed.,,,
+1517,speech,PRIEST,There you are.,neutral,neutral,neutral
+1518,speech,PRIEST,Three scotches please.,neutral,neutral,neutral
+1519,speech,BARMAN,Very good Father.,joy,admiration,joy
+1520,speech,ALAN,"Doubles.
+",neutral,neutral,neutral
+1521,consigne,,BARMAN goes to bar and fixes drinks.,,,
+1522,speech,PRIEST,Yes!,anger,excitement,joy
+1523,speech,PRIEST,"Why why why bloody not!
+",anger,neutral,anger
+1524,speech,ALAN,"The mingling wasn't too bad then Father?
+",disgust,approval,neutral
+1525,speech,PRIEST,No not at all actually.,neutral,disapproval,neutral
+1526,speech,PRIEST,Spent most of the time comforting that poor Jessica.,neutral,sadness,neutral
+1527,speech,PRIEST,"She certainly seemed very very very
+",neutral,neutral,neutral
+1528,speech,MARGARET,"emotional?
+",surprise,neutral,neutral
+1529,speech,PRIEST,"Yes, quite!
+",surprise,approval,joy
+1530,consigne,,PRIEST sits with ALAN and MARGARET. BARMAN brings the drinks over then returns to the bar.,,,
+1531,speech,PRIEST,Thank you.,neutral,gratitude,neutral
+1532,speech,PRIEST,Yes very emotional indeed.,neutral,approval,neutral
+1533,speech,PRIEST,"Ah, here comes the third musketeer!
+",joy,excitement,joy
+1534,consigne,,TREVOR enters forlorn. He walks past PRIEST then MARGARET then ALAN and each time takes the drink out of their hands and drains it. He slumps in a chair next to ALAN and stares off into space. Long Pause.,,,
+1535,speech,ALAN,Soooooo?,surprise,neutral,neutral
+1536,speech,ALAN,How did it go?,surprise,curiosity,neutral
+1537,consigne,,Punches him playfully on the arm,,,
+1538,speech,TREVOR,"My marriage is over.
+",sadness,sadness,sadness
+1539,speech,PRIEST,Are you Catholic my son?,neutral,curiosity,neutral
+1540,speech,TREVOR,"Presbyterian.
+",neutral,neutral,neutral
+1541,speech,PRIEST,"Good stuff, won't be needing me then!",joy,admiration,joy
+1542,consigne,,Walks over to bar and sits on a stool,,,
+1543,speech,PRIEST,"Another drink Barkeep!
+",joy,neutral,joy
+1544,consigne,,BARMAN fixes the drink.,,,
+1545,speech,MARGARET,"What are you talking about?
+",surprise,curiosity,surprise
+1546,speech,TREVOR,"I'm sorry Margaret, I had to.",sadness,remorse,sadness
+1547,speech,MARGARET,"What did you have to?
+",surprise,neutral,neutral
+1548,speech,ALAN,He told his wife.,disgust,neutral,neutral
+1549,speech,ALAN,"About last night, about everything.",neutral,neutral,neutral
+1550,speech,MARGARET,"Oh Trevor.
+",neutral,neutral,neutral
+1551,speech,TREVOR,I'm sorry I couldn't keep your promise Margaret.,sadness,remorse,sadness
+1552,speech,MARGARET,Bugger the promise.,neutral,neutral,neutral
+1553,speech,MARGARET,"God Trevor, what have you done?
+",surprise,neutral,surprise
+1554,speech,ALAN,"What did she say?
+",surprise,neutral,neutral
+1555,speech,TREVOR,She wasn't even upset.,neutral,neutral,neutral
+1556,speech,TREVOR,That was the worst bit.,disgust,disgust,disgust
+1557,speech,TREVOR,"She was just so disappointed.
+",sadness,disappointment,sadness
+1558,speech,MARGARET,"She can't just end it like that.
+",neutral,neutral,neutral
+1559,speech,TREVOR,"She said the only reason we worked was because I was honest and faithful, and that whilst I'd shown I was honest I'd also shown I was incapable of being faithful.",neutral,neutral,neutral
+1560,speech,TREVOR,She said there wasn't enough love in our marriage to get over something like this.,neutral,neutral,sadness
+1561,speech,TREVOR,"She said I'd never been someone she'd craved; all I'd ever been was '91good husband material', and after this I wasn't even that anymore.
+",neutral,neutral,sadness
+1562,speech,MARGARET,"What about your life together?
+",neutral,curiosity,neutral
+1563,speech,TREVOR,She said she doesn't want anything.,anger,neutral,neutral
+1564,speech,TREVOR,We've no children and she earns nearly what I do.,neutral,neutral,anger
+1565,speech,TREVOR,She said I could have the house.,neutral,neutral,neutral
+1566,speech,TREVOR,She said she couldn't be bothered fighting over it in court seeing as I'd probably win anyway.,anger,neutral,neutral
+1567,consigne,,Pause,,,
+1568,speech,TREVOR,"It was so clinical, so heartless.",fear,annoyance,neutral
+1569,consigne,,Pause. Sobbing,,,
+1570,speech,TREVOR,"I thought she'd forgive me, I really did.",neutral,neutral,sadness
+1571,speech,TREVOR,I thought she loved me so strongly.,joy,love,joy
+1572,speech,TREVOR,Instead it turns out she never really cared at all.,surprise,disappointment,neutral
+1573,speech,TREVOR,"I was just someone good to bring home to her parents.
+",neutral,approval,neutral
+1574,speech,ALAN,"Trevor.
+",neutral,neutral,neutral
+1575,consigne,,shouting,,,
+1576,speech,TREVOR,No!,anger,disapproval,anger
+1577,speech,TREVOR,It's fucked!,anger,anger,disgust
+1578,speech,TREVOR,Can't you see that?,surprise,curiosity,surprise
+1579,speech,TREVOR,To betray someone you love is one thing.,disgust,neutral,disgust
+1580,speech,TREVOR,"To betray someone you love and then discover that they never even loved you at all is just'85 
+",anger,neutral,neutral
+1581,consigne,,hold his head in his hands,,,
+1582,consigne,,JESSICA enters smoking.,,,
+1583,speech,JESSICA,Here you all are!,joy,neutral,joy
+1584,speech,JESSICA,If I didn't know better I'd say you were avoiding me.,neutral,neutral,neutral
+1585,consigne,,Spots PRIEST,,,
+1586,speech,JESSICA,Hello Father.,neutral,neutral,neutral
+1587,consigne,,Blows him a kiss,,,
+1588,speech,JESSICA,mwah!,surprise,excitement,surprise
+1589,speech,JESSICA,What are you all looking so down in the mouth for.,surprise,neutral,surprise
+1590,speech,JESSICA,It's not like someone died!,surprise,neutral,anger
+1591,consigne,,Laughs hysterically. Pause,,,
+1592,speech,JESSICA,"Oh come on chaps, Edwin would have thought that was funny.",joy,amusement,neutral
+1593,speech,JESSICA,How's about cheering up a little.,neutral,joy,neutral
+1594,speech,JESSICA,"Trevor why don't you recite his graduation speech, that's always good for a laugh or two!
+",neutral,joy,anger
+1595,speech,MARGARET,"Jessica please.
+",neutral,neutral,neutral
+1596,speech,JESSICA,"Oh god, Miss Killjoy chirps up again.",surprise,neutral,joy
+1597,speech,JESSICA,Sorry Maggs am I having a little too much fun for your liking?,sadness,remorse,sadness
+1598,speech,MARGARET,Trevor's wife has left him.,sadness,sadness,neutral
+1599,consigne,,taken aback,,,
+1600,speech,JESSICA,Oh!,surprise,neutral,surprise
+1601,speech,JESSICA,Gosh!,surprise,neutral,surprise
+1602,consigne,,Pause,,,
+1603,speech,JESSICA,Still probably for the best hey Trev.,neutral,optimism,neutral
+1604,speech,JESSICA,Plenty more fish and all that.,neutral,neutral,neutral
+1605,consigne,,stands up,,,
+1606,speech,MARGARET,For God's sake!,anger,neutral,anger
+1607,speech,MARGARET,Show a bit of compassion!,anger,caring,anger
+1608,speech,MARGARET,"Your friend has just had his marriage break up and need I remind you that it's all your bloody fault!
+",anger,sadness,anger
+1609,speech,JESSICA,My fault?,anger,confusion,surprise
+1610,speech,JESSICA,"Don't be ridiculous.
+",anger,annoyance,anger
+1611,speech,MARGARET,You destroyed him!,anger,anger,anger
+1612,speech,MARGARET,You knew exactly what you were doing.,anger,neutral,neutral
+1613,consigne,,raising her voice,,,
+1614,speech,JESSICA,How have I destroyed him!,anger,anger,anger
+1615,consigne,,Turns to TREVOR,,,
+1616,speech,JESSICA,"I don't love you Trevor, I never have and I never will!",anger,disapproval,sadness
+1617,speech,JESSICA,"I wanted a fuck last night, not a future!",anger,annoyance,anger
+1618,speech,JESSICA,Get it!,anger,neutral,anger
+1619,consigne,,turns back to MARGARET sweetly,,,
+1620,speech,JESSICA,"There, is that a bit clearer?
+",neutral,confusion,neutral
+1621,speech,MARGARET,"You're not the same person I used to be friends with, you're so cold and bitter.",anger,disapproval,disgust
+1622,speech,MARGARET,How can you even dream of talking like that?,surprise,curiosity,surprise
+1623,consigne,,Loudly to ALAN,,,
+1624,speech,MARGARET,"Alan are you just going to sit there and say nothing?
+",anger,neutral,anger
+1625,speech,JESSICA,"Oh yes why not turn to lover boy.
+",neutral,neutral,neutral
+1626,speech,MARGARET,"Shut up!
+",anger,anger,anger
+1627,speech,JESSICA,Turn to your darling unrequited sweetheart every time you need a bit of support.,anger,caring,neutral
+1628,speech,JESSICA,"I hate to say it, but you're exactly the same person I had to be friends with all those years ago.",disgust,anger,neutral
+1629,speech,MARGARET,"You shut up!
+",anger,anger,anger
+1630,speech,JESSICA,Why don't you admit it?,anger,curiosity,neutral
+1631,speech,JESSICA,"Why don't you just tell him what we all already know?
+",anger,neutral,anger
+1632,consigne,,yelling,,,
+1633,speech,MARGARET,Fine!,anger,approval,anger
+1634,speech,MARGARET,"I admit it, I love him!",joy,love,joy
+1635,speech,MARGARET,I always have loved him and I always will.,joy,love,joy
+1636,speech,MARGARET,But if you don't shut you're mouth this second I'm going to ram this glass down your bloody throat!,anger,anger,anger
+1637,consigne,,calmly,,,
+1638,speech,JESSICA,"Well, there you go.",neutral,neutral,neutral
+1639,speech,JESSICA,All our dirty little secrets are out.,disgust,neutral,neutral
+1640,speech,JESSICA,That is except one.,neutral,neutral,neutral
+1641,consigne,,Pause,,,
+1642,speech,JESSICA,Do you want to tell her Alan?,surprise,curiosity,neutral
+1643,speech,JESSICA,"Or should I?
+",fear,confusion,neutral
+1644,speech,JESSICA,"After you so expertly managed to save Trevor from doing something that would jeopardise his marriage, that pathetic drunk and I did something to jeopardise mine.
+",disgust,neutral,anger
+1645,consigne,,TREVOR looks up for the first time. MARGARET is shocked. ALAN is unmoved.,,,
+1646,speech,MARGARET,Alan?,surprise,neutral,neutral
+1647,speech,MARGARET,"Is this true?
+",surprise,curiosity,surprise
+1648,speech,TREVOR,Alan?,surprise,neutral,neutral
+1649,speech,TREVOR,You didn't did you?,surprise,curiosity,surprise
+1650,speech,TREVOR,"Please tell me you didn't.
+",neutral,neutral,neutral
+1651,speech,JESSICA,Well Alan?,surprise,neutral,neutral
+1652,speech,JESSICA,Did you?,surprise,curiosity,surprise
+1653,consigne,,"ALAN stands up, slowly walks over to the bar and takes a bottle of whiskey out of BARMAN'S hand. He pours himself a very large drink. As he begins to drink MARGARET comes over to him and slaps the glass out of his hand.",,,
+1654,speech,MARGARET,You and your bloody drink!,anger,neutral,anger
+1655,consigne,,MARGARET beats her fists on ALAN'S chest. TREVOR stands.,,,
+1656,consigne,,crying,,,
+1657,speech,MARGARET,"You bloody wretched, stinking alcoholic.",disgust,anger,disgust
+1658,speech,MARGARET,How could you!,surprise,neutral,surprise
+1659,speech,MARGARET,"How could y'85 
+",fear,neutral,neutral
+1660,consigne,,trails off,,,
+1661,consigne,,MARGARET sits on a bar stool next to PRIEST. ALAN pours another drink and walks towards TREVOR.,,,
+1662,speech,TREVOR,"Is there a man left here I can call a friend.
+",neutral,neutral,neutral
+1663,speech,ALAN,"Trevor I 
+",fear,neutral,neutral
+1664,consigne,,"pause, ALAN looks at the floor",,,
+1665,speech,TREVOR,The great poet lost for words.,sadness,sadness,neutral
+1666,speech,TREVOR,Not much to say is there.,neutral,neutral,neutral
+1667,consigne,,He holds ALAN'S head in his hands,,,
+1668,speech,TREVOR,We're all to blame Alan.,anger,neutral,sadness
+1669,speech,TREVOR,We're all guilty.,sadness,remorse,sadness
+1670,consigne,,TREVOR kisses ALAN'S head and exits. ALAN follows. As soon as ALAN exits he enters again walking backwards with MR CLEETHORPES following him.,,,
+1671,speech,MR CLEETHORPES,There you are boy!,joy,neutral,joy
+1672,speech,MR CLEETHORPES,I want a word with you.,neutral,desire,neutral
+1673,speech,ALAN,"Mr Cleethorpes this really is a bad time.
+",disgust,disapproval,sadness
+1674,speech,MR CLEETHORPES,"Too right it's a bad time, I've just had to put my only son in the ground thanks to you and your swath of decadent acolytes.
+",disgust,gratitude,sadness
+1675,speech,ALAN,Please sir this isn't the time.,neutral,disapproval,neutral
+1676,speech,MR CLEETHORPES,It never is for you lot is it?,neutral,confusion,neutral
+1677,speech,MR CLEETHORPES,"There's always a party to go, a drink to be drunk, drugs to be taken, boys to be buggered.",neutral,neutral,neutral
+1678,speech,MR CLEETHORPES,You sir have made my life a hell.,anger,anger,anger
+1679,speech,MR CLEETHORPES,You've corrupted my heir and sent him to his grave.,disgust,anger,anger
+1680,speech,MR CLEETHORPES,The certainty that you'll be burning for eternity is scant succour.,neutral,neutral,neutral
+1681,speech,ALAN,"Mr Cleethorpes we all loved Edwin dearly and I can understand your grief, but please
+",sadness,love,sadness
+1682,consigne,,raising his voice,,,
+1683,speech,MR CLEETHORPES,Don't you dare try and placate me with niceties sir!,anger,anger,anger
+1684,speech,MR CLEETHORPES,The tongue of a bugger should not be allowed to speak!,anger,annoyance,disgust
+1685,speech,MR CLEETHORPES,Your sinful hedonism has left me childless.,disgust,sadness,disgust
+1686,speech,MR CLEETHORPES,"How dare you'85
+",anger,anger,anger
+1687,consigne,,JESSICA moves towards MR CLEETHORPES.,,,
+1688,speech,JESSICA,How dare you!,anger,anger,anger
+1689,speech,JESSICA,"How dare you say these things.
+",anger,anger,anger
+1690,speech,MR CLEETHORPES,You madam have not been addressed!,anger,neutral,anger
+1691,speech,MR CLEETHORPES,"And despite your attire I recognise you as one of the clowns from that carnival of depravity earlier.
+",disgust,realization,disgust
+1692,consigne,,MARGARET moves towards MR CLEETHORPES so she JESSICA and ALAN are surrounding him.,,,
+1693,speech,MARGARET,"Is it so depraved to carry out the wishes of the deceased?
+",disgust,curiosity,disgust
+1694,speech,MR CLEETHORPES,When the deceased is a fine man of noble birth corrupted by buggers and whores then yes it is madam.,disgust,approval,neutral
+1695,speech,JESSICA,You are the only one who ever corrupted Edwin.,neutral,annoyance,neutral
+1696,speech,JESSICA,"You crushed and stifled a beautiful, brilliant man.
+",anger,admiration,anger
+1697,speech,MR CLEETHORPES,I taught him discipline.,disgust,neutral,neutral
+1698,speech,MR CLEETHORPES,"I sought to save his soul.
+",sadness,caring,sadness
+1699,speech,ALAN,You sought nothing but your own selfish ends.,anger,neutral,neutral
+1700,speech,ALAN,Edwin was a god among men.,neutral,admiration,neutral
+1701,speech,ALAN,"He spread happiness and love wherever he went.
+",joy,love,neutral
+1702,speech,MR CLEETHORPES,Please spare me the filthy details.,disgust,neutral,disgust
+1703,speech,MR CLEETHORPES,I should never have sent him to that boarding school.,sadness,disapproval,sadness
+1704,speech,MR CLEETHORPES,Thought it would build his character and teach him some piety.,neutral,neutral,neutral
+1705,speech,MR CLEETHORPES,Turned out to be a bastion of sods and drunkards.,disgust,annoyance,disgust
+1706,speech,MARGARET,"You can't blame Edwin because Gerald
+",anger,neutral,neutral
+1707,consigne,,yelling,,,
+1708,speech,MR CLEETHORPES,That is not a name I care to hear madam!,anger,disapproval,anger
+1709,speech,JESSICA,"You have a son.
+",neutral,neutral,neutral
+1710,speech,MR CLEETHORPES,"I am aware I have a son madam, but he has been sullied by a brigade of demons and lies cold in the ground.
+",anger,sadness,neutral
+1711,speech,ALAN,"You have another son, and you should be proud of them both.
+",neutral,pride,neutral
+1712,consigne,,MR CLEETHOPRES punches ALAN who falls to the ground. MARGARET and JESSICA gather round him.,,,
+1713,speech,MR CLEETHORPES,So rotten is your soul sir that you insult a man at the wake of his only son.,disgust,anger,disgust
+1714,consigne,,To BARMAN,,,
+1715,speech,MR CLEETHORPES,"You there, what's your name?
+",surprise,curiosity,neutral
+1716,speech,BARMAN,"Me sir?
+",neutral,neutral,neutral
+1717,speech,MR CLEETHORPES,Me sir?,surprise,neutral,neutral
+1718,speech,MR CLEETHORPES,Yes you sir?,surprise,neutral,neutral
+1719,speech,MR CLEETHORPES,"What's your godforsaken name?
+",surprise,curiosity,surprise
+1720,speech,BARMAN,Clifton sir.,neutral,neutral,neutral
+1721,speech,MR CLEETHORPES,Well Mr Clifton tell my wife to join me in the car immediately.,neutral,neutral,neutral
+1722,speech,MR CLEETHORPES,Every second I spend in this hive of wickedness does irreparable damage to my soul.,disgust,sadness,sadness
+1723,consigne,,MR CLEETHORPES exits. Long silence.,,,
+1724,speech,PRIEST,I I I have an early mass in the morning.,fear,neutral,neutral
+1725,speech,PRIEST,I should should should really get to bed.,sadness,neutral,neutral
+1726,consigne,,He looks round at everyone,,,
+1727,speech,PRIEST,"It was was was a pleasure to meet you all.
+",joy,joy,joy
+1728,consigne,,PRIEST exits hurriedly.,,,
+1729,speech,ALAN,You don't think he left on our account do you?,surprise,confusion,surprise
+1730,speech,ALAN,"Or do all priests go to bed at five o clock?
+",neutral,confusion,neutral
+1731,consigne,,JESSICA and MARGARET haul ALAN to his feet and they all sit on the large chairs.,,,
+1732,speech,MARGARET,"How on earth did he do it?
+",surprise,curiosity,surprise
+1733,speech,JESSICA,"Who?
+",surprise,neutral,surprise
+1734,speech,MARGARET,Edwin.,neutral,neutral,neutral
+1735,speech,MARGARET,"How did he turn out so happy with that a father like that?
+",surprise,curiosity,surprise
+1736,consigne,,holding his jaw,,,
+1737,speech,ALAN,It's just'85 Edwin.,neutral,neutral,neutral
+1738,speech,JESSICA,"Come on, let's go and get Trevor.",neutral,neutral,neutral
+1739,speech,JESSICA,I imagine he needs his friends right now.,neutral,neutral,neutral
+1740,consigne,,MARGARET and JESSICA put their arms across ALAN'S shoulders as support and they all exit. BARMAN begins to set out the caf'e9 style tables and chairs ready for the daytime custom (as at the start of ACT I SCENE II). While doing so he speaks.,,,
+1741,speech,BARMAN,Unfortunately that wasn't the end of the evening's drama.,sadness,disappointment,sadness
+1742,speech,BARMAN,There was one big shock left for everybody.,surprise,surprise,surprise
+1743,speech,BARMAN,"Ridden with despair, Mr Mcleish had locked himself in his bedroom seemingly wanting only to be alone.",sadness,sadness,sadness
+1744,speech,BARMAN,Alan and Margaret spent over an hour pleading with him to unlock the door so they could offer him the comfort they shared so naturally and readily in their youth.,neutral,neutral,neutral
+1745,speech,BARMAN,During this time Jessica was on the phone to Mrs Mcleish.,neutral,neutral,neutral
+1746,speech,BARMAN,She tried to explain to her that any infidelity on Trevor's behalf was totally out of character and only occurred due her own selfish need to be desired.,neutral,neutral,neutral
+1747,speech,BARMAN,She confessed that she planned to manipulate him the second she knew they were to meet.,disgust,neutral,neutral
+1748,speech,BARMAN,"She didn't ask for forgiveness, as she said she didn't deserve it.",sadness,neutral,sadness
+1749,speech,BARMAN,However she stressed that Trevor did and implored Mrs Mcleish to give him another chance.,neutral,neutral,neutral
+1750,speech,BARMAN,When this phone call was over she made another one to her own husband.,disgust,neutral,neutral
+1751,speech,BARMAN,She confessed a string of infidelities to him and made it clear she did not believe their marriage could survive with her behaving in such a way.,disgust,neutral,sadness
+1752,speech,BARMAN,After ending this conversation she went upstairs to join Alan and Margaret in offering comfort to Trevor.,neutral,neutral,neutral
+1753,speech,BARMAN,By this stage Alan had managed to force open the door.,anger,neutral,neutral
+1754,speech,BARMAN,"She found the three of them together, congregated in the bathroom.",disgust,neutral,neutral
+1755,speech,BARMAN,"Alan and Margaret were standing quite still, embracing each other tightly.",neutral,neutral,neutral
+1756,speech,BARMAN,Trevor lay in the bath staring off into space.,disgust,neutral,neutral
+1757,speech,BARMAN,The veins in his left wrist had been deeply cut and the warm water meant he bled to death in minutes.,sadness,neutral,neutral
+1758,speech,BARMAN,The three friends spoke and slept little that night.,neutral,neutral,neutral
+1759,speech,BARMAN,Each consumed deep in their own thoughts.,disgust,neutral,neutral
+1760,speech,BARMAN,All they could do was wait for morning and catch the first train home; leaving their two fiends behind.,neutral,neutral,neutral
+1761,consigne,,BARMAN returns to the bar and MARGARET enters with her coat on and carrying a suitcase.,,,
+1762,speech,MARGARET,"Morning Clifton, is my taxi here?
+",neutral,neutral,neutral
+1763,speech,BARMAN,Not yet madam.,neutral,neutral,neutral
+1764,consigne,,She sits at one of the tables.,,,
+1765,speech,BARMAN,Can I get you anything madam?,anger,curiosity,neutral
+1766,speech,MARGARET,"No, no thank you.",disgust,disapproval,neutral
+1767,speech,MARGARET,I just want to get out of here to be honest.,neutral,desire,sadness
+1768,speech,MARGARET,"It's been an awful stain these last few days, even before last night.",disgust,disgust,disgust
+1769,speech,MARGARET,All seems so silly now.,sadness,annoyance,sadness
+1770,speech,BARMAN,Very good madam.,neutral,admiration,neutral
+1771,consigne,,ALAN enters with coat on carrying a suitcase. He goes and sits at MARGARET'S table.,,,
+1772,speech,MARGARET,"Hi.
+",neutral,neutral,neutral
+1773,speech,ALAN,Hi.,neutral,neutral,neutral
+1774,consigne,,Pasue,,,
+1775,speech,ALAN,"Not really what I had in mind as a great tribute to Edwin.
+",neutral,disapproval,neutral
+1776,speech,MARGARET,No not really.,neutral,disapproval,neutral
+1777,speech,ALAN,Jessica is distraught.,fear,sadness,fear
+1778,speech,MARGARET,I would be too if I were her.,neutral,neutral,neutral
+1779,speech,MARGARET,I'm not too happy as it is myself.,sadness,sadness,sadness
+1780,consigne,,Long pause.,,,
+1781,speech,ALAN,"Why did you never mention anything about us?
+",surprise,curiosity,surprise
+1782,speech,MARGARET,I was too busy trying to deal with other people's problems.,sadness,neutral,neutral
+1783,speech,MARGARET,"It's a very good way of pretending you don't have any of your own.
+",neutral,admiration,neutral
+1784,speech,ALAN,I know it almost seems silly to mention.,disgust,annoyance,sadness
+1785,speech,ALAN,"But you know I've always loved you too.
+",joy,love,neutral
+1786,speech,MARGARET,I know.,neutral,neutral,neutral
+1787,speech,ALAN,"Why did we never do anything?
+",anger,confusion,neutral
+1788,speech,MARGARET,"I don't know.
+",surprise,confusion,neutral
+1789,speech,ALAN,"Maybe one day it could still happen.
+",neutral,optimism,neutral
+1790,speech,MARGARET,"What in five years time at another funeral?
+",neutral,curiosity,neutral
+1791,speech,ALAN,"Why not, Jessica would be easy enough to nudge down the stairs.
+",neutral,neutral,neutral
+1792,consigne,,smiles,,,
+1793,speech,MARGARET,Yes.,neutral,approval,neutral
+1794,speech,MARGARET,I think we need to sort ourselves out before we do anything like that.,neutral,neutral,neutral
+1795,speech,MARGARET,I need to get myself right in the head.,anger,neutral,neutral
+1796,speech,MARGARET,I was thinking about going to see someone.,joy,neutral,neutral
+1797,speech,MARGARET,"What do you think?
+",neutral,neutral,neutral
+1798,speech,ALAN,I think we need all the help we can get.,neutral,caring,neutral
+1799,consigne,,JESSICA enters with coat on carrying a case. She joins them at the table.,,,
+1800,speech,JESSICA,Morning.,neutral,neutral,neutral
+1801,speech,MARGARET,Morning Jess.,neutral,neutral,neutral
+1802,speech,JESSICA,Taxi here yet?,neutral,neutral,neutral
+1803,speech,MARGARET,"No not yet, do you want to share?
+",neutral,curiosity,neutral
+1804,speech,JESSICA,"Sure.
+",neutral,approval,neutral
+1805,speech,MARGARET,Alan?,surprise,neutral,neutral
+1806,speech,ALAN,I'll follow on later.,neutral,neutral,neutral
+1807,speech,ALAN,"I just got a call from Mr Cleethorpes, he wants to meet with me.",neutral,neutral,neutral
+1808,speech,JESSICA,Hopefully to apologise.,sadness,optimism,sadness
+1809,speech,ALAN,Well hopefully not to give me another thump anyway.,neutral,optimism,neutral
+1810,consigne,,Pause,,,
+1811,speech,MARGARET,"Did you ever dream this is how we'd end up?
+",surprise,curiosity,joy
+1812,speech,ALAN,"In what way?
+",neutral,neutral,neutral
+1813,speech,MARGARET,"Well, so unhappy.",sadness,sadness,sadness
+1814,speech,JESSICA,I certainly can't imagine we'd have gone through all this nonsense if Edwin had been here.,surprise,disapproval,surprise
+1815,speech,JESSICA,"All the tension, all the hate, the bitterness, the resentment just wouldn't have existed with him around.",anger,neutral,anger
+1816,speech,MARGARET,"Edwin didn't take those things away, he just covered them up well.",neutral,neutral,neutral
+1817,speech,MARGARET,That's probably why we saw them so prominently when we went our separate ways.,neutral,neutral,neutral
+1818,speech,MARGARET,"That's probably how we became so unhappy.
+",sadness,disappointment,neutral
+1819,speech,ALAN,I don't think so.,neutral,disapproval,neutral
+1820,speech,ALAN,"We're not unhappy people, we're just not kids anymore.",sadness,neutral,neutral
+1821,speech,ALAN,"That life we lived with Edwin meant none of us ever got used to growing up, and I don't think any of us really learned how to do it properly.",neutral,disappointment,neutral
+1822,speech,ALAN,"That's why in one way or another none of us knew how to cope.
+",neutral,neutral,neutral
+1823,speech,JESSICA,That's why I'm leaving Thomas.,sadness,neutral,neutral
+1824,speech,JESSICA,I need to learn how to live for myself.,neutral,desire,neutral
+1825,speech,JESSICA,"Besides, he deserves someone who will treat him right.",neutral,approval,neutral
+1826,speech,JESSICA,I just hope my girls forgive me one day.,neutral,optimism,sadness
+1827,consigne,,A car horn sounds.,,,
+1828,speech,MARGARET,That's us.,neutral,neutral,neutral
+1829,speech,MARGARET,"How about we try and meet up a little more regularly, and under better circumstances.
+",neutral,desire,neutral
+1830,speech,JESSICA,"I'd like that.
+",neutral,love,neutral
+1831,speech,ALAN,Me too.,neutral,neutral,neutral
+1832,speech,JESSICA,"Goodbye Clifton.
+",sadness,neutral,neutral
+1833,speech,MARGARET,"Goodbye.
+",sadness,neutral,neutral
+1834,speech,BARMAN,"Goodbye .
+",sadness,neutral,neutral
+1835,consigne,,JESSICA and MARGARET kiss ALAN on the cheek and exit.,,,
+1836,speech,ALAN,I should think about making a move myself.,fear,neutral,neutral
+1837,speech,BARMAN,Care for a drink before you go sir?,fear,curiosity,neutral
+1838,speech,ALAN,Please.,neutral,neutral,neutral
+1839,consigne,,"BARMAN brings over a glass of whiskey on a tray and puts it on the table. He stands next to ALAN. ALAN reaches into his inside pocket and pulls out a packet of cigarettes, he puts one in his mouth. He looks in several pockets for matches and pulls out a note.",,,
+1840,speech,ALAN,What's this?,surprise,curiosity,surprise
+1841,consigne,,Removes the cigarette. He reads the note to himself.,,,
+1842,speech,ALAN,It's from Trevor.,neutral,neutral,neutral
+1843,consigne,,He hands the note to BARMAN who reads it to himself.,,,
+1844,speech,BARMAN,"Whatever does it mean sir?
+",neutral,confusion,neutral
+1845,consigne,,smiles,,,
+1846,speech,ALAN,It means the Romans were right.,neutral,approval,neutral
+1847,speech,BARMAN,"sir?
+",surprise,neutral,neutral
+1848,consigne,,ALAN stands and moves over to the door.,,,
+1849,speech,BARMAN,"Your drink sir?
+",neutral,neutral,neutral
+1850,consigne,,ALAN walks back to the table and picks up the glass. He holds it for a few seconds then puts it on BARMAN'S tray.,,,
+1851,speech,ALAN,I'm trying to cut down.,anger,neutral,neutral
+1852,consigne,,ALAN walks over to the door and exits.,,,
+1853,consigne,,Curtain falls.,,,
+1854,consigne,,END,,,
