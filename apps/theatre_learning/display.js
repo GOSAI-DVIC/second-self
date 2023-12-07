@@ -20,10 +20,10 @@ export const theatre_learning = new p5((sketch) => {
     let scenes_info_received = false
     let choosing_characters_bool = false
 
-    let hands_position = []
+    let characterColors_init = false
     let characterColors = {};
     let starting_correction = false 
-    let users_initialized = false
+
     let longest = 0
     
 
@@ -66,23 +66,29 @@ export const theatre_learning = new p5((sketch) => {
 
             if (Object.keys(data)[0] == "characters"){
                 console.log('characters');
-                console.log(data);
+                console.log(characterColors.length);
                 characters = data["characters"]
+                transcription = data["transcription"]
 
-                if (characterColors=={}){
+                if (!characterColors_init){
                     for (let i = 0; i < characters.length; i++){
                         characterColors[characters[i]]= "blue"
 
                     }
+                    characterColors_init = true
                 }
-                if (data['changing_mode_character']!="NO") {
-                    if (characterColors[data['changing_mode_character']]==="blue"){
-                        characterColors[data['changing_mode_character']] = "orange"  
-                    }
-                    else {
-                        characterColors[data['changing_mode_character']] = "blue"  
-                    }
+                if (data['changing_mode_character'].length!=0) {
+                    for (var i = 0; i < data['changing_mode_character'].length; i++){
+                        if (characterColors[data['changing_mode_character'][i]]=="blue"){
+                            characterColors[data['changing_mode_character'][i]] = "orange"  
+                        }
+                        else {
+                            characterColors[data['changing_mode_character'][i]] = "blue"  
+                        }
+                     }
                 }
+
+                console.log(characterColors)
                 theatre_plays_scene_init = false
                 choosing_characters_bool = true
             }
@@ -98,6 +104,7 @@ export const theatre_learning = new p5((sketch) => {
                 console.log(data);
                 instruct = data["instruction"]
                 instruct_received = true
+                choosing_characters_bool = false
                 
                
             }
@@ -184,7 +191,7 @@ export const theatre_learning = new p5((sketch) => {
                 sketch.text(available_theatre_plays[i], sketch.width / 2, ((i*2)*sketch.height / (20))+250)
                 console.log(available_theatre_plays[i])
             }
-            sketch.text("COMMAND RECEIVED : "+transcription, sketch.width / 2, sketch.height*(available_theatre_plays.length+4) / (available_theatre_plays.length+5))
+            sketch.text("COMMAND RECEIVED : "+transcription, sketch.width / 2,  sketch.height*(17) / (20))
             
         }
 
@@ -195,7 +202,7 @@ export const theatre_learning = new p5((sketch) => {
             sketch.rect( sketch.width / 2, sketch.height * 2 / (20) , titleBgWidth, 50 ,20); // Rounded rectangle background
 
             sketch.fill("white")
-            sketch.text(" AVAILABLE SCENES ", sketch.width / 2, sketch.height*2 / (20))
+            sketch.text(" AVAILABLE SCENES ", sketch.width / 2, sketch.height * 2 / (20))
          
 
             var lgth = 0
@@ -222,7 +229,7 @@ export const theatre_learning = new p5((sketch) => {
                 j = j + 1
               }
               
-            sketch.text("COMMAND RECEIVED : "+transcription, sketch.width / 2, sketch.height*(available_theatre_plays.length+4) / (available_theatre_plays.length+5))
+            sketch.text("COMMAND RECEIVED : "+transcription, sketch.width / 2,  sketch.height*(17) / (20))
 
             
 
@@ -231,11 +238,11 @@ export const theatre_learning = new p5((sketch) => {
 
         if (choosing_characters_bool){
            
-            sketch.fill(0, 255, 0);  // Green color for section title
-            let chooseCharactersBgWidth = sketch.textWidth("CHOOSE THE CHARACTERS") + 20;
-            sketch.rect(sketch.width / 2, sketch.height / 20, chooseCharactersBgWidth, 50, 20); // Rounded rectangle background
-            sketch.fill(0);  // Black text color
-            sketch.text("CHOOSE THE CHARACTERS", sketch.width / 2, sketch.height / 20);
+            sketch.fill("green");  // Green color for section title
+            let chooseCharactersBgWidth = sketch.textWidth("************** AVAILABLE SCENES **************") + 20;
+            sketch.rect(sketch.width / 2, sketch.height * 2 / 20, chooseCharactersBgWidth, 50, 20); // Rounded rectangle background
+            sketch.fill("white");  // Black text color
+            sketch.text("CHOOSE THE CHARACTERS", sketch.width / 2, sketch.height*2 / 20);
 
             // Display rectangles for each character
             sketch.fill(0, 0, 255);  // Blue color for character rectangles
@@ -261,13 +268,15 @@ export const theatre_learning = new p5((sketch) => {
                 sketch.fill(value)
                 console.log(key)
                 console.log(value)
-                sketch.rect( sketch.width / 2, ((k*3)*sketch.height / (20))+250, titleBgWidth, 100 ,20); // Rounded rectangle background
+                sketch.rect( sketch.width / 2, ((k)*sketch.height / (20))+250, titleBgWidth, 50 ,20); // Rounded rectangle background
                 sketch.fill("white")
-                sketch.text(key, sketch.width / 2, ((k*3)*sketch.height / (20))+250)
+                sketch.text(key, sketch.width / 2, ((k)*sketch.height / (20))+250)
                 
-                console.log(j)
+                console.log(k)
                 k = k + 1
             }
+
+            sketch.text("COMMAND RECEIVED : "+transcription, sketch.width / 2, sketch.height*(17) / (20))
            
             // ... (remaining code)
         }
@@ -286,7 +295,7 @@ export const theatre_learning = new p5((sketch) => {
 
         }
         
-        
+         
         
 
 

@@ -53,7 +53,7 @@ class Application(BaseApplication):
         self.theatre_play_title_init_bool = False
         self.theatre_play_character_init_bool = False
         self.changing_mode_character = None
-        self.changing_mode_character = "NO"
+        self.changing_mode_character = []
         self.script_info = {
             "idx" : 0,
             "sentence" : "",
@@ -187,8 +187,10 @@ class Application(BaseApplication):
             elif self.theatre_play_title_init_bool and self.theatre_play_scene_init_bool :
                 self.data = {
                     "characters" : self.characters,
-                    "changing_mode_character" : "NO"
+                    "changing_mode_character" : self.changing_mode_character
+                   
                 }
+                print(self.data)
                 self.server.send_data(self.name, self.data)
 
             else :
@@ -230,11 +232,12 @@ class Application(BaseApplication):
                 command = ""
                 #command_recognized_bool = False
                 self.command_recognized = ""
+
                 self.log(data['transcription_segments'],3)
                 command = data['transcription_segments']
-                if not self.theatre_play_title_init_bool and not self.theatre_play_character_init_bool:
+                if not self.theatre_play_title_init_bool and not self.theatre_play_scene_init_bool:
                     for txt in self.available_theatre_plays :
-                        if self.corrector_for_cmd.txt_correction(command, txt) :
+                        #if self.corrector_for_cmd.txt_correction(command, txt) :
                             self.theatre_play_title_init_bool = True 
                             self.command_recognized_bool = True
                             self.command_recognized = txt
@@ -245,15 +248,16 @@ class Application(BaseApplication):
                     "command_recognized" : self.command_recognized,
                     "transcription" : command
                      }
-                elif self.theatre_play_title_init_bool and not self.theatre_play_character_init_bool : 
+                elif self.theatre_play_title_init_bool and not self.theatre_play_scene_init_bool : 
                     for txt in self.theatre_play_scene_info.keys() :
-                        if self.corrector_for_cmd.txt_correction(command, txt) :
+                        #if self.corrector_for_cmd.txt_correction(command, txt) :
                             self.theatre_play_scene_init_bool = True
                             self.command_recognized_bool = True 
                             self.command_recognized = txt
 
                            
                             self.characters = self.theatre_play_scene_info[self.command_recognized]
+                            self.characters_to_keep = []
                             print(self.command_recognized[-1])
                             self.scene_script = self.scene_list[int(self.command_recognized[-1])-1]
 
@@ -261,24 +265,35 @@ class Application(BaseApplication):
                     if self.corrector_for_cmd.txt_correction(command, "finish") :
                         self.initialisation_bool = True
                         self.theatre_play_scene_init_bool = True
+                        
+                        
                        
                     
                     for txt in self.characters :
                         if self.corrector_for_cmd.txt_correction(command, txt) :
                             
-                            self.changing_mode_character = txt
-                     
-                        
+                            self.changing_mode_character.append(txt)
+
+                            if txt in self.characters_to_keep :
+                                self.characters_to_keep.remove(txt)
+                            elif txt not in self.characters_to_keep :
+                                self.characters_to_keep.append(txt)
+
+                            print(self.characters_to_keep)
+
+                    self.command_recognized_bool = True 
+                                             
                         
     
                             
                     self.data = {
                     "characters" : self.characters,
-                    "changing_mode_character" : self.changing_mode_character
+                    "changing_mode_character" : self.changing_mode_character,
+                    "transcription" : command
                 }
 
                 self.server.send_data(self.name, self.data)
-                self.changing_mode_character = "NO"
+                self.changing_mode_character = []
 
                 self.waiting_result_bool = False
                 
@@ -529,8 +544,10 @@ class Application(BaseApplication):
 
         if not self.initialisation_bool :
            self.script_init(source, event, data)
+           
 
         elif not self.character_embedding_stored and self.initialisation_bool: 
+            self.characters = self.characters_to_keep
             self.store_character_embedding(source, event, data)
 
         else : 
