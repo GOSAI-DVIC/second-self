@@ -37,10 +37,7 @@ export const theatre_learning = new p5((sketch) => {
             
             console.log('receiving')
             console.log(Object.keys(data)[0])
-            // if (Object.keys(data)[0] == "hands_landmarks") {
-            // if (data == undefined || data[0].length == 0) return;
-            // hands_position = data["hands_landmarks"];
-            // }
+            
             if (Object.keys(data)[0] == "command_recognized_bool"){
                 console.log('command_recognized_bool');
                 console.log(data);
@@ -69,7 +66,8 @@ export const theatre_learning = new p5((sketch) => {
                 console.log(characterColors.length);
                 characters = data["characters"]
                 transcription = data["transcription"]
-
+                console.log('transcription')
+                console.log(transcription)
                 if (!characterColors_init){
                     for (let i = 0; i < characters.length; i++){
                         characterColors[characters[i]]= "blue"
@@ -142,28 +140,6 @@ export const theatre_learning = new p5((sketch) => {
     sketch.show = () => {
         sketch.clear();
         
-        // if ((!starting_correction) && (hands_position.length>0)) {
-
-        //     console.log('hands positions : ')
-        //     console.log(hands_position)
-        //     console.log(hands_position.length)
-        //     if (hands_position.length != 0){
-        //         index_x_a = hands_position[0][8][0] * width;
-        //         index_y_a = hands_position[0][8][1] * height;
-        //         sketch.circle(index_x_a, index_y_a, 20);
-            
-        //     } else {
-        //         index_x_a = 0;
-        //         index_y_a = 0;
-        //     }
-        //     if (hands_position.length > 1) {
-        //         index_x_b = hands_position[1][8][0] * width;
-        //         index_y_b = hands_position[1][8][1] * height;
-        //     } else {
-        //         index_x_b = 0;
-        //         index_y_b = 0;
-        //     }
-        // }
 
         if ((theatre_play_title_init)&&(available_theatre_plays_received)){
             // console.log('display')
@@ -221,10 +197,10 @@ export const theatre_learning = new p5((sketch) => {
 
                 sketch.fill(50)
                 
-                sketch.rect( sketch.width / 2, ((j*3 + 0.5)*sketch.height / (20))+250, titleBgWidth, 100 ,20); // Rounded rectangle background
+                sketch.rect( sketch.width / 2, ((j*2 + 0.5)*sketch.height / (20))+200, titleBgWidth, 75 ,20); // Rounded rectangle background
                 sketch.fill("white")
-                sketch.text(key, sketch.width / 2, ((j*3)*sketch.height / (20))+250)
-                sketch.text(value, sketch.width / 2, ((j*3 + 1)*sketch.height / (20))+250)
+                sketch.text(key, sketch.width / 2, ((j*2)*sketch.height / (20))+200)
+                sketch.text(value, sketch.width / 2, ((j*2 + 1)*sketch.height / (20))+200)
                 console.log(j)
                 j = j + 1
               }
@@ -266,13 +242,11 @@ export const theatre_learning = new p5((sketch) => {
                 let titleBgWidth = sketch.textWidth(longest) +40;
 
                 sketch.fill(value)
-                console.log(key)
-                console.log(value)
                 sketch.rect( sketch.width / 2, ((k)*sketch.height / (20))+250, titleBgWidth, 50 ,20); // Rounded rectangle background
                 sketch.fill("white")
                 sketch.text(key, sketch.width / 2, ((k)*sketch.height / (20))+250)
                 
-                console.log(k)
+
                 k = k + 1
             }
 
@@ -302,11 +276,24 @@ export const theatre_learning = new p5((sketch) => {
         if (starting_correction){ 
             console.log(results)
 
-        
-            sketch.text("**************[NEXT REPLY]**************", sketch.width / 2,(sketch.height / 15)*1);
-            sketch.text("NEXT REPLY : "+results["next_sentence"], sketch.width / 2,(sketch.height / 15)*2)
-            sketch.text("NEXT CHAR : "+results["next_char"], sketch.width / 2,(sketch.height / 15)*3)
-            sketch.text("NEXT EMO : "+results["next_emo"], sketch.width / 2,(sketch.height / 15)*4)
+            sketch.fill(50)
+
+            let list = ["**************[NEXT REPLY]**************", "NEXT REPLY : "+results["next_sentence"], "NEXT CHAR : "+results["next_char"], "NEXT EMO : "+results["next_emo"]]
+            var lgth = 0
+            for (var i = 0; i < list.length; i++) {
+                if (list[i].length > lgth) {
+                  lgth = list[i].length;
+                  longest = list[i];
+                }
+              }
+
+            let chooseCharactersBgWidth = sketch.textWidth(longest) + 20;
+            sketch.rect(sketch.width / 2, sketch.height * 3 / 20, chooseCharactersBgWidth, 145, 20); // Rounded rectangle background
+            sketch.fill("white")
+            sketch.text("**************[NEXT REPLY]**************", sketch.width / 2,(sketch.height / 20)*1);
+            sketch.text("NEXT REPLY : "+results["next_sentence"], sketch.width / 2,(sketch.height / 20)*2)
+            sketch.text("NEXT CHAR : "+results["next_char"], sketch.width / 2,(sketch.height / 20)*3)
+            sketch.text("NEXT EMO : "+results["next_emo"], sketch.width / 2,(sketch.height / 20)*4)
             
             if (Object.keys(results).length > 3){
             sketch.text("**************[CORRECTION]**************", sketch.width / 2,(sketch.height / 15)*6);
@@ -314,20 +301,62 @@ export const theatre_learning = new p5((sketch) => {
                 sketch.fill("green")
             }
             else {sketch.fill("red")}
-            sketch.text("[CORRECTION] STT : "+results["correction_stt"], sketch.width / 2,(sketch.height / 15)*7);
-            sketch.text("[RESULT] STT : "+results["stt"], sketch.width / 2, (sketch.height / 15)*8);
+
+            if (("[CORRECTION] STT : "+results["correction_stt"]).length < ("[RESULT] STT : "+results["stt"]).length){
+                chooseCharactersBgWidth = sketch.textWidth("[RESULT] STT : "+results["stt"]) + 20;
+            }
+            else {
+                chooseCharactersBgWidth = sketch.textWidth("[CORRECTION] STT : "+results["correction_stt"]) + 20;
+            }
+
+            sketch.rect(sketch.width / 2, sketch.height * 8.5 / 20, chooseCharactersBgWidth, 100, 20); // Rounded rectangle background
+            
+            sketch.fill('white')
+
+            sketch.text("[CORRECTION] STT : "+results["correction_stt"], sketch.width / 2,(sketch.height / 20)*8);
+            sketch.text("[RESULT] STT : "+results["stt"], sketch.width / 2, (sketch.height / 20)*9);
+
+
             if (results.emo_correction_bool){
                 sketch.fill("green")
             }
             else {sketch.fill("red")}
-            sketch.text("[CORRECTION] EMO : "+results["correction_emo"], sketch.width / 2,(sketch.height / 15)*9);
-            sketch.text("[RESULT] EMO : "+results["emo"], sketch.width / 2, (sketch.height / 15)*10);
+            
+            if (("[CORRECTION] EMO : "+results["correction_emo"]).length < ("[RESULT] EMO : "+results["emo"]).length){
+                chooseCharactersBgWidth = sketch.textWidth("[RESULT] EMO : "+results["emo"]) + 20;
+            }
+            else {
+                chooseCharactersBgWidth = sketch.textWidth("[CORRECTION] EMO : "+results["correction_emo"]) + 20;
+            }
+
+            sketch.rect(sketch.width / 2, sketch.height * 11.5 / 20, chooseCharactersBgWidth, 100, 20); // Rounded rectangle background
+            
+            sketch.fill('white')
+
+            sketch.text("[CORRECTION] EMO : "+results["correction_emo"], sketch.width / 2,(sketch.height / 20)*11);
+            sketch.text("[RESULT] EMO : "+results["emo"], sketch.width / 2, (sketch.height / 20)*12);
+
+
             if (results.emb_correction_bool){
                 sketch.fill("green")
             }
             else {sketch.fill("red")}
-            sketch.text("[CORRECTION] EMB : "+results["correction_emb"], sketch.width / 2, (sketch.height / 15)*11);
-            sketch.text("[RESULT] EMB : "+results["emb"], sketch.width / 2, (sketch.height / 15)*12);
+
+
+            if (("[CORRECTION] EMB : "+results["correction_emb"]).length < ("[RESULT] EMB : "+results["emb"]).length){
+                chooseCharactersBgWidth = sketch.textWidth("[RESULT] EMB : "+results["emb"]) + 20;
+            }
+            else {
+                chooseCharactersBgWidth = sketch.textWidth("[CORRECTION] EMB : "+results["correction_emb"]) + 20;
+            }
+
+            sketch.rect(sketch.width / 2, sketch.height * 14.5 / 20, chooseCharactersBgWidth, 100, 20); // Rounded rectangle background
+            
+            sketch.fill('white')
+
+
+            sketch.text("[CORRECTION] EMB : "+results["correction_emb"], sketch.width / 2, (sketch.height / 20)*14);
+            sketch.text("[RESULT] EMB : "+results["emb"], sketch.width / 2, (sketch.height / 20)*15);
                         }
             }
             sketch.fill("white")

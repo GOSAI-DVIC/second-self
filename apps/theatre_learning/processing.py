@@ -16,7 +16,7 @@ class Application(BaseApplication):
         self.time = 0
 
         self.corrector = Correction()
-        self.corrector_for_cmd = Correction(90)
+        self.corrector_for_cmd = Correction(80)
 
         #FOR JS
         self.recording_sent = False
@@ -124,7 +124,7 @@ class Application(BaseApplication):
               
             self.scene_list.append(new_scene)
            
-            # self.scene_script = scene_list[scene_nb - 1]
+         
 
 
             
@@ -149,10 +149,6 @@ class Application(BaseApplication):
             compt+=1
             
 
-        # self.characters = sorted(set(self.scene_script["character"].tolist()))
-        # if 'NaN' in self.characters :
-        #     self.characters.remove('NaN')
-        # self.characters = list(self.characters)
 
         
 
@@ -161,13 +157,7 @@ class Application(BaseApplication):
         
 
     def script_init(self, source, event, data):
-        #ASK TO THE USER WHICH THEATRE PLAY TO USE 
-        #AND ALSO WHICH SCENE 
-        #GET THE NUMBER OF USER AND THEIR NAME 
 
-        #Exemples
-
-        # List all theatre plays availables 
 
         if self.command_recognized_bool : 
 
@@ -183,11 +173,17 @@ class Application(BaseApplication):
                             "scenes_info" : self.theatre_play_scene_info
                         }
                 self.server.send_data(self.name, self.data)
+
+                self.data = {
+                    "state" : "Listening..."
+                }   
+                self.server.send_data(self.name, self.data)
             
             elif self.theatre_play_title_init_bool and self.theatre_play_scene_init_bool :
                 self.data = {
                     "characters" : self.characters,
-                    "changing_mode_character" : self.changing_mode_character
+                    "changing_mode_character" : self.changing_mode_character,
+                    "transcription" : self.command
                    
                 }
                 print(self.data)
@@ -202,16 +198,18 @@ class Application(BaseApplication):
                 
             self.data = {
                     "state" : "Listening..."
-                }       
+                }   
+            self.server.send_data(self.name, self.data)
+
             self.is_listening_for_sentence = True
             self.command_recognized_bool = False
 
         else : 
-            if source == "microphone" and event == "audio_stream" and data is not None :
+            if source == "microphone" and event == "audio_stream" and data is not None and not self.waiting_result_bool :
 
 
                 
-                self.listen_for_one_sentence(data)#, new_users=True)
+                self.listen_for_one_sentence(data)
                
 
 
@@ -229,15 +227,15 @@ class Application(BaseApplication):
                 print(self.audio['previous_activity_detected'] ,self.audio['activity_detected'] )
 
             if source == "speech_to_text" and event == "transcription" and data is not None :
-                command = ""
+                self.command = ""
                 #command_recognized_bool = False
                 self.command_recognized = ""
 
                 self.log(data['transcription_segments'],3)
-                command = data['transcription_segments']
+                self.command = data['transcription_segments']
                 if not self.theatre_play_title_init_bool and not self.theatre_play_scene_init_bool:
                     for txt in self.available_theatre_plays :
-                        #if self.corrector_for_cmd.txt_correction(command, txt) :
+                        if self.corrector_for_cmd.txt_correction(self.command, txt) :
                             self.theatre_play_title_init_bool = True 
                             self.command_recognized_bool = True
                             self.command_recognized = txt
@@ -246,11 +244,15 @@ class Application(BaseApplication):
                     self.data = {
                     "command_recognized_bool" : self.theatre_play_title_init_bool,
                     "command_recognized" : self.command_recognized,
-                    "transcription" : command
+                    "transcription" : self.command
                      }
+                    
+
                 elif self.theatre_play_title_init_bool and not self.theatre_play_scene_init_bool : 
                     for txt in self.theatre_play_scene_info.keys() :
-                        #if self.corrector_for_cmd.txt_correction(command, txt) :
+                        numb_mapping = {1:"one", 2:"two", 3:"three", 4:"four", 5:"five", 6:"six", 7:"seven", 8:"eight"}
+                      
+                        if self.corrector_for_cmd.txt_correction(self.command, txt[:5]+' '+str(numb_mapping[int(txt[-1])])) :
                             self.theatre_play_scene_init_bool = True
                             self.command_recognized_bool = True 
                             self.command_recognized = txt
@@ -262,7 +264,7 @@ class Application(BaseApplication):
                             self.scene_script = self.scene_list[int(self.command_recognized[-1])-1]
 
                 else :
-                    if self.corrector_for_cmd.txt_correction(command, "finish") :
+                    if self.corrector_for_cmd.txt_correction(self.command, "finish") :
                         self.initialisation_bool = True
                         self.theatre_play_scene_init_bool = True
                         
@@ -270,7 +272,7 @@ class Application(BaseApplication):
                        
                     
                     for txt in self.characters :
-                        if self.corrector_for_cmd.txt_correction(command, txt) :
+                        if self.corrector_for_cmd.txt_correction(self.command, txt) :
                             
                             self.changing_mode_character.append(txt)
 
@@ -285,71 +287,29 @@ class Application(BaseApplication):
                                              
                         
     
-                            
+                    self.log(self.command,3)                            
                     self.data = {
                     "characters" : self.characters,
                     "changing_mode_character" : self.changing_mode_character,
-                    "transcription" : command
-                }
+                    "transcription" : self.command
+                    }
 
                 self.server.send_data(self.name, self.data)
+                self.processing_sent = False
+
                 self.changing_mode_character = []
 
                 self.waiting_result_bool = False
+
+                self.data = {
+                    "state" : "Listening..."
+                }   
+                self.server.send_data(self.name, self.data)
                 
 
 
 
-
-        # self.script = pd.read_csv(script_path)
-        # scene_list = []
-        # new_scene = 0
-        # idx = 0
-
-        # self.script = self.script.fillna("NaN")
-        # if self.str_scene_title == "POH" :
-
-        #     for i, row in self.script.iterrows():
-
-                
-        #         if type(new_scene) != int: 
-        #             new_scene.at[idx, "character"] = row["character"]
-        #             new_scene.at[idx, "type"] = row["character"]
-        #             new_scene.at[idx, "sentence"] = row["sentence"]
-        #             new_scene.at[idx, "emo"] = row["j-hartmann/emotion-english-distilroberta-base"]
-        #             idx += 1
-
-        #         if row['sentence'][:6] == 'Scene:' : 
-                    
-        #             if type(new_scene) != int: 
-        #                 scene_list.append(new_scene)
-        #                 print("appending new scene")
-
-        #             new_scene = pd.DataFrame(columns = ['character', 'type', 'sentence'])
-            
-        #     scene_list.append(new_scene)
-        #     self.scene_script = scene_list[scene_nb - 1]
-
-
-            
-        # if self.str_scene_title == "TWATC" :
-        #     new_scene = pd.DataFrame(columns = ['character', 'type', 'sentence','emo'])
-        #     for i, row in self.script.iterrows():
-        #         new_scene.at[idx, "character"] = row["character"]
-        #         new_scene.at[idx, "type"] = row["character"]
-        #         new_scene.at[idx, "sentence"] = row["sentence"]
-        #         new_scene.at[idx, "emo"] = row["michellejieli/emotion_text_classifier"]
-        #         idx += 1
-            
-        #     self.scene_script = new_scene
-
-        
-        # self.characters = sorted(set(self.scene_script["character"].tolist()))
-        # if 'NaN' in self.characters :
-        #     self.characters.remove('NaN')
-        # self.characters = list(self.characters)
-
-        # print("characters : ", set(self.scene_script["character"].tolist()))
+       
 
 
     def clear_audio_buffer(self):
@@ -364,24 +324,33 @@ class Application(BaseApplication):
         if self.script_info["idx"] >= len(self.scene_script):
             self.log("Script finished !", 3)
         else : 
-            #print(self.scene_script.at[self.script_info["idx"], "character"])print
-            while self.scene_script.at[self.script_info["idx"], "character"] == "NaN":
-                #idx = self.script_info["idx"]
-                #if self.scene_script.at[idx, "character"] == "" :
-                self.log(f'CONSIGNE : {self.scene_script.at[self.script_info["idx"], "sentence"]}', 3)
+           
+           
+            #self.script_info["idx"] += 1 
+            
+            while self.scene_script['character'].iloc[self.script_info['idx']] == "NaN" or self.scene_script['character'].iloc[self.script_info['idx']] not in self.characters :
+
+                #if self.scene_script['character'].iloc[self.script_info['idx']] not in self.characters :
+                    #ADD THE REPLY IN A QUEUE FOR TTS
+               
+
+                
                 self.script_info["idx"] += 1 
                 #else : 
-            self.script_info["sentence"] = self.scene_script.at[self.script_info["idx"], "sentence"]
-            self.script_info["character"] = self.scene_script.at[self.script_info["idx"], "character"]
-            self.script_info["emo"] = self.scene_script.at[self.script_info["idx"], "emo"]
+            self.script_info["sentence"] = self.scene_script['sentence'].iloc[self.script_info['idx']]
+            
+            self.script_info["character"] = self.scene_script['character'].iloc[self.script_info['idx']]
 
-            #Now lets take the next sentence too 
+            self.script_info["emo"] = self.scene_script['emo'].iloc[self.script_info['idx']]
+         
+
             idx = self.script_info["idx"] + 1
-            while self.scene_script.at[idx, "character"] == "NaN":
+            while self.scene_script['character'].iloc[idx] == "NaN" or self.scene_script['character'].iloc[idx] not in self.characters :
                 idx += 1 
-            self.script_info["next_sentence"] = self.scene_script.at[idx, "sentence"]
-            self.script_info["next_emo"] = self.scene_script.at[idx, "emo"]
-            self.script_info["next_char"] = self.scene_script.at[idx, "character"]
+
+            self.script_info["next_sentence"] = self.scene_script['sentence'].iloc[idx]
+            self.script_info["next_emo"] = self.scene_script['emo'].iloc[idx]
+            self.script_info["next_char"] = self.scene_script['character'].iloc[idx]
             
 
 
@@ -391,14 +360,8 @@ class Application(BaseApplication):
 
         if mode=="script_init":
             self.log(f'Correction [STT]: {self.script_info["sentence"]}',3)
-            compt = 0
-            sentence = ""
-
-
-            # for segment in self.module_results['speech_to_text'] :
-            #     compt += 1
-            #     self.log(f"""Results [STT]:({compt}/{len(self.module_results['speech_to_text'])}) : {segment.text}""",3)  
-            #     sentence += segment.text
+            
+           
             sentence = self.module_results['speech_to_text']
 
 
@@ -413,14 +376,8 @@ class Application(BaseApplication):
                     best_emb = i
 
             self.log(f'Correction [STT]: {self.script_info["sentence"]}',3)
-            compt = 0
-            sentence = ""
-
-            # for segment in self.module_results['speech_to_text'] :
-            #     compt += 1
-            #     self.log(f"""Results [STT]:({compt}/{len(self.module_results['speech_to_text'])}) : {segment.text}""",3)  
-            #     sentence += segment.text
-            sentence = self.script_info["sentence"]
+        
+            sentence = self.module_results['speech_to_text']
             self.log(f'Correction [SEE]: {self.script_info["emo"]}',3)
 
             best_conf = 0
@@ -552,23 +509,16 @@ class Application(BaseApplication):
 
         else : 
             if self.module_results['speech_to_text_reception'] and self.module_results['speech_speaker_extraction_reception'] and self.module_results['speech_emo_extraction_reception'] :
-                # self.log(f'Results [EMB]: {self.module_results["speech_speaker_extraction"]}',3)
-                # compt = 0
-                # for segment in self.module_results['speech_to_text'] :
-                #     compt += 1
-                #     self.log(f"""Results [STT]:({compt}/{len(self.module_results['speech_to_text'])}) : {segment.text}""",3)  
-
-                # for emo in self.module_results['speech_emo_extraction'] :
-                #     self.log(f'Results [SEE]: Emotion : {emo["label"]} with {emo["score"]*100}%', 3)
+                
                 self.correction()
                 self.is_listening_for_sentence = True
                 self.module_results['speech_to_text_reception'] = False
                 self.module_results['speech_speaker_extraction_reception'] = False
                 self.module_results['speech_emo_extraction_reception'] = False
 
+
             if source == "microphone" and event == "audio_stream" and data is not None and self.is_listening_for_sentence:
                 self.script_iter()
-
 
                 self.listen_for_one_sentence(data)
 
@@ -678,55 +628,4 @@ class Application(BaseApplication):
             self.activity_buffer = self.activity_buffer[target_sr * activity_duration:] 
 
 
-    #                         data,
-    #                         new_users : bool = False,
-    #                         sentence_duration_treshold : float = 2, 
-    #                         activity_duration : float = 2, 
-    #                         target_sr : int = 16000, ):
-            
-    #         frame = data["block"][:, 0]
-    #         sample_rate = self.audio["samplerate"]
-    #         frame = samplerate.resample(frame, target_sr * 1.0 / sample_rate, 'sinc_best')  
-            
-    #         self.audio["audio_buffer"].extend(frame) 
-    #         self.audio["activity_buffer"].extend(frame)
-
-    #         if not self.audio["activity_detected"] :
-    #             if len(self.audio["audio_buffer"])/target_sr > sentence_duration_treshold :
-
-
-    #                     self.execute("speech_speaker_extraction", "speaker_verification", self.audio)
-    #                     self.listening_spk = False
-
-    #                     if new_users : 
-                            
-    #                         self.character_registered_index += 1
-    #                         #return 
-                        
-    #                     else :
-    #                         self.execute("speech_to_text", "transcribe", self.audio)
-    #                         #self.execute("speech_to_text", "transcribe", self.audio)
-    #                         return
-
-
-    #             self.audio["audio_buffer"] = []
-
-    #         elif len(self.audio["audio_buffer"]) == 0 :
-    #             self.audio["audio_buffer"].extend(self.audio["activity_buffer"])
-
-
-
-
-
-    #         if len(self.audio["activity_buffer"]) >= target_sr*activity_duration:
-    #             onesec_activity = self.audio["activity_buffer"][:target_sr*activity_duration]
-    #             self.audio["activity_buffer"] = self.audio["activity_buffer"][target_sr*activity_duration:]
-
-                
-    #             self.execute("speech_activity_detection", "predict", onesec_activity) 
-
-
-
-
-
-
+   
