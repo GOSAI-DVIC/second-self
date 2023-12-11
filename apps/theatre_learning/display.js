@@ -26,6 +26,24 @@ export const theatre_learning = new p5((sketch) => {
 
     let longest = 0
     
+    function getTextSize(text) {
+        // Split the text into lines
+        const lines = text.split('\n');
+      
+        // Calculate the maximum width among all lines
+        const maxWidth = lines.reduce((maxWidth, line) => {
+          const lineWidth = sketch.textWidth(line);
+          return Math.max(maxWidth, lineWidth);
+        }, 0);
+      
+        // Calculate the total height of all lines
+        const totalHeight = lines.length * sketch.textAscent();
+      
+        return { width: maxWidth, height: totalHeight };
+      }
+
+
+
 
     sketch.set = (width, height, socket) => {
         sketch.selfCanvas = sketch
@@ -145,13 +163,15 @@ export const theatre_learning = new p5((sketch) => {
             // console.log('display')
             sketch.fill("green")
             sketch.rectMode(sketch.CENTER);
-            let titleBgWidth = sketch.textWidth("************** AVAILABLE THEATRE PLAYS **************") + 20;
-            sketch.rect( sketch.width / 2, sketch.height * 2 / (20) , titleBgWidth, 50 ,20); // Rounded rectangle background
+            
+            let textSize = getTextSize("************** AVAILABLE THEATRE PLAYS **************");
+            let txtWidth = textSize.width + 20 ;
+            let txtHeigh = textSize.height + 20 ;
+            sketch.rect( sketch.width / 2, sketch.height * 2 / (20) , txtWidth, txtHeigh ,20); // Rounded rectangle background
 
             sketch.fill("white")
             sketch.text(" AVAILABLE THEATRE PLAYS ", sketch.width / 2, sketch.height * 2 / (20));
-            console.log(available_theatre_plays.length)
-
+        
             var lgth = 0
             for (var i = 0; i < available_theatre_plays.length; i++) {
                 if (available_theatre_plays[i].length > lgth) {
@@ -161,8 +181,12 @@ export const theatre_learning = new p5((sketch) => {
               }
             for (let i = 0; i < available_theatre_plays.length; i++) {
                 sketch.fill(50)
-                let titleBgWidth = sketch.textWidth(longest) +40;
-                sketch.rect( sketch.width / 2, ((i*2)*sketch.height / (20))+250, titleBgWidth, 45 ,20); // Rounded rectangle background
+
+                textSize = getTextSize("************** AVAILABLE THEATRE PLAYS **************");
+                txtWidth = textSize.width + 20 ;
+                txtHeigh = textSize.height + 20 ;
+
+                sketch.rect( sketch.width / 2, ((i*2)*sketch.height / (20))+250, txtWidth, txtHeigh ,20); // Rounded rectangle background
                 sketch.fill("white")
                 sketch.text(available_theatre_plays[i], sketch.width / 2, ((i*2)*sketch.height / (20))+250)
                 console.log(available_theatre_plays[i])
@@ -174,8 +198,12 @@ export const theatre_learning = new p5((sketch) => {
         if ((scenes_info_received)&&(theatre_plays_scene_init)){
             
             sketch.fill("green")
-            let titleBgWidth = sketch.textWidth("************** AVAILABLE SCENES **************") + 20;
-            sketch.rect( sketch.width / 2, sketch.height * 2 / (20) , titleBgWidth, 50 ,20); // Rounded rectangle background
+
+            let textSize = getTextSize("************** AVAILABLE SCENES **************");
+            let txtWidth = textSize.width + 20 ;
+            let txtHeigh = textSize.height + 20 ;
+
+            sketch.rect( sketch.width / 2, sketch.height * 2 / (20) , txtWidth, txtHeigh ,20); // Rounded rectangle background
 
             sketch.fill("white")
             sketch.text(" AVAILABLE SCENES ", sketch.width / 2, sketch.height * 2 / (20))
@@ -183,9 +211,9 @@ export const theatre_learning = new p5((sketch) => {
 
             var lgth = 0
             for (const [key, value] of Object.entries(scenes_info)) {
-                if (str(value).length > lgth){
-                  lgth = str(value).length;
-                  longest = str(value);
+                if (String(value).length > lgth){
+                  lgth = String(value).length;
+                  longest = String(value);
                 }
               }
             
@@ -193,11 +221,13 @@ export const theatre_learning = new p5((sketch) => {
             for (const [key, value] of Object.entries(scenes_info)) {
        
                 
-                let titleBgWidth = sketch.textWidth(longest) +40;
+                textSize = getTextSize(longest);
+                txtWidth = textSize.width + 20 ;
+                txtHeigh = textSize.height + 20 ;
 
                 sketch.fill(50)
                 
-                sketch.rect( sketch.width / 2, ((j*2 + 0.5)*sketch.height / (20))+200, titleBgWidth, 75 ,20); // Rounded rectangle background
+                sketch.rect( sketch.width / 2, ((j*2 + 0.5)*sketch.height / (20))+200, txtWidth, txtHeigh ,20); // Rounded rectangle background
                 sketch.fill("white")
                 sketch.text(key, sketch.width / 2, ((j*2)*sketch.height / (20))+200)
                 sketch.text(value, sketch.width / 2, ((j*2 + 1)*sketch.height / (20))+200)
@@ -215,8 +245,11 @@ export const theatre_learning = new p5((sketch) => {
         if (choosing_characters_bool){
            
             sketch.fill("green");  // Green color for section title
-            let chooseCharactersBgWidth = sketch.textWidth("************** AVAILABLE SCENES **************") + 20;
-            sketch.rect(sketch.width / 2, sketch.height * 2 / 20, chooseCharactersBgWidth, 50, 20); // Rounded rectangle background
+
+            let textSize = getTextSize("************** AVAILABLE SCENES **************");
+            let txtWidth = textSize.width + 20 ;
+            let txtHeigh = textSize.height + 20 ;
+            sketch.rect(sketch.width / 2, sketch.height * 2 / 20, txtWidth, txtHeigh, 20); // Rounded rectangle background
             sketch.fill("white");  // Black text color
             sketch.text("CHOOSE THE CHARACTERS", sketch.width / 2, sketch.height*2 / 20);
 
@@ -233,16 +266,19 @@ export const theatre_learning = new p5((sketch) => {
             let characterName = ""
             let characterColor = ""
             let k = 0
+            
             for (const [key, value] of Object.entries(characterColors)) {
                 characterName = key;
                 characterColor = value;
                
                 
+                textSize = getTextSize(longest);
+                txtWidth = textSize.width + 20 ;
+                txtHeigh = textSize.height + 20 ;
 
-                let titleBgWidth = sketch.textWidth(longest) +40;
 
                 sketch.fill(value)
-                sketch.rect( sketch.width / 2, ((k)*sketch.height / (20))+250, titleBgWidth, 50 ,20); // Rounded rectangle background
+                sketch.rect( sketch.width / 2, ((k)*sketch.height / (20))+250, txtWidth, txtHeigh ,20); // Rounded rectangle background
                 sketch.fill("white")
                 sketch.text(key, sketch.width / 2, ((k)*sketch.height / (20))+250)
                 
@@ -278,22 +314,17 @@ export const theatre_learning = new p5((sketch) => {
 
             sketch.fill(50)
 
-            let list = ["**************[NEXT REPLY]**************", "NEXT REPLY : "+results["next_sentence"], "NEXT CHAR : "+results["next_char"], "NEXT EMO : "+results["next_emo"]]
-            var lgth = 0
-            for (var i = 0; i < list.length; i++) {
-                if (list[i].length > lgth) {
-                  lgth = list[i].length;
-                  longest = list[i];
-                }
-              }
+            let next_reply = "**************[NEXT REPLY]**************\n"+"NEXT REPLY : "+results["next_sentence"]+"\n"+"NEXT CHAR : "+results["next_char"]+"\n"+"NEXT EMO : "+results["next_emo"]
+            let textSize = getTextSize(next_reply);
+            let txtWidth = textSize.width + 20 ;
+            let txtHeigh = textSize.height + 20 ;
+         
 
-            let chooseCharactersBgWidth = sketch.textWidth(longest) + 20;
-            sketch.rect(sketch.width / 2, sketch.height * 3 / 20, chooseCharactersBgWidth, 145, 20); // Rounded rectangle background
+
+            sketch.rect(sketch.width / 2, sketch.height * 3 / 20, txtWidth, txtHeigh, 20); // Rounded rectangle background
             sketch.fill("white")
-            sketch.text("**************[NEXT REPLY]**************", sketch.width / 2,(sketch.height / 20)*1);
-            sketch.text("NEXT REPLY : "+results["next_sentence"], sketch.width / 2,(sketch.height / 20)*2)
-            sketch.text("NEXT CHAR : "+results["next_char"], sketch.width / 2,(sketch.height / 20)*3)
-            sketch.text("NEXT EMO : "+results["next_emo"], sketch.width / 2,(sketch.height / 20)*4)
+            sketch.text(next_reply, sketch.width / 2,(sketch.height / 20)*3);
+            
             
             if (Object.keys(results).length > 3){
             sketch.text("**************[CORRECTION]**************", sketch.width / 2,(sketch.height / 15)*6);
@@ -302,39 +333,35 @@ export const theatre_learning = new p5((sketch) => {
             }
             else {sketch.fill("red")}
 
-            if (("[CORRECTION] STT : "+results["correction_stt"]).length < ("[RESULT] STT : "+results["stt"]).length){
-                chooseCharactersBgWidth = sketch.textWidth("[RESULT] STT : "+results["stt"]) + 20;
-            }
-            else {
-                chooseCharactersBgWidth = sketch.textWidth("[CORRECTION] STT : "+results["correction_stt"]) + 20;
-            }
+            let correction_stt = "[CORRECTION] STT : "+results["correction_stt"] +"\n"+"[RESULT] STT : "+results["stt"]
+            textSize = getTextSize(correction_stt);
+            txtWidth = textSize.width + 20 ;
+            txtHeigh = textSize.height + 20 ;
 
-            sketch.rect(sketch.width / 2, sketch.height * 8.5 / 20, chooseCharactersBgWidth, 100, 20); // Rounded rectangle background
+            sketch.rect(sketch.width / 2, sketch.height * 8 / 20, txtWidth, txtHeigh, 20); // Rounded rectangle background
             
             sketch.fill('white')
 
-            sketch.text("[CORRECTION] STT : "+results["correction_stt"], sketch.width / 2,(sketch.height / 20)*8);
-            sketch.text("[RESULT] STT : "+results["stt"], sketch.width / 2, (sketch.height / 20)*9);
-
+            sketch.text(correction_stt, sketch.width / 2,(sketch.height / 20)*8);
+            
 
             if (results.emo_correction_bool){
                 sketch.fill("green")
             }
             else {sketch.fill("red")}
             
-            if (("[CORRECTION] EMO : "+results["correction_emo"]).length < ("[RESULT] EMO : "+results["emo"]).length){
-                chooseCharactersBgWidth = sketch.textWidth("[RESULT] EMO : "+results["emo"]) + 20;
-            }
-            else {
-                chooseCharactersBgWidth = sketch.textWidth("[CORRECTION] EMO : "+results["correction_emo"]) + 20;
-            }
+            let correction_emo = "[CORRECTION] EMO : "+results["correction_emo"]+"\n"+"[RESULT] EMO : "+results["emo"]
+            textSize = getTextSize(correction_emo);
+            txtWidth = textSize.width + 20 ;
+            txtHeigh = textSize.height + 20 ;
+           
 
-            sketch.rect(sketch.width / 2, sketch.height * 11.5 / 20, chooseCharactersBgWidth, 100, 20); // Rounded rectangle background
+            sketch.rect(sketch.width / 2, sketch.height * 11 / 20, txtWidth, txtHeigh, 20); // Rounded rectangle background
             
             sketch.fill('white')
 
-            sketch.text("[CORRECTION] EMO : "+results["correction_emo"], sketch.width / 2,(sketch.height / 20)*11);
-            sketch.text("[RESULT] EMO : "+results["emo"], sketch.width / 2, (sketch.height / 20)*12);
+            sketch.text(correction_emo, sketch.width / 2,(sketch.height / 20)*11);
+            
 
 
             if (results.emb_correction_bool){
@@ -342,21 +369,19 @@ export const theatre_learning = new p5((sketch) => {
             }
             else {sketch.fill("red")}
 
+            let correction_emb = "[CORRECTION] EMB : "+results["correction_emb"]+"\n"+"[RESULT] EMB : "+results["emb"]
+            textSize = getTextSize(correction_emb);
+            txtWidth = textSize.width + 20 ;
+            txtHeigh = textSize.height + 20 ;
 
-            if (("[CORRECTION] EMB : "+results["correction_emb"]).length < ("[RESULT] EMB : "+results["emb"]).length){
-                chooseCharactersBgWidth = sketch.textWidth("[RESULT] EMB : "+results["emb"]) + 20;
-            }
-            else {
-                chooseCharactersBgWidth = sketch.textWidth("[CORRECTION] EMB : "+results["correction_emb"]) + 20;
-            }
 
-            sketch.rect(sketch.width / 2, sketch.height * 14.5 / 20, chooseCharactersBgWidth, 100, 20); // Rounded rectangle background
+            sketch.rect(sketch.width / 2, sketch.height * 14 / 20, txtWidth, txtHeigh, 20); // Rounded rectangle background
             
             sketch.fill('white')
 
 
-            sketch.text("[CORRECTION] EMB : "+results["correction_emb"], sketch.width / 2, (sketch.height / 20)*14);
-            sketch.text("[RESULT] EMB : "+results["emb"], sketch.width / 2, (sketch.height / 20)*15);
+            sketch.text(correction_emb, sketch.width / 2, (sketch.height / 20)*14);
+          
                         }
             }
             sketch.fill("white")
@@ -383,3 +408,5 @@ export const theatre_learning = new p5((sketch) => {
 // "emo" : best_emo + " Score : "+str(best_conf)+"%",
 // "emb" : best_emb + " Score : "+str(best_emb_score)+"%",
 // "stt" : sentence,
+
+
