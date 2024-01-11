@@ -4,7 +4,9 @@ import samplerate
 import pandas as pd 
 from home.apps.theatre_learning.utils import Correction
 import time 
-import os 
+import os
+import soundfile as sf
+import time
 
 class Application(BaseApplication):
     """Theatre play"""
@@ -29,6 +31,7 @@ class Application(BaseApplication):
         self.requires["speech_to_text"] = ["transcription"]
         self.requires["speech_speaker_extraction"] = ["speaker_emb"]
         self.requires["speech_emo_extraction"] = ["speech_emotion"]
+        self.requires["speaker"] = ["play"]
         
         #self.requires["speech_speaker_extraction"] = ["speaker_verification"]
 
@@ -47,6 +50,7 @@ class Application(BaseApplication):
         # self.str_scene_title = "TWATC"
         # script_path = "home/apps/theatre_learning/scripts/TWATC_processed.csv"
         # self.script_init(script_path, )
+        self.audio_path = ""
         self.waiting_result_bool = False
         self.command_recognized_bool = True
         self.theatre_play_scene_init_bool = False
@@ -91,10 +95,27 @@ class Application(BaseApplication):
             "speech_emo_extraction_reception" : False
         }
 
+    def preprocess_script(self, df: pd.DataFrame) -> pd.DataFrame:
+        # Create a new column 'count_column' using a loop
+        counts = {}
+        count_column = []
 
+        df.dropna(subset = ['character'], inplace=True)
+
+        for value in df['character']:
+            if value in counts:
+                counts[value] += 1
+            else:
+                counts[value] = 1
+            count_column.append(counts[value])
+
+        df['count_column'] = count_column
+        return df
 
     def get_all_scenes(self, theatre_play):
         self.script = pd.read_csv('home/apps/theatre_learning/scripts/'+theatre_play)
+        self.audio_path = os.path.join("audio", theatre_play.split('.')[0])
+        
         self.scene_list = []
         self.theatre_play_scene_info = dict()
         new_scene = 0
@@ -132,14 +153,16 @@ class Application(BaseApplication):
             new_scene = pd.DataFrame(columns = ['character', 'type', 'sentence','emo'])
             for i, row in self.script.iterrows():
                 new_scene.at[idx, "character"] = row["character"]
-                new_scene.at[idx, "type"] = row["character"]
+                new_scene.at[idx, "type"] = row["type"]
                 new_scene.at[idx, "sentence"] = row["sentence"]
                 new_scene.at[idx, "emo"] = row["michellejieli/emotion_text_classifier"]
                 idx += 1
-            
+            new_scene = self.preprocess_script(new_scene)
+            new_scene.to_csv("test.csv")
             self.scene_list = [new_scene]
-
+            self.log(self.scene_list[0]['count_column'],3)
         compt = 1
+
         for scene in self.scene_list : 
             characters = scene["character"].unique().tolist()
             if 'NaN' in characters :
@@ -328,7 +351,7 @@ class Application(BaseApplication):
            
             #self.script_info["idx"] += 1 
             
-            while self.scene_script['character'].iloc[self.script_info['idx']] == "NaN" or self.scene_script['character'].iloc[self.script_info['idx']] not in self.characters :
+            while self.scene_script['character'].iloc[self.script_info['idx']] == "NaN" : #or self.scene_script['character'].iloc[self.script_info['idx']] not in self.characters 
 
                 #if self.scene_script['character'].iloc[self.script_info['idx']] not in self.characters :
                     #ADD THE REPLY IN A QUEUE FOR TTS
@@ -345,12 +368,13 @@ class Application(BaseApplication):
          
 
             idx = self.script_info["idx"] + 1
-            while self.scene_script['character'].iloc[idx] == "NaN" or self.scene_script['character'].iloc[idx] not in self.characters :
+            while self.scene_script['character'].iloc[idx] == "NaN": #or self.scene_script['character'].iloc[idx] not in self.characters
                 idx += 1 
 
             self.script_info["next_sentence"] = self.scene_script['sentence'].iloc[idx]
             self.script_info["next_emo"] = self.scene_script['emo'].iloc[idx]
             self.script_info["next_char"] = self.scene_script['character'].iloc[idx]
+            self.script_info["next_count_column"] = self.scene_script['count_column'].iloc[idx]
             
 
 
@@ -511,6 +535,12 @@ class Application(BaseApplication):
             if self.module_results['speech_to_text_reception'] and self.module_results['speech_speaker_extraction_reception'] and self.module_results['speech_emo_extraction_reception'] :
                 
                 self.correction()
+                if self.data["next_char"] not in  self.characters and self.data["next_char"] != "":
+                    self.log("Character not in the scene",3)
+                    self.play_audio()
+                    self.script_iter()
+                    
+
                 self.is_listening_for_sentence = True
                 self.module_results['speech_to_text_reception'] = False
                 self.module_results['speech_speaker_extraction_reception'] = False
@@ -556,6 +586,18 @@ class Application(BaseApplication):
                 self.module_results['speech_emo_extraction'] = data['results']
                 self.module_results['speech_emo_extraction_reception'] = True
             
+
+
+    def play_audio(self):
+        char = self.script_info["next_char"]
+        column_count = self.script_info["next_count_column"]
+        audio = os.path.join(self.audio_path, f'{char}_{str(column_count)}.wav')
+        self.log(audio,3)
+        audio, sr = sf.read(audio)
+        self.log(f'Audio duration : {len(audio)/sr}',3)
+        self.log(f'Audio sample rate : {sr}',3)
+        self.execute("speaker", "play", audio)
+        time.sleep(len(audio)/sr)
 
 
 

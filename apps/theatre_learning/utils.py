@@ -1,6 +1,24 @@
 from typing import Any
 from fuzzywuzzy import fuzz
 import re
+import pandas as pd
+
+def preprocess_script(df: pd.DataFrame) -> pd.DataFrame:
+    # Create a new column 'count_column' using a loop
+    counts = {}
+    count_column = []
+
+    df = df.dropna("character")
+
+    for value in df['character']:
+        if value in counts:
+            counts[value] += 1
+        else:
+            counts[value] = 1
+        count_column.append(counts[value])
+
+    df['count_column'] = count_column
+    return df
 
 class Correction():
 
