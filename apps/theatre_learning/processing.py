@@ -115,7 +115,7 @@ class Application(BaseApplication):
 
     def get_all_scenes(self, theatre_play):
         self.script = pd.read_csv('home/apps/theatre_learning/scripts/'+theatre_play)
-        self.audio_path = os.path.join("audio", theatre_play.split('.')[0])
+        self.audio_path = os.path.join("home/apps/theatre_learning/audio", theatre_play.split('.')[0])
         
         self.scene_list = []
         self.theatre_play_scene_info = dict()
@@ -189,11 +189,11 @@ class Application(BaseApplication):
 
             #if self.command_recognized_bool :
             if self.theatre_play_title_init_bool and not self.theatre_play_scene_init_bool :
-                print(self.command_recognized)
+            
                 
                 path = self.command_recognized+'.csv'
                 self.get_all_scenes(path)
-                print(self.theatre_play_scene_info)
+              
                 self.data = {
                             "scenes_info" : self.theatre_play_scene_info
                         }
@@ -211,7 +211,7 @@ class Application(BaseApplication):
                     "transcription" : self.command
                    
                 }
-                print(self.data)
+             
                 self.server.send_data(self.name, self.data)
 
             else :
@@ -286,7 +286,7 @@ class Application(BaseApplication):
                            
                             self.characters = self.theatre_play_scene_info[self.command_recognized]
                             self.characters_to_keep = []
-                            print(self.command_recognized[-1])
+                  
                             self.scene_script = self.scene_list[int(self.command_recognized[-1])-1]
 
                          
@@ -309,7 +309,7 @@ class Application(BaseApplication):
                             elif txt not in self.characters_to_keep :
                                 self.characters_to_keep.append(txt)
 
-                            print(self.characters_to_keep)
+                           
 
                     self.command_recognized_bool = True 
                                              
@@ -538,7 +538,8 @@ class Application(BaseApplication):
 
         else : 
             if self.module_results['speech_to_text_reception'] and self.module_results['speech_speaker_extraction_reception'] and self.module_results['speech_emo_extraction_reception'] :
-                
+                print(self.characters)
+                print(self.script_info['next_char'])
                 self.correction()
                 if self.script_info["next_char"] not in  self.characters and self.script_info["next_char"] != "":
                     self.log("Character not in the scene",3)
@@ -554,7 +555,7 @@ class Application(BaseApplication):
 
             if source == "microphone" and event == "audio_stream" and data is not None and self.is_listening_for_sentence:
                 self.script_iter()
-
+                
                 self.listen_for_one_sentence(data)
 
                 
@@ -623,8 +624,8 @@ class Application(BaseApplication):
                 pass
 
             elif self.audio['previous_activity_detected'] and not self.audio['activity_detected']:
-                print(self.audio['new_user'], self.audio['char_name'])
-                print("123456",self.character_embedding_stored , self.initialisation_bool)
+             
+                
                 # Displaying "Processing..."
                 if not self.processing_sent : 
                     self.data = {
@@ -642,7 +643,7 @@ class Application(BaseApplication):
                         self.execute("speech_to_text", "transcribe", self.audio)
                         self.execute("speech_emo_extraction", "predict", self.audio) 
                 if (not self.character_embedding_stored and not self.initialisation_bool) or (self.character_embedding_stored and self.initialisation_bool) :
-                    print(self.audio)
+                   
                     self.execute("speech_to_text", "transcribe", self.audio)
 
                 self.is_listening_for_sentence = False
