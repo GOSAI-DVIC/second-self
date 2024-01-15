@@ -68,6 +68,9 @@ export const theatre_learning = new p5((sketch) => {
                 console.log(data);
                 available_theatre_plays = data.available_theatre_plays
                 available_theatre_plays_received = true 
+                theatre_plays_scene_init = false
+                //scenes_info_received = false
+                theatre_play_title_init = true
             }
             
             if (Object.keys(data)[0] == "scenes_info"){
@@ -77,6 +80,7 @@ export const theatre_learning = new p5((sketch) => {
                 scenes_info_received = true 
                 theatre_play_title_init = false
                 theatre_plays_scene_init = true
+                choosing_characters_bool = false
             }
 
             if (Object.keys(data)[0] == "characters"){
@@ -158,7 +162,10 @@ export const theatre_learning = new p5((sketch) => {
     sketch.show = () => {
         sketch.clear();
         
-
+        console.log(theatre_play_title_init,3)
+        console.log(available_theatre_plays_received,3)
+        console.log(scenes_info_received,3)
+        console.log(theatre_plays_scene_init,3)
         if ((theatre_play_title_init)&&(available_theatre_plays_received)){
             // console.log('display')
             sketch.fill("green")

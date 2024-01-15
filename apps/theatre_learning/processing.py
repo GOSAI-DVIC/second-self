@@ -56,6 +56,7 @@ class Application(BaseApplication):
         self.theatre_play_scene_init_bool = False
         self.theatre_play_title_init_bool = False
         self.theatre_play_character_init_bool = False
+        self.title_choosen = ""
         self.changing_mode_character = None
         self.return_command_str = "go back"
         self.changing_mode_character = []
@@ -191,7 +192,7 @@ class Application(BaseApplication):
             if self.theatre_play_title_init_bool and not self.theatre_play_scene_init_bool :
             
                 
-                path = self.command_recognized+'.csv'
+                path = self.title_choosen+'.csv'
                 self.get_all_scenes(path)
               
                 self.data = {
@@ -220,6 +221,7 @@ class Application(BaseApplication):
                             "available_theatre_plays" : self.available_theatre_plays
                         }
                 self.server.send_data(self.name, self.data)
+                print('info sent')
                 
             self.data = {
                     "state" : "Listening..."
@@ -264,6 +266,7 @@ class Application(BaseApplication):
                             self.theatre_play_title_init_bool = True 
                             self.command_recognized_bool = True
                             self.command_recognized = txt
+                            self.title_choosen = txt
                             print('self.command_recognized = ', txt)
                                   
                             
@@ -275,43 +278,59 @@ class Application(BaseApplication):
                     
 
                 elif self.theatre_play_title_init_bool and not self.theatre_play_scene_init_bool : 
-                    for txt in self.theatre_play_scene_info.keys() :
-                        numb_mapping = {1:"one", 2:"two", 3:"three", 4:"four", 5:"five", 6:"six", 7:"seven", 8:"eight"}
-                      
-                        if self.corrector_for_cmd.txt_correction(self.command, txt[:5]+' '+str(numb_mapping[int(txt[-1])])) :
-                            self.theatre_play_scene_init_bool = True
-                            self.command_recognized_bool = True 
-                            self.command_recognized = txt
 
-                           
-                            self.characters = self.theatre_play_scene_info[self.command_recognized]
-                            self.characters_to_keep = []
-                  
-                            self.scene_script = self.scene_list[int(self.command_recognized[-1])-1]
+
+                    if self.corrector_for_cmd.txt_correction(self.command, "go back") :
+                        self.theatre_play_character_init_bool = False
+                        self.theatre_play_scene_init_bool = False
+                        self.theatre_play_title_init_bool = False
+                        self.command_recognized_bool = True
+                    
+                    else :
+                        for txt in self.theatre_play_scene_info.keys() :
+                            numb_mapping = {1:"one", 2:"two", 3:"three", 4:"four", 5:"five", 6:"six", 7:"seven", 8:"eight"}
+                        
+                            if self.corrector_for_cmd.txt_correction(self.command, txt[:5]+' '+str(numb_mapping[int(txt[-1])])) :
+                                self.theatre_play_scene_init_bool = True
+                                self.command_recognized_bool = True 
+                                self.command_recognized = txt
+
+                            
+                                self.characters = self.theatre_play_scene_info[self.command_recognized]
+                                self.characters_to_keep = []
+                    
+                                self.scene_script = self.scene_list[int(self.command_recognized[-1])-1]
 
                          
 
                 else :
-                    if self.corrector_for_cmd.txt_correction(self.command, "finish") :
+
+                    if self.corrector_for_cmd.txt_correction(self.command, "go back") :
+                        self.theatre_play_character_init_bool = False
+                        self.theatre_play_scene_init_bool = False
+                        self.theatre_play_title_init_bool = True
+                        self.command_recognized_bool = True
+
+                    elif self.corrector_for_cmd.txt_correction(self.command, "finish") :
                         self.initialisation_bool = True
                         self.theatre_play_scene_init_bool = True
                         
                         
                        
-                    
-                    for txt in self.characters :
-                        if self.corrector_for_cmd.txt_correction(self.command, txt) :
-                            
-                            self.changing_mode_character.append(txt)
+                    else :
+                        for txt in self.characters :
+                            if self.corrector_for_cmd.txt_correction(self.command, txt) :
+                                
+                                self.changing_mode_character.append(txt)
 
-                            if txt in self.characters_to_keep :
-                                self.characters_to_keep.remove(txt)
-                            elif txt not in self.characters_to_keep :
-                                self.characters_to_keep.append(txt)
+                                if txt in self.characters_to_keep :
+                                    self.characters_to_keep.remove(txt)
+                                elif txt not in self.characters_to_keep :
+                                    self.characters_to_keep.append(txt)
 
                            
 
-                    self.command_recognized_bool = True 
+                            self.command_recognized_bool = True 
                                              
                         
     
