@@ -53,6 +53,7 @@ class Application(BaseApplication):
         self.theatre_play_title_init_bool = False
         self.theatre_play_character_init_bool = False
         self.changing_mode_character = None
+        self.return_command_str = "go back"
         self.changing_mode_character = []
         self.script_info = {
             "idx" : 0,
@@ -240,6 +241,7 @@ class Application(BaseApplication):
                             self.command_recognized_bool = True
                             self.command_recognized = txt
                             print('self.command_recognized = ', txt)
+                                  
                             
                     self.data = {
                     "command_recognized_bool" : self.theatre_play_title_init_bool,
@@ -262,6 +264,8 @@ class Application(BaseApplication):
                             self.characters_to_keep = []
                             print(self.command_recognized[-1])
                             self.scene_script = self.scene_list[int(self.command_recognized[-1])-1]
+
+                         
 
                 else :
                     if self.corrector_for_cmd.txt_correction(self.command, "finish") :
@@ -577,7 +581,7 @@ class Application(BaseApplication):
 
             elif self.audio['previous_activity_detected'] and not self.audio['activity_detected']:
                 print(self.audio['new_user'], self.audio['char_name'])
-
+                print("123456",self.character_embedding_stored , self.initialisation_bool)
                 # Displaying "Processing..."
                 if not self.processing_sent : 
                     self.data = {
@@ -595,6 +599,7 @@ class Application(BaseApplication):
                         self.execute("speech_to_text", "transcribe", self.audio)
                         self.execute("speech_emo_extraction", "predict", self.audio) 
                 if (not self.character_embedding_stored and not self.initialisation_bool) or (self.character_embedding_stored and self.initialisation_bool) :
+                    print(self.audio)
                     self.execute("speech_to_text", "transcribe", self.audio)
 
                 self.is_listening_for_sentence = False
