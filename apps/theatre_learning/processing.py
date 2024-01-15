@@ -142,8 +142,9 @@ class Application(BaseApplication):
                         print("appending new scene")
 
                     new_scene = pd.DataFrame(columns = ['character', 'type', 'sentence', 'emo'])
-            
-              
+
+            new_scene = self.preprocess_script(new_scene)  
+            new_scene.to_csv("test.csv")
             self.scene_list.append(new_scene)
            
          
@@ -539,7 +540,7 @@ class Application(BaseApplication):
             if self.module_results['speech_to_text_reception'] and self.module_results['speech_speaker_extraction_reception'] and self.module_results['speech_emo_extraction_reception'] :
                 
                 self.correction()
-                if self.data["next_char"] not in  self.characters and self.data["next_char"] != "":
+                if self.script_info["next_char"] not in  self.characters and self.script_info["next_char"] != "":
                     self.log("Character not in the scene",3)
                     self.play_audio()
                     self.script_iter()
