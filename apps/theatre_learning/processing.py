@@ -105,7 +105,7 @@ class Application(BaseApplication):
         counts = {}
         count_column = []
 
-        df.dropna(subset = ['character'], inplace=True)
+        df = df[df['type'] == "speech"]
 
         for value in df['character']:
             if value in counts:
