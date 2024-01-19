@@ -39,7 +39,7 @@ class Application(BaseApplication):
         self.is_listening_for_sentence = False
 
         #Activity config
-        self.activity_treshold = 0.8
+        self.activity_treshold = 0.9
         self.activity_duration = 1
         self.previous_processed_activity_buffer = []
         self.processed_activity_buffer = []
@@ -195,7 +195,7 @@ class Application(BaseApplication):
                 
                 path = self.title_choosen+'.csv'
                 self.get_all_scenes(path)
-              
+                self.log(self.theatre_play_scene_info,3)
                 self.data = {
                             "scenes_info" : self.theatre_play_scene_info
                         }
