@@ -230,8 +230,9 @@ export const theatre_learning = new p5((sketch) => {
            // console.log(results)
 
             sketch.fill(50)
-
-            let next_reply = "**************[NEXT REPLY]**************\n"+"NEXT REPLY : "+results["next_sentence"]+"\n"+"NEXT CHAR : "+results["next_char"]+"\n"+"NEXT EMO : "+results["next_emo"]
+            
+            
+            let next_reply = "**************[NEXT REPLY (in "+results["sentences_to_wait"]+" replies)]**************\n"+"NEXT REPLY : "+results["next_sentence"]+"\n"+"NEXT CHAR : "+results["next_char"]+"\n"+"NEXT EMO : "+results["next_emo"]
             let textSize = getTextSize(next_reply);
             let txtWidth = textSize.width + 0.1*textSize.width ;
             let txtHeigh = textSize.height + 0.1*textSize.width ;
@@ -353,9 +354,9 @@ function displayContent(sketch, text_array, mode){
     for (const [key, value] of Object.entries(text_array)) {
 
     
-        textSize = getTextSize(longest);
-        let txtWidth = textSize.width + 0.2*textSize.width ;
-        let txtHeigh = textSize.height + 0.2*textSize.height ;
+        let textSize = getTextSize(longest);
+        let txtWidth = textSize.width ;//+ 0.2*textSize.width ;
+        let txtHeigh = textSize.height ;//+ 0.2*textSize.height ;
 
         sketch.fill(50)
         
@@ -363,6 +364,7 @@ function displayContent(sketch, text_array, mode){
         sketch.fill("white")
         sketch.text(key, sketch.width / 2, ((j*3)*sketch.height / (40))+sketch.height * 2 / (40) +  txtHeigh*2)
         sketch.text(value, sketch.width / 2, ((j*3 + 1)*sketch.height / (40))+sketch.height * 2 / (40) +  txtHeigh*2)
+        console.log(key + value)
 
         j = j + 1
     }
@@ -412,7 +414,7 @@ function displayContent(sketch, text_array, mode){
                 characterColor = value;
                
                 
-                textSize = getTextSize(longest);
+                let textSize = getTextSize(longest);
                 let txtWidth = textSize.width + 0.2*textSize.width ;
                 let txtHeigh = textSize.height + 0.2*textSize.height ;
 
