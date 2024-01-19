@@ -129,10 +129,10 @@ class Application(BaseApplication):
 
             for i, row in self.script.iterrows():
 
-                
+                # self.log(str(i)+str(len(self.scene_list)), 3)
                 if type(new_scene) != int: 
                     new_scene.at[idx, "character"] = row["character"]
-                    new_scene.at[idx, "type"] = row["character"]
+                    new_scene.at[idx, "type"] = row["type"]
                     new_scene.at[idx, "sentence"] = row["sentence"]
                     new_scene.at[idx, "emo"] = row["j-hartmann/emotion-english-distilroberta-base"]
                     idx += 1
@@ -140,11 +140,15 @@ class Application(BaseApplication):
                 if row['sentence'][:6] == 'Scene:' : 
                     
                     if type(new_scene) != int: 
+                       
+                        new_scene = new_scene[new_scene['type'] == "speech"]
+                        
                         self.scene_list.append(new_scene)
                         print("appending new scene")
 
                     new_scene = pd.DataFrame(columns = ['character', 'type', 'sentence', 'emo'])
             new_scene = new_scene[new_scene['type'] == "speech"]
+           
             self.scene_list.append(new_scene)
            
          
@@ -164,13 +168,14 @@ class Application(BaseApplication):
         compt = 1
 
         for scene in self.scene_list : 
+            
             characters = scene["character"].unique().tolist()
             if 'NaN' in characters :
                 characters.remove('NaN')
 
             self.theatre_play_scene_info["scene - "+str(compt)] = characters
             compt+=1
-
+        
 
             
 
