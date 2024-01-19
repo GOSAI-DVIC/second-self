@@ -105,7 +105,7 @@ class Application(BaseApplication):
         counts = {}
         count_column = []
 
-        df.dropna(subset = ['character'], inplace=True)
+        df = df[df['type'] == "speech"]
 
         for value in df['character']:
             if value in counts:
@@ -148,7 +148,6 @@ class Application(BaseApplication):
                     new_scene = pd.DataFrame(columns = ['character', 'type', 'sentence', 'emo'])
 
             new_scene = self.preprocess_script(new_scene)  
-            new_scene.to_csv("test.csv")
             self.scene_list.append(new_scene)
            
          
@@ -164,7 +163,6 @@ class Application(BaseApplication):
                 new_scene.at[idx, "emo"] = row["michellejieli/emotion_text_classifier"]
                 idx += 1
             new_scene = self.preprocess_script(new_scene)
-            new_scene.to_csv("test.csv")
             self.scene_list = [new_scene]
             self.log(self.scene_list[0]['count_column'],3)
         compt = 1
@@ -619,7 +617,7 @@ class Application(BaseApplication):
             idx = self.audio_to_read_idx.pop()
                 
             char = self.scene_script['character'].iloc[idx]
-            column_count = self.scene_script["next_count_column"].iloc[idx]
+            column_count = self.scene_script["count_column"].iloc[idx]
             audio = os.path.join(self.audio_path, f'{char}_{str(column_count)}.wav')
             self.log(audio,3)
             audio, sr = sf.read(audio)
