@@ -104,9 +104,6 @@ class Application(BaseApplication):
         # Create a new column 'count_column' using a loop
         counts = {}
         count_column = []
-
-        df = df[df['type'] == "speech"]
-
         for value in df['character']:
             if value in counts:
                 counts[value] += 1
@@ -127,6 +124,7 @@ class Application(BaseApplication):
         idx = 0
 
         self.script = self.script.fillna("NaN")
+        self.script = self.preprocess_script(self.script)
         if str(theatre_play) == "Pursuit of happiness.csv" :
 
             for i, row in self.script.iterrows():
@@ -146,8 +144,7 @@ class Application(BaseApplication):
                         print("appending new scene")
 
                     new_scene = pd.DataFrame(columns = ['character', 'type', 'sentence', 'emo'])
-
-            new_scene = self.preprocess_script(new_scene)  
+            new_scene = new_scene[new_scene['type'] == "speech"]
             self.scene_list.append(new_scene)
            
          
@@ -162,9 +159,8 @@ class Application(BaseApplication):
                 new_scene.at[idx, "sentence"] = row["sentence"]
                 new_scene.at[idx, "emo"] = row["michellejieli/emotion_text_classifier"]
                 idx += 1
-            new_scene = self.preprocess_script(new_scene)
+            new_scene = new_scene[new_scene['type'] == "speech"]
             self.scene_list = [new_scene]
-            self.log(self.scene_list[0]['count_column'],3)
         compt = 1
 
         for scene in self.scene_list : 
@@ -174,6 +170,8 @@ class Application(BaseApplication):
 
             self.theatre_play_scene_info["scene - "+str(compt)] = characters
             compt+=1
+
+
             
 
 
