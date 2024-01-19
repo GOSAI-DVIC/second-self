@@ -351,16 +351,18 @@ function displayContent(sketch, text_array, mode){
     
     let j = 0 
     console.log('longest : ', longest)
+    let textSize = getTextSize(longest);
+    let txtWidth = textSize.width + 0.2*textSize.width ;
+    let txtHeigh = textSize.height + 0.2*textSize.height ;
     for (const [key, value] of Object.entries(text_array)) {
 
     
-        let textSize = getTextSize(longest);
-        let txtWidth = textSize.width ;//+ 0.2*textSize.width ;
-        let txtHeigh = textSize.height ;//+ 0.2*textSize.height ;
+        
+
 
         sketch.fill(50)
         
-        sketch.rect( sketch.width / 2, ((j*3 + 0.5)*sketch.height / (40))+(sketch.height * 2 / (40) +  txtHeigh*2), 2*txtWidth, 2*txtHeigh ,20); // Rounded rectangle background
+        sketch.rect( sketch.width / 2, ((j*3 + 0.5)*sketch.height / (40))+(sketch.height * 2 / (40) +  txtHeigh*2), 2*txtWidth, txtHeigh ,20); // Rounded rectangle background
         sketch.fill("white")
         sketch.text(key, sketch.width / 2, ((j*3)*sketch.height / (40))+sketch.height * 2 / (40) +  txtHeigh*2)
         sketch.text(value, sketch.width / 2, ((j*3 + 1)*sketch.height / (40))+sketch.height * 2 / (40) +  txtHeigh*2)
@@ -378,12 +380,13 @@ function displayContent(sketch, text_array, mode){
           longest = text_array[i];
         }
       }
+    let textSize = getTextSize(longest);
+    let txtWidth = textSize.width + 0.3*textSize.width ;
+    let txtHeigh = textSize.height + 0.3*textSize.height  ;
     for (let i = 0; i < text_array.length; i++) {
         sketch.fill(50)
 
-        let textSize = getTextSize(longest);
-        let txtWidth = textSize.width + 0.3*textSize.width ;
-        let txtHeigh = textSize.height + 0.3*textSize.height  ;
+
 
         sketch.rect( sketch.width / 2, ((i*2)*sketch.height / (40))+(sketch.height * 2 / (40) +  txtHeigh*2), txtWidth, txtHeigh ,20); // Rounded rectangle background
         sketch.fill("white")
@@ -408,15 +411,16 @@ function displayContent(sketch, text_array, mode){
             let characterName = ""
             let characterColor = ""
             let k = 0
+            let textSize = getTextSize(longest);
+            let txtWidth = textSize.width + 0.2*textSize.width ;
+            let txtHeigh = textSize.height + 0.2*textSize.height ;
             
             for (const [key, value] of Object.entries(characterColors)) {
                 characterName = key;
                 characterColor = value;
                
                 
-                let textSize = getTextSize(longest);
-                let txtWidth = textSize.width + 0.2*textSize.width ;
-                let txtHeigh = textSize.height + 0.2*textSize.height ;
+
 
 
                 sketch.fill(value)
