@@ -362,7 +362,7 @@ function displayContent(sketch, text_array, mode){
 
         sketch.fill(50)
         
-        sketch.rect( sketch.width / 2, ((j*3 + 0.5)*sketch.height / (40))+(sketch.height * 2 / (40) +  txtHeigh*2), 2*txtWidth, txtHeigh ,20); // Rounded rectangle background
+        sketch.rect( sketch.width / 2, ((j*3 + 0.5)*sketch.height / (40))+(sketch.height * 2 / (40) +  txtHeigh*2), txtWidth, 2*txtHeigh ,20); // Rounded rectangle background
         sketch.fill("white")
         sketch.text(key, sketch.width / 2, ((j*3)*sketch.height / (40))+sketch.height * 2 / (40) +  txtHeigh*2)
         sketch.text(value, sketch.width / 2, ((j*3 + 1)*sketch.height / (40))+sketch.height * 2 / (40) +  txtHeigh*2)
@@ -370,6 +370,8 @@ function displayContent(sketch, text_array, mode){
 
         j = j + 1
     }
+
+    
 
     }
     if (mode == "play_choice") {
@@ -431,6 +433,19 @@ function displayContent(sketch, text_array, mode){
 
                 k = k + 1
             }
+            textSize = getTextSize("Computer");
+            txtWidth = textSize.width + 0.1*textSize.width ;
+            txtHeigh = textSize.height + 0.1*textSize.height ;
+
+            sketch.fill("blue")
+            sketch.rect( sketch.width*3 / 10, 35*sketch.height / (40), txtWidth, txtHeigh ,20); // Rounded rectangle background
+            sketch.fill('white')
+            sketch.text("Computer", sketch.width*3 / 10, 35*sketch.height / (40))
+            sketch.fill("orange")
+            sketch.rect( sketch.width*7 / 10, 35*sketch.height / (40), txtWidth, txtHeigh ,20); // Rounded rectangle background
+            sketch.fill('white')
+            sketch.text("User", sketch.width*7 / 10, 35*sketch.height / (40))
+            sketch.text("Say 'Let's start' to continue", sketch.width / 2, 34*sketch.height / (40))
 
         if (mode == "correction"){
 
@@ -443,9 +458,9 @@ function displayContent(sketch, text_array, mode){
          
 
 
-            sketch.rect(sketch.width / 2, sketch.height * 9 / 40, txtWidth, txtHeigh, 20); // Rounded rectangle background
+            sketch.rect(sketch.width / 2, sketch.height * 11 / 40, txtWidth, txtHeigh, 20); // Rounded rectangle background
             sketch.fill("white")
-            sketch.text(next_reply, sketch.width / 2,(sketch.height / 40)*9);
+            sketch.text(next_reply, sketch.width / 2,(sketch.height / 40)*11);
             
             
             if (Object.keys(results).length > 3){

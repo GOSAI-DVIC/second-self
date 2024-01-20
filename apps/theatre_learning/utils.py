@@ -28,7 +28,7 @@ class Correction():
         
         self.txt_sim_treshold = txt_sim_treshold
 
-    def txt_correction(self, txt_1 : str, txt_2 : str, mode:str="fuzzywuzzy"):
+    def txt_correction(self, txt_1 : str, txt_2 : str, scorebool : bool = False,  mode:str="fuzzywuzzy"):
 
         if mode == 'fuzzywuzzy':
             #score = fuzz.partial_token_set_ratio(txt_1, txt_2)
@@ -47,7 +47,8 @@ class Correction():
             txt_1 = re.sub(r'[^\w\s]', '', txt_1.lower()).replace(' ','')
             txt_2 = re.sub(r'[^\w\s]', '', txt_2.lower()).replace(' ','')
             verif = txt_1==txt_2
-        
+        if scorebool :
+            return verif, score
         return verif
     def emo_correction(self, emo_1 : str, emo_2 : str):
         return self.emo_mapping[emo_1]==emo_2

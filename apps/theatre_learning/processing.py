@@ -291,10 +291,14 @@ class Application(BaseApplication):
                         self.command_recognized_bool = True
                     
                     else :
+                        best_score = 0
                         for txt in self.theatre_play_scene_info.keys() :
+
                             numb_mapping = {1:"one", 2:"two", 3:"three", 4:"four", 5:"five", 6:"six", 7:"seven", 8:"eight"}
-                        
-                            if self.corrector_for_cmd.txt_correction(self.command, txt[:5]+' '+str(numb_mapping[int(txt[-1])])) :
+                            lit_bool, lit_score = self.corrector_for_cmd.txt_correction(self.command, txt[:5]+' '+str(numb_mapping[int(txt[-1])]), scorebool=True)
+                            dec_bool, dec_score = self.corrector_for_cmd.txt_correction(self.command, txt[:5]+' '+txt[-1], scorebool = True)
+                            if (lit_bool or dec_bool) and (lit_score > best_score or dec_score > best_score) :
+                                best_score = max(lit_score, dec_score)
                                 self.theatre_play_scene_init_bool = True
                                 self.command_recognized_bool = True 
                                 self.command_recognized = txt
@@ -315,7 +319,7 @@ class Application(BaseApplication):
                         self.theatre_play_title_init_bool = True
                         self.command_recognized_bool = True
 
-                    elif self.corrector_for_cmd.txt_correction(self.command, "finish") :
+                    elif self.corrector_for_cmd.txt_correction(self.command, "let's start") :
                         self.initialisation_bool = True
                         self.theatre_play_scene_init_bool = True
                         
@@ -442,6 +446,10 @@ class Application(BaseApplication):
                     best_conf = float(emo["score"]*100)
 
             self.log(self.script_info["next_sentence"], 3)
+            self.log(sentence, 3)
+
+            sttcorrection, sttscore = self.corrector.txt_correction(self.script_info["sentence"],sentence, scorebool=True)
+            self.log(sttcorrection, 3)
 
            
             self.data = {
@@ -452,11 +460,11 @@ class Application(BaseApplication):
                         "correction_stt": self.script_info["sentence"], 
                         "correction_emo": self.script_info["emo"] ,
                         "emo" : best_emo + " Score : "+str(best_conf)+"%",
-                        "emb" : best_emb + " Score : "+str(best_emb_score)+"%",
-                        "stt" : sentence,
+                        "emb" : best_emb + " Score : "+str(best_emb_score*100)+"%",
+                        "stt" : sentence + " Score : "+str(sttscore)+"%",
                         "emo_correction_bool":self.corrector.emo_correction(self.script_info["emo"],best_emo),
                         "emb_correction_bool":best_emb==self.script_info["character"],
-                        "stt_correction_bool":self.corrector.txt_correction(self.script_info["sentence"],sentence),
+                        "stt_correction_bool":sttcorrection,
                         "sentences_to_wait": self.script_info["sentences_to_wait"]
                     }
             self.server.send_data(self.name, self.data)
