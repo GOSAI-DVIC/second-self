@@ -452,7 +452,7 @@ class Application(BaseApplication):
             self.log(sttcorrection, 3)
 
            
-            self.data = {
+            self.data_correction = {
                         "next_char": self.script_info["next_char"], 
                         "next_emo": self.script_info["next_emo"], 
                         "next_sentence": self.script_info["next_sentence"],           
@@ -467,7 +467,7 @@ class Application(BaseApplication):
                         "stt_correction_bool":sttcorrection,
                         "sentences_to_wait": self.script_info["sentences_to_wait"]
                     }
-            self.server.send_data(self.name, self.data)
+            self.server.send_data(self.name, self.data_correction)
             self.iteration = True
                 
             # if correction good : 
@@ -623,6 +623,7 @@ class Application(BaseApplication):
 
 
     def play_audio(self):
+        self.server.send_data(self.name, {"state" : "Computer Speaking..."})
         while len(self.audio_to_read_idx)!=0:
             self.is_speaking = True
             idx = self.audio_to_read_idx.pop()
@@ -636,7 +637,24 @@ class Application(BaseApplication):
             self.log(f'Audio sample rate : {sr}',3)
             self.execute("speaker", "play", audio)
             time.sleep(len(audio)/sr)
+            self.data_correction = {
+                        "next_char": self.data_correction["next_char"], 
+                        "next_emo": self.data_correction["next_emo"], 
+                        "next_sentence": self.data_correction["next_sentence"],           
+                        "correction_emb": self.data_correction["correction_emb"] , 
+                        "correction_stt": self.data_correction["correction_stt"], 
+                        "correction_emo": self.data_correction["correction_emo"] ,
+                        "emo" : self.data_correction["emo"],
+                        "emb" : self.data_correction["emb"],
+                        "stt" : self.data_correction["stt"],
+                        "emo_correction_bool":self.data_correction["emo_correction_bool"],
+                        "emb_correction_bool":self.data_correction["emb_correction_bool"],
+                        "stt_correction_bool":self.data_correction["stt_correction_bool"],
+                        "sentences_to_wait": self.data_correction["sentences_to_wait"] - 1
+                    }
+            self.server.send_data(self.name, self.data_correction)
         self.is_speaking = False
+        self.server.send_data(self.name, {"state" : "Listening..."})
 
 
 
