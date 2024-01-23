@@ -384,7 +384,7 @@ class Application(BaseApplication):
                 self.iteration = False
                 self.script_info["idx"] += 1
             
-                while self.scene_script['character'].iloc[self.script_info['idx']] == "NaN" : #or self.scene_script['character'].iloc[self.script_info['idx']] not in self.characters 
+                while self.scene_script['character'].iloc[self.script_info['idx']] == "NaN" or self.scene_script['character'].iloc[self.script_info['idx']] not in self.characters :
                     if self.scene_script['character'].iloc[self.script_info['idx']] not in self.characters_to_keep : #Enter when user is not register
                         self.log("Character not in the scene",3)
                         self.audio_to_read_idx.append(self.script_info['idx'])
@@ -401,13 +401,16 @@ class Application(BaseApplication):
             
 
                 idx = self.script_info["idx"] + 1
+                sentences_to_wait = 0
                 while self.scene_script['character'].iloc[idx] == "NaN" or self.scene_script['character'].iloc[idx] not in self.characters_to_keep :
                     idx += 1 
+                    if self.scene_script['character'].iloc[idx] not in self.characters_to_keep  :
+                        sentences_to_wait += 1
 
                 self.script_info["next_sentence"] = self.scene_script['sentence'].iloc[idx]
                 self.script_info["next_emo"] = self.scene_script['emo'].iloc[idx]
                 self.script_info["next_char"] = self.scene_script['character'].iloc[idx]
-                self.script_info["sentences_to_wait"] = idx - self.script_info["idx"]
+                self.script_info["sentences_to_wait"] = sentences_to_wait
 
             
 
