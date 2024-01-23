@@ -39,7 +39,7 @@ class Application(BaseApplication):
         self.is_listening_for_sentence = False
 
         #Activity config
-        self.activity_treshold = 0.8
+        self.activity_treshold = 0.9    
         self.activity_duration = 1
         self.previous_processed_activity_buffer = []
         self.processed_activity_buffer = []
@@ -122,9 +122,8 @@ class Application(BaseApplication):
         self.theatre_play_scene_info = dict()
         new_scene = 0
         idx = 0
-
-        self.script = self.script.fillna("NaN")
         self.script = self.preprocess_script(self.script)
+        self.script = self.script.fillna("NaN")
         if str(theatre_play) == "Pursuit of happiness.csv" :
 
             for i, row in self.script.iterrows():
@@ -135,6 +134,7 @@ class Application(BaseApplication):
                     new_scene.at[idx, "type"] = row["type"]
                     new_scene.at[idx, "sentence"] = row["sentence"]
                     new_scene.at[idx, "emo"] = row["j-hartmann/emotion-english-distilroberta-base"]
+                    new_scene.at[idx, "count_column"] = row["count_column"]
                     idx += 1
 
                 if row['sentence'][:6] == 'Scene:' : 
@@ -146,7 +146,7 @@ class Application(BaseApplication):
                         self.scene_list.append(new_scene)
                         print("appending new scene")
 
-                    new_scene = pd.DataFrame(columns = ['character', 'type', 'sentence', 'emo'])
+                    new_scene = pd.DataFrame(columns = ['character', 'type', 'sentence', 'emo', 'count_column'])
             new_scene = new_scene[new_scene['type'] == "speech"]
            
             self.scene_list.append(new_scene)
@@ -156,12 +156,14 @@ class Application(BaseApplication):
 
             
         if str(theatre_play) == "The window across the courtyard.csv" :
-            new_scene = pd.DataFrame(columns = ['character', 'type', 'sentence','emo'])
+            new_scene = pd.DataFrame(columns = ['character', 'type', 'sentence','emo', 'count_column'])
             for i, row in self.script.iterrows():
                 new_scene.at[idx, "character"] = row["character"]
                 new_scene.at[idx, "type"] = row["type"]
                 new_scene.at[idx, "sentence"] = row["sentence"]
                 new_scene.at[idx, "emo"] = row["michellejieli/emotion_text_classifier"]
+                new_scene.at[idx, "count_column"] = row["count_column"]
+
                 idx += 1
             new_scene = new_scene[new_scene['type'] == "speech"]
             self.scene_list = [new_scene]
@@ -383,11 +385,12 @@ class Application(BaseApplication):
             if self.iteration == True : 
                 self.iteration = False
                 self.script_info["idx"] += 1
-            
-                while self.scene_script['character'].iloc[self.script_info['idx']] == "NaN" or self.scene_script['character'].iloc[self.script_info['idx']] not in self.characters :
+                
+                while self.scene_script['character'].iloc[self.script_info['idx']] == "NaN" or self.scene_script['character'].iloc[self.script_info['idx']] not in self.characters_to_keep :
                     if self.scene_script['character'].iloc[self.script_info['idx']] not in self.characters_to_keep : #Enter when user is not register
                         self.log("Character not in the scene",3)
                         self.audio_to_read_idx.append(self.script_info['idx'])
+                        print(self.audio_to_read_idx)
                 
 
                     
@@ -403,15 +406,14 @@ class Application(BaseApplication):
                 idx = self.script_info["idx"] + 1
                 sentences_to_wait = 0
                 while self.scene_script['character'].iloc[idx] == "NaN" or self.scene_script['character'].iloc[idx] not in self.characters_to_keep :
-                    idx += 1 
                     if self.scene_script['character'].iloc[idx] not in self.characters_to_keep  :
                         sentences_to_wait += 1
+                    idx += 1 
 
                 self.script_info["next_sentence"] = self.scene_script['sentence'].iloc[idx]
                 self.script_info["next_emo"] = self.scene_script['emo'].iloc[idx]
                 self.script_info["next_char"] = self.scene_script['character'].iloc[idx]
                 self.script_info["sentences_to_wait"] = sentences_to_wait
-
             
 
 
@@ -518,8 +520,11 @@ class Application(BaseApplication):
                     "next_char": self.script_info["character"], 
                     "next_emo": self.script_info["emo"], 
                     "next_sentence": self.script_info["sentence"],  
+                    "sentences_to_wait": self.script_info["sentences_to_wait"]
                 }
                 self.server.send_data(self.name, self.data)
+
+                self.play_audio()
                 
 
 
@@ -625,13 +630,13 @@ class Application(BaseApplication):
             
 
 
-    def play_audio(self):
+    def play_audio(self, init = False):
         
         while len(self.audio_to_read_idx)!=0:
             self.server.send_data(self.name, {"state" : "Computer Speaking..."})
             self.is_speaking = True
             idx = self.audio_to_read_idx.pop()
-                
+            print(self.audio_to_read_idx)
             char = self.scene_script['character'].iloc[idx]
             column_count = self.scene_script["count_column"].iloc[idx]
             audio = os.path.join(self.audio_path, f'{char}_{str(column_count)}.wav')
@@ -641,24 +646,19 @@ class Application(BaseApplication):
             self.log(f'Audio sample rate : {sr}',3)
             self.execute("speaker", "play", audio)
             time.sleep(len(audio)/sr)
-            self.data_correction = {
-                        "next_char": self.data_correction["next_char"], 
-                        "next_emo": self.data_correction["next_emo"], 
-                        "next_sentence": self.data_correction["next_sentence"],           
-                        "correction_emb": self.data_correction["correction_emb"] , 
-                        "correction_stt": self.data_correction["correction_stt"], 
-                        "correction_emo": self.data_correction["correction_emo"] ,
-                        "emo" : self.data_correction["emo"],
-                        "emb" : self.data_correction["emb"],
-                        "stt" : self.data_correction["stt"],
-                        "emo_correction_bool":self.data_correction["emo_correction_bool"],
-                        "emb_correction_bool":self.data_correction["emb_correction_bool"],
-                        "stt_correction_bool":self.data_correction["stt_correction_bool"],
-                        "sentences_to_wait": self.data_correction["sentences_to_wait"] - 1
-                    }
-            self.server.send_data(self.name, self.data_correction)
-        self.is_speaking = False
-        #self.server.send_data(self.name, {"state" : "Listening..."})
+            if init :
+                self.data = {
+                            "next_char": self.data["next_char"], 
+                            "next_emo": self.data["next_emo"], 
+                            "next_sentence": self.data["next_sentence"],           
+                            "sentences_to_wait": self.data["sentences_to_wait"] - 1
+                        }
+            else :
+                self.data_correction["sentences_to_wait"] -=1
+                self.server.send_data(self.name, self.data_correction)
+            if len(self.audio_to_read_idx)==0:
+                self.server.send_data(self.name, {"state" : "Listening..."})
+                self.is_speaking = False
 
 
 
