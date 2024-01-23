@@ -39,7 +39,7 @@ class Application(BaseApplication):
         self.is_listening_for_sentence = False
 
         #Activity config
-        self.activity_treshold = 0.9
+        self.activity_treshold = 0.8
         self.activity_duration = 1
         self.previous_processed_activity_buffer = []
         self.processed_activity_buffer = []
@@ -623,8 +623,9 @@ class Application(BaseApplication):
 
 
     def play_audio(self):
-        self.server.send_data(self.name, {"state" : "Computer Speaking..."})
+        
         while len(self.audio_to_read_idx)!=0:
+            self.server.send_data(self.name, {"state" : "Computer Speaking..."})
             self.is_speaking = True
             idx = self.audio_to_read_idx.pop()
                 
@@ -654,7 +655,7 @@ class Application(BaseApplication):
                     }
             self.server.send_data(self.name, self.data_correction)
         self.is_speaking = False
-        self.server.send_data(self.name, {"state" : "Listening..."})
+        #self.server.send_data(self.name, {"state" : "Listening..."})
 
 
 
