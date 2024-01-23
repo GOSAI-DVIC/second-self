@@ -14,7 +14,7 @@
         "disabled": ["bounce", "raw_hands", "show_ping", "score_player", "show_frequency", "sign_language"]
     },
     "microphone": {
-        "number": 0,
+        "number": 8,
         "channels_nb": 1
     },
     "screen": {
@@ -24,7 +24,7 @@
         "height": 1920
     },
     "speaker":{
-        "number":8,
+        "number":0,
         "channels": 1,
         "samplerate": 22500
 
