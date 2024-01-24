@@ -29,12 +29,12 @@ class Application(BaseApplication):
         self.requires["microphone"] = ["audio_stream"]
         self.requires["speech_activity_detection"] = ["activity"]
         self.requires["speech_to_text"] = ["transcription"]
-        self.requires["speech_speaker_extraction"] = ["speaker_emb"]
-        self.requires["speech_emo_extraction"] = ["speech_emotion"]
+        self.requires["speaker_recognition"] = ["speaker_emb"]
+        self.requires["speech_emo_prediction"] = ["speech_emotion"]
         self.requires["speaker"] = ["play"]
         self.requires["tts"] = ["generate_audio"]
         
-        #self.requires["speech_speaker_extraction"] = ["speaker_verification"]
+        #self.requires["speaker_recognition"] = ["speaker_verification"]
 
         self.target_sr = 16000
         self.is_listening_for_sentence = False
@@ -107,8 +107,8 @@ class Application(BaseApplication):
         #module results
         self.module_results = {
             "speech_to_text_reception" : False,
-            "speech_speaker_extraction_reception" : False,
-            "speech_emo_extraction_reception" : False
+            "speaker_recognition_reception" : False,
+            "speech_emo_prediction_reception" : False
         }
 
     def preprocess_script(self, df: pd.DataFrame) -> pd.DataFrame:
@@ -451,10 +451,10 @@ class Application(BaseApplication):
         else : 
             print('before correction : ', self.script_info)
             self.log(f'Correction [EMB]: {self.script_info["character"]}',3)
-            self.log(f'Results [EMB]: {self.module_results["speech_speaker_extraction"]}',3)
+            self.log(f'Results [EMB]: {self.module_results["speaker_recognition"]}',3)
             best_emb_score = 0
             best_emb = ""
-            for i, emb in self.module_results["speech_speaker_extraction"].items():
+            for i, emb in self.module_results["speaker_recognition"].items():
                 if float(emb[1].item()) > best_emb_score :
                     best_emb_score = float(emb[1].item())
                     best_emb = i
@@ -465,7 +465,7 @@ class Application(BaseApplication):
             self.log(f'Correction [SEE]: {self.script_info["emo"]}',3)
 
             best_conf = 0
-            for emo in self.module_results['speech_emo_extraction'] :
+            for emo in self.module_results['speech_emo_prediction'] :
                 self.log(f'Results [SEE]: Emotion : {emo["label"]} with {emo["score"]*100}%', 3)
                 if float(emo["score"]*100) > best_conf :
                     best_emo = emo["label"]
@@ -600,19 +600,19 @@ class Application(BaseApplication):
 
         else : 
             
-            if self.module_results['speech_to_text_reception'] and self.module_results['speech_speaker_extraction_reception'] and self.module_results['speech_emo_extraction_reception'] :
+            if self.module_results['speech_to_text_reception'] and self.module_results['speaker_recognition_reception'] and self.module_results['speech_emo_prediction_reception'] :
                 self.correction()
                     
 
                 self.is_listening_for_sentence = True
                 self.module_results['speech_to_text_reception'] = False
-                self.module_results['speech_speaker_extraction_reception'] = False
-                self.module_results['speech_emo_extraction_reception'] = False
+                self.module_results['speaker_recognition_reception'] = False
+                self.module_results['speech_emo_prediction_reception'] = False
 
 
             if source == "microphone" and event == "audio_stream" and data is not None and self.is_listening_for_sentence and not self.is_speaking:
               
-                if (time.time() - data['timestamp']) > 0.1 :
+                if (time.time() - data['timestamp']) > 0.05 :
                      return
                 self.script_iter()
 
@@ -636,10 +636,10 @@ class Application(BaseApplication):
                 print(self.audio['previous_activity_detected'] ,self.audio['activity_detected'] )
 
 
-            if source == "speech_speaker_extraction" and event == "speaker_emb" and data is not None and not self.is_speaking:
+            if source == "speaker_recognition" and event == "speaker_emb" and data is not None and not self.is_speaking:
                 #self.log(f'Results : {data["comparaison"]}',3)
                 self.module_results[source] = data["comparaison"]
-                self.module_results['speech_speaker_extraction_reception'] = True
+                self.module_results['speaker_recognition_reception'] = True
             
             if source == "speech_to_text" and event == "transcription" and data is not None and not self.is_speaking:
                 # compt = 0 
@@ -649,10 +649,10 @@ class Application(BaseApplication):
                 self.module_results[source] = data['transcription_segments']
                 self.module_results['speech_to_text_reception'] = True
 
-            if source == "speech_emo_extraction" and event == "speech_emotion" and data is not None and not self.is_speaking:
+            if source == "speech_emo_prediction" and event == "speech_emotion" and data is not None and not self.is_speaking:
                 
-                self.module_results['speech_emo_extraction'] = data['results']
-                self.module_results['speech_emo_extraction_reception'] = True
+                self.module_results['speech_emo_prediction'] = data['results']
+                self.module_results['speech_emo_prediction_reception'] = True
 
             if source == "tts" and event == "generate_audio" and data is not None:
                 self.play_audio(data = data)
@@ -661,13 +661,16 @@ class Application(BaseApplication):
 
     def play_audio(self, init = False, data = None):
         if self.tts and data is not None:
+            self.tts = False
             self.log("TTS to speaker",3)
-            self.execute("speaker", "play", audio)
-            time.sleep(len(audio)/16000)
+            data = samplerate.resample(data, 16000 * 1.0 / 22050, 'sinc_best')
+            self.execute("speaker", "play", data)
+            time.sleep(len(data)/(16000 * 0.8))
+            idx = self.audio_to_read_idx.pop(0)
             char = self.scene_script['character'].iloc[idx]
             column_count = self.scene_script["count_column"].iloc[idx]
-            audio = os.path.join(self.audio_path, f'{char}_{str(column_count)}.wav')
-            sf.write(audio, data, 22050)
+            audio_path = os.path.join(self.audio_path, f'{char}_{str(column_count)}.wav')
+            #sf.write(audio_path, data, 1600)
             self.data_correction["sentences_to_wait"] -=1
             self.data_correction["next_sentence"] = self.scene_script['sentence'].iloc[self.script_info["idx"]-self.data_correction["sentences_to_wait"]]
             self.server.send_data(self.name, self.data_correction)
@@ -679,18 +682,21 @@ class Application(BaseApplication):
         while len(self.audio_to_read_idx)!=0 and not self.tts:
             self.server.send_data(self.name, {"state" : "Computer Speaking..."})
             self.is_speaking = True
-            idx = self.audio_to_read_idx.pop()
+            idx = self.audio_to_read_idx[0]
             print(self.audio_to_read_idx)
             char = self.scene_script['character'].iloc[idx]
             column_count = self.scene_script["count_column"].iloc[idx]
-            audio = os.path.join(self.audio_path, f'{char}_{str(column_count)}.wav')
-            self.log(audio,3)
-            if os.path.isfile(audio) :
-                audio, sr = sf.read(audio)
+            audio_path = os.path.join(self.audio_path, f'{char}_{str(column_count)}.wav')
+            self.log(audio_path,3)
+            if os.path.isfile(audio_path) :
+                audio, sr = sf.read(audio_path)
                 self.log(f'Audio duration : {len(audio)/sr}',3)
                 self.log(f'Audio sample rate : {sr}',3)
+                if sr > 16000:
+                    audio = samplerate.resample(audio, 16000 * 1.0 / sr, 'sinc_best')
                 self.execute("speaker", "play", audio)
-                time.sleep(len(audio)/sr)
+                self.audio_to_read_idx.pop(0)
+                time.sleep(len(audio)/(16000 * 0.8))
                 self.data_correction["sentences_to_wait"] -=1
                 self.data_correction["next_sentence"] = self.scene_script['sentence'].iloc[self.script_info["idx"]-self.data_correction["sentences_to_wait"]]
                 self.server.send_data(self.name, self.data_correction)
@@ -698,12 +704,16 @@ class Application(BaseApplication):
                     self.server.send_data(self.name, {"state" : "Listening..."})
                     self.is_speaking = False
                     self.finish_speaking = True
+                    print("exit")
+                    return
             else :
                 self.execute("tts", "run", {"prompt" : self.scene_script['sentence'].iloc[idx], "speaker" : self.dico_speaker[char]})
                 self.log("Audio file not found",3)
                 self.log("TTS",3)
                 self.tts = True
+                print("exit")
                 return
+            
 
 
 
@@ -735,12 +745,12 @@ class Application(BaseApplication):
                     self.recording_sent = False
 
                 if self.initialisation_bool : 
-                    self.execute("speech_speaker_extraction", "speaker_verification", self.audio)
+                    self.execute("speaker_recognition", "speaker_verification", self.audio)
                     if self.audio['new_user']==True : 
                         self.character_registered_index += 1
                     else : 
                         self.execute("speech_to_text", "transcribe", self.audio)
-                        self.execute("speech_emo_extraction", "predict", self.audio) 
+                        self.execute("speech_emo_prediction", "predict", self.audio) 
                 if (not self.character_embedding_stored and not self.initialisation_bool) or (self.character_embedding_stored and self.initialisation_bool) :
                    
                     self.execute("speech_to_text", "transcribe", self.audio)
@@ -766,9 +776,7 @@ class Application(BaseApplication):
 
         self.activity_buffer.extend(mic_chunk)
         #print(len(mic_chunk), len(self.activity_buffer))
-        if self.finish_speaking:
-            self.activity_buffer = []
-            self.finish_speaking = False
+       
         #print('activity buffer duration : ', len(self.activity_buffer)/16000)
 
 
