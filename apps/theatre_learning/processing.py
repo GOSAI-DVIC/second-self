@@ -32,6 +32,7 @@ class Application(BaseApplication):
         self.requires["speech_speaker_extraction"] = ["speaker_emb"]
         self.requires["speech_emo_extraction"] = ["speech_emotion"]
         self.requires["speaker"] = ["play"]
+        self.requires["tts"] = ["generate_audio"]
         
         #self.requires["speech_speaker_extraction"] = ["speaker_verification"]
 
@@ -75,11 +76,18 @@ class Application(BaseApplication):
         self.iteration = True
         self.is_speaking = False
         self.finish_speaking = False
-        
+        self.tts = False
 
         #INITIALIZATION OF THE USERS 
         self.character_embedding_stored = False 
         self.character_registered_index = 0
+        self.dico_speaker = {
+            "JESSICA" : "f_1.wav",
+            "BARMAN" : "m_1.wav",
+            "TREVOR" : "m_2.wav",
+            "MARGARET" : "f_2.wav",
+            "ALAN" : "m_3.wav",
+        }
         
 
 
@@ -643,12 +651,26 @@ class Application(BaseApplication):
                 
                 self.module_results['speech_emo_extraction'] = data['results']
                 self.module_results['speech_emo_extraction_reception'] = True
+
+            if source == "tts" and event == "generate_audio" and data is not None:
+                self.play_audio(data = data)
             
 
 
-    def play_audio(self, init = False):
-        
-        while len(self.audio_to_read_idx)!=0:
+    def play_audio(self, init = False, data = None):
+        if self.tts and data is not None:
+            self.log("TTS to speaker",3)
+            self.execute("speaker", "play", audio)
+            time.sleep(len(audio)/16000)
+            self.data_correction["sentences_to_wait"] -=1
+            self.data_correction["next_sentence"] = self.scene_script['sentence'].iloc[self.script_info["idx"]-self.data_correction["sentences_to_wait"]]
+            self.server.send_data(self.name, self.data_correction)
+            if len(self.audio_to_read_idx)==0:
+                self.server.send_data(self.name, {"state" : "Listening..."})
+                self.is_speaking = False
+                self.finish_speaking = True
+            
+        while len(self.audio_to_read_idx)!=0 and not self.tts:
             self.server.send_data(self.name, {"state" : "Computer Speaking..."})
             self.is_speaking = True
             idx = self.audio_to_read_idx.pop()
@@ -657,27 +679,25 @@ class Application(BaseApplication):
             column_count = self.scene_script["count_column"].iloc[idx]
             audio = os.path.join(self.audio_path, f'{char}_{str(column_count)}.wav')
             self.log(audio,3)
-            audio, sr = sf.read(audio)
-            self.log(f'Audio duration : {len(audio)/sr}',3)
-            self.log(f'Audio sample rate : {sr}',3)
-            self.execute("speaker", "play", audio)
-            time.sleep(len(audio)/sr)
-            # if init :
-            #     self.data = {
-            #                 "next_char": self.data["next_char"], 
-            #                 "next_emo": self.data["next_emo"], 
-            #                 "next_sentence": self.data["next_sentence"],           
-            #                 "sentences_to_wait": self.data["sentences_to_wait"] - 1
-            #             }
-            # else :
-            self.data_correction["sentences_to_wait"] -=1
-        
-            self.data_correction["next_sentence"] = self.scene_script['sentence'].iloc[self.script_info["idx"]-self.data_correction["sentences_to_wait"]]
-            self.server.send_data(self.name, self.data_correction)
-            if len(self.audio_to_read_idx)==0:
-                self.server.send_data(self.name, {"state" : "Listening..."})
-                self.is_speaking = False
-                self.finish_speaking = True
+            if os.path.isfile(audio) :
+                audio, sr = sf.read(audio)
+                self.log(f'Audio duration : {len(audio)/sr}',3)
+                self.log(f'Audio sample rate : {sr}',3)
+                self.execute("speaker", "play", audio)
+                time.sleep(len(audio)/sr)
+                self.data_correction["sentences_to_wait"] -=1
+                self.data_correction["next_sentence"] = self.scene_script['sentence'].iloc[self.script_info["idx"]-self.data_correction["sentences_to_wait"]]
+                self.server.send_data(self.name, self.data_correction)
+                if len(self.audio_to_read_idx)==0:
+                    self.server.send_data(self.name, {"state" : "Listening..."})
+                    self.is_speaking = False
+                    self.finish_speaking = True
+            else :
+                self.execute("tts", "run", {"prompt" : self.scene_script['sentence'].iloc[idx], "speaker" : self.dico_speaker[char]})
+                self.log("Audio file not found",3)
+                self.log("TTS",3)
+                self.tts = True
+                return
 
 
 
