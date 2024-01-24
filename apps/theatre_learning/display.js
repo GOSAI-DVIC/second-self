@@ -229,23 +229,26 @@ export const theatre_learning = new p5((sketch) => {
         if (starting_correction){ 
            // console.log(results)
 
-            sketch.fill(50)
+            if (results["sentences_to_wait"]!=0){sketch.fill("blue")}
+            else {sketch.fill("orange")}
             
             
             let next_reply = "**************[NEXT REPLY (in "+results["sentences_to_wait"]+" replies)]**************\n"+"NEXT REPLY : "+results["next_sentence"]+"\n"+"NEXT CHAR : "+results["next_char"]+"\n"+"NEXT EMO : "+results["next_emo"]
             let textSize = getTextSize(next_reply);
-            let txtWidth = textSize.width + 0.1*textSize.width ;
-            let txtHeigh = textSize.height + 0.1*textSize.width ;
+            let txtWidth = textSize.width + 0.3*textSize.width ;
+            let txtHeigh = textSize.height + 0.3*textSize.height ;
          
 
-
-            sketch.rect(sketch.width / 2, sketch.height * 3 / 40, txtWidth, txtHeigh, 20); // Rounded rectangle background
-            sketch.fill("white")
-            sketch.text(next_reply, sketch.width / 2,(sketch.height / 40)*3);
+            sketch.rect(sketch.width / 2, sketch.height * 9 / 40, txtWidth, txtHeigh, 20); 
+        
+            if (results["sentences_to_wait"]!=0){sketch.fill("white")}
+            else {sketch.fill("black")}
+            
+            sketch.text(next_reply, sketch.width / 2,(sketch.height / 40)*9);
             
             
-            if (Object.keys(results).length > 3){
-            sketch.text("**************[CORRECTION]**************", sketch.width / 2,(sketch.height / 15)*6);
+            if (Object.keys(results).length >4 ){
+            sketch.text("**************[CORRECTION]**************", sketch.width / 2,(sketch.height / 18)*40);
             if (results.stt_correction_bool){
                 sketch.fill("green")
             }
@@ -253,14 +256,14 @@ export const theatre_learning = new p5((sketch) => {
 
             let correction_stt = "[CORRECTION] STT : "+results["correction_stt"] +"\n"+"[RESULT] STT : "+results["stt"]
             textSize = getTextSize(correction_stt);
-            txtWidth = textSize.width + 20 ;
-            txtHeigh = textSize.height + 20 ;
+            txtWidth = textSize.width + 0.3*textSize.width ;
+            txtHeigh = textSize.height + 0.3*textSize.height ;
 
-            sketch.rect(sketch.width / 2, sketch.height * 8 / 20, txtWidth, txtHeigh, 20); // Rounded rectangle background
+            sketch.rect(sketch.width / 2, sketch.height * 20 / 40, txtWidth, txtHeigh, 20); // Rounded rectangle background
             
             sketch.fill('white')
 
-            sketch.text(correction_stt, sketch.width / 2,(sketch.height / 20)*8);
+            sketch.text(correction_stt, sketch.width / 2,(sketch.height / 40)*20);
             
 
             if (results.emo_correction_bool){
@@ -270,15 +273,15 @@ export const theatre_learning = new p5((sketch) => {
             
             let correction_emo = "[CORRECTION] EMO : "+results["correction_emo"]+"\n"+"[RESULT] EMO : "+results["emo"]
             textSize = getTextSize(correction_emo);
-            txtWidth = textSize.width + 20 ;
-            txtHeigh = textSize.height + 20 ;
+            txtWidth = textSize.width + 0.3*textSize.width ;
+            txtHeigh = textSize.height + 0.3*textSize.height ;
            
 
-            sketch.rect(sketch.width / 2, sketch.height * 11 / 20, txtWidth, txtHeigh, 20); // Rounded rectangle background
+            sketch.rect(sketch.width / 2, sketch.height * 24 / 40, txtWidth, txtHeigh, 20); // Rounded rectangle background
             
             sketch.fill('white')
 
-            sketch.text(correction_emo, sketch.width / 2,(sketch.height / 20)*11);
+            sketch.text(correction_emo, sketch.width / 2,(sketch.height / 40)*24);
             
 
 
@@ -289,18 +292,32 @@ export const theatre_learning = new p5((sketch) => {
 
             let correction_emb = "[CORRECTION] EMB : "+results["correction_emb"]+"\n"+"[RESULT] EMB : "+results["emb"]
             textSize = getTextSize(correction_emb);
-            txtWidth = textSize.width + 20 ;
-            txtHeigh = textSize.height + 20 ;
+            txtWidth = textSize.width + 0.3*textSize.width ;
+            txtHeigh = textSize.height + 0.3*textSize.height ;
 
 
-            sketch.rect(sketch.width / 2, sketch.height * 14 / 20, txtWidth, txtHeigh, 20); // Rounded rectangle background
+            sketch.rect(sketch.width / 2, sketch.height * 28 / 40, txtWidth, txtHeigh, 20); // Rounded rectangle background
             
             sketch.fill('white')
 
 
-            sketch.text(correction_emb, sketch.width / 2, (sketch.height / 20)*14);
+            sketch.text(correction_emb, sketch.width / 2, (sketch.height / 40)*28);
           
                         }
+            textSize = getTextSize("Computer's turn");
+            txtWidth = textSize.width + 0.1*textSize.width ;
+            txtHeigh = textSize.height + 0.1*textSize.height;
+            sketch.fill("blue")
+            sketch.rect( sketch.width*3 / 10, 34*sketch.height / (40), txtWidth, txtHeigh ,20); // Rounded rectangle background
+            sketch.fill('white')
+            sketch.text("Computer's turn", sketch.width*3 / 10, 34*sketch.height / (40))
+            sketch.fill("orange")
+            textSize = getTextSize("User's turn");
+            txtWidth = textSize.width + 0.1*textSize.width ;
+            txtHeigh = textSize.height + 0.1*textSize.height;
+            sketch.rect( sketch.width*7 / 10, 34*sketch.height / (40), txtWidth, txtHeigh ,20); // Rounded rectangle background
+            sketch.fill('black')
+            sketch.text("User's turn", sketch.width*7 / 10, 34*sketch.height / (40))
             }
             sketch.fill("white")
 
@@ -438,13 +455,13 @@ function displayContent(sketch, text_array, mode){
             txtHeigh = textSize.height + 0.1*textSize.height ;
 
             sketch.fill("blue")
-            sketch.rect( sketch.width*3 / 10, 35*sketch.height / (40), txtWidth, txtHeigh ,20); // Rounded rectangle background
+            sketch.rect( sketch.width*3 / 10, 34*sketch.height / (40), txtWidth, txtHeigh ,20); // Rounded rectangle background
             sketch.fill('white')
-            sketch.text("Computer", sketch.width*3 / 10, 35*sketch.height / (40))
+            sketch.text("Computer", sketch.width*3 / 10, 34*sketch.height / (40))
             sketch.fill("orange")
-            sketch.rect( sketch.width*7 / 10, 35*sketch.height / (40), txtWidth, txtHeigh ,20); // Rounded rectangle background
+            sketch.rect( sketch.width*7 / 10, 34*sketch.height / (40), txtWidth, txtHeigh ,20); // Rounded rectangle background
             sketch.fill('white')
-            sketch.text("User", sketch.width*7 / 10, 35*sketch.height / (40))
+            sketch.text("User", sketch.width*7 / 10, 34*sketch.height / (40))
             sketch.text("Say 'Let's start' to continue", sketch.width / 2, 34*sketch.height / (40))
 
         if (mode == "correction"){
@@ -463,7 +480,7 @@ function displayContent(sketch, text_array, mode){
             sketch.text(next_reply, sketch.width / 2,(sketch.height / 40)*11);
             
             
-            if (Object.keys(results).length > 3){
+            if (Object.keys(results).length > 4){
             sketch.text("**************[CORRECTION]**************", sketch.width / 2,(sketch.height / 40)*18);
             if (results.stt_correction_bool){
                 sketch.fill("green")

@@ -32,7 +32,9 @@ class Correction():
 
         if mode == 'fuzzywuzzy':
             #score = fuzz.partial_token_set_ratio(txt_1, txt_2)
-            score = fuzz.token_set_ratio(txt_1,txt_2)
+            score_a = fuzz.token_set_ratio(txt_1,txt_2)
+            score_b = fuzz.token_set_ratio(txt_2,txt_1)
+            score = min(score_b, score_a)
             print('txt1 : ',txt_1, 'txt2',txt_2 ,'score : ', score)
             if score > self.txt_sim_treshold:
                 verif = True
