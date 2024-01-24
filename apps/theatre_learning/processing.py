@@ -88,7 +88,7 @@ class Application(BaseApplication):
             "MARGARET" : "f_2.wav",
             "ALAN" : "m_3.wav",
             "Madison" : "f_3.wav",
-            "Alexandre" : "m_4.wav",
+            "Alexander" : "m_4.wav",
         }
         
 
@@ -393,7 +393,7 @@ class Application(BaseApplication):
         self.processed_activity_buffer = []
         self.previous_processed_activity_buffer = []
 
-    def script_iter(self, init = True ):
+    def script_iter(self, init = False ):
 
 
         if self.script_info["idx"] >= len(self.scene_script):
@@ -403,11 +403,17 @@ class Application(BaseApplication):
             if self.iteration == True : 
                 self.iteration = False
                 self.script_info["idx"] += 1
+                if init :
+                    self.script_info["init_sentences_to_wait"] = 0
                 
                 while self.scene_script['character'].iloc[self.script_info['idx']] == "NaN" or self.scene_script['character'].iloc[self.script_info['idx']] not in self.characters_to_keep :
                     if self.scene_script['character'].iloc[self.script_info['idx']] not in self.characters_to_keep : #Enter when user is not register
                         self.log("Character not in the scene",3)
                         self.audio_to_read_idx.append(self.script_info['idx'])
+                        if init :    
+                           
+                        
+                            self.script_info["init_sentences_to_wait"] += 1
 
                 
 
@@ -426,6 +432,8 @@ class Application(BaseApplication):
                 while self.scene_script['character'].iloc[idx] == "NaN" or self.scene_script['character'].iloc[idx] not in self.characters_to_keep :
                     if self.scene_script['character'].iloc[idx] not in self.characters_to_keep  :
                         sentences_to_wait += 1
+                        # if not init : 
+                        #      self.audio_to_read_idx.append(idx)
                     idx += 1 
 
                 self.script_info["next_idx"] = idx
@@ -536,12 +544,12 @@ class Application(BaseApplication):
                 self.clear_audio_buffer()
 
 
-                self.script_iter()
+                self.script_iter(init = True)
                 self.data_correction = {
                     "next_char": self.script_info["character"], 
                     "next_emo": self.script_info["emo"], 
-                    "next_sentence": self.scene_script['sentence'].iloc[self.script_info["idx"]-self.script_info["sentences_to_wait"]],  
-                    "sentences_to_wait": self.script_info["sentences_to_wait"]
+                    "next_sentence": self.scene_script['sentence'].iloc[self.script_info["idx"]-self.script_info["init_sentences_to_wait"]],  
+                    "sentences_to_wait": self.script_info["init_sentences_to_wait"]
                 }
                 self.server.send_data(self.name, self.data_correction)
 
