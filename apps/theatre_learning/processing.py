@@ -87,6 +87,8 @@ class Application(BaseApplication):
             "TREVOR" : "m_2.wav",
             "MARGARET" : "f_2.wav",
             "ALAN" : "m_3.wav",
+            "Madison" : "f_3.wav",
+            "Alexandre" : "m_4.wav",
         }
         
 
@@ -662,6 +664,10 @@ class Application(BaseApplication):
             self.log("TTS to speaker",3)
             self.execute("speaker", "play", audio)
             time.sleep(len(audio)/16000)
+            char = self.scene_script['character'].iloc[idx]
+            column_count = self.scene_script["count_column"].iloc[idx]
+            audio = os.path.join(self.audio_path, f'{char}_{str(column_count)}.wav')
+            sf.write(audio, data, 22050)
             self.data_correction["sentences_to_wait"] -=1
             self.data_correction["next_sentence"] = self.scene_script['sentence'].iloc[self.script_info["idx"]-self.data_correction["sentences_to_wait"]]
             self.server.send_data(self.name, self.data_correction)
