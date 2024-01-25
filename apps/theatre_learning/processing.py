@@ -26,7 +26,7 @@ class Application(BaseApplication):
         self.processing_sent = False
         self.delayed_bool = False
 
-        #self.requires["hand_pose"] = ["raw_data"]
+        # Configuration of required modules for the application functionality.
         self.requires["microphone"] = ["audio_stream"]
         self.requires["speech_activity_detection"] = ["activity"]
         self.requires["speech_to_text"] = ["transcription"]
@@ -34,7 +34,6 @@ class Application(BaseApplication):
         self.requires["speech_emo_prediction"] = ["speech_emotion"]
         self.requires["speaker"] = ["play"]
         self.requires["tts"] = ["generate_audio"]
-        
         #self.requires["speaker_recognition"] = ["speaker_verification"]
 
         self.target_sr = 16000
@@ -48,72 +47,11 @@ class Application(BaseApplication):
         self.activity_buffer = []
     
 
-        #INITIALIZATION SCRIPT
-        # self.str_scene_title = "TWATC"
-        # script_path = "home/apps/theatre_learning/scripts/TWATC_processed.csv"
-        # self.script_init(script_path, )
-        self.audio_path = ""
-        self.waiting_result_bool = False
-        self.command_recognized_bool = True
-        self.theatre_play_scene_init_bool = False
-        self.theatre_play_title_init_bool = False
-        self.theatre_play_character_init_bool = False
-        self.title_choosen = ""
-        self.changing_mode_character = None
-        self.return_command_str = "go back"
-        self.changing_mode_character = []
-        self.script_info = {
-            "idx" : -1,
-            "sentence" : "",
-            "next_sentence" : "",
-            "next_emo" : "",
-            "next_char" : "",
-            "character" : "",
-            "emo" : ""
-        }
-        #self.script_idx = 0 
-        self.initialisation_bool = False
-        self.audio_to_read_idx = []
-        self.iteration = True
-        self.is_speaking = False
-        self.finish_speaking = False
-        self.tts = False
+        self.variable_init()
 
-        #INITIALIZATION OF THE USERS 
-        self.character_embedding_stored = False 
-        self.character_registered_index = 0
-        self.dico_speaker = {
-            "JESSICA" : "f_1.wav",
-            "BARMAN" : "m_1.wav",
-            "TREVOR" : "m_2.wav",
-            "MARGARET" : "f_2.wav",
-            "ALAN" : "m_3.wav",
-            "Madison" : "f_3.wav",
-            "Alexander" : "m_4.wav",
-        }
-        
-
-
-        self.audio = {
-        #"activity_buffer": [],
-        "audio_buffer" : [],
-        "char_name" : None,
-        "new_user" : True,
-        "activity_detected" : False,
-       "previous_activity_detected" : False
-            }
-
-        self.activity_detection_reception = False
-
-        #module results
-        self.module_results = {
-            "speech_to_text_reception" : False,
-            "speaker_recognition_reception" : False,
-            "speech_emo_prediction_reception" : False
-        }
-
+    
     def preprocess_script(self, df: pd.DataFrame) -> pd.DataFrame:
-        # Create a new column 'count_column' using a loop
+        # Adds a count column for each character so we can get the right audio
         counts = {}
         count_column = []
         for value in df['character']:
@@ -127,6 +65,7 @@ class Application(BaseApplication):
         return df
 
     def get_all_scenes(self, theatre_play):
+        # Reading and organizing the script into scenes.
         self.script = pd.read_csv('home/apps/theatre_learning/scripts/'+theatre_play)
         self.audio_path = os.path.join("home/apps/theatre_learning/audio", theatre_play.split('.')[0])
         
@@ -195,6 +134,7 @@ class Application(BaseApplication):
 
 
     def variable_init(self):
+        # Resets all variables to their default states.
         self.audio_path = ""
         self.waiting_result_bool = False
         self.command_recognized_bool = True
@@ -260,7 +200,7 @@ class Application(BaseApplication):
         
 
     def script_init(self, source, event, data):
-
+        # Handling commands and initializing scenes.
 
         if self.command_recognized_bool : 
 
@@ -456,6 +396,7 @@ class Application(BaseApplication):
         self.previous_processed_activity_buffer = []
 
     def script_iter(self, init = False ):
+         # Manages script progression and dialogues.
 
 
         if self.script_info["idx"] >= len(self.scene_script):
@@ -510,7 +451,7 @@ class Application(BaseApplication):
 
 
     def correction(self, mode = "") :
-
+        # Manages the correction of audio and textual inputs.
         if mode=="script_init":
             self.log(f'Correction [STT]: {self.script_info["sentence"]}',3)
             
@@ -583,7 +524,7 @@ class Application(BaseApplication):
 
 
     def store_character_embedding(self, source, event, data):
-
+        # Manages the recording of character embeddings.
         if not self.is_listening_for_sentence:
             if self.character_registered_index < len(self.characters):
                 self.audio["char_name"] = self.characters[self.character_registered_index]
@@ -660,6 +601,7 @@ class Application(BaseApplication):
 
     def listener(self, source, event, data):
         super().listener(source, event, data)
+        # Main event handler for the application.
 
         if not self.delayed_bool : 
             time.sleep(5)
@@ -737,6 +679,7 @@ class Application(BaseApplication):
 
 
     def play_audio(self, init = False, data = None):
+        # Manages the audio playback for characters.
         if self.tts and data is not None:
             self.tts = False
             self.log("TTS to speaker",3)
@@ -799,6 +742,7 @@ class Application(BaseApplication):
                                 data,
                                 target_sr : int = 16000,
                                 activity_duration : int = 1):
+        # Manages listening and processing of a single audio sentence.
         mic_chunk = data["block"][:, 0]
         sample_rate = data["samplerate"]
         mic_chunk = samplerate.resample(mic_chunk, target_sr * 1.0 / sample_rate, 'sinc_best')  
