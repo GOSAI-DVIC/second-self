@@ -19,6 +19,7 @@ class Application(BaseApplication):
 
         self.corrector = Correction()
         self.corrector_for_cmd = Correction(80)
+        self.is_exclusive = True
 
         #FOR JS
         self.recording_sent = False
@@ -193,7 +194,66 @@ class Application(BaseApplication):
             
 
 
+    def variable_init(self):
+        self.audio_path = ""
+        self.waiting_result_bool = False
+        self.command_recognized_bool = True
+        self.theatre_play_scene_init_bool = False
+        self.theatre_play_title_init_bool = False
+        self.theatre_play_character_init_bool = False
+        self.title_choosen = ""
+        self.changing_mode_character = None
+        self.return_command_str = "go back"
+        self.changing_mode_character = []
+        self.script_info = {
+            "idx" : -1,
+            "sentence" : "",
+            "next_sentence" : "",
+            "next_emo" : "",
+            "next_char" : "",
+            "character" : "",
+            "emo" : ""
+        }
+        #self.script_idx = 0 
+        self.initialisation_bool = False
+        self.audio_to_read_idx = []
+        self.iteration = True
+        self.is_speaking = False
+        self.finish_speaking = False
+        self.tts = False
+
+        #INITIALIZATION OF THE USERS 
+        self.character_embedding_stored = False 
+        self.character_registered_index = 0
+        self.dico_speaker = {
+            "JESSICA" : "f_1.wav",
+            "BARMAN" : "m_1.wav",
+            "TREVOR" : "m_2.wav",
+            "MARGARET" : "f_2.wav",
+            "ALAN" : "m_3.wav",
+            "Madison" : "f_3.wav",
+            "Alexander" : "m_4.wav",
+        }
         
+
+
+        self.audio = {
+        #"activity_buffer": [],
+        "audio_buffer" : [],
+        "char_name" : None,
+        "new_user" : True,
+        "activity_detected" : False,
+       "previous_activity_detected" : False
+            }
+
+        self.activity_detection_reception = False
+
+        #module results
+        self.module_results = {
+            "speech_to_text_reception" : False,
+            "speaker_recognition_reception" : False,
+            "speech_emo_prediction_reception" : False
+        }         
 
 
         
@@ -456,7 +516,11 @@ class Application(BaseApplication):
             sentence = self.module_results['speech_to_text']
 
 
-        else : 
+        else :
+            if self.corrector_for_cmd.txt_correction(self.module_results['speech_to_text'], "stop stop stop") :
+                self.variable_init()
+                self.manager.start("menu")
+                self.manager.stop("thatre_learning")
             print('before correction : ', self.script_info)
             self.log(f'Correction [EMB]: {self.script_info["character"]}',3)
             self.log(f'Results [EMB]: {self.module_results["speaker_recognition"]}',3)
@@ -609,6 +673,7 @@ class Application(BaseApplication):
         else : 
             
             if self.module_results['speech_to_text_reception'] and self.module_results['speaker_recognition_reception'] and self.module_results['speech_emo_prediction_reception'] :
+
                 self.correction()
                     
 
