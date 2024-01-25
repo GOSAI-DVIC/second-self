@@ -1,6 +1,7 @@
 {
     "name": "Second Self",
     "camera": {
+        "type": "intel",
         "flip" : false,
         "width": 640,
         "height": 480,
@@ -10,11 +11,10 @@
         "y_offset": 100
     },
     "applications": {
-        "startup": ["theatre_learning"],
+        "startup": ["menu", "hands"],
         "disabled": ["bounce", "raw_hands", "show_ping", "score_player", "show_frequency", "sign_language", "aria", "clock"]
     },
     "microphone": {
-        "number": 8,
         "channels_nb": 1
     },
     "screen": {
@@ -24,7 +24,6 @@
         "height": 1920
     },
     "speaker":{
-        "number":0,
         "channels": 1,
         "samplerate": 22500
 

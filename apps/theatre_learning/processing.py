@@ -343,7 +343,9 @@ class Application(BaseApplication):
                 if not self.theatre_play_title_init_bool and not self.theatre_play_scene_init_bool:
                     if self.corrector_for_cmd.txt_correction(self.command, "go back") :
                         self.manager.start("menu")
+                        self.manager.start("hands")
                         self.manager.stop("thatre_learning")
+                        return
                     else : 
                         for txt in self.available_theatre_plays :
                             if self.corrector_for_cmd.txt_correction(self.command, txt) :
@@ -520,7 +522,9 @@ class Application(BaseApplication):
             if self.corrector_for_cmd.txt_correction(self.module_results['speech_to_text'], "stop stop stop") :
                 self.variable_init()
                 self.manager.start("menu")
+                self.manager.start("hands")
                 self.manager.stop("thatre_learning")
+                return 
             print('before correction : ', self.script_info)
             self.log(f'Correction [EMB]: {self.script_info["character"]}',3)
             self.log(f'Results [EMB]: {self.module_results["speaker_recognition"]}',3)
